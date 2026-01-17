@@ -1,4 +1,4 @@
-# @haneullabs/ledgerjs-hw-app-sui
+# @haneullabs/ledgerjs-hw-app-haneul
 
 ## 0.7.0
 

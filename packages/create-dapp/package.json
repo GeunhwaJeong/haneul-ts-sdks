@@ -1,7 +1,7 @@
 {
 	"name": "@haneullabs/create-dapp",
 	"author": "Haneul Labs <build@haneullabs.com>",
-	"description": "A CLI for creating new Sui dApps",
+	"description": "A CLI for creating new Haneul dApps",
 	"homepage": "https://sdk.haneullabs.com",
 	"version": "0.5.13",
 	"license": "Apache-2.0",

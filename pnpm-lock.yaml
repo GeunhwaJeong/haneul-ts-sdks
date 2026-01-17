@@ -340,12 +340,12 @@ importers:
 
   packages/dapp-kit:
     dependencies:
-      '@haneullabs/slush-wallet':
-        specifier: workspace:*
-        version: link:../slush-wallet
       '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
+      '@haneullabs/slush-wallet':
+        specifier: workspace:*
+        version: link:../slush-wallet
       '@haneullabs/utils':
         specifier: workspace:*
         version: link:../utils
@@ -564,12 +564,12 @@ importers:
       '@floating-ui/dom':
         specifier: ^1.7.4
         version: 1.7.4
-      '@haneullabs/slush-wallet':
-        specifier: workspace:*
-        version: link:../../../slush-wallet
       '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../../typescript
+      '@haneullabs/slush-wallet':
+        specifier: workspace:*
+        version: link:../../../slush-wallet
       '@haneullabs/utils':
         specifier: workspace:*
         version: link:../../../utils
@@ -766,6 +766,9 @@ importers:
       '@haneullabs/enoki-connect':
         specifier: workspace:*
         version: link:../enoki-connect
+      '@haneullabs/haneul':
+        specifier: workspace:*
+        version: link:../typescript
       '@haneullabs/haneulns':
         specifier: workspace:*
         version: link:../haneulns
@@ -784,9 +787,6 @@ importers:
       '@haneullabs/slush-wallet':
         specifier: workspace:*
         version: link:../slush-wallet
-      '@haneullabs/haneul':
-        specifier: workspace:*
-        version: link:../typescript
       '@haneullabs/utils':
         specifier: workspace:*
         version: link:../utils
@@ -878,12 +878,12 @@ importers:
 
   packages/enoki:
     dependencies:
-      '@haneullabs/signers':
-        specifier: workspace:*
-        version: link:../signers
       '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
+      '@haneullabs/signers':
+        specifier: workspace:*
+        version: link:../signers
       '@haneullabs/wallet-standard':
         specifier: workspace:*
         version: link:../wallet-standard
@@ -1131,7 +1131,7 @@ importers:
         specifier: ^9.0.3
         version: 9.0.3
 
-  packages/ledgerjs-hw-app-sui:
+  packages/ledgerjs-hw-app-haneul:
     dependencies:
       '@ledgerhq/devices':
         specifier: ^8.6.1
@@ -1281,12 +1281,12 @@ importers:
       '@google-cloud/kms':
         specifier: ^4.5.0
         version: 4.5.0
-      '@haneullabs/ledgerjs-hw-app-sui':
-        specifier: workspace:*
-        version: link:../ledgerjs-hw-app-sui
       '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
+      '@haneullabs/ledgerjs-hw-app-haneul':
+        specifier: workspace:*
+        version: link:../ledgerjs-hw-app-haneul
       '@noble/curves':
         specifier: '=1.9.4'
         version: 1.9.4

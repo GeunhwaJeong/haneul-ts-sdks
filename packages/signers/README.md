@@ -1,11 +1,11 @@
-# Sui KMS Signers
+# Haneul KMS Signers
 
-The Sui KMS Signers package provides a set of tools for securely signing transactions using Key
+The Haneul KMS Signers package provides a set of tools for securely signing transactions using Key
 Management Services (KMS) like AWS KMS and GCP KMS.
 
 ## Table of Contents
 
-- [Sui KMS Signers](#sui-kms-signers)
+- [Haneul KMS Signers](#haneul-kms-signers)
   - [Table of Contents](#table-of-contents)
   - [AWS KMS Signer](#aws-kms-signer)
     - [Usage](#usage)
@@ -26,7 +26,7 @@ Management Services (KMS) like AWS KMS and GCP KMS.
 
 ## AWS KMS Signer
 
-The AWS KMS Signer allows you to leverage AWS's Key Management Service to sign Sui transactions.
+The AWS KMS Signer allows you to leverage AWS's Key Management Service to sign Haneul transactions.
 
 ### Usage
 
@@ -149,7 +149,7 @@ console.log(isValid); // Should print true if the signature is valid
 
 ## Ledger Signer
 
-The Ledger Signer allows you to leverage a Ledger hardware wallet to sign Sui transactions.
+The Ledger Signer allows you to leverage a Ledger hardware wallet to sign Haneul transactions.
 
 ### Usage
 
@@ -172,19 +172,19 @@ cryptographic operations.
 
 ```typescript
 import Transport from '@ledgerhq/hw-transport-node-hid';
-import SuiLedgerClient from '@haneullabs/ledgerjs-hw-app-sui';
+import HaneulLedgerClient from '@haneullabs/ledgerjs-hw-app-haneul';
 import { LedgerSigner } from '@haneullabs/signers/ledger';
 import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
 import { Transaction } from '@haneullabs/haneul/transactions';
 
 const transport = await Transport.open(undefined);
-const ledgerClient = new SuiLedgerClient(transport);
-const suiClient = new HaneulClient({ url: getFullnodeUrl('testnet') });
+const ledgerClient = new HaneulLedgerClient(transport);
+const haneulClient = new HaneulClient({ url: getFullnodeUrl('testnet') });
 
 const signer = await LedgerSigner.fromDerivationPath(
 	"m/44'/784'/0'/0'/0'",
 	ledgerClient,
-	suiClient,
+	haneulClient,
 );
 
 // Log the Haneul address:

@@ -32,7 +32,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run TS SDK e2e tests
-        run: pnpm --filter @mysten/sui test:e2e
+        run: pnpm --filter @haneullabs/haneul test:e2e
 
       - name: Run kiosk sdk e2e tests
-        run: pnpm --filter @mysten/kiosk test:e2e
+        run: pnpm --filter @haneullabs/kiosk test:e2e

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a monorepo containing TypeScript SDKs for the Haneul blockchain ecosystem. It uses pnpm workspaces, turbo for build orchestration, and includes packages for core Sui functionality, dApp development, wallet integration, and various blockchain services.
+This is a monorepo containing TypeScript SDKs for the Haneul blockchain ecosystem. It uses pnpm workspaces, turbo for build orchestration, and includes packages for core Haneul functionality, dApp development, wallet integration, and various blockchain services.
 
 ## Common Commands
 
@@ -67,11 +67,11 @@ pnpm changeset-version
 ### Repository Structure
 
 - **packages/** - All SDK packages organized by functionality
-  - **typescript/** - Core Sui SDK with submodules for bcs, client, cryptography, transactions, etc.
+  - **typescript/** - Core Haneul SDK with submodules for bcs, client, cryptography, transactions, etc.
   - **dapp-kit/** - React hooks and components for dApp development
   - **wallet-standard/** - Wallet adapter implementation
   - **signers/** - Various signing solutions (AWS KMS, GCP KMS, Ledger, etc.)
-  - **suins/** - Sui Name Service integration
+  - **haneulns/** - Haneul Name Service integration
   - **deepbook/** - DEX integration packages
   - **zksend/** - zkSend functionality
 

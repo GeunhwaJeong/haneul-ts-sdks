@@ -1,12 +1,12 @@
 {
-	"name": "@haneullabs/ledgerjs-hw-app-sui",
+	"name": "@haneullabs/ledgerjs-hw-app-haneul",
 	"version": "0.7.0",
-	"description": "Ledger Hardware Wallet Sui Application API",
+	"description": "Ledger Hardware Wallet Haneul Application API",
 	"keywords": [
 		"Ledger",
 		"LedgerWallet",
 		"LedgerSigner",
-		"Sui",
+		"Haneul",
 		"NanoS",
 		"Blue",
 		"Hardware Wallet"
@@ -23,7 +23,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"homepage": "https://github.com/HaneulLabs/ts-sdks/tree/main/packages/ledgerjs-hw-app-sui#readme",
+	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/tree/main/packages/ledgerjs-hw-app-haneul#readme",
 	"files": [
 		"CHANGELOG.md",
 		"dist",

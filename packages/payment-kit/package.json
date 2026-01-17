@@ -2,7 +2,7 @@
 	"name": "@haneullabs/payment-kit",
 	"version": "0.0.20",
 	"private": false,
-	"description": "Sui Payment Kit",
+	"description": "Haneul Payment Kit",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneullabs.com>",
 	"type": "commonjs",

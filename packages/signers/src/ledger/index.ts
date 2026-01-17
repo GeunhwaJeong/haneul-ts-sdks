@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type HaneulLedgerClient from '@haneullabs/ledgerjs-hw-app-sui';
+import type HaneulLedgerClient from '@haneullabs/ledgerjs-hw-app-haneul';
 import type { HaneulClient } from '@haneullabs/haneul/client';
 import type { SignatureWithBytes } from '@haneullabs/haneul/cryptography';
 import { messageWithIntent, Signer, toSerializedSignature } from '@haneullabs/haneul/cryptography';
@@ -11,7 +11,7 @@ import { toBase64 } from '@haneullabs/haneul/utils';
 
 import { bcs } from '@haneullabs/haneul/bcs';
 import { getInputObjects } from './objects.js';
-import type { Resolution } from '@haneullabs/ledgerjs-hw-app-sui';
+import type { Resolution } from '@haneullabs/ledgerjs-hw-app-haneul';
 
 export { HaneulMoveObject } from './bcs.js';
 export { getInputObjects } from './objects.js';

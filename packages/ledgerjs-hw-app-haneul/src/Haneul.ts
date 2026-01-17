@@ -55,7 +55,7 @@ enum HostToLedger {
 }
 
 const MIN_VERSION = '1.2.2';
-const MANAGER_APP_NAME = 'Sui';
+const MANAGER_APP_NAME = 'Haneul';
 
 function isPKIUnsupportedError(err: unknown): err is TransportStatusError {
 	return err instanceof TransportStatusError && err.message.includes('0x6a81');
@@ -72,13 +72,13 @@ async function tryLoadPKI(...args: Parameters<typeof loadPKI>) {
 }
 
 /**
- * Sui API
+ * Haneul API
  *
  * @example
- * import Haneul from "@haneullabs/ledgerjs-hw-app-sui";
+ * import Haneul from "@haneullabs/ledgerjs-hw-app-haneul";
  * const haneul = new Haneul(transport)
  */
-export default class Sui {
+export default class Haneul {
 	transport: Transport;
 	readonly #verbose: boolean;
 

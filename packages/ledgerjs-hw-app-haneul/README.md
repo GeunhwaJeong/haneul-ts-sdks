@@ -2,32 +2,32 @@
 [Ledger Developer Portal](https://developers.ledger.com/),
 [Ledger Developer Discord](https://developers.ledger.com/discord-pro)
 
-# ledgerjs-hw-app-sui
+# ledgerjs-hw-app-haneul
 
-[Ledger Hardware Wallet](https://www.ledger.com/) JavaScript bindings for [Sui](https://sui.io/),
+[Ledger Hardware Wallet](https://www.ledger.com/) JavaScript bindings for [Haneul](https://haneul.io/),
 based on [LedgerJS](https://github.com/LedgerHQ/ledgerjs).
 
-## Using LedgerJS for Sui
+## Using LedgerJS for Haneul
 
 Here is a sample app for Node:
 
 ```javascript
 const Transport = require('@ledgerhq/hw-transport').default;
-const Sui = require('@haneullabs/ledgerjs-hw-app-sui').default;
+const Haneul = require('@haneullabs/ledgerjs-hw-app-haneul').default;
 
 const getPublicKey = async () => {
-	const sui = new Sui(await Transport.create());
-	return await sui.getPublicKey("44'/784'/0'/0'/0'");
+	const haneul = new Haneul(await Transport.create());
+	return await haneul.getPublicKey("44'/784'/0'/0'/0'");
 };
 
 const signTransaction = async () => {
-	const sui = new Sui(await Transport.create());
-	return await sui.signTransaction("44'/784'/0'/0'/0'", '<transaction contents>');
+	const haneul = new Haneul(await Transport.create());
+	return await haneul.signTransaction("44'/784'/0'/0'/0'", '<transaction contents>');
 };
 
 const getVersion = async () => {
-	const sui = new Sui(await Transport.create());
-	return await sui.getVersion();
+	const haneul = new Haneul(await Transport.create());
+	return await haneul.getVersion();
 };
 
 const doAll = async () => {
@@ -43,7 +43,7 @@ doAll().catch((err) => console.log(err));
 
 ### Table of Contents
 
-- [Sui](#sui)
+- [Haneul](#haneul)
   - [Parameters](#parameters)
   - [Examples](#examples)
   - [getPublicKey](#getpublickey)
@@ -61,15 +61,15 @@ doAll().catch((err) => console.log(err));
 - `transport` **`Transport<any>`**
 - `scrambleKey`
   **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
-  (optional, default `"Sui"`)
+  (optional, default `"Haneul"`)
 
 ### Examples
 
 ```javascript
-import Sui from 'ledgerjs-hw-app-sui';
+import Haneul from '@haneullabs/ledgerjs-hw-app-haneul';
 
 const transport = await Transport.create();
-const sui = new Sui(transport);
+const haneul = new Haneul(transport);
 ```
 
 ### getPublicKey
@@ -88,7 +88,7 @@ Gets the Haneul address for a given BIP-32 path.
 #### Examples
 
 ```javascript
-const publicKey = await sui.getPublicKey("44'/784'/0'/0'/0'");
+const publicKey = await haneul.getPublicKey("44'/784'/0'/0'/0'");
 ```
 
 Returns
@@ -108,7 +108,7 @@ Sign a transaction with a given BIP-32 path.
 #### Examples
 
 ```javascript
-const publicKey = await sui.signTransaction("44'/784'/0'/0'/0'", '<transaction contents>');
+const publicKey = await haneul.signTransaction("44'/784'/0'/0'/0'", '<transaction contents>');
 ```
 
 Returns
@@ -122,7 +122,7 @@ Get the version of the application installed on the hardware device.
 #### Examples
 
 ```javascript
-console.log(await sui.getVersion());
+console.log(await haneul.getVersion());
 ```
 
 for version 0.1.0, it produces something like

@@ -1,7 +1,7 @@
 {
 	"name": "@haneullabs/deepbook",
 	"author": "Haneul Labs <build@haneullabs.com>",
-	"description": "Sui Deepbook SDK",
+	"description": "Haneul Deepbook SDK",
 	"version": "0.9.12",
 	"license": "Apache-2.0",
 	"type": "commonjs",
