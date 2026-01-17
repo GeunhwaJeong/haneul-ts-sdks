@@ -5,7 +5,7 @@ authors = ["Haneul Labs <build@haneullabs.com>"]
 edition = "2024.beta"
 
 [dependencies]
-Sui = { git = "https://github.com/HaneulLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet-v1.43.0" }
+Haneul = { git = "https://github.com/GeunhwaJeong/haneul.git", subdir = "crates/haneul-framework/packages/haneul-framework", rev = "testnet-v1.43.0" }
 WAL = { local = "../wal" }
 
 # For remote import, use the `{ git = "...", subdir = "...", rev = "..." }`.

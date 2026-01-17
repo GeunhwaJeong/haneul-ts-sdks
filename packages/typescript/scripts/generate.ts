@@ -19,7 +19,7 @@ import type {
 const packageRoot = path.resolve(import.meta.url.slice(5), '../..');
 
 const res = await fetch(
-	'https://raw.githubusercontent.com/HaneulLabs/sui/refs/heads/main/crates/sui-open-rpc/spec/openrpc.json',
+	'https://raw.githubusercontent.com/GeunhwaJeong/haneul/refs/heads/main/crates/haneul-open-rpc/spec/openrpc.json',
 );
 
 if (!res.ok) {
