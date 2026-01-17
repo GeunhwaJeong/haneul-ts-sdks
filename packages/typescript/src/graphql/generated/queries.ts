@@ -1306,9 +1306,9 @@ export type Epoch = {
    * Returns `None` when no checkpoint is set in scope (e.g. execution scope).
    */
   totalCheckpoints?: Maybe<Scalars['UInt53']['output']>;
-  /** The total amount of gas fees (in MIST) that were paid in this epoch (or `null` if the epoch has not finished yet). */
+  /** The total amount of gas fees (in GEUNHWA) that were paid in this epoch (or `null` if the epoch has not finished yet). */
   totalGasFees?: Maybe<Scalars['BigInt']['output']>;
-  /** The total MIST rewarded as stake (or `null` if the epoch has not finished yet). */
+  /** The total GEUNHWA rewarded as stake (or `null` if the epoch has not finished yet). */
   totalStakeRewards?: Maybe<Scalars['BigInt']['output']>;
   /** The amount added to total gas fees to make up the total stake rewards (or `null` if the epoch has not finished yet). */
   totalStakeSubsidies?: Maybe<Scalars['BigInt']['output']>;
@@ -1576,7 +1576,7 @@ export type GasInput = {
   gasBudget?: Maybe<Scalars['BigInt']['output']>;
   /** Objects used to pay for a transaction's execution and storage */
   gasPayment?: Maybe<ObjectConnection>;
-  /** An unsigned integer specifying the number of native tokens per gas unit this transaction will pay (in MIST). */
+  /** An unsigned integer specifying the number of native tokens per gas unit this transaction will pay (in GEUNHWA). */
   gasPrice?: Maybe<Scalars['BigInt']['output']>;
   /** Address of the owner of the gas object(s) used. */
   gasSponsor?: Maybe<Address>;

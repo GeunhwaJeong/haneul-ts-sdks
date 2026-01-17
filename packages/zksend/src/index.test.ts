@@ -6,7 +6,7 @@ import { decodeHaneulPrivateKey, Keypair } from '@haneullabs/sui/cryptography';
 import { getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/sui/faucet';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { Transaction } from '@haneullabs/sui/transactions';
-import { MIST_PER_SUI, toBase64 } from '@haneullabs/sui/utils';
+import { GEUNHWA_PER_HANEUL, toBase64 } from '@haneullabs/sui/utils';
 import { beforeAll, describe, expect, test } from 'vitest';
 
 import {
@@ -37,7 +37,7 @@ beforeAll(async () => {
 		owner: keypair.toHaneulAddress(),
 	});
 
-	if (Number(balance.totalBalance) < Number(MIST_PER_SUI) * 0.02) {
+	if (Number(balance.totalBalance) < Number(GEUNHWA_PER_HANEUL) * 0.02) {
 		await getSuiFromFaucet(keypair);
 	}
 }, 30_000);
@@ -64,7 +64,7 @@ describe('Contract links', () => {
 			link.addClaimableObject(bear.objectId);
 		}
 
-		link.addClaimableMist(100n);
+		link.addClaimableGeunhwa(100n);
 
 		const linkUrl = link.getLink();
 
@@ -135,7 +135,7 @@ describe('Contract links', () => {
 			link.addClaimableObject(bear.objectId);
 		}
 
-		link.addClaimableMist(100n);
+		link.addClaimableGeunhwa(100n);
 
 		const { digest } = await link.create({
 			signer: keypair,
@@ -225,7 +225,7 @@ describe('Contract links', () => {
 			link.addClaimableObject(bear.objectId);
 		}
 
-		link.addClaimableMist(100n);
+		link.addClaimableGeunhwa(100n);
 
 		const { digest } = await link.create({
 			signer: keypair,
@@ -274,7 +274,7 @@ describe('Contract links', () => {
 				sender: keypair.toHaneulAddress(),
 			});
 
-			link.addClaimableMist(100n);
+			link.addClaimableGeunhwa(100n);
 			link.addClaimableObject(bear.objectId);
 
 			links.push(link);
@@ -348,7 +348,7 @@ describe('Non contract links', () => {
 			link.addClaimableObject(bear.objectId);
 		}
 
-		link.addClaimableMist(100n);
+		link.addClaimableGeunhwa(100n);
 
 		const linkUrl = link.getLink();
 
@@ -468,7 +468,7 @@ describe('Non contract links', () => {
 			link.addClaimableObject(bear.objectId);
 		}
 
-		link.addClaimableMist(100n);
+		link.addClaimableGeunhwa(100n);
 
 		const receiver = new Ed25519Keypair();
 
@@ -510,7 +510,7 @@ describe('Non contract links', () => {
 			link.addClaimableObjectRef(bear, DEMO_BEAR_CONFIG.type);
 		}
 
-		link.addClaimableMist(100n);
+		link.addClaimableGeunhwa(100n);
 
 		const linkUrl = link.getLink();
 
@@ -578,7 +578,7 @@ describe('Non contract links', () => {
 			link.addClaimableObject(bear.objectId);
 		}
 
-		link.addClaimableMist(100n);
+		link.addClaimableGeunhwa(100n);
 
 		const linkUrl = link.getLink();
 

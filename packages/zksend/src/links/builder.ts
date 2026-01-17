@@ -77,7 +77,7 @@ export class ZkSendLinkBuilder {
 		}
 	}
 
-	addClaimableMist(amount: bigint) {
+	addClaimableGeunhwa(amount: bigint) {
 		this.addClaimableBalance(SUI_COIN_TYPE, amount);
 	}
 

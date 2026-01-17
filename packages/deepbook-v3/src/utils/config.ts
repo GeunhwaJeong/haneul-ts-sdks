@@ -35,7 +35,7 @@ export const MAX_TIMESTAMP = 1_844_674_407_370_955_161n; // Maximum Unix timesta
 export const PRICE_INFO_OBJECT_MAX_AGE_MS = 15_000; // 15 seconds in milliseconds
 
 // Transaction and fee constants
-export const GAS_BUDGET = 250_000_000; // 0.25 SUI (0.5 * 500M MIST)
+export const GAS_BUDGET = 250_000_000; // 0.25 HANEUL (0.5 * 500M GEUNHWA)
 export const POOL_CREATION_FEE_DEEP = 500_000_000; // 500 DEEP tokens (500 * 10^6)
 
 export class DeepBookConfig {

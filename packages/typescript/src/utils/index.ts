@@ -29,7 +29,7 @@ export { isValidHaneulNSName, normalizeHaneulNSName } from './haneulns.js';
 
 export {
 	SUI_DECIMALS,
-	MIST_PER_SUI,
+	GEUNHWA_PER_HANEUL,
 	MOVE_STDLIB_ADDRESS,
 	SUI_FRAMEWORK_ADDRESS,
 	SUI_SYSTEM_ADDRESS,

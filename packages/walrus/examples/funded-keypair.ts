@@ -5,7 +5,7 @@ import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/sui/faucet';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { coinWithBalance, Transaction } from '@haneullabs/sui/transactions';
-import { MIST_PER_SUI, parseStructTag } from '@haneullabs/sui/utils';
+import { GEUNHWA_PER_HANEUL, parseStructTag } from '@haneullabs/sui/utils';
 
 import { TESTNET_WALRUS_PACKAGE_CONFIG } from '../src/index.js';
 
@@ -23,7 +23,7 @@ export async function getFundedKeypair() {
 		owner: keypair.toHaneulAddress(),
 	});
 
-	if (BigInt(balance.totalBalance) < MIST_PER_SUI) {
+	if (BigInt(balance.totalBalance) < GEUNHWA_PER_HANEUL) {
 		await requestSuiFromFaucetV2({
 			host: getFaucetHost('testnet'),
 			recipient: keypair.toHaneulAddress(),
@@ -36,7 +36,7 @@ export async function getFundedKeypair() {
 	});
 	console.log('wal balance:', walBalance.totalBalance);
 
-	if (Number(walBalance.totalBalance) < Number(MIST_PER_SUI) / 2) {
+	if (Number(walBalance.totalBalance) < Number(GEUNHWA_PER_HANEUL) / 2) {
 		const tx = new Transaction();
 
 		const exchange = await haneulClient.getObject({
@@ -55,7 +55,7 @@ export async function getFundedKeypair() {
 			arguments: [
 				tx.object(TESTNET_WALRUS_PACKAGE_CONFIG.exchangeIds[0]),
 				coinWithBalance({
-					balance: MIST_PER_SUI / 2n,
+					balance: GEUNHWA_PER_HANEUL / 2n,
 				}),
 			],
 		});

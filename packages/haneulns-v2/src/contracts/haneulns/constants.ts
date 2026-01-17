@@ -38,12 +38,12 @@ export function defaultImage(options: DefaultImageOptions = {}) {
 			function: 'default_image',
 		});
 }
-export interface MistPerSuiOptions {
+export interface GeunhwaPerHaneulOptions {
 	package?: string;
 	arguments?: [];
 }
-/** The amount of MIST in 1 SUI. */
-export function mistPerSui(options: MistPerSuiOptions = {}) {
+/** The amount of GEUNHWA in 1 HANEUL. */
+export function geunhwaPerHaneul(options: GeunhwaPerHaneulOptions = {}) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	return (tx: Transaction) =>
 		tx.moveCall({

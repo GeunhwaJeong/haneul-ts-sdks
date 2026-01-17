@@ -53,7 +53,7 @@ export interface Epoch {
 	 */
 	end?: Timestamp;
 	/**
-	 * Reference gas price denominated in MIST
+	 * Reference gas price denominated in GEUNHWA
 	 *
 	 * @generated from protobuf field: optional uint64 reference_gas_price = 8;
 	 */

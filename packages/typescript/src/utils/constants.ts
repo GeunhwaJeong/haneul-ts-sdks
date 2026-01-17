@@ -4,7 +4,7 @@
 import { normalizeHaneulObjectId } from './haneul-types.js';
 
 export const SUI_DECIMALS = 9;
-export const MIST_PER_SUI = BigInt(1000000000);
+export const GEUNHWA_PER_HANEUL = BigInt(1000000000);
 
 export const MOVE_STDLIB_ADDRESS = '0x1';
 export const SUI_FRAMEWORK_ADDRESS = '0x2';

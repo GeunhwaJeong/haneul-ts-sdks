@@ -36,7 +36,7 @@ import { HaneulnsTransaction } from '../sr./haneulns-transaction.js';
 	/* Registration Example Using SUI */
 	const tx = new Transaction();
 	const suinsTx = new HaneulnsTransaction(haneulnsClient, tx);
-	const maxPaymentAmount = 5 * 1_000_000; // In MIST of the payment coin type
+	const maxPaymentAmount = 5 * 1_000_000; // In GEUNHWA of the payment coin type
 	const [coin] = suinsTx.transaction.splitCoins('0xMyCoin', [maxPaymentAmount]);
 
 	/* Registration Example Using NS */

@@ -12,7 +12,7 @@ import {
 	operationType,
 } from '../../src';
 import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import { MIST_PER_SUI } from '@haneullabs/sui/utils';
+import { GEUNHWA_PER_HANEUL } from '@haneullabs/sui/utils';
 
 const policy: AutoApprovalPolicy = {
 	schemaVersion: '1.0.0',
@@ -64,7 +64,7 @@ describe('AutoApprovalManager', () => {
 			remainingTransactions: 10,
 			usdBudget: 10,
 			coinBudgets: {
-				'sui:0x2::haneul::HANEUL': String(10n * MIST_PER_SUI),
+				'sui:0x2::haneul::HANEUL': String(10n * GEUNHWA_PER_HANEUL),
 			},
 			sharedBudget: null,
 		});

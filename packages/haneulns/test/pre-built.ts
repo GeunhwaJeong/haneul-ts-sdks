@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Transaction } from '@haneullabs/sui/transactions';
-import { MIST_PER_SUI, normalizeHaneulAddress } from '@haneullabs/sui/utils';
+import { GEUNHWA_PER_HANEUL, normalizeHaneulAddress } from '@haneullabs/sui/utils';
 import { expect } from 'vitest';
 
 import { ALLOWED_METADATA, HaneulnsClient, HaneulnsTransaction } from '../src/index.js';
@@ -55,7 +55,7 @@ export const e2eLiveNetworkDryRunFlow = async (network: 'mainnet' | 'testnet') =
 	const uniqueName =
 		(Date.now().toString(36) + Math.random().toString(36).substring(2)).repeat(2) + '.sui';
 
-	const [coinInput] = suinsTx.transaction.splitCoins(suinsTx.transaction.gas, [10n * MIST_PER_SUI]);
+	const [coinInput] = suinsTx.transaction.splitCoins(suinsTx.transaction.gas, [10n * GEUNHWA_PER_HANEUL]);
 	// register test.sui for 2 years.
 	const nft = suinsTx.register({
 		domain: uniqueName,
