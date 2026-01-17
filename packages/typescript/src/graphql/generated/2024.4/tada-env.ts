@@ -440,7 +440,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -1899,7 +1899,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -2556,7 +2556,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -4211,7 +4211,7 @@ const introspection = {
           },
           {
             "kind": "OBJECT",
-            "name": "SuinsRegistration"
+            "name": "HaneulnsRegistration"
           }
         ]
       },
@@ -4365,7 +4365,7 @@ const introspection = {
           },
           {
             "kind": "OBJECT",
-            "name": "SuinsRegistration"
+            "name": "HaneulnsRegistration"
           }
         ]
       },
@@ -4603,7 +4603,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -4675,7 +4675,7 @@ const introspection = {
           },
           {
             "kind": "OBJECT",
-            "name": "SuinsRegistration"
+            "name": "HaneulnsRegistration"
           }
         ]
       },
@@ -5531,10 +5531,10 @@ const introspection = {
             "isDeprecated": false
           },
           {
-            "name": "asSuinsRegistration",
+            "name": "asHaneulnsRegistration",
             "type": {
               "kind": "OBJECT",
-              "name": "SuinsRegistration"
+              "name": "HaneulnsRegistration"
             },
             "args": [],
             "isDeprecated": false
@@ -5979,7 +5979,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -6549,7 +6549,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -7549,7 +7549,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -8406,7 +8406,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -10712,7 +10712,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -10896,7 +10896,7 @@ const introspection = {
       },
       {
         "kind": "OBJECT",
-        "name": "SuinsRegistration",
+        "name": "HaneulnsRegistration",
         "fields": [
           {
             "name": "address",
@@ -11362,7 +11362,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistrationConnection"
+                "name": "HaneulnsRegistrationConnection"
               }
             },
             "args": [
@@ -11427,7 +11427,7 @@ const introspection = {
       },
       {
         "kind": "OBJECT",
-        "name": "SuinsRegistrationConnection",
+        "name": "HaneulnsRegistrationConnection",
         "fields": [
           {
             "name": "edges",
@@ -11439,7 +11439,7 @@ const introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "SuinsRegistrationEdge"
+                    "name": "HaneulnsRegistrationEdge"
                   }
                 }
               }
@@ -11457,7 +11457,7 @@ const introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "SuinsRegistration"
+                    "name": "HaneulnsRegistration"
                   }
                 }
               }
@@ -11482,7 +11482,7 @@ const introspection = {
       },
       {
         "kind": "OBJECT",
-        "name": "SuinsRegistrationEdge",
+        "name": "HaneulnsRegistrationEdge",
         "fields": [
           {
             "name": "cursor",
@@ -11502,7 +11502,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SuinsRegistration"
+                "name": "HaneulnsRegistration"
               }
             },
             "args": [],

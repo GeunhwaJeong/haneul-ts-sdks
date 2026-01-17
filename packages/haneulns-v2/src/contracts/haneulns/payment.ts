@@ -238,7 +238,7 @@ export function initRenewal(options: InitRenewalOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
 		`${packageAddress}::haneulns::HaneulNS`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'u8',
 	] satisfies string[];
 	const parameterNames = ['haneulns', 'nft', 'years'];
@@ -304,7 +304,7 @@ export function renew(options: RenewOptions) {
 	const argumentsTypes = [
 		`${packageAddress}::payment::Receipt`,
 		`${packageAddress}::haneulns::HaneulNS`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
 	] satisfies string[];
 	const parameterNames = ['receipt', 'haneulns', 'nft'];

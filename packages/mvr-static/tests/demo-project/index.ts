@@ -15,7 +15,7 @@ const _demoFunction = () => {
 			// eslint-disable-next-line prettier/prettier
 			'@mvr/app::type::Type<@kiosk/core::kiosk::Kiosk, bool>',
 			// eslint-disable-next-line prettier/prettier
-			'app.sui/app::t::T',
+			'app.haneul/app::t::T',
 			'@pkg/qwer::mvr_b::V2',
 		],
 	});

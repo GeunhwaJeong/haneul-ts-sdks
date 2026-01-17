@@ -38,7 +38,7 @@ export type HaneulCodegenConfig = z.input<typeof configSchema>;
 export type ParsedHaneulCodegenConfig = z.infer<typeof configSchema>;
 
 export async function loadConfig(): Promise<ParsedHaneulCodegenConfig> {
-	const config = await cosmiconfig('sui-codegen').search();
+	const config = await cosmiconfig('haneul-codegen').search();
 
 	if (!config) {
 		return {

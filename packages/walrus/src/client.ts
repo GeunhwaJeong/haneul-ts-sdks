@@ -200,7 +200,7 @@ export class WalrusClient {
 		this.#haneulClient =
 			config.haneulClient ??
 			new HaneulClient({
-				url: config.suiRpcUrl,
+				url: config.haneulRpcUrl,
 			});
 
 		this.#storageNodeClient = new StorageNodeClient(config.storageNodeClientOptions);
@@ -872,11 +872,11 @@ export class WalrusClient {
 			objectIds: createdObjectIds,
 		});
 
-		const suiBlobObject = createdObjects.objects.find(
+		const haneulBlobObject = createdObjects.objects.find(
 			(object) => !(object instanceof Error) && object.type === blobType,
 		);
 
-		if (suiBlobObject instanceof Error || !suiBlobObject) {
+		if (haneulBlobObject instanceof Error || !haneulBlobObject) {
 			throw new WalrusClientError(
 				`Storage object not found in transaction effects for transaction (${digest})`,
 			);
@@ -884,7 +884,7 @@ export class WalrusClient {
 
 		return {
 			digest,
-			storage: Storage.parse(await suiBlobObject.content),
+			storage: Storage.parse(await haneulBlobObject.content),
 		};
 	}
 
@@ -1106,11 +1106,11 @@ export class WalrusClient {
 			objectIds: createdObjectIds,
 		});
 
-		const suiBlobObject = createdObjects.objects.find(
+		const haneulBlobObject = createdObjects.objects.find(
 			(object) => !(object instanceof Error) && object.type === blobType,
 		);
 
-		if (suiBlobObject instanceof Error || !suiBlobObject) {
+		if (haneulBlobObject instanceof Error || !haneulBlobObject) {
 			throw new WalrusClientError(
 				`Blob object not found in transaction effects for transaction (${digest})`,
 			);
@@ -1118,7 +1118,7 @@ export class WalrusClient {
 
 		return {
 			digest,
-			blob: Blob.parse(await suiBlobObject.content),
+			blob: Blob.parse(await haneulBlobObject.content),
 		};
 	}
 
@@ -1138,17 +1138,17 @@ export class WalrusClient {
 			objectIds: createdObjectIds,
 		});
 
-		const suiBlobObject = createdObjects.objects.find(
+		const haneulBlobObject = createdObjects.objects.find(
 			(object) => !(object instanceof Error) && object.type === blobType,
 		);
 
-		if (suiBlobObject instanceof Error || !suiBlobObject) {
+		if (haneulBlobObject instanceof Error || !haneulBlobObject) {
 			throw new WalrusClientError(
 				`Blob object not found in transaction effects for transaction (${digest})`,
 			);
 		}
 
-		return Blob.parse(await suiBlobObject.content);
+		return Blob.parse(await haneulBlobObject.content);
 	}
 
 	async certificateFromConfirmations({
@@ -1901,7 +1901,7 @@ export class WalrusClient {
 			const blobId = encoded.blobId;
 			const { sliversByNode, metadata, rootHash } = encoded;
 
-			const suiBlobObject = await this.executeRegisterBlobTransaction({
+			const haneulBlobObject = await this.executeRegisterBlobTransaction({
 				signer,
 				size: blob.length,
 				epochs,
@@ -1912,7 +1912,7 @@ export class WalrusClient {
 				attributes,
 			});
 
-			const blobObjectId = suiBlobObject.blob.id.id;
+			const blobObjectId = haneulBlobObject.blob.id.id;
 
 			const confirmations = await this.writeEncodedBlobToNodes({
 				blobId,

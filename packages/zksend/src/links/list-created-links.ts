@@ -56,8 +56,8 @@ export async function listCreatedLinks({
 	const gqlClient = new HaneulGraphQLClient({
 		url:
 			network === 'testnet'
-				? 'https://graphql.testnet.sui.io/graphql'
-				: 'https://graphql.mainnet.sui.io/graphql',
+				? 'https://graphql.testnet.haneul.io/graphql'
+				: 'https://graphql.mainnet.haneul.io/graphql',
 		fetch: fetchFn,
 	});
 

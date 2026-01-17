@@ -4,7 +4,7 @@
 import type { BcsType, BcsTypeOptions } from '@haneullabs/bcs';
 import { bcs, fromBase58, fromBase64, fromHex, toBase58, toBase64, toHex } from '@haneullabs/bcs';
 
-import { isValidHaneulAddress, normalizeHaneulAddress, SUI_ADDRESS_LENGTH } from '../utils/haneul-types.js';
+import { isValidHaneulAddress, normalizeHaneulAddress, HANEUL_ADDRESS_LENGTH } from '../utils/haneul-types.js';
 import { TypeTagSerializer } from './type-tag-serializer.js';
 import type { TypeTag as TypeTagType } from './types.js';
 
@@ -27,7 +27,7 @@ function optionEnum<T extends BcsType<any, any>>(type: T) {
 	});
 }
 
-export const Address = bcs.bytes(SUI_ADDRESS_LENGTH).transform({
+export const Address = bcs.bytes(HANEUL_ADDRESS_LENGTH).transform({
 	validate: (val) => {
 		const address = typeof val === 'string' ? val : toHex(val);
 		if (!address || !isValidHaneulAddress(normalizeHaneulAddress(address))) {

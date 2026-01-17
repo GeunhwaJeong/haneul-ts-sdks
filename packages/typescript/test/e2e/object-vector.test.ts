@@ -4,7 +4,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Transaction } from '../../src/transactions';
-import { SUI_FRAMEWORK_ADDRESS } from '../../src/utils';
+import { HANEUL_FRAMEWORK_ADDRESS } from '../../src/utils';
 import { publishPackage, setup, TestToolbox } from './utils/setup';
 
 describe('Test Move call with a vector of objects as input', () => {
@@ -74,7 +74,7 @@ describe('Test Move call with a vector of objects as input', () => {
 			elements: [coinIDs[1], tx.object(coinIDs[2])],
 		});
 		tx.moveCall({
-			target: `${SUI_FRAMEWORK_ADDRESS}::pay::join_vec`,
+			target: `${HANEUL_FRAMEWORK_ADDRESS}::pay::join_vec`,
 			typeArguments: ['0x2::haneul::HANEUL'],
 			arguments: [tx.object(coinIDs[0]), vec],
 		});

@@ -6,7 +6,7 @@ import { blake2b } from '@noble/hashes/blake2b';
 import { bytesToHex } from '@noble/hashes/utils';
 
 import { bcs } from '../bcs/index.js';
-import { normalizeHaneulAddress, SUI_ADDRESS_LENGTH } from '../utils/haneul-types.js';
+import { normalizeHaneulAddress, HANEUL_ADDRESS_LENGTH } from '../utils/haneul-types.js';
 import type { IntentScope } from './intent.js';
 import { messageWithIntent } from './intent.js';
 import { SIGNATURE_FLAG_TO_SCHEME, SIGNATURE_SCHEME_TO_SIZE } from './signature-scheme.js';
@@ -61,7 +61,7 @@ export abstract class PublicKey {
 	 * of the scheme flag with the raw bytes of the public key
 	 */
 	toHaneulPublicKey(): string {
-		const bytes = this.toSuiBytes();
+		const bytes = this.toHaneulBytes();
 		return toBase64(bytes);
 	}
 
@@ -105,7 +105,7 @@ export abstract class PublicKey {
 	 * Returns the bytes representation of the public key
 	 * prefixed with the signature scheme flag
 	 */
-	toSuiBytes(): Uint8Array<ArrayBuffer> {
+	toHaneulBytes(): Uint8Array<ArrayBuffer> {
 		const rawBytes = this.toRawBytes();
 		const suiBytes = new Uint8Array(rawBytes.length + 1);
 		suiBytes.set([this.flag()]);
@@ -120,7 +120,7 @@ export abstract class PublicKey {
 	toHaneulAddress(): string {
 		// Each hex char represents half a byte, hence hex address doubles the length
 		return normalizeHaneulAddress(
-			bytesToHex(blake2b(this.toSuiBytes(), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
+			bytesToHex(blake2b(this.toHaneulBytes(), { dkLen: 32 })).slice(0, HANEUL_ADDRESS_LENGTH * 2),
 		);
 	}
 

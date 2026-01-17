@@ -362,7 +362,7 @@ function replaceMvrNames(tag: string | StructTag, typeCache: Record<string, stri
 
 export function hasMvrName(nameOrType: string) {
 	return (
-		nameOrType.includes(NAME_SEPARATOR) || nameOrType.includes('@') || nameOrType.includes('.sui')
+		nameOrType.includes(NAME_SEPARATOR) || nameOrType.includes('@') || nameOrType.includes('.haneul')
 	);
 }
 

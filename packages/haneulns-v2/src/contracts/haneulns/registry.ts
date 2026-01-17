@@ -57,7 +57,7 @@ export interface AddRecordIgnoringGracePeriodOptions {
 /**
  * Attempts to add a new record to the registry without looking at the grace
  * period. Currently used for subdomains where there's no grace period to respect.
- * Returns a `SuinsRegistration` upon success.
+ * Returns a `HaneulnsRegistration` upon success.
  */
 export function addRecordIgnoringGracePeriod(options: AddRecordIgnoringGracePeriodOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
@@ -92,7 +92,7 @@ export interface AddRecordOptions {
 		  ];
 }
 /**
- * Attempts to add a new record to the registry and returns a `SuinsRegistration`
+ * Attempts to add a new record to the registry and returns a `HaneulnsRegistration`
  * upon success. Only use with second-level names. Enforces a `grace_period` by
  * default. Not suitable for subdomains (unless a grace period is needed).
  */
@@ -131,7 +131,7 @@ export function burnRegistrationObject(options: BurnRegistrationObjectOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
 		`${packageAddress}::registry::Registry`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
 	] satisfies string[];
 	const parameterNames = ['self', 'nft'];
@@ -158,7 +158,7 @@ export function wrapSubdomain(options: WrapSubdomainOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
 		`${packageAddress}::registry::Registry`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
 	] satisfies string[];
 	const parameterNames = ['_', 'nft'];
@@ -217,9 +217,9 @@ export interface AddLeafRecordOptions {
 }
 /**
  * Adds a `leaf` record to the registry. A `leaf` record is a record that is a
- * subdomain and doesn't have an equivalent `SuinsRegistration` object.
+ * subdomain and doesn't have an equivalent `HaneulnsRegistration` object.
  *
- * Instead, the parent's `SuinsRegistration` object is used to manage
+ * Instead, the parent's `HaneulnsRegistration` object is used to manage
  * target_address & remove it / determine expiration.
  *
  * 1.  Leaf records can't have children. They only work as a resolving mechanism.
@@ -260,7 +260,7 @@ export interface RemoveLeafRecordOptions {
 }
 /**
  * Can be used to remove a leaf record. Leaf records do not have any symmetrical
- * `SuinsRegistration` object. Authorization of who calls this is delegated to the
+ * `HaneulnsRegistration` object. Authorization of who calls this is delegated to the
  * authorized module that calls this.
  */
 export function removeLeafRecord(options: RemoveLeafRecordOptions) {
@@ -381,15 +381,15 @@ export interface SetExpirationTimestampMsOptions {
 		  ];
 }
 /**
- * Update the `expiration_timestamp_ms` of the given `SuinsRegistration` and
- * `NameRecord`. Requires the `SuinsRegistration` to make sure that both timestamps
+ * Update the `expiration_timestamp_ms` of the given `HaneulnsRegistration` and
+ * `NameRecord`. Requires the `HaneulnsRegistration` to make sure that both timestamps
  * are in sync.
  */
 export function setExpirationTimestampMs(options: SetExpirationTimestampMsOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
 		`${packageAddress}::registry::Registry`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		`${packageAddress}::domain::Domain`,
 		'u64',
 	] satisfies string[];
@@ -418,7 +418,7 @@ export interface SetDataOptions {
 		  ];
 }
 /**
- * Update the `data` of the given `NameRecord` using a `SuinsRegistration`. Use
+ * Update the `data` of the given `NameRecord` using a `HaneulnsRegistration`. Use
  * with caution and validate(!!) that any system fields are not removed
  * (accidentally), when building authorized packages that can write the metadata
  * field.
@@ -534,7 +534,7 @@ export function assertNftIsAuthorized(options: AssertNftIsAuthorizedOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
 		`${packageAddress}::registry::Registry`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
 	] satisfies string[];
 	const parameterNames = ['self', 'nft'];

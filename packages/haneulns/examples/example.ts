@@ -27,7 +27,7 @@ import { HaneulnsTransaction } from '../sr./haneulns-transaction.js';
 	console.log(await haneulnsClient.getCoinTypeDiscount());
 
 	/* Following can be used to fetch the domain record */
-	console.log('Domain Record: ', await haneulnsClient.getNameRecord('myname.sui'));
+	console.log('Domain Record: ', await haneulnsClient.getNameRecord('myname.haneul'));
 
 	/* If discount NFT is used */
 	// const discountNft = '0xMyDiscountNft'; // This can be a string or a kioskTransactionArgument
@@ -35,15 +35,15 @@ import { HaneulnsTransaction } from '../sr./haneulns-transaction.js';
 
 	/* Registration Example Using SUI */
 	const tx = new Transaction();
-	const suinsTx = new HaneulnsTransaction(haneulnsClient, tx);
+	const haneulnsTx = new HaneulnsTransaction(haneulnsClient, tx);
 	const maxPaymentAmount = 5 * 1_000_000; // In GEUNHWA of the payment coin type
-	const [coin] = suinsTx.transaction.splitCoins('0xMyCoin', [maxPaymentAmount]);
+	const [coin] = haneulnsTx.transaction.splitCoins('0xMyCoin', [maxPaymentAmount]);
 
 	/* Registration Example Using NS */
 	const coinConfig = haneulnsClient.config.coins.NS; // Specify the coin type used for the transaction
 	const priceInfoObjectId = (await haneulnsClient.getPriceInfoObject(tx, coinConfig.feed))[0];
-	const nft = suinsTx.register({
-		domain: 'myname.sui',
+	const nft = haneulnsTx.register({
+		domain: 'myname.haneul',
 		years: 2,
 		coinConfig,
 		couponCode: 'fiveplus15percentoff',
@@ -53,8 +53,8 @@ import { HaneulnsTransaction } from '../sr./haneulns-transaction.js';
 
 	/* Registration Example Using USDC */
 	// const coinConfig = haneulnsClient.config.coins.USDC; // Specify the coin type used for the transaction
-	// const nft = suinsTx.register({
-	// 	domain: 'myname.sui',
+	// const nft = haneulnsTx.register({
+	// 	domain: 'myname.haneul',
 	// 	years: 2,
 	// 	coinConfig,
 	// 	coin,
@@ -63,7 +63,7 @@ import { HaneulnsTransaction } from '../sr./haneulns-transaction.js';
 	// /* Renew Example */
 	// const coinConfig = haneulnsClient.config.coins.SUI; // Specify the coin type used for the transaction
 	// const priceInfoObjectId = await haneulnsClient.getPriceInfoObject(tx, coinConfig.feed)[0];
-	// suinsTx.renew({
+	// haneulnsTx.renew({
 	// 	nft: '0xMyNft',
 	// 	years: 2,
 	// 	coinConfig,
@@ -72,36 +72,36 @@ import { HaneulnsTransaction } from '../sr./haneulns-transaction.js';
 	// });
 
 	/* Optionally set target address */
-	suinsTx.setTargetAddress({ nft, address: '0xMyAddress' });
+	haneulnsTx.setTargetAddress({ nft, address: '0xMyAddress' });
 
 	/* Optionally set default */
-	suinsTx.setDefault('myname.sui');
+	haneulnsTx.setDefault('myname.haneul');
 
 	/* Optionally set user data */
-	suinsTx.setUserData({
+	haneulnsTx.setUserData({
 		nft,
 		value: 'hello',
 		key: 'walrus_site_id',
 	});
 
 	/* Optionally transfer the NFT */
-	suinsTx.transaction.transferObjects([nft], '0xMyAddress');
+	haneulnsTx.transaction.transferObjects([nft], '0xMyAddress');
 
 	/* Optionally transfer coin */
-	suinsTx.transaction.transferObjects([coin], '0xMyAddress');
+	haneulnsTx.transaction.transferObjects([coin], '0xMyAddress');
 
 	/* Subname Example */
-	// const subnameNft = suinsTx.createSubName({
+	// const subnameNft = haneulnsTx.createSubName({
 	// 	parentNft: '0xMyParentNft',
-	// 	name: 'name.myname.sui',
+	// 	name: 'name.myname.haneul',
 	// 	expirationTimestampMs: 1862491339394,
 	// 	allowChildCreation: true,
 	// 	allowTimeExtension: true,
 	// });
-	// suinsTx.transaction.transferObjects([subnameNft], 'YOUR_ADDRESS');
+	// haneulnsTx.transaction.transferObjects([subnameNft], 'YOUR_ADDRESS');
 
 	/* Extend Subname Expiration */
-	// suinsTx.extendExpiration({
+	// haneulnsTx.extendExpiration({
 	// 	nft: '0xMySubnameNft',
 	// 	expirationTimestampMs: 1862511339394,
 	// });

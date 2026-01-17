@@ -32,7 +32,7 @@ export function WalletBalances({
 	const [isReturning, setIsReturning] = useState(false);
 	const [isSwapping, setIsSwapping] = useState(false);
 	const [walBalance, setWalBalance] = useState<string>('0');
-	const [suiBalance, setSuiBalance] = useState<string>('0');
+	const [haneulBalance, setSuiBalance] = useState<string>('0');
 
 	const formatBalance = (balance: string, decimals: number = 9): string => {
 		const num = Number(balance) / Math.pow(10, decimals);
@@ -177,7 +177,7 @@ export function WalletBalances({
 		<div style={{ marginBottom: '15px' }}>
 			<h3 style={{ margin: '0 0 10px 0' }}>Keypair Balances</h3>
 			<div style={{ marginBottom: '10px' }}>
-				<strong>SUI:</strong> {formatBalance(suiBalance)} SUI
+				<strong>SUI:</strong> {formatBalance(haneulBalance)} SUI
 				<span style={{ margin: '0 15px' }}>•</span>
 				<strong>WAL:</strong> {formatBalance(walBalance)} WAL
 			</div>

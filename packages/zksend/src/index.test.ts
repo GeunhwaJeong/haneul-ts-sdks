@@ -27,7 +27,7 @@ const client = new HaneulClient({
 
 // address:  0x8ab2b2a5cfa538db19062b79622abe28f3171c8b8048c5957b01846d57574630
 const keypair = Ed25519Keypair.fromSecretKey(
-	'suiprivkey1qz3v0pjxalg3z3p9p6lp4x84y74g0qt2y2q36amvkgfh9zzmm4q66y6ccdz',
+	'haneulprivkey1qz3v0pjxalg3z3p9p6lp4x84y74g0qt2y2q36amvkgfh9zzmm4q66y6ccdz',
 );
 
 // Automatically get gas from testnet is not working reliably, manually request gas via discord,

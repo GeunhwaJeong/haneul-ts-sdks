@@ -4,7 +4,7 @@
 import { TypeTagSerializer } from '../bcs/type-tag-serializer.js';
 import type { TransactionPlugin } from '../transactions/index.js';
 import { deriveDynamicFieldID } from '../utils/dynamic-fields.js';
-import { normalizeStructTag, parseStructTag, SUI_ADDRESS_LENGTH } from '../utils/haneul-types.js';
+import { normalizeStructTag, parseStructTag, HANEUL_ADDRESS_LENGTH } from '../utils/haneul-types.js';
 import { Experimental_BaseClient } from './client.js';
 import type { ClientWithExtensions, Experimental_HaneulClientTypes } from './types.js';
 import { MvrClient } from './mvr.js';
@@ -153,7 +153,7 @@ export abstract class Experimental_CoreClient
 						typeof fieldType.typeParams[1] === 'string'
 							? fieldType.typeParams[1]
 							: normalizeStructTag(fieldType.typeParams[1]),
-					bcs: content.slice(SUI_ADDRESS_LENGTH + options.name.bcs.length),
+					bcs: content.slice(HANEUL_ADDRESS_LENGTH + options.name.bcs.length),
 				},
 			},
 		};

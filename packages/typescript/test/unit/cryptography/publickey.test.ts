@@ -11,7 +11,7 @@ import { bytesEqual, PublicKey } from '../../../src/cryptography/publickey';
 import { Ed25519Keypair, Ed25519PublicKey } from '../../../src/keypairs/ed25519';
 import { Secp256k1Keypair } from '../../../src/keypairs/secp256k1';
 import { Secp256r1Keypair } from '../../../src/keypairs/secp256r1';
-import { normalizeHaneulAddress, SUI_ADDRESS_LENGTH } from '../../../s../utils/haneul-types.js';
+import { normalizeHaneulAddress, HANEUL_ADDRESS_LENGTH } from '../../../s../utils/haneul-types.js';
 
 describe('Publickey', () => {
 	let k1: Ed25519Keypair,
@@ -61,7 +61,7 @@ describe('Publickey', () => {
 	});
 
 	it('`toHaneulPublicKey()` should return a valid sui representation', async () => {
-		expect(pk2.toHaneulPublicKey()).toEqual(toBase64(pk2.toSuiBytes()));
+		expect(pk2.toHaneulPublicKey()).toEqual(toBase64(pk2.toHaneulBytes()));
 		expect(pk2.toHaneulPublicKey()).toEqual('AQIdFSMHxrcrDtBBiw5wzYDn9SlbjYb1ci0/UhP70jlPNg==');
 	});
 
@@ -103,13 +103,13 @@ describe('Publickey', () => {
 		expect(await pk2.verifyTransaction(data, sig2.signature)).toEqual(true);
 	});
 
-	it('`toSuiBytes()` should return the correct byte representation of the public key with the signature scheme flag', async () => {
+	it('`toHaneulBytes()` should return the correct byte representation of the public key with the signature scheme flag', async () => {
 		const pk1SuiBytes = new Uint8Array(pk1.toRawBytes().length + 1);
 		pk1SuiBytes.set([0x00]);
 		pk1SuiBytes.set(pk1.toRawBytes(), 1);
 
-		expect(pk1.toSuiBytes()).toEqual(pk1SuiBytes);
-		expect(pk1.toSuiBytes()).toEqual(
+		expect(pk1.toHaneulBytes()).toEqual(pk1SuiBytes);
+		expect(pk1.toHaneulBytes()).toEqual(
 			new Uint8Array([
 				0, 90, 226, 32, 180, 178, 246, 94, 151, 124, 18, 237, 230, 21, 121, 255, 81, 112, 182, 194,
 				44, 0, 97, 104, 195, 123, 94, 124, 97, 175, 1, 128, 131,
@@ -120,8 +120,8 @@ describe('Publickey', () => {
 		pk2SuiBytes.set([0x01]);
 		pk2SuiBytes.set(pk2.toRawBytes(), 1);
 
-		expect(pk2.toSuiBytes()).toEqual(pk2SuiBytes);
-		expect(pk2.toSuiBytes()).toEqual(
+		expect(pk2.toHaneulBytes()).toEqual(pk2SuiBytes);
+		expect(pk2.toHaneulBytes()).toEqual(
 			new Uint8Array([
 				1, 2, 29, 21, 35, 7, 198, 183, 43, 14, 208, 65, 139, 14, 112, 205, 128, 231, 245, 41, 91,
 				141, 134, 245, 114, 45, 63, 82, 19, 251, 210, 57, 79, 54,
@@ -132,8 +132,8 @@ describe('Publickey', () => {
 		pk3SuiBytes.set([0x02]);
 		pk3SuiBytes.set(pk3.toRawBytes(), 1);
 
-		expect(pk3.toSuiBytes()).toEqual(pk3SuiBytes);
-		expect(pk3.toSuiBytes()).toEqual(
+		expect(pk3.toHaneulBytes()).toEqual(pk3SuiBytes);
+		expect(pk3.toHaneulBytes()).toEqual(
 			new Uint8Array([
 				2, 2, 39, 50, 43, 58, 137, 26, 10, 40, 13, 107, 193, 251, 44, 187, 35, 210, 143, 84, 144,
 				111, 214, 64, 127, 95, 116, 31, 109, 239, 87, 98, 96, 154,
@@ -143,13 +143,13 @@ describe('Publickey', () => {
 
 	it('`toHaneulAddress()` should correctly return sui address associated with Ed25519 publickey', async () => {
 		const pk1HaneulAddress = normalizeHaneulAddress(
-			bytesToHex(blake2b(pk1.toSuiBytes(), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
+			bytesToHex(blake2b(pk1.toHaneulBytes(), { dkLen: 32 })).slice(0, HANEUL_ADDRESS_LENGTH * 2),
 		);
 		const pk2HaneulAddress = normalizeHaneulAddress(
-			bytesToHex(blake2b(pk2.toSuiBytes(), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
+			bytesToHex(blake2b(pk2.toHaneulBytes(), { dkLen: 32 })).slice(0, HANEUL_ADDRESS_LENGTH * 2),
 		);
 		const pk3HaneulAddress = normalizeHaneulAddress(
-			bytesToHex(blake2b(pk3.toSuiBytes(), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
+			bytesToHex(blake2b(pk3.toHaneulBytes(), { dkLen: 32 })).slice(0, HANEUL_ADDRESS_LENGTH * 2),
 		);
 		expect(k1.toHaneulAddress()).toEqual(pk1HaneulAddress);
 		expect(k1.toHaneulAddress()).toEqual(

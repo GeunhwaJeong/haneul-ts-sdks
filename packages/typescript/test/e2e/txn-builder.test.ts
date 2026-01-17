@@ -7,7 +7,7 @@ import { bcs } from '../../src/bcs';
 import { HaneulClient, HaneulObjectChangeCreated, HaneulTransactionBlockResponse } from '../../src/client';
 import type { Keypair } from '../../src/cryptography';
 import { Transaction } from '../../src/transactions';
-import { normalizeHaneulObjectId, SUI_SYSTEM_STATE_OBJECT_ID } from '../../src/utils';
+import { normalizeHaneulObjectId, HANEUL_SYSTEM_STATE_OBJECT_ID } from '../../src/utils';
 import {
 	DEFAULT_GAS_BUDGET,
 	DEFAULT_RECIPIENT,
@@ -88,7 +88,7 @@ describe('Transaction Builders', () => {
 			tx.moveCall({
 				target: '0x3::haneul_system::request_add_stake',
 				arguments: [
-					tx.object(SUI_SYSTEM_STATE_OBJECT_ID),
+					tx.object(HANEUL_SYSTEM_STATE_OBJECT_ID),
 					tx.object(coin_2.coinObjectId),
 					tx.pure.address(validatorAddress),
 				],

@@ -336,7 +336,7 @@ export class HaneulnsTransaction {
 
 	/**
 	 * Builds the PTB to create a leaf subdomain.
-	 * Parent can be a `SuinsRegistration` or a `SubDomainRegistration` object.
+	 * Parent can be a `HaneulnsRegistration` or a `SubDomainRegistration` object.
 	 * Can be passed in as an ID or a TransactionArgument.
 	 */
 	createLeafSubName({

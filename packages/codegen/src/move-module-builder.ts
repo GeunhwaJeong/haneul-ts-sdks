@@ -6,8 +6,8 @@ import { readFile } from 'node:fs/promises';
 import {
 	getSafeName,
 	renderTypeSignature,
-	SUI_FRAMEWORK_ADDRESS,
-	SUI_SYSTEM_ADDRESS,
+	HANEUL_FRAMEWORK_ADDRESS,
+	HANEUL_SYSTEM_ADDRESS,
 } from './render-types.js';
 import {
 	camelCase,
@@ -65,9 +65,9 @@ export class MoveModuleBuilder extends FileBuilder {
 
 	#getModuleTypeName() {
 		const resolvedAddress = this.#resolveAddress(this.summary.id.address);
-		if (resolvedAddress === SUI_FRAMEWORK_ADDRESS) {
+		if (resolvedAddress === HANEUL_FRAMEWORK_ADDRESS) {
 			return '0x2';
-		} else if (resolvedAddress === SUI_SYSTEM_ADDRESS) {
+		} else if (resolvedAddress === HANEUL_SYSTEM_ADDRESS) {
 			return '0x3';
 		} else {
 			return this.#mvrNameOrAddress ?? this.summary.id.address;
@@ -576,7 +576,7 @@ export class MoveModuleBuilder extends FileBuilder {
 
 		if ('Datatype' in type) {
 			return (
-				this.#resolveAddress(type.Datatype.module.address) === SUI_FRAMEWORK_ADDRESS &&
+				this.#resolveAddress(type.Datatype.module.address) === HANEUL_FRAMEWORK_ADDRESS &&
 				type.Datatype.module.name === 'tx_context' &&
 				type.Datatype.name === 'TxContext'
 			);

@@ -6,10 +6,10 @@ import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { DeepBookClient } from '../src/index.js'; // Adjust path according to new structure
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.HANEUL_BINARY ?? \`haneul\`;
 
 export const getActiveAddress = () => {
-	return execSync(`${SUI} client active-address`, { encoding: 'utf8' }).trim();
+	return execSync(` client active-address`, { encoding: 'utf8' }).trim();
 };
 
 export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
@@ -37,7 +37,7 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 
 	const suiDbusdcDeepbookReferral =
 		'0x35db71e6431935bde42803fdad7f69d4688bc92abb5e1522bbb8aa3db33c5169';
-	const deepSuiDeepbookReferral =
+	const deepHaneulDeepbookReferral =
 		'0x1f6fbf3ecaa948df7b448c932f9f72a604477be63de199d37cee8a9a863c31eb';
 
 	const dbClient = new DeepBookClient({
@@ -120,11 +120,11 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	);
 	console.log('HANEUL_DBUSDC Referral Balances:', suiDbusdcReferralBalances);
 
-	const deepSuiReferralBalances = await dbClient.getPoolReferralBalances(
+	const deepHaneulReferralBalances = await dbClient.getPoolReferralBalances(
 		'DEEP_HANEUL',
-		deepSuiDeepbookReferral,
+		deepHaneulDeepbookReferral,
 	);
-	console.log('DEEP_HANEUL Referral Balances:', deepSuiReferralBalances);
+	console.log('DEEP_HANEUL Referral Balances:', deepHaneulReferralBalances);
 
 	// 2. Get multiplier for referrals
 	console.log('\n--- DeepBook Pool Referral: poolReferralMultiplier ---');
@@ -134,7 +134,7 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	);
 	console.log(
 		'DEEP_HANEUL Multiplier:',
-		await dbClient.poolReferralMultiplier('DEEP_HANEUL', deepSuiDeepbookReferral),
+		await dbClient.poolReferralMultiplier('DEEP_HANEUL', deepHaneulDeepbookReferral),
 	);
 
 	// --- Balance Manager Referral Read-only Functions ---
@@ -145,8 +145,8 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 		await dbClient.balanceManagerReferralOwner(suiDbusdcDeepbookReferral);
 	console.log('HANEUL_DBUSDC Referral Owner:', suiDbusdcReferralOwner);
 
-	const deepSuiReferralOwner = await dbClient.balanceManagerReferralOwner(deepSuiDeepbookReferral);
-	console.log('DEEP_HANEUL Referral Owner:', deepSuiReferralOwner);
+	const deepHaneulReferralOwner = await dbClient.balanceManagerReferralOwner(deepHaneulDeepbookReferral);
+	console.log('DEEP_HANEUL Referral Owner:', deepHaneulReferralOwner);
 
 	// 4. Get pool ID from referral
 	console.log('\n--- Balance Manager Referral: balanceManagerReferralPoolId ---');
@@ -156,7 +156,7 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	);
 	console.log(
 		'DEEP_HANEUL Pool ID:',
-		await dbClient.balanceManagerReferralPoolId(deepSuiDeepbookReferral),
+		await dbClient.balanceManagerReferralPoolId(deepHaneulDeepbookReferral),
 	);
 
 	// 5. Get the referral ID set on the balance manager
@@ -167,9 +167,9 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	);
 	console.log('HANEUL_DBUSDC Referral ID on BALANCE_MANAGER_1:', suiDbusdcReferralId);
 
-	const deepSuiReferralId = await dbClient.getBalanceManagerReferralId(
+	const deepHaneulReferralId = await dbClient.getBalanceManagerReferralId(
 		'BALANCE_MANAGER_1',
 		'DEEP_HANEUL',
 	);
-	console.log('DEEP_HANEUL Referral ID on BALANCE_MANAGER_1:', deepSuiReferralId);
+	console.log('DEEP_HANEUL Referral ID on BALANCE_MANAGER_1:', deepHaneulReferralId);
 })();

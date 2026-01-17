@@ -110,7 +110,7 @@ const MOCK_KEY_SERVERS = new Map([
 ]);
 describe('Integration test', () => {
 	let keypair: Ed25519Keypair;
-	let suiAddress: string;
+	let haneulAddress: string;
 	let haneulClient: SealCompatibleClient;
 	let TESTNET_PACKAGE_ID: string;
 	let serverObjectId: string;
@@ -119,9 +119,9 @@ describe('Integration test', () => {
 	let whitelistId: string;
 	beforeAll(async () => {
 		keypair = Ed25519Keypair.fromSecretKey(
-			'suiprivkey1qqgzvw5zc2zmga0uyp4rzcgk42pzzw6387zqhahr82pp95yz0scscffh2d8',
+			'haneulprivkey1qqgzvw5zc2zmga0uyp4rzcgk42pzzw6387zqhahr82pp95yz0scscffh2d8',
 		);
-		suiAddress = keypair.getPublicKey().toHaneulAddress();
+		haneulAddress = keypair.getPublicKey().toHaneulAddress();
 		haneulClient = new HaneulClient({ url: getFullnodeUrl('testnet') });
 		TESTNET_PACKAGE_ID = '0x8afa5d31dbaa0a8fb07082692940ca3d56b5e856c5126cb5a3693f0a4de63b82';
 		// Object ids pointing to ci key servers' urls
@@ -167,7 +167,7 @@ describe('Integration test', () => {
 		]);
 
 		const sessionKey = await SessionKey.create({
-			address: suiAddress,
+			address: haneulAddress,
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
@@ -280,7 +280,7 @@ describe('Integration test', () => {
 		]);
 
 		const sessionKey = await SessionKey.create({
-			address: suiAddress,
+			address: haneulAddress,
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
@@ -342,7 +342,7 @@ describe('Integration test', () => {
 		]);
 
 		const sessionKey = await SessionKey.create({
-			address: suiAddress,
+			address: haneulAddress,
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
@@ -402,7 +402,7 @@ describe('Integration test', () => {
 		const txBytes = await constructTxBytes(packageId, 'allowlist', haneulClient, [whitelistId]);
 
 		const sessionKey = await SessionKey.create({
-			address: suiAddress,
+			address: haneulAddress,
 			packageId,
 			ttlMin: 10,
 			signer: keypair,
@@ -463,7 +463,7 @@ describe('Integration test', () => {
 		]);
 
 		const sessionKey = await SessionKey.create({
-			address: suiAddress,
+			address: haneulAddress,
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
@@ -513,7 +513,7 @@ describe('Integration test', () => {
 		]);
 
 		const sessionKey = await SessionKey.create({
-			address: suiAddress,
+			address: haneulAddress,
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
@@ -594,7 +594,7 @@ describe('Integration test', () => {
 
 		const encryptedObject = EncryptedObject.parse(encryptedBytes);
 
-		// Session key with mismatched sui address and personal msg signature fails.
+		// Session key with mismatched haneul address and personal msg signature fails.
 		const wrongHaneulAddress = Ed25519Keypair.generate().getPublicKey().toHaneulAddress();
 		const sessionKey = await SessionKey.create({
 			address: wrongHaneulAddress,
@@ -609,7 +609,7 @@ describe('Integration test', () => {
 
 		// Wrong txBytes fails to verify.
 		const sessionKey2 = await SessionKey.create({
-			address: suiAddress,
+			address: haneulAddress,
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
@@ -631,7 +631,7 @@ describe('Integration test', () => {
 		// construct a non move call ptb, gets invalid PTB error.
 		const tx = new Transaction();
 		const objectArg = tx.object(whitelistId);
-		tx.transferObjects([objectArg], suiAddress);
+		tx.transferObjects([objectArg], haneulAddress);
 		const txBytes3 = await tx.build({ client: haneulClient, onlyTransactionKind: true });
 
 		const client2 = new SealClient({
@@ -641,7 +641,7 @@ describe('Integration test', () => {
 		});
 
 		const sessionKey3 = await SessionKey.create({
-			address: suiAddress,
+			address: haneulAddress,
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
@@ -716,7 +716,7 @@ describe('Integration test', () => {
 			.mockRejectedValueOnce(new Error('Other error'));
 
 		const sessionKey = await SessionKey.create({
-			address: suiAddress,
+			address: haneulAddress,
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,

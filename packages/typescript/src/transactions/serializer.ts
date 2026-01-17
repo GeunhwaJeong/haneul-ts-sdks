@@ -5,7 +5,7 @@ import type { BcsType } from '@haneullabs/bcs';
 
 import { bcs } from '../bcs/index.js';
 import type { HaneulMoveNormalizedType } from '../client/index.js';
-import { MOVE_STDLIB_ADDRESS, SUI_FRAMEWORK_ADDRESS } from '../utils/index.js';
+import { MOVE_STDLIB_ADDRESS, HANEUL_FRAMEWORK_ADDRESS } from '../utils/index.js';
 import { normalizeHaneulAddress } from '../utils/haneul-types.js';
 import type { OpenMoveTypeSignature, OpenMoveTypeSignatureBody } from './data/internal.js';
 
@@ -97,7 +97,7 @@ export function getPureBcsSchema(typeSignature: OpenMoveTypeSignatureBody): BcsT
 		}
 
 		if (
-			pkg === normalizeHaneulAddress(SUI_FRAMEWORK_ADDRESS) &&
+			pkg === normalizeHaneulAddress(HANEUL_FRAMEWORK_ADDRESS) &&
 			typeSignature.datatype.module === OBJECT_MODULE_NAME &&
 			typeSignature.datatype.type === ID_STRUCT_NAME
 		) {

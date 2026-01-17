@@ -9,7 +9,7 @@ import { PublicKey } from '../cryptography/publickey.js';
 import type { PublicKeyInitData } from '../cryptography/publickey.js';
 import { SIGNATURE_SCHEME_TO_FLAG } from '../cryptography/signature-scheme.js';
 import { HaneulGraphQLClient } from '../graphql/client.js';
-import { normalizeHaneulAddress, SUI_ADDRESS_LENGTH } from '../utils/haneul-types.js';
+import { normalizeHaneulAddress, HANEUL_ADDRESS_LENGTH } from '../utils/haneul-types.js';
 import type { ZkLoginSignatureInputs } from './bcs.js';
 import { extractClaimValue } from './jwt-utils.js';
 import { parseZkLoginSignature } from './signature.js';
@@ -138,7 +138,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 		addressBytes[0] = this.flag();
 		addressBytes.set(legacyBytes, 1);
 		return normalizeHaneulAddress(
-			bytesToHex(blake2b(addressBytes, { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
+			bytesToHex(blake2b(addressBytes, { dkLen: 32 })).slice(0, HANEUL_ADDRESS_LENGTH * 2),
 		);
 	}
 
@@ -239,7 +239,7 @@ async function graphqlVerifyZkLoginSignature({
 	signature,
 	intentScope,
 	client = new HaneulGraphQLClient({
-		url: 'https://graphql.mainnet.sui.io/graphql',
+		url: 'https://graphql.mainnet.haneul.io/graphql',
 	}),
 }: {
 	address: string;

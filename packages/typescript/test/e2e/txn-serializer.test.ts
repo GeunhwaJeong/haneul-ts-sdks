@@ -7,7 +7,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { HaneulTransactionBlockResponse } from '../../src/client';
 import { Transaction } from '../../src/transactions';
 import { TransactionDataBuilder } from '../../src/transactions/TransactionData';
-import { SUI_SYSTEM_STATE_OBJECT_ID } from '../../src/utils';
+import { HANEUL_SYSTEM_STATE_OBJECT_ID } from '../../src/utils';
 import { publishPackage, setup, TestToolbox } from './utils/setup';
 
 let toolbox: TestToolbox;
@@ -52,7 +52,7 @@ describe('Transaction bcs Serialization and deserialization', () => {
 		tx.moveCall({
 			target: '0x3::haneul_system::request_add_stake',
 			arguments: [
-				tx.object(SUI_SYSTEM_STATE_OBJECT_ID),
+				tx.object(HANEUL_SYSTEM_STATE_OBJECT_ID),
 				tx.object(coin.coinObjectId),
 				tx.pure.address(validatorAddress),
 			],
@@ -121,7 +121,7 @@ describe('TXB v2 JSON serialization', () => {
 		tx.moveCall({
 			target: '0x3::haneul_system::request_add_stake',
 			arguments: [
-				tx.object(SUI_SYSTEM_STATE_OBJECT_ID),
+				tx.object(HANEUL_SYSTEM_STATE_OBJECT_ID),
 				tx.object(coin.coinObjectId),
 				tx.pure.address(validatorAddress),
 			],
@@ -220,7 +220,7 @@ describe('TXB v1 JSON serialization', () => {
 		tx.moveCall({
 			target: '0x3::haneul_system::request_add_stake',
 			arguments: [
-				tx.object(SUI_SYSTEM_STATE_OBJECT_ID),
+				tx.object(HANEUL_SYSTEM_STATE_OBJECT_ID),
 				tx.object(coin.coinObjectId),
 				tx.pure.address(validatorAddress),
 			],

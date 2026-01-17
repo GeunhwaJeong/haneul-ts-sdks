@@ -58,7 +58,7 @@ export class UnsafeBurnerWallet implements Wallet {
 
 		this.#account = new ReadonlyWalletAccount({
 			address: this.#keypair.getPublicKey().toHaneulAddress(),
-			publicKey: this.#keypair.getPublicKey().toSuiBytes(),
+			publicKey: this.#keypair.getPublicKey().toHaneulBytes(),
 			chains: this.chains,
 			features: [HaneulSignTransaction, HaneulSignAndExecuteTransaction, HaneulSignPersonalMessage],
 		});

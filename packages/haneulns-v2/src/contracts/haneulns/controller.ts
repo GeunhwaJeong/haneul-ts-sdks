@@ -35,7 +35,7 @@ export function setTargetAddress(options: SetTargetAddressOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
 		`${packageAddress}::haneulns::HaneulNS`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000001::option::Option<address>',
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
 	] satisfies string[];
@@ -180,7 +180,7 @@ export function setUserData(options: SetUserDataOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
 		`${packageAddress}::haneulns::HaneulNS`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000001::string::String',
 		'0x0000000000000000000000000000000000000000000000000000000000000001::string::String',
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
@@ -214,7 +214,7 @@ export function unsetUserData(options: UnsetUserDataOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
 		`${packageAddress}::haneulns::HaneulNS`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000001::string::String',
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
 	] satisfies string[];
@@ -241,7 +241,7 @@ export function burnExpired(options: BurnExpiredOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
 		`${packageAddress}::haneulns::HaneulNS`,
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
 	] satisfies string[];
 	const parameterNames = ['haneulns', 'nft'];

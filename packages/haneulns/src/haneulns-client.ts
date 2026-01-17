@@ -266,7 +266,7 @@ export class HaneulnsClient {
 	/**
 	 * Calculates the registration or renewal price for an SLD (Second Level Domain).
 	 * It expects a domain name, the number of years and a `SuinsPriceList` object,
-	 * as returned from `haneulnsClient.getPriceList()` function, or `suins.getRenewalPriceList()` function.
+	 * as returned from `haneulnsClient.getPriceList()` function, or `haneulns.getRenewalPriceList()` function.
 	 *
 	 * It throws an error:
 	 * 1. if the name is a subdomain

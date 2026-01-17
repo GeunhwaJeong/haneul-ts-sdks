@@ -3,7 +3,7 @@
 import { format } from 'prettier';
 import ts from 'typescript';
 import type { Type } from './types/summary.js';
-import { SUI_FRAMEWORK_ADDRESS, SUI_SYSTEM_ADDRESS } from './render-types.js';
+import { HANEUL_FRAMEWORK_ADDRESS, HANEUL_SYSTEM_ADDRESS } from './render-types.js';
 
 export function printNodes(...nodes: ts.Node[]) {
 	const printer = ts.createPrinter({
@@ -156,7 +156,7 @@ export function isWellKnownObjectParameter(
 	const { Datatype } = type;
 
 	const address = resolveAddress(Datatype.module.address);
-	if (address === SUI_FRAMEWORK_ADDRESS) {
+	if (address === HANEUL_FRAMEWORK_ADDRESS) {
 		if (Datatype.module.name === 'deny_list') {
 			return Datatype.name === 'DenyList';
 		}
@@ -170,7 +170,7 @@ export function isWellKnownObjectParameter(
 		}
 	}
 
-	if (address === SUI_SYSTEM_ADDRESS) {
+	if (address === HANEUL_SYSTEM_ADDRESS) {
 		if (Datatype.module.name === 'haneul_system') {
 			return Datatype.name === 'HaneulSystemState';
 		}

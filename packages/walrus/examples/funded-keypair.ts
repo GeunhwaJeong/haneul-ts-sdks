@@ -15,7 +15,7 @@ export async function getFundedKeypair() {
 	});
 
 	const keypair = Ed25519Keypair.fromSecretKey(
-		'suiprivkey1qzmcxscyglnl9hnq82crqsuns0q33frkseks5jw0fye3tuh83l7e6ajfhxx',
+		'haneulprivkey1qzmcxscyglnl9hnq82crqsuns0q33frkseks5jw0fye3tuh83l7e6ajfhxx',
 	);
 	console.log(keypair.toHaneulAddress());
 

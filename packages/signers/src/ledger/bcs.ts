@@ -10,8 +10,8 @@ import {
 	parseStructTag,
 } from '@haneullabs/haneul/utils';
 
-const SUI_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
-const SUI_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
+const HANEUL_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
+const HANEUL_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
 
 const MoveObjectType = bcs.enum('MoveObjectType', {
 	Other: bcs.StructTag,
@@ -28,14 +28,14 @@ export const HaneulMoveObject = bcs.struct('HaneulMoveObject', {
 					const structTag = parseStructTag(objectType);
 
 					if (
-						structTag.address === SUI_FRAMEWORK_ADDRESS &&
+						structTag.address === HANEUL_FRAMEWORK_ADDRESS &&
 						structTag.module === 'coin' &&
 						structTag.name === 'Coin' &&
 						typeof structTag.typeParams[0] === 'object'
 					) {
 						const innerStructTag = structTag.typeParams[0];
 						if (
-							innerStructTag.address === SUI_FRAMEWORK_ADDRESS &&
+							innerStructTag.address === HANEUL_FRAMEWORK_ADDRESS &&
 							innerStructTag.module === 'haneul' &&
 							innerStructTag.name === 'SUI'
 						) {
@@ -43,7 +43,7 @@ export const HaneulMoveObject = bcs.struct('HaneulMoveObject', {
 						}
 						return { Coin: normalizeStructTag(innerStructTag), $kind: 'Coin' };
 					} else if (
-						structTag.address === SUI_SYSTEM_ADDRESS &&
+						structTag.address === HANEUL_SYSTEM_ADDRESS &&
 						structTag.module === 'staking_pool' &&
 						structTag.name === 'StakedSui'
 					) {

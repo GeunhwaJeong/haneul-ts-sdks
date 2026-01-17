@@ -46,12 +46,12 @@ const localCachePlugin = namedPackagesPlugin({
 	overrides: {
 		packages: {
 			'@framework/std': '0x1',
-			'@framework/sui': '0x2',
+			'@framework/haneul': '0x2',
 		},
 		types: {
-			'@framework/sui::vec_set::VecSet': '0x2::vec_set::VecSet',
+			'@framework/haneul::vec_set::VecSet': '0x2::vec_set::VecSet',
 			'@framework/std::string::String': '0x1::string::String',
-			'@framework/sui::haneul::HANEUL': '0x2::haneul::HANEUL',
+			'@framework/haneul::haneul::HANEUL': '0x2::haneul::HANEUL',
 		},
 	},
 });
@@ -59,12 +59,12 @@ const localCachePlugin = namedPackagesPlugin({
 const localMvrOverrides = {
 	packages: {
 		'@framework/std': '0x1',
-		'@framework/sui': '0x2',
+		'@framework/haneul': '0x2',
 	},
 	types: {
-		'@framework/sui::vec_set::VecSet': '0x2::vec_set::VecSet',
+		'@framework/haneul::vec_set::VecSet': '0x2::vec_set::VecSet',
 		'@framework/std::string::String': '0x1::string::String',
-		'@framework/sui::haneul::HANEUL': '0x2::haneul::HANEUL',
+		'@framework/haneul::haneul::HANEUL': '0x2::haneul::HANEUL',
 	},
 };
 
@@ -135,8 +135,8 @@ describe.concurrent('Name Resolution Plugin (With client overrides)', () => {
 		const transaction = new Transaction();
 
 		const zeroCoin = transaction.moveCall({
-			target: '@framework/sui::coin::zero',
-			typeArguments: ['@framework/sui::haneul::HANEUL'],
+			target: '@framework/haneul::coin::zero',
+			typeArguments: ['@framework/haneul::haneul::HANEUL'],
 		});
 
 		transaction.transferObjects([zeroCoin], normalizeHaneulAddress('0x2'));
@@ -145,7 +145,7 @@ describe.concurrent('Name Resolution Plugin (With client overrides)', () => {
 		// full type in the cache.
 		transaction.moveCall({
 			target: '@framework/std::vector::empty',
-			typeArguments: ['@framework/sui::vec_set::VecSet<@framework/std::string::String>'],
+			typeArguments: ['@framework/haneul::vec_set::VecSet<@framework/std::string::String>'],
 		});
 
 		const res = await dryRun(transaction, 'testnet', true);
@@ -156,8 +156,8 @@ describe.concurrent('Name Resolution Plugin (With client overrides)', () => {
 		const transaction = new Transaction();
 
 		const zeroCoin = transaction.moveCall({
-			target: '@framework/sui::coin::zero',
-			typeArguments: ['@framework/sui::haneul::HANEUL'],
+			target: '@framework/haneul::coin::zero',
+			typeArguments: ['@framework/haneul::haneul::HANEUL'],
 		});
 
 		transaction.transferObjects([zeroCoin], normalizeHaneulAddress('0x2'));
@@ -166,7 +166,7 @@ describe.concurrent('Name Resolution Plugin (With client overrides)', () => {
 		// full type in the cache.
 		transaction.moveCall({
 			target: '@framework/std::vector::empty',
-			typeArguments: ['@framework/sui::vec_set::VecSet<@framework/std::string::String>'],
+			typeArguments: ['@framework/haneul::vec_set::VecSet<@framework/std::string::String>'],
 		});
 
 		const res = await dryRun(transaction, 'testnet', true);
@@ -180,8 +180,8 @@ describe.concurrent('Name Resolution Plugin (Local Cache)', () => {
 		transaction.addSerializationPlugin(localCachePlugin);
 
 		const zeroCoin = transaction.moveCall({
-			target: '@framework/sui::coin::zero',
-			typeArguments: ['@framework/sui::haneul::HANEUL'],
+			target: '@framework/haneul::coin::zero',
+			typeArguments: ['@framework/haneul::haneul::HANEUL'],
 		});
 
 		transaction.transferObjects([zeroCoin], normalizeHaneulAddress('0x2'));
@@ -190,7 +190,7 @@ describe.concurrent('Name Resolution Plugin (Local Cache)', () => {
 		// full type in the cache.
 		transaction.moveCall({
 			target: '@framework/std::vector::empty',
-			typeArguments: ['@framework/sui::vec_set::VecSet<@framework/std::string::String>'],
+			typeArguments: ['@framework/haneul::vec_set::VecSet<@framework/std::string::String>'],
 		});
 
 		const res = await dryRun(transaction, 'testnet');
@@ -202,8 +202,8 @@ describe.concurrent('Name Resolution Plugin (Local Cache)', () => {
 		transaction.addSerializationPlugin(localCachePlugin);
 
 		const zeroCoin = transaction.moveCall({
-			target: '@framework/sui::coin::zero',
-			typeArguments: ['@framework/sui::haneul::HANEUL'],
+			target: '@framework/haneul::coin::zero',
+			typeArguments: ['@framework/haneul::haneul::HANEUL'],
 		});
 
 		transaction.transferObjects([zeroCoin], normalizeHaneulAddress('0x2'));
@@ -212,7 +212,7 @@ describe.concurrent('Name Resolution Plugin (Local Cache)', () => {
 		// full type in the cache.
 		transaction.moveCall({
 			target: '@framework/std::vector::empty',
-			typeArguments: ['@framework/sui::vec_set::VecSet<@framework/std::string::String>'],
+			typeArguments: ['@framework/haneul::vec_set::VecSet<@framework/std::string::String>'],
 		});
 
 		const res = await dryRun(transaction, 'testnet');

@@ -75,14 +75,14 @@ async function tryLoadPKI(...args: Parameters<typeof loadPKI>) {
  * Sui API
  *
  * @example
- * import Sui from "@haneullabs/ledgerjs-hw-app-sui";
- * const sui = new Sui(transport)
+ * import Haneul from "@haneullabs/ledgerjs-hw-app-sui";
+ * const haneul = new Haneul(transport)
  */
 export default class Sui {
 	transport: Transport;
 	readonly #verbose: boolean;
 
-	constructor(transport: Transport, scrambleKey = 'default_sui_scramble_key', verbose = false) {
+	constructor(transport: Transport, scrambleKey = 'default_haneul_scramble_key', verbose = false) {
 		this.#verbose = verbose;
 		this.transport = transport;
 		this.transport.decorateAppAPIMethods(

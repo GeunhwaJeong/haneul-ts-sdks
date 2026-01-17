@@ -9,7 +9,7 @@ export function createMockAccount(accountOverrides: Partial<WalletAccount> = {})
 	const keypair = new Ed25519Keypair();
 	return new ReadonlyWalletAccount({
 		address: keypair.getPublicKey().toHaneulAddress(),
-		publicKey: keypair.getPublicKey().toSuiBytes(),
+		publicKey: keypair.getPublicKey().toHaneulBytes(),
 		chains: ['sui:unknown'],
 		features: [
 			'sui:signAndExecuteTransactionBlock',

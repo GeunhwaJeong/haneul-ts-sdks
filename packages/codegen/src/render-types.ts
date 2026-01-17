@@ -6,8 +6,8 @@ import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import type { Datatype, ModuleSummary, Type, TypeParameter } from './types/summary.js';
 
 export const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress('0x1');
-export const SUI_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
-export const SUI_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
+export const HANEUL_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
+export const HANEUL_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
 
 type TypeSignatureFormat = 'typescriptArg' | 'bcs' | 'typeTag';
 interface RenderTypeSignatureOptions {
@@ -202,7 +202,7 @@ function isPureDataType(type: Datatype, options: RenderTypeSignatureOptions) {
 		}
 	}
 
-	if (address === SUI_FRAMEWORK_ADDRESS) {
+	if (address === HANEUL_FRAMEWORK_ADDRESS) {
 		if (type.module.name === 'object' && type.name === 'ID') {
 			return true;
 		}
@@ -253,7 +253,7 @@ function renderDataType(type: Datatype, options: RenderTypeSignatureOptions): st
 		}
 	}
 
-	if (address === SUI_FRAMEWORK_ADDRESS) {
+	if (address === HANEUL_FRAMEWORK_ADDRESS) {
 		if (type.module.name === 'object' && type.name === 'ID') {
 			switch (options.format) {
 				case 'typescriptArg':

@@ -57,7 +57,7 @@ describe('passkey signer E2E testing', () => {
 		const clientDataJSON = {
 			type: 'webauthn.get',
 			challenge: Buffer.from(digest).toString('base64'),
-			origin: 'https://www.sui.io',
+			origin: 'https://www.haneul.io',
 			crossOrigin: false,
 		};
 		expect(parsed.clientDataJson).toEqual(JSON.stringify(clientDataJSON));
@@ -84,7 +84,7 @@ describe('passkey signer E2E testing', () => {
 		const clientDataJSON = {
 			type: 'webauthn.get',
 			challenge: Buffer.from(digest).toString('base64'),
-			origin: 'https://www.sui.io',
+			origin: 'https://www.haneul.io',
 			crossOrigin: false,
 		};
 		const clientDataJSONString = JSON.stringify(clientDataJSON);

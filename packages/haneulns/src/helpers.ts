@@ -11,7 +11,7 @@ export function isSubName(name: string): boolean {
 /**
  * Checks if a name is a nested subname.
  * A nested subdomain is a subdomain that is a subdomain of another subdomain.
- * @param name The name to check (e.g test.example.sub.sui)
+ * @param name The name to check (e.g test.example.sub.haneul)
  */
 export function isNestedSubName(name: string): boolean {
 	return normalizeHaneulNSName(name, 'dot').split('.').length > 3;
@@ -31,20 +31,20 @@ export function zeroCoin(tx: Transaction, type: string) {
 	});
 }
 
-export function getConfigType(suinsPackageV1: string, innerType: string): string {
-	return `${suinsPackageV1}::suins::ConfigKey<${innerType}>`;
+export function getConfigType(haneulnsPackageV1: string, innerType: string): string {
+	return `${haneulnsPackageV1}::haneulns::ConfigKey<${innerType}>`;
 }
 
-export function getDomainType(suinsPackageV1: string): string {
-	return `${suinsPackageV1}::domain::Domain`;
+export function getDomainType(haneulnsPackageV1: string): string {
+	return `${haneulnsPackageV1}::domain::Domain`;
 }
 
-export function getPricelistConfigType(suinsPackageId: string): string {
-	return `${suinsPackageId}::pricing_config::PricingConfig`;
+export function getPricelistConfigType(haneulnsPackageId: string): string {
+	return `${haneulnsPackageId}::pricing_config::PricingConfig`;
 }
 
-export function getRenewalPricelistConfigType(suinsPackageId: string): string {
-	return `${suinsPackageId}::pricing_config::RenewalConfig`;
+export function getRenewalPricelistConfigType(haneulnsPackageId: string): string {
+	return `${haneulnsPackageId}::pricing_config::RenewalConfig`;
 }
 
 export function getCoinDiscountConfigType(paymentPackageId: string): string {

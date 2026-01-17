@@ -252,7 +252,7 @@ describe('Publickey', () => {
 		tmp.set(bcs.U16.serialize(3).toBytes(), 1);
 		let i = 3;
 		for (const { publicKey, weight } of multiSigPublicKey.getPublicKeys()) {
-			const bytes = publicKey.toSuiBytes();
+			const bytes = publicKey.toHaneulBytes();
 			tmp.set(bytes, i);
 			i += bytes.length;
 			tmp.set([weight], i++);

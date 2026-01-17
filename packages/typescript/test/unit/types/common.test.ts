@@ -59,7 +59,7 @@ describe('parseStructTag', () => {
       }
     `);
 
-		expect(parseStructTag('@mvr/demo::foo::bar<inner.mvr.sui/demo::baz::qux, bool>'))
+		expect(parseStructTag('@mvr/demo::foo::bar<inner.mvr.haneul/demo::baz::qux, bool>'))
 			.toMatchInlineSnapshot(`
       {
         "address": "@mvr/demo",
@@ -67,7 +67,7 @@ describe('parseStructTag', () => {
         "name": "bar",
         "typeParams": [
           {
-            "address": "inner.mvr.sui/demo",
+            "address": "inner.mvr.haneul/demo",
             "module": "baz",
             "name": "qux",
             "typeParams": [],
@@ -92,9 +92,9 @@ describe('normalizeStructTag', () => {
 
 	it('normalizes named package addresses', () => {
 		const checks = [
-			'@mvr/demo::foo::bar<inner.mvr.sui/demo::baz::qux,bool>',
+			'@mvr/demo::foo::bar<inner.mvr.haneul/demo::baz::qux,bool>',
 			'@mvr/demo::foo::bar',
-			'@mvr/demo::foo::bar<inner.mvr.sui/demo::baz::Qux,bool,inner@mvr/demo::foo::Nested<u64,bool>>',
+			'@mvr/demo::foo::bar<inner.mvr.haneul/demo::baz::Qux,bool,inner@mvr/demo::foo::Nested<u64,bool>>',
 		];
 
 		for (const check of checks) expect(normalizeStructTag(parseStructTag(check))).toEqual(check);

@@ -43,7 +43,7 @@ export type { TypeTag } from './types.js';
 export { TypeTagSerializer } from './type-tag-serializer.js';
 export { BcsType, BcsStruct, BcsEnum, BcsTuple, type BcsTypeOptions } from '@haneullabs/bcs';
 
-const suiBcs = {
+const haneulBcs = {
 	...bcs,
 	U8: bcs.u8(),
 	U16: bcs.u16(),
@@ -93,4 +93,4 @@ export {
 	type PureTypeName,
 } from './pure.js';
 
-export { suiBcs as bcs };
+export { haneulBcs as bcs };

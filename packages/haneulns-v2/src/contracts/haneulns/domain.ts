@@ -21,7 +21,7 @@ export const Domain = new MoveStruct({
 		 * Vector of labels that make up a domain.
 		 *
 		 * Labels are stored in reverse order such that the TLD is always in position `0`.
-		 * e.g. domain "pay.name.sui" will be stored in the vector as ["sui", "name",
+		 * e.g. domain "pay.name.haneul" will be stored in the vector as ["haneul", "name",
 		 * "pay"].
 		 */
 		labels: bcs.vector(bcs.string()),
@@ -81,11 +81,11 @@ export interface LabelOptions {
 /**
  * Returns the `label` in a domain specified by `level`.
  *
- * Given the domain "pay.name.sui" the individual labels have the following levels:
+ * Given the domain "pay.name.haneul" the individual labels have the following levels:
  *
  * - "pay" - `2`
  * - "name" - `1`
- * - "sui" - `0`
+ * - "haneul" - `0`
  *
  * This means that the TLD will always be at level `0`.
  */
@@ -111,7 +111,7 @@ export interface TldOptions {
 /**
  * Returns the TLD (Top-Level Domain) of a `Domain`.
  *
- * "name.sui" -> "sui"
+ * "name.haneul" -> "haneul"
  */
 export function tld(options: TldOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
@@ -135,7 +135,7 @@ export interface SldOptions {
 /**
  * Returns the SLD (Second-Level Domain) of a `Domain`.
  *
- * "name.sui" -> "sui"
+ * "name.haneul" -> "haneul"
  */
 export function sld(options: SldOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
@@ -194,7 +194,7 @@ export interface ParentOptions {
 	package?: string;
 	arguments: ParentArguments | [domain: RawTransactionArgument<string>];
 }
-/** Derive the parent of a subdomain. e.g. `subdomain.example.sui` -> `example.sui` */
+/** Derive the parent of a subdomain. e.g. `subdomain.example.haneul` -> `example.haneul` */
 export function parent(options: ParentOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [`${packageAddress}::domain::Domain`] satisfies string[];

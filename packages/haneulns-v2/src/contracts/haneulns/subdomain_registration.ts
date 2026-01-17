@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
- * A wrapper for `SuinsRegistration` subdomain objects.
+ * A wrapper for `HaneulnsRegistration` subdomain objects.
  *
  * With the wrapper, we are allowing easier distinction between second level names
  * & subdomains in RPC Querying | filtering.
@@ -20,7 +20,7 @@ export const SubDomainRegistration = new MoveStruct({
 	name: `${$moduleName}::SubDomainRegistration`,
 	fields: {
 		id: object.UID,
-		nft: haneulns_registration.SuinsRegistration,
+		nft: haneulns_registration.HaneulnsRegistration,
 	},
 });
 export interface NftArguments {

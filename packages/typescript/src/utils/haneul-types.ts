@@ -23,9 +23,9 @@ export function isValidTransactionDigest(value: string): value is string {
 // which uses the Move account address length
 // https://github.com/move-language/move/blob/67ec40dc50c66c34fd73512fcc412f3b68d67235/language/move-core/types/src/account_address.rs#L23 .
 
-export const SUI_ADDRESS_LENGTH = 32;
+export const HANEUL_ADDRESS_LENGTH = 32;
 export function isValidHaneulAddress(value: string): value is string {
-	return isHex(value) && getHexByteLength(value) === SUI_ADDRESS_LENGTH;
+	return isHex(value) && getHexByteLength(value) === HANEUL_ADDRESS_LENGTH;
 }
 
 export function isValidHaneulObjectId(value: string): boolean {
@@ -86,7 +86,7 @@ export function normalizeStructTag(type: string | StructTag): string {
  * Perform the following operations:
  * 1. Make the address lower case
  * 2. Prepend `0x` if the string does not start with `0x`.
- * 3. Add more zeros if the length of the address(excluding `0x`) is less than `SUI_ADDRESS_LENGTH`
+ * 3. Add more zeros if the length of the address(excluding `0x`) is less than `HANEUL_ADDRESS_LENGTH`
  *
  * WARNING: if the address value itself starts with `0x`, e.g., `0x0x`, the default behavior
  * is to treat the first `0x` not as part of the address. The default behavior can be overridden by
@@ -98,7 +98,7 @@ export function normalizeHaneulAddress(value: string, forceAdd0x: boolean = fals
 	if (!forceAdd0x && address.startsWith('0x')) {
 		address = address.slice(2);
 	}
-	return `0x${address.padStart(SUI_ADDRESS_LENGTH * 2, '0')}`;
+	return `0x${address.padStart(HANEUL_ADDRESS_LENGTH * 2, '0')}`;
 }
 
 export function normalizeHaneulObjectId(value: string, forceAdd0x: boolean = false): string {

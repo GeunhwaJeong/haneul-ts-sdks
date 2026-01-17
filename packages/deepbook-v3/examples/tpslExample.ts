@@ -17,10 +17,10 @@ import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { DeepBookClient, OrderType, SelfMatchingOptions } from '../src/index.js';
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.HANEUL_BINARY ?? \`haneul\`;
 
 export const getActiveAddress = () => {
-	return execSync(`${SUI} client active-address`, { encoding: 'utf8' }).trim();
+	return execSync(` client active-address`, { encoding: 'utf8' }).trim();
 };
 
 export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';

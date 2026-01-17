@@ -99,7 +99,7 @@ export function applyCoupon(options: ApplyCouponOptions) {
 		});
 }
 export interface RegisterWithCouponArguments {
-	Suins: RawTransactionArgument<string>;
+	Haneulns: RawTransactionArgument<string>;
 	CouponCode: RawTransactionArgument<string>;
 	DomainName: RawTransactionArgument<string>;
 	NoYears: RawTransactionArgument<number>;
@@ -110,7 +110,7 @@ export interface RegisterWithCouponOptions {
 	arguments:
 		| RegisterWithCouponArguments
 		| [
-				Suins: RawTransactionArgument<string>,
+				Haneulns: RawTransactionArgument<string>,
 				CouponCode: RawTransactionArgument<string>,
 				DomainName: RawTransactionArgument<string>,
 				NoYears: RawTransactionArgument<number>,
@@ -137,7 +137,7 @@ export function registerWithCoupon(options: RegisterWithCouponOptions) {
 		});
 }
 export interface CalculateSalePriceArguments {
-	Suins: RawTransactionArgument<string>;
+	Haneulns: RawTransactionArgument<string>;
 	Price: RawTransactionArgument<number | bigint>;
 	CouponCode: RawTransactionArgument<string>;
 }
@@ -146,7 +146,7 @@ export interface CalculateSalePriceOptions {
 	arguments:
 		| CalculateSalePriceArguments
 		| [
-				Suins: RawTransactionArgument<string>,
+				Haneulns: RawTransactionArgument<string>,
 				Price: RawTransactionArgument<number | bigint>,
 				CouponCode: RawTransactionArgument<string>,
 		  ];

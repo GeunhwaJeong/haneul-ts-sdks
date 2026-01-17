@@ -36,7 +36,7 @@ export const Auction = new MoveStruct({
 		end_timestamp_ms: bcs.u64(),
 		winner: bcs.Address,
 		current_bid: coin.Coin,
-		nft: haneulns_registration.SuinsRegistration,
+		nft: haneulns_registration.HaneulnsRegistration,
 	},
 });
 export const AuctionStartedEvent = new MoveStruct({
@@ -298,7 +298,7 @@ export interface AdminFinalizeAuctionOptions {
  * provided `operation_limit`:
  *
  * - claim the winning bid and place in `AuctionHouse.balance`
- * - push the `SuinsRegistration` to the winner
+ * - push the `HaneulnsRegistration` to the winner
  * - push loosing bids back to their respective account owners
  *
  * Once all of the above has been done the auction is destroyed, freeing on-chain

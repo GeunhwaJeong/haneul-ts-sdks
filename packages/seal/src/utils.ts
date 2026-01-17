@@ -10,7 +10,7 @@ import { UserError } from './error.js';
 export const MAX_U8 = 255;
 
 /** Length of a Haneul address. */
-export const SUI_ADDRESS_LENGTH = 32;
+export const HANEUL_ADDRESS_LENGTH = 32;
 
 /** Length of an encrypted share. */
 export const ENCRYPTED_SHARE_LENGTH = 32;

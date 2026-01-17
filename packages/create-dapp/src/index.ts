@@ -45,7 +45,7 @@ async function main() {
 
 				name: 'dAppName',
 				message: 'What is the name of your dApp? (this will be used as the directory name)',
-				initial: 'my-first-sui-dapp',
+				initial: 'my-first-haneul-dapp',
 			},
 		].filter((question) => !args[question.name as 'template']),
 	);

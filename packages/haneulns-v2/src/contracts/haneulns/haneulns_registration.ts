@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
- * Handles creation of the `SuinsRegistration`s. Separates the logic of creating a
- * `SuinsRegistration`. New `SuinsRegistration`s can be created only by the
+ * Handles creation of the `HaneulnsRegistration`s. Separates the logic of creating a
+ * `HaneulnsRegistration`. New `HaneulnsRegistration`s can be created only by the
  * `registry` and this module is tightly coupled with it.
  *
  * When reviewing the module, make sure that:
@@ -19,8 +19,8 @@ import type { Transaction } from '@haneullabs/haneul/transactions';
 import * as object from './deps/sui/object.js';
 import * as domain_1 from './domain.js';
 const $moduleName = '@haneulns/core::haneulns_registration';
-export const SuinsRegistration = new MoveStruct({
-	name: `${$moduleName}::SuinsRegistration`,
+export const HaneulnsRegistration = new MoveStruct({
+	name: `${$moduleName}::HaneulnsRegistration`,
 	fields: {
 		id: object.UID,
 		/** The parsed domain. */
@@ -41,13 +41,13 @@ export interface HasExpiredOptions {
 	arguments: HasExpiredArguments | [self: RawTransactionArgument<string>];
 }
 /**
- * Check whether the `SuinsRegistration` has expired by comparing the expiration
+ * Check whether the `HaneulnsRegistration` has expired by comparing the expiration
  * timeout with the current time.
  */
 export function hasExpired(options: HasExpiredOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
 	] satisfies string[];
 	const parameterNames = ['self'];
@@ -67,14 +67,14 @@ export interface HasExpiredPastGracePeriodOptions {
 	arguments: HasExpiredPastGracePeriodArguments | [self: RawTransactionArgument<string>];
 }
 /**
- * Check whether the `SuinsRegistration` has expired by comparing the expiration
+ * Check whether the `HaneulnsRegistration` has expired by comparing the expiration
  * timeout with the current time. This function also takes into account the grace
  * period.
  */
 export function hasExpiredPastGracePeriod(options: HasExpiredPastGracePeriodOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 		'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock',
 	] satisfies string[];
 	const parameterNames = ['self'];
@@ -93,11 +93,11 @@ export interface DomainOptions {
 	package?: string;
 	arguments: DomainArguments | [self: RawTransactionArgument<string>];
 }
-/** Get the `domain` field of the `SuinsRegistration`. */
+/** Get the `domain` field of the `HaneulnsRegistration`. */
 export function domain(options: DomainOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 	] satisfies string[];
 	const parameterNames = ['self'];
 	return (tx: Transaction) =>
@@ -115,11 +115,11 @@ export interface DomainNameOptions {
 	package?: string;
 	arguments: DomainNameArguments | [self: RawTransactionArgument<string>];
 }
-/** Get the `domain_name` field of the `SuinsRegistration`. */
+/** Get the `domain_name` field of the `HaneulnsRegistration`. */
 export function domainName(options: DomainNameOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 	] satisfies string[];
 	const parameterNames = ['self'];
 	return (tx: Transaction) =>
@@ -137,11 +137,11 @@ export interface ExpirationTimestampMsOptions {
 	package?: string;
 	arguments: ExpirationTimestampMsArguments | [self: RawTransactionArgument<string>];
 }
-/** Get the `expiration_timestamp_ms` field of the `SuinsRegistration`. */
+/** Get the `expiration_timestamp_ms` field of the `HaneulnsRegistration`. */
 export function expirationTimestampMs(options: ExpirationTimestampMsOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 	] satisfies string[];
 	const parameterNames = ['self'];
 	return (tx: Transaction) =>
@@ -159,11 +159,11 @@ export interface ImageUrlOptions {
 	package?: string;
 	arguments: ImageUrlArguments | [self: RawTransactionArgument<string>];
 }
-/** Get the `image_url` field of the `SuinsRegistration`. */
+/** Get the `image_url` field of the `HaneulnsRegistration`. */
 export function imageUrl(options: ImageUrlOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 	] satisfies string[];
 	const parameterNames = ['self'];
 	return (tx: Transaction) =>
@@ -184,7 +184,7 @@ export interface UidOptions {
 export function uid(options: UidOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 	] satisfies string[];
 	const parameterNames = ['self'];
 	return (tx: Transaction) =>
@@ -202,11 +202,11 @@ export interface UidMutOptions {
 	package?: string;
 	arguments: UidMutArguments | [self: RawTransactionArgument<string>];
 }
-/** Get the mutable `id` field of the `SuinsRegistration`. */
+/** Get the mutable `id` field of the `HaneulnsRegistration`. */
 export function uidMut(options: UidMutOptions) {
 	const packageAddress = options.package ?? '@haneulns/core';
 	const argumentsTypes = [
-		`${packageAddress}::haneulns_registration::SuinsRegistration`,
+		`${packageAddress}::haneulns_registration::HaneulnsRegistration`,
 	] satisfies string[];
 	const parameterNames = ['self'];
 	return (tx: Transaction) =>

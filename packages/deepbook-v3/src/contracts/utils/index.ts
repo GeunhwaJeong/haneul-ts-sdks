@@ -8,8 +8,8 @@ import { isArgument } from '@haneullabs/haneul/transactions';
 import { ValidationError, ErrorMessages } from '../../utils/errors.js';
 
 const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress('0x1');
-const SUI_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
-const SUI_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
+const HANEUL_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
+const HANEUL_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
 
 export type RawTransactionArgument<T> = T | TransactionArgument;
 
@@ -58,7 +58,7 @@ export function getPureBcsSchema(typeTag: string | TypeTag): BcsType<any> | null
 			}
 		}
 
-		if (pkg === SUI_FRAMEWORK_ADDRESS && structTag.module === 'Object' && structTag.name === 'ID') {
+		if (pkg === HANEUL_FRAMEWORK_ADDRESS && structTag.module === 'Object' && structTag.name === 'ID') {
 			return bcs.Address;
 		}
 	}
@@ -88,22 +88,22 @@ export function normalizeMoveArguments(
 
 	let index = 0;
 	for (const [i, argType] of argTypes.entries()) {
-		if (argType === `${SUI_FRAMEWORK_ADDRESS}::deny_list::DenyList`) {
+		if (argType === `${HANEUL_FRAMEWORK_ADDRESS}::deny_list::DenyList`) {
 			normalizedArgs.push((tx) => tx.object.denyList());
 			continue;
 		}
 
-		if (argType === `${SUI_FRAMEWORK_ADDRESS}::random::Random`) {
+		if (argType === `${HANEUL_FRAMEWORK_ADDRESS}::random::Random`) {
 			normalizedArgs.push((tx) => tx.object.random());
 			continue;
 		}
 
-		if (argType === `${SUI_FRAMEWORK_ADDRESS}::clock::Clock`) {
+		if (argType === `${HANEUL_FRAMEWORK_ADDRESS}::clock::Clock`) {
 			normalizedArgs.push((tx) => tx.object.clock());
 			continue;
 		}
 
-		if (argType === `${SUI_SYSTEM_ADDRESS}::haneul_system::HaneulSystemState`) {
+		if (argType === `${HANEUL_SYSTEM_ADDRESS}::haneul_system::HaneulSystemState`) {
 			normalizedArgs.push((tx) => tx.object.system());
 			continue;
 		}

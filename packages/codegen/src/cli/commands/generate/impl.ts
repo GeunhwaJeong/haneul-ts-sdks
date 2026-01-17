@@ -51,7 +51,7 @@ export default async function generate(
 				throw new Error(`Package path does not exist: ${pkg.path}`);
 			}
 
-			execSync('sui move summary', {
+			execSync('haneul move summary', {
 				cwd: pkg.path,
 				stdio: 'inherit',
 			});

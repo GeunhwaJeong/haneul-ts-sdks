@@ -55,7 +55,7 @@ function registerUnsafeBurnerWallet(haneulClient: HaneulClient) {
 	const keypair = new Ed25519Keypair();
 	const account = new ReadonlyWalletAccount({
 		address: keypair.getPublicKey().toHaneulAddress(),
-		publicKey: keypair.getPublicKey().toSuiBytes(),
+		publicKey: keypair.getPublicKey().toHaneulBytes(),
 		chains: ['sui:unknown'],
 		features: [
 			'sui:signAndExecuteTransactionBlock',

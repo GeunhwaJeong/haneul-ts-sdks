@@ -183,15 +183,15 @@ export class EnokiWallet implements Wallet {
 
 		const { client, keypair } = await this.#getSignerContext(chain);
 		const parsedTransaction = Transaction.from(await transaction.toJSON());
-		const suiAddress = keypair.toHaneulAddress();
+		const haneulAddress = keypair.toHaneulAddress();
 
-		if (suiAddress !== account.address) {
+		if (haneulAddress !== account.address) {
 			throw new Error(
-				`The specified account ${account.address} does not match the currently connected Enoki address ${suiAddress}.`,
+				`The specified account ${account.address} does not match the currently connected Enoki address ${haneulAddress}.`,
 			);
 		}
 
-		parsedTransaction.setSenderIfNotSet(suiAddress);
+		parsedTransaction.setSenderIfNotSet(haneulAddress);
 		return keypair.signTransaction(await parsedTransaction.build({ client }));
 	};
 
@@ -207,15 +207,15 @@ export class EnokiWallet implements Wallet {
 		const parsedTransaction = Transaction.from(await transaction.toJSON());
 		const bytes = await parsedTransaction.build({ client });
 
-		const suiAddress = keypair.toHaneulAddress();
+		const haneulAddress = keypair.toHaneulAddress();
 
-		if (suiAddress !== account.address) {
+		if (haneulAddress !== account.address) {
 			throw new Error(
-				`The specified account ${account.address} does not match the currently connected Enoki address ${suiAddress}.`,
+				`The specified account ${account.address} does not match the currently connected Enoki address ${haneulAddress}.`,
 			);
 		}
 
-		parsedTransaction.setSenderIfNotSet(suiAddress);
+		parsedTransaction.setSenderIfNotSet(haneulAddress);
 
 		const result = await keypair.signAndExecuteTransaction({
 			transaction: parsedTransaction,
@@ -232,11 +232,11 @@ export class EnokiWallet implements Wallet {
 
 	#signPersonalMessage: HaneulSignPersonalMessageMethod = async ({ message, account, chain }) => {
 		const { keypair } = await this.#getSignerContext(chain);
-		const suiAddress = keypair.toHaneulAddress();
+		const haneulAddress = keypair.toHaneulAddress();
 
-		if (suiAddress !== account.address) {
+		if (haneulAddress !== account.address) {
 			throw new Error(
-				`The specified account ${account.address} does not match the currently connected Enoki address ${suiAddress}.`,
+				`The specified account ${account.address} does not match the currently connected Enoki address ${haneulAddress}.`,
 			);
 		}
 
