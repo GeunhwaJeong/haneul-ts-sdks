@@ -1,0 +1,82 @@
+{
+	"name": "@haneullabs/dapp-kit-core",
+	"author": "Haneul Labs <build@haneullabs.com>",
+	"description": "Framework-agnostic toolkit for building decentralized applications on Sui.",
+	"homepage": "https://sdk.haneullabs.com/typescript",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"private": true,
+	"files": [
+		"CHANGELOG.md",
+		"LICENSE",
+		"README.md",
+		"dist",
+		"src",
+		"web"
+	],
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.mts",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.cjs"
+		},
+		"./web": {
+			"import": "./dist/web/index.mjs",
+			"require": "./dist/web/index.cjs"
+		}
+	},
+	"scripts": {
+		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
+		"build": "pnpm typecheck && tsdown",
+		"typecheck": "tsc --noEmit",
+		"dev": "tsdown --watch",
+		"prettier:check": "prettier -c --ignore-unknown .",
+		"prettier:fix": "prettier -w --ignore-unknown .",
+		"eslint:check": "eslint --max-warnings=0 .",
+		"eslint:fix": "pnpm run eslint:check --fix",
+		"lint": "pnpm run eslint:check && pnpm run prettier:check",
+		"lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix",
+		"test": "pnpm test:typecheck && pnpm vitest run",
+		"test:typecheck": "tsc -b ./test",
+		"storybook": "storybook dev -p 6006",
+		"build-storybook": "storybook build"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/HaneulLabs/ts-sdks/issues/new"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"@storybook/addon-essentials": "^8.6.14",
+		"@storybook/blocks": "^8.6.14",
+		"@storybook/web-components": "^8.6.14",
+		"@storybook/web-components-vite": "^8.6.14",
+		"storybook": "^8.6.14",
+		"tsdown": "0.17.0-beta.4",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.15"
+	},
+	"dependencies": {
+		"@floating-ui/dom": "^1.7.4",
+		"@lit-labs/scoped-registry-mixin": "^1.0.4",
+		"@lit/task": "^1.0.3",
+		"@haneullabs/slush-wallet": "workspace:*",
+		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/utils": "workspace:*",
+		"@haneullabs/wallet-standard": "workspace:*",
+		"@nanostores/lit": "^0.2.3",
+		"@wallet-standard/ui": "^1.0.1",
+		"@wallet-standard/ui-registry": "^1.0.1",
+		"@webcomponents/scoped-custom-element-registry": "^0.0.10",
+		"lit": "^3.3.1",
+		"nanostores": "^1.1.0"
+	}
+}

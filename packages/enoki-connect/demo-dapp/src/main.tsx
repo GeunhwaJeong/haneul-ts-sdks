@@ -1,0 +1,39 @@
+// Copyright (c) Mysten Labs, Inc.
+// SPDX-License-Identifier: Apache-2.0
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "@haneullabs/dapp-kit/dist/index.css";
+import "@radix-ui/themes/styles.css";
+
+import { SuiClientProvider, WalletProvider } from "@haneullabs/dapp-kit";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Theme } from "@radix-ui/themes";
+import App from "./App.tsx";
+import { networkConfig } from "./networkConfig.ts";
+import { registerEnokiConnectWallets } from "@haneullabs/enoki-connect";
+
+import "./styles.css";
+
+const queryClient = new QueryClient();
+
+registerEnokiConnectWallets({
+  publicAppSlugs: [
+    "demo-enoki-connect-f9v2kr7q",
+    "demo-enoki-connect-f9v2kr7q-light",
+  ],
+  dappName: "Test Dapp",
+}).catch(() => {});
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <Theme appearance="dark">
+      <QueryClientProvider client={queryClient}>
+        <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+          <WalletProvider autoConnect>
+            <App />
+          </WalletProvider>
+        </SuiClientProvider>
+      </QueryClientProvider>
+    </Theme>
+  </React.StrictMode>,
+);

@@ -1,0 +1,59 @@
+{
+	"name": "@haneullabs/dapp-kit-react",
+	"author": "Haneul Labs <build@haneullabs.com>",
+	"description": "React bindings for @haneullabs/dapp-kit-core",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"private": true,
+	"files": [
+		"LICENSE",
+		"README.md",
+		"dist",
+		"src"
+	],
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"scripts": {
+		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
+		"build": "pnpm typecheck && tsdown",
+		"typecheck": "tsc --noEmit",
+		"dev": "tsdown --watch",
+		"prettier:check": "prettier -c --ignore-unknown .",
+		"prettier:fix": "prettier -w --ignore-unknown .",
+		"eslint:check": "eslint --max-warnings=0 .",
+		"eslint:fix": "pnpm run eslint:check --fix",
+		"lint": "pnpm run eslint:check && pnpm run prettier:check",
+		"lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/HaneulLabs/ts-sdks/issues/new"
+	},
+	"devDependencies": {
+		"@types/react": "^19.2.7",
+		"react": "^19.2.1",
+		"tsdown": "0.17.0-beta.4",
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"@lit/react": "^1.0.8",
+		"@haneullabs/dapp-kit-core": "workspace:*",
+		"@nanostores/react": "^1.0.0",
+		"nanostores": "^1.1.0"
+	},
+	"peerDependencies": {
+		"@types/react": ">=17.0.0",
+		"react": ">=17.0.0"
+	}
+}

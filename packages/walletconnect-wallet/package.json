@@ -1,0 +1,54 @@
+{
+	"name": "@haneullabs/walletconnect-wallet",
+	"version": "0.1.12",
+	"description": "Wallet adapter for WalletConnect on Sui",
+	"license": "Apache-2.0",
+	"author": "Haneul Labs <build@haneullabs.com>",
+	"type": "commonjs",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.js",
+	"types": "./dist/cjs/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js"
+		}
+	},
+	"sideEffects": false,
+	"files": [
+		"CHANGELOG.md",
+		"dist"
+	],
+	"scripts": {
+		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
+		"build": "build-package",
+		"prettier:check": "prettier -c --ignore-unknown .",
+		"prettier:fix": "prettier -w --ignore-unknown .",
+		"eslint:check": "eslint --max-warnings=0 .",
+		"eslint:fix": "pnpm run eslint:check --fix",
+		"lint": "pnpm run eslint:check && pnpm run prettier:check",
+		"lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/haneullabs/ts-sdks/issues"
+	},
+	"homepage": "https://github.com/HaneulLabs/ts-sdks/tree/main/packages/walletconnect-wallet#readme",
+	"devDependencies": {
+		"@haneullabs/build-scripts": "workspace:*",
+		"@types/node": "^24.10.1",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.15"
+	},
+	"dependencies": {
+		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/utils": "workspace:*",
+		"@haneullabs/wallet-standard": "workspace:*",
+		"@reown/appkit-universal-connector": "1.8.14",
+		"mitt": "^3.0.1",
+		"valibot": "^1.2.0"
+	}
+}

@@ -1,0 +1,49 @@
+{
+	"name": "@haneullabs/payment-kit",
+	"version": "0.0.20",
+	"private": false,
+	"description": "Sui Payment Kit",
+	"license": "Apache-2.0",
+	"author": "Haneul Labs <build@haneullabs.com>",
+	"type": "commonjs",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.js",
+	"types": "./dist/cjs/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js"
+		}
+	},
+	"sideEffects": false,
+	"files": [
+		"dist"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/HaneulLabs/ts-sdks/issues/new"
+	},
+	"scripts": {
+		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
+		"build": "build-package",
+		"codegen": "sui-ts-codegen generate && pnpm lint:fix",
+		"prettier:check": "prettier -c --ignore-unknown .",
+		"prettier:fix": "prettier -w --ignore-unknown .",
+		"eslint:check": "eslint --max-warnings=0 .",
+		"eslint:fix": "pnpm run eslint:check --fix",
+		"lint": "pnpm run eslint:check && pnpm run prettier:check",
+		"lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix"
+	},
+	"devDependencies": {
+		"@haneullabs/build-scripts": "workspace:*",
+		"@haneullabs/codegen": "workspace:*",
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"@haneullabs/bcs": "workspace:*",
+		"@haneullabs/sui": "workspace:*"
+	}
+}

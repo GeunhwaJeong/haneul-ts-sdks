@@ -1,0 +1,47 @@
+{
+	"name": "@haneullabs/move-bytecode-template",
+	"version": "0.3.0",
+	"description": "Move Binary Format implementation in WASM",
+	"main": "index.js",
+	"types": "./web/move_bytecode_template.d.ts",
+	"files": [
+		"nodejs",
+		"web",
+		"index.js",
+		"index.mjs"
+	],
+	"exports": {
+		".": {
+			"browser": "./web/move_bytecode_template.js",
+			"import": "./index.mjs",
+			"require": "./index.js",
+			"types": "./web/move_bytecode_template.d.ts"
+		},
+		"./web/move_bytecode_template_bg.wasm": {
+			"browser": "./web/move_bytecode_template_bg.wasm",
+			"import": "./web/move_bytecode_template_bg.wasm",
+			"require": "./web/move_bytecode_template_bg.wasm"
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/HaneulLabs/ts-sdks/issues/new"
+	},
+	"scripts": {
+		"build:wasm": "pnpm build:nodejs && pnpm build:web",
+		"build:nodejs": "wasm-pack build --target nodejs --release --out-dir nodejs --no-pack && rm nodejs/.gitignore",
+		"build:web": "wasm-pack build --target web --release --out-dir web --no-pack && rm web/.gitignore",
+		"test": "vitest run"
+	},
+	"author": "Haneul Labs <build@haneullabs.com>",
+	"license": "Apache-2.0",
+	"devDependencies": {
+		"@haneullabs/bcs": "workspace:*",
+		"@haneullabs/build-scripts": "workspace:*",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.15"
+	}
+}

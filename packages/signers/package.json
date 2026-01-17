@@ -1,0 +1,76 @@
+{
+	"name": "@haneullabs/signers",
+	"version": "0.6.2",
+	"description": "A collection of signers for various providers",
+	"license": "Apache-2.0",
+	"author": "Haneul Labs <build@haneullabs.com>",
+	"type": "commonjs",
+	"exports": {
+		"./aws": {
+			"import": "./dist/esm/aws/index.js",
+			"require": "./dist/cjs/aws/index.js"
+		},
+		"./gcp": {
+			"import": "./dist/esm/gcp/index.js",
+			"require": "./dist/cjs/gcp/index.js"
+		},
+		"./ledger": {
+			"import": "./dist/esm/ledger/index.js",
+			"require": "./dist/cjs/ledger/index.js"
+		},
+		"./webcrypto": {
+			"import": "./dist/esm/webcrypto/index.js",
+			"require": "./dist/cjs/webcrypto/index.js"
+		}
+	},
+	"sideEffects": false,
+	"files": [
+		"CHANGELOG.md",
+		"LICENSE",
+		"README.md",
+		"aws",
+		"dist",
+		"gcp",
+		"ledger",
+		"src",
+		"src",
+		"webcrypto"
+	],
+	"scripts": {
+		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
+		"build": "build-package",
+		"prettier:check": "prettier -c --ignore-unknown .",
+		"prettier:fix": "prettier -w --ignore-unknown .",
+		"eslint:check": "eslint --max-warnings=0 .",
+		"eslint:fix": "pnpm run eslint:check --fix",
+		"lint": "pnpm run eslint:check && pnpm run prettier:check",
+		"lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix",
+		"test": "vitest run"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/haneullabs/ts-sdks/issues"
+	},
+	"homepage": "https://github.com/HaneulLabs/ts-sdks/tree/main/packages/signers#readme",
+	"devDependencies": {
+		"@haneullabs/build-scripts": "workspace:*",
+		"@types/node": "^24.10.1",
+		"dotenv": "^17.2.3",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.15"
+	},
+	"dependencies": {
+		"@google-cloud/kms": "^4.5.0",
+		"@haneullabs/ledgerjs-hw-app-sui": "workspace:*",
+		"@haneullabs/sui": "workspace:*",
+		"@noble/curves": "=1.9.4",
+		"@noble/hashes": "^1.8.0",
+		"asn1-ts": "^8.0.2"
+	},
+	"engines": {
+		"node": ">=20"
+	}
+}

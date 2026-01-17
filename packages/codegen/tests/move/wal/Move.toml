@@ -1,0 +1,11 @@
+[package]
+name = "WAL"
+license = "Apache-2.0"
+authors = ["Haneul Labs <build@haneullabs.com>"]
+edition = "2024.beta"
+
+[dependencies]
+Sui = { git = "https://github.com/HaneulLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet-v1.43.0" }
+
+[addresses]
+wal = "0x0"

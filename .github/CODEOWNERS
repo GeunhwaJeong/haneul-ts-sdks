@@ -1,0 +1,3 @@
+packages/ @MystenLabs/sdk-reviewers
+packages/kiosk @MystenLabs/kiosk-sdk-reviewers
+packages/wallet-standard @MystenLabs/wallet-kit-reviewers

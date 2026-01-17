@@ -1,0 +1,80 @@
+{
+	"name": "@haneullabs/enoki",
+	"version": "0.13.0",
+	"description": "TODO: Description",
+	"license": "Apache-2.0",
+	"author": "Haneul Labs <build@haneullabs.com>",
+	"type": "commonjs",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.js",
+	"types": "./dist/cjs/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js"
+		},
+		"./react": {
+			"import": "./dist/esm/react.js",
+			"require": "./dist/cjs/react.js"
+		}
+	},
+	"files": [
+		"CHANGELOG.md",
+		"dist",
+		"react"
+	],
+	"scripts": {
+		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
+		"build": "build-package",
+		"demo": "vite ./demo",
+		"prettier:check": "prettier -c --ignore-unknown .",
+		"prettier:fix": "prettier -w --ignore-unknown .",
+		"eslint:check": "eslint --max-warnings=0 .",
+		"eslint:fix": "pnpm run eslint:check --fix",
+		"lint": "pnpm run eslint:check && pnpm run prettier:check",
+		"lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/haneullabs/ts-sdks/issues"
+	},
+	"homepage": "https://docs.enoki.haneullabs.com",
+	"devDependencies": {
+		"@haneullabs/build-scripts": "workspace:*",
+		"@haneullabs/dapp-kit": "workspace:*",
+		"@tanstack/react-query": "^5.90.11",
+		"@types/node": "^24.10.1",
+		"@types/react": "^19.2.7",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react-swc": "^4.2.2",
+		"react": "^19.2.1",
+		"react-dom": "^19.2.1",
+		"typescript": "^5.9.3",
+		"vite": "^7.2.6"
+	},
+	"dependencies": {
+		"@haneullabs/signers": "workspace:*",
+		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/wallet-standard": "workspace:*",
+		"@nanostores/react": "^1.0.0",
+		"@wallet-standard/ui": "^1.0.1",
+		"idb-keyval": "^6.2.2",
+		"mitt": "^3.0.1",
+		"nanostores": "^1.1.0"
+	},
+	"peerDependencies": {
+		"@types/react": ">=17.0.0",
+		"react": ">=17.0.0"
+	},
+	"peerDependenciesMeta": {
+		"react": {
+			"optional": true
+		},
+		"@types/react": {
+			"optional": true
+		}
+	}
+}

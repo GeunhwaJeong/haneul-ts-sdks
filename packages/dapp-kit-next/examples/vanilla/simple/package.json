@@ -1,0 +1,19 @@
+{
+	"name": "vanilla-simple-example",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@haneullabs/dapp-kit-core": "workspace:*",
+		"@haneullabs/sui": "workspace:*"
+	},
+	"devDependencies": {
+		"typescript": "^5.9.3",
+		"vite": "^7.2.6"
+	}
+}
