@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Transaction } from '@haneullabs/sui/transactions';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import { signTransaction } from '@haneullabs/wallet-standard';
 import type { SignedTransaction, HaneulSignTransactionInput } from '@haneullabs/wallet-standard';
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';

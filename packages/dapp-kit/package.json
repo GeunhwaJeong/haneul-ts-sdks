@@ -83,7 +83,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/slush-wallet": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@haneullabs/utils": "workspace:*",
 		"@haneullabs/wallet-standard": "workspace:*",
 		"@radix-ui/react-dialog": "^1.1.15",

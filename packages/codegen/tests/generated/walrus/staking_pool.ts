@@ -5,7 +5,7 @@
 /** Module: staking_pool */
 
 import { MoveStruct, MoveEnum } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as object from './deps/sui/object.js';
 import * as storage_node from './storage_node.js';
 import * as pending_values from './pending_values.js';

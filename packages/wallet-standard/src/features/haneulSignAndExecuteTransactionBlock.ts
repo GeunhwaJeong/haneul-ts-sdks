@@ -5,7 +5,7 @@ import type {
 	ExecuteTransactionRequestType,
 	HaneulTransactionBlockResponse,
 	HaneulTransactionBlockResponseOptions,
-} from '@haneullabs/sui/client';
+} from '@haneullabs/haneul/client';
 
 import type { HaneulSignTransactionBlockInput } from './haneulSignTransactionBlock.js';
 

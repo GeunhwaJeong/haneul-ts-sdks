@@ -1,18 +1,18 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@haneullabs/sui/bcs';
-import type { OrderArguments, PaginatedEvents, PaginationArguments } from '@haneullabs/sui/client';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import type { Argument, TransactionObjectInput, TransactionResult } from '@haneullabs/sui/transactions';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { OrderArguments, PaginatedEvents, PaginationArguments } from '@haneullabs/haneul/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import type { Argument, TransactionObjectInput, TransactionResult } from '@haneullabs/haneul/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import {
 	normalizeStructTag,
 	normalizeHaneulAddress,
 	normalizeHaneulObjectId,
 	parseStructTag,
 	SUI_CLOCK_OBJECT_ID,
-} from '@haneullabs/sui/utils';
+} from '@haneullabs/haneul/utils';
 
 import { BcsOrder } from './types/bcs.js';
 import type {

@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { KeyManagementServiceClient } from '@google-cloud/kms';
-import type { PublicKey, SignatureFlag } from '@haneullabs/sui/cryptography';
-import { SIGNATURE_FLAG_TO_SCHEME, Signer } from '@haneullabs/sui/cryptography';
-import { Secp256k1PublicKey } from '@haneullabs/sui/keypairs/secp256k1';
-import { Secp256r1PublicKey } from '@haneullabs/sui/keypairs/secp256r1';
-import { fromBase64 } from '@haneullabs/sui/utils';
+import type { PublicKey, SignatureFlag } from '@haneullabs/haneul/cryptography';
+import { SIGNATURE_FLAG_TO_SCHEME, Signer } from '@haneullabs/haneul/cryptography';
+import { Secp256k1PublicKey } from '@haneullabs/haneul/keypairs/secp256k1';
+import { Secp256r1PublicKey } from '@haneullabs/haneul/keypairs/secp256r1';
+import { fromBase64 } from '@haneullabs/haneul/utils';
 
 import { getConcatenatedSignature, publicKeyFromDER } from '../utils/utils.js';
 

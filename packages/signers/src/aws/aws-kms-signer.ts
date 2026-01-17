@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import type { PublicKey, SignatureFlag } from '@haneullabs/sui/cryptography';
-import { SIGNATURE_FLAG_TO_SCHEME, Signer } from '@haneullabs/sui/cryptography';
-import { fromBase64, toBase64 } from '@haneullabs/sui/utils';
+import type { PublicKey, SignatureFlag } from '@haneullabs/haneul/cryptography';
+import { SIGNATURE_FLAG_TO_SCHEME, Signer } from '@haneullabs/haneul/cryptography';
+import { fromBase64, toBase64 } from '@haneullabs/haneul/utils';
 
 import { getConcatenatedSignature } from '../utils/utils.js';
 import type { AwsClientOptions } from './aws-client.js';

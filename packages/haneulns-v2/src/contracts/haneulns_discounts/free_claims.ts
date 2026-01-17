@@ -12,9 +12,9 @@
 
 import { MoveTuple, MoveStruct, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { BcsType } from '@haneullabs/sui/bcs';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { BcsType } from '@haneullabs/haneul/bcs';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import * as pricing_config from './deps/haneulns/pricing_config.js';
 import * as linked_table from './deps/sui/linked_table.js';
 const $moduleName = '@haneulns/discounts::free_claims';

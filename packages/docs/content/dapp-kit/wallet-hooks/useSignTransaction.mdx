@@ -7,14 +7,14 @@ import { UseSignTransactionExample } from '../../../examples/wallet-hooks-client
 Use the `useSignTransaction` hook to prompt the user to sign a transaction with their wallet.
 
 ```ts
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import {
 	ConnectButton,
 	useCurrentAccount,
 	useSignTransaction,
 	useHaneulClient,
 } from '@haneullabs/dapp-kit';
-import { toBase64 } from '@haneullabs/sui/utils';
+import { toBase64 } from '@haneullabs/haneul/utils';
 import { useState } from 'react';
 
 function MyComponent() {

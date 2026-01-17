@@ -2,7 +2,7 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveStruct, MoveEnum } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '@local-pkg/walrus::messages';
 export const ProofOfPossessionMessage = new MoveStruct({
 	name: `${$moduleName}::ProofOfPossessionMessage`,

@@ -12,21 +12,21 @@
 ### Patch Changes
 
 - Updated dependencies [29e8b92]
-  - @haneullabs/sui@1.45.2
+  - @haneullabs/haneul@1.45.2
 
 ## 0.0.18
 
 ### Patch Changes
 
 - Updated dependencies [e3811f1]
-  - @haneullabs/sui@1.45.1
+  - @haneullabs/haneul@1.45.1
 
 ## 0.0.17
 
 ### Patch Changes
 
 - Updated dependencies [88bdbac]
-  - @haneullabs/sui@1.45.0
+  - @haneullabs/haneul@1.45.0
 
 ## 0.0.16
 
@@ -51,7 +51,7 @@
 ### Patch Changes
 
 - Updated dependencies [44d9b4f]
-  - @haneullabs/sui@1.44.0
+  - @haneullabs/haneul@1.44.0
 
 ## 0.0.12
 
@@ -65,7 +65,7 @@
 
 - Updated dependencies [89fa2dc]
   - @haneullabs/bcs@1.9.2
-  - @haneullabs/sui@1.43.2
+  - @haneullabs/haneul@1.43.2
 
 ## 0.0.10
 
@@ -79,7 +79,7 @@
 
 - Updated dependencies [a37829f]
   - @haneullabs/bcs@1.9.1
-  - @haneullabs/sui@1.43.1
+  - @haneullabs/haneul@1.43.1
 
 ## 0.0.8
 
@@ -97,7 +97,7 @@
 - Updated dependencies [f3b19a7]
 - Updated dependencies [f3b19a7]
 - Updated dependencies [bf9f85c]
-  - @haneullabs/sui@1.43.0
+  - @haneullabs/haneul@1.43.0
   - @haneullabs/bcs@1.9.0
 
 ## 0.0.6
@@ -105,7 +105,7 @@
 ### Patch Changes
 
 - Updated dependencies [98c8a27]
-  - @haneullabs/sui@1.42.0
+  - @haneullabs/haneul@1.42.0
 
 ## 0.0.5
 
@@ -115,7 +115,7 @@
 - Updated dependencies [d554cd2]
 - Updated dependencies [04fcfbc]
   - @haneullabs/bcs@1.8.1
-  - @haneullabs/sui@1.41.0
+  - @haneullabs/haneul@1.41.0
 
 ## 0.0.4
 
@@ -123,7 +123,7 @@
 
 - da06c0c: Added Registry and Payment Record calls
 - Updated dependencies [f5fc0c0]
-  - @haneullabs/sui@1.40.0
+  - @haneullabs/haneul@1.40.0
 
 ## 0.0.3
 
@@ -132,7 +132,7 @@
 - bde81dd: Added processRegistryPayment/processEphemeralPayment transaction builders and
   getPaymentRecord
 - Updated dependencies [a9f9035]
-  - @haneullabs/sui@1.39.1
+  - @haneullabs/haneul@1.39.1
 
 ## 0.0.2
 
@@ -140,4 +140,4 @@
 
 - Updated dependencies [ca92487]
 - Updated dependencies [5ab3c0a]
-  - @haneullabs/sui@1.39.0
+  - @haneullabs/haneul@1.39.0

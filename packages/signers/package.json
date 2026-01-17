@@ -65,7 +65,7 @@
 	"dependencies": {
 		"@google-cloud/kms": "^4.5.0",
 		"@haneullabs/ledgerjs-hw-app-sui": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@noble/curves": "=1.9.4",
 		"@noble/hashes": "^1.8.0",
 		"asn1-ts": "^8.0.2"

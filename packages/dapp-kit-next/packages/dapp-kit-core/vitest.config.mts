@@ -16,7 +16,7 @@ export default defineConfig({
 		alias: {
 			'@dappkit/core': resolve(__dirname, './src'),
 			'@dappkit/core/test-utils': resolve(__dirname, './test/test-utils'),
-			'@haneullabs/sui': resolve(__dirname, '../../../typescript/src'),
+			'@haneullabs/haneul': resolve(__dirname, '../../../typescript/src'),
 			'@haneullabs/wallet-standard': resolve(__dirname, '../../../wallet-standard/src'),
 		},
 	},

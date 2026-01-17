@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { DeepBookClient } from '../src/client.js';
-import { HaneulClient, getFullnodeUrl } from '@haneullabs/sui/client';
+import { HaneulClient, getFullnodeUrl } from '@haneullabs/haneul/client';
 
 (async () => {
 	const dbClient = new DeepBookClient({

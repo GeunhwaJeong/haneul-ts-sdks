@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@haneullabs/sui/bcs';
-import type { TransactionArgument } from '@haneullabs/sui/transactions';
-import { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { TransactionArgument } from '@haneullabs/haneul/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import type { RuleResolvingParams } from '../../types/index.js';
 import { lock } from '../kiosk.js';

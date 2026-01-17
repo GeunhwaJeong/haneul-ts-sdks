@@ -19,7 +19,7 @@
  */
 
 import { MoveStruct, MoveTuple } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as object from './deps/sui/object.js';
 import * as object_bag from './deps/sui/object_bag.js';
 const $moduleName = '@local-pkg/walrus::display';

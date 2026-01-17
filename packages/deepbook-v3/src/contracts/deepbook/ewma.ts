@@ -10,7 +10,7 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '@deepbook/core::ewma';
 export const EWMAState = new MoveStruct({
 	name: `${$moduleName}::EWMAState`,

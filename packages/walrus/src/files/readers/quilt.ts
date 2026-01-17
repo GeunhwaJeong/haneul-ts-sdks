@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { ClientCache } from '@haneullabs/sui/experimental';
+import { ClientCache } from '@haneullabs/haneul/experimental';
 import type { BlobReader } from './blob.js';
 import { QuiltPatchBlobHeader, QuiltPatchId } from '../../utils/bcs.js';
 import {

@@ -1,13 +1,13 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import type {
 	Transaction,
 	TransactionObjectArgument,
 	TransactionObjectInput,
-} from '@haneullabs/sui/transactions';
-import { isValidHaneulNSName, normalizeHaneulNSName, SUI_CLOCK_OBJECT_ID } from '@haneullabs/sui/utils';
+} from '@haneullabs/haneul/transactions';
+import { isValidHaneulNSName, normalizeHaneulNSName, SUI_CLOCK_OBJECT_ID } from '@haneullabs/haneul/utils';
 
 import { ALLOWED_METADATA, MAX_U64 } from './constants.js';
 import { isNestedSubName, isSubName, zeroCoin } from './helpers.js';

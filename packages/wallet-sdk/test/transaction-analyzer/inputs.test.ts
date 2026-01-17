@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, it, expect } from 'vitest';
-import { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import { analyze } from '../../src/transaction-analyzer/analyzer';
 import { inputs } from '../../src/transaction-analyzer/rules/inputs';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import { MockHaneulClient } from '../mocks/MockHaneulClient';
 import {
 	DEFAULT_SENDER,

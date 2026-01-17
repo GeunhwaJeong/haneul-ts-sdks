@@ -34,7 +34,7 @@ The Sui TypeScript SDK deprecates the following classes with version 0.38.0:
   been deprecated in favor of using `suiClient` for establishing the connection. See
   [Network Interactions with HaneulClient](typescript/haneul-client) for more information.
 - The `superstruct` type definitions for `JsonRPCProvider` types are replaced with generated types
-  exported from `@haneullabs/sui/client`. The new type definitions are pure TypeScript types that you
+  exported from `@haneullabs/haneul/client`. The new type definitions are pure TypeScript types that you
   can't use for runtime validation.
 - A more stable JSON-RPC API has reduced the need for many of the SDK "getter" methods, which are
   now deprecated.
@@ -49,11 +49,11 @@ an example of transaction signing, see the
 
 The ability to request SUI from a faucet is not part of `HaneulClient` as it was with
 `JsonRpcProvider`. Instead, you must use the `requestSuiFromFaucetV0` method from
-`@haneullabs/sui/faucet`. The `@haneullabs/sui/faucet` import also provides a `getFaucetHost` method to
+`@haneullabs/haneul/faucet`. The `@haneullabs/haneul/faucet` import also provides a `getFaucetHost` method to
 retrieve the faucet URL for `localnet`, `testnet`, or `devnet` networks.
 
 ```ts
-import { getFaucetHost, requestSuiFromFaucetV0 } from '@haneullabs/sui/faucet';
+import { getFaucetHost, requestSuiFromFaucetV0 } from '@haneullabs/haneul/faucet';
 
 await requestSuiFromFaucetV0({
 	host: getFaucetHost('devnet'),

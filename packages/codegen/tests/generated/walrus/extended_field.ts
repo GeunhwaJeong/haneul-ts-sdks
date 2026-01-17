@@ -10,8 +10,8 @@ import {
 	normalizeMoveArguments,
 	type RawTransactionArgument,
 } from '../utils/index.js';
-import { bcs, type BcsType } from '@haneullabs/sui/bcs';
-import { type Transaction } from '@haneullabs/sui/transactions';
+import { bcs, type BcsType } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 import * as object from './deps/sui/object.js';
 const $moduleName = '@local-pkg/walrus::extended_field';
 export const ExtendedField = new MoveStruct({

@@ -1,4 +1,4 @@
-# @haneullabs/sui.js
+# @haneullabs/haneul.js
 
 ## 1.45.2
 
@@ -62,7 +62,7 @@
 
 ### Minor Changes
 
-- d554cd2: Add new @haneullabs/sui/jsonRpc export
+- d554cd2: Add new @haneullabs/haneul/jsonRpc export
 - 04fcfbc: Add GRPC client
 
 ### Patch Changes
@@ -403,7 +403,7 @@
 
 ### Minor Changes
 
-- 539168a: expose isArgument util from @haneullabs/sui/transactions
+- 539168a: expose isArgument util from @haneullabs/haneul/transactions
 
 ### Patch Changes
 
@@ -459,9 +459,9 @@
 ### Minor Changes
 
 - ec2dc7f: Add legacyAddress flag to zklogin methods that generate addresses
-- ec2dc7f: All functionality from `@haneullabs/zklogin` has been moved to `@haneullabs/sui/zklogin`
+- ec2dc7f: All functionality from `@haneullabs/zklogin` has been moved to `@haneullabs/haneul/zklogin`
 
-  For most methods, simply replace the `@haneullabs/zklogin` import with `@haneullabs/sui/zklogin`
+  For most methods, simply replace the `@haneullabs/zklogin` import with `@haneullabs/haneul/zklogin`
 
   2 Methods require one small additional change:
 
@@ -470,7 +470,7 @@
 
   ```diff
   - import { computeZkLoginAddress, jwtToAddress } from '@haneullabs/zklogin';
-  + import { computeZkLoginAddress, jwtToAddress } from '@haneullabs/sui/zklogin';
+  + import { computeZkLoginAddress, jwtToAddress } from '@haneullabs/haneul/zklogin';
 
     const address = jwtToAddress(
      jwtAsString,
@@ -725,7 +725,7 @@
 
 ### Major Changes
 
-- a92b03de42: The Typescript SDK has been renamed to `@haneullabs/sui` and includes many new features
+- a92b03de42: The Typescript SDK has been renamed to `@haneullabs/haneul` and includes many new features
   and breaking changes. See the
   [full migration guide](https://sdk.haneullabs.com/typescript/migrations/haneul-1.0) for details on
   how to upgrade.
@@ -860,7 +860,7 @@
   HaneulHTTPTransport (eg, using the `ws` package)
 
   ```typescript
-  import { getFullnodeUrl, HaneulClient, HaneulHTTPTransport } from '@haneullabs/sui.js/client';
+  import { getFullnodeUrl, HaneulClient, HaneulHTTPTransport } from '@haneullabs/haneul.js/client';
   import { WebSocket } from 'ws';
 
   new HaneulClient({
@@ -977,7 +977,7 @@
 
 ### Minor Changes
 
-- fd8589806: Remove all previously deprecated exports from @haneullabs/sui.js
+- fd8589806: Remove all previously deprecated exports from @haneullabs/haneul.js
 
 ## 0.41.2
 
@@ -996,7 +996,7 @@
 
 ### Minor Changes
 
-- ba8e3b857: Rename TransactionBlock generated type in @haneullabs/sui.js/client to HaneulTransactionBlock
+- ba8e3b857: Rename TransactionBlock generated type in @haneullabs/haneul.js/client to HaneulTransactionBlock
   to avoid conflicting names in exports
 
 ### Patch Changes
@@ -1007,7 +1007,7 @@
 
 ### Minor Changes
 
-- a503cad34: Add exports to `@haneullabs/sui.js/client` for rpc method params
+- a503cad34: Add exports to `@haneullabs/haneul.js/client` for rpc method params
 
 ### Patch Changes
 
@@ -1032,15 +1032,15 @@
 - 6d41059c7: Deprecate imports from the root path which can be imported from a modular export
 - cc6441f46: The Sui TS SDK has been broken up into a set of modular exports, and all exports from
   the root of the package have been deprecated. The following export paths have been added:
-  - `@haneullabs/sui.js/client` - A client for interacting with Sui RPC nodes.
-  - `@haneullabs/sui.js/bcs` - A BCS builder with pre-defined types for Sui.
-  - `@haneullabs/sui.js/transaction` - Utilities for building and interacting with transactions.
-  - `@haneullabs/sui.js/keypairs/*` - Modular exports for specific KeyPair implementations.
-  - `@haneullabs/sui.js/verify` - Methods for verifying transactions and messages.
-  - `@haneullabs/sui.js/cryptography` - Shared types and classes for cryptography.
-  - `@haneullabs/sui.js/multisig` - Utilities for working with multisig signatures.
-  - `@haneullabs/sui.js/utils` - Utilities for formatting and parsing various Sui types.
-  - `@haneullabs/sui.js/faucet`- Methods for requesting sui from a faucet.
+  - `@haneullabs/haneul.js/client` - A client for interacting with Sui RPC nodes.
+  - `@haneullabs/haneul.js/bcs` - A BCS builder with pre-defined types for Sui.
+  - `@haneullabs/haneul.js/transaction` - Utilities for building and interacting with transactions.
+  - `@haneullabs/haneul.js/keypairs/*` - Modular exports for specific KeyPair implementations.
+  - `@haneullabs/haneul.js/verify` - Methods for verifying transactions and messages.
+  - `@haneullabs/haneul.js/cryptography` - Shared types and classes for cryptography.
+  - `@haneullabs/haneul.js/multisig` - Utilities for working with multisig signatures.
+  - `@haneullabs/haneul.js/utils` - Utilities for formatting and parsing various Sui types.
+  - `@haneullabs/haneul.js/faucet`- Methods for requesting sui from a faucet.
 
   As part of this refactor we are deprecating a number of existing APIs:
   - `JsonRPCProvider` - This Provider pattern is being replaced by a new `HaneulClient`
@@ -1048,7 +1048,7 @@
     Signing in verifying has been moved to the KeyPair classes, and the
     `signAndExecuteTransactionBlock` method has been moved to the new `HaneulClient`.
   - The `superstruct` type definitions for types used by JsonRPCProvider are being replaced with
-    generated types exported from `@haneullabs/sui.js/client`. The new type definitions are pure
+    generated types exported from `@haneullabs/haneul.js/client`. The new type definitions are pure
     typescript types and can't be used for runtime validation. By generating these as types, it will
     be easier to keep them in sync with the RPC definitions and avoid discrepancies between the type
     definitions in the SDK and the data returned by RPC methods.
@@ -1078,8 +1078,8 @@
   provider.
 
   ```diff
-  - import { JsonRpcProvider, devnetConnection } from '@haneullabs/sui.js';
-  + import { HaneulClient, getFullnodeUrl } from '@haneullabs/sui.js/client';
+  - import { JsonRpcProvider, devnetConnection } from '@haneullabs/haneul.js';
+  + import { HaneulClient, getFullnodeUrl } from '@haneullabs/haneul.js/client';
 
   - const provider = new JsonRpcProvider(localnetConnection);
   + const client = new HaneulClient({ url: getFullnodeUrl('localnet')});
@@ -1097,10 +1097,10 @@
   -    RawSigner,
   -    TransactionBlock,
   -    localnetConnection,
-  - } from '@haneullabs/sui.js';
-  + import { Ed25519Keypair } from '@haneullabs/sui.js/keypairs/ed25519';
-  + import { HaneulClient, getFullnodeUrl } from '@haneullabs/sui.js/client';
-  + import { TransactionBlock } from '@haneullabs/sui.js/transactions';
+  - } from '@haneullabs/haneul.js';
+  + import { Ed25519Keypair } from '@haneullabs/haneul.js/keypairs/ed25519';
+  + import { HaneulClient, getFullnodeUrl } from '@haneullabs/haneul.js/client';
+  + import { TransactionBlock } from '@haneullabs/haneul.js/transactions';
 
     const keypair = new Ed25519Keypair()
   - const provider = new JsonRpcProvider(localnetConnection);
@@ -1118,12 +1118,12 @@
   #### Migrating faucet requests
 
   The ability to request Sui from a faucet was not added to `HaneulClient`, instead you will need to
-  use a method `@haneullabs/sui.js/faucet` to make these requests
+  use a method `@haneullabs/haneul.js/faucet` to make these requests
 
   ```diff
-  - import { JsonRpcProvider, devnetConnection } from '@haneullabs/sui.js';
+  - import { JsonRpcProvider, devnetConnection } from '@haneullabs/haneul.js';
   - const provider = new JsonRpcProvider(devnetConnection);
-  + import { requestSuiFromFaucetV0, getFaucetHost } from '@haneullabs/sui.js/faucet';
+  + import { requestSuiFromFaucetV0, getFaucetHost } from '@haneullabs/haneul.js/faucet';
 
   - await provider.requestSuiFromFaucet(
   -  '<YOUR SUI ADDRESS>'
@@ -1134,7 +1134,7 @@
   +});
   ```
 
-- 001148443: Introduce new `@haneullabs/sui.js/faucet` export, which should be used for all faucet
+- 001148443: Introduce new `@haneullabs/haneul.js/faucet` export, which should be used for all faucet
   interactions. This deprecates the previous `requestSuiFromFaucet` APIs that existed on the
   `JsonRpcProvider` and `Signer` classes.
 

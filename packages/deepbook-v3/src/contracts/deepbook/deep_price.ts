@@ -8,8 +8,8 @@
 
 import { MoveStruct, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 const $moduleName = '@deepbook/core::deep_price';
 export const Price = new MoveStruct({
 	name: `${$moduleName}::Price`,

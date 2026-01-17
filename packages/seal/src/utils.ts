@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { fromHex, toHex } from '@haneullabs/bcs';
-import { isValidHaneulObjectId } from '@haneullabs/sui/utils';
+import { isValidHaneulObjectId } from '@haneullabs/haneul/utils';
 
 import { UserError } from './error.js';
 

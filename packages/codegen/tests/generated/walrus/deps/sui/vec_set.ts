@@ -1,7 +1,7 @@
 /**************************************************************
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
-import { type BcsType, bcs } from '@haneullabs/sui/bcs';
+import { type BcsType, bcs } from '@haneullabs/haneul/bcs';
 import { MoveStruct } from '../../../utils/index.js';
 const $moduleName = '0x2::vec_set';
 /**

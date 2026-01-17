@@ -1,14 +1,14 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import type { CoinStruct } from '@haneullabs/sui/client';
-import { decodeHaneulPrivateKey } from '@haneullabs/sui/cryptography';
-import type { Keypair, Signer } from '@haneullabs/sui/cryptography';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import type { TransactionObjectArgument, TransactionObjectInput } from '@haneullabs/sui/transactions';
-import { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeStructTag, normalizeHaneulAddress, SUI_TYPE_ARG, toBase64 } from '@haneullabs/sui/utils';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import type { CoinStruct } from '@haneullabs/haneul/client';
+import { decodeHaneulPrivateKey } from '@haneullabs/haneul/cryptography';
+import type { Keypair, Signer } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import type { TransactionObjectArgument, TransactionObjectInput } from '@haneullabs/haneul/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeStructTag, normalizeHaneulAddress, SUI_TYPE_ARG, toBase64 } from '@haneullabs/haneul/utils';
 
 import type { ZkBagContractOptions } from './zk-bag.js';
 import { getContractIds, ZkBag } from './zk-bag.js';

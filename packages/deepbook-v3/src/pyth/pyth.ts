@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@haneullabs/sui/bcs';
-import type { HaneulClient } from '@haneullabs/sui/client';
-import type { Transaction } from '@haneullabs/sui/transactions';
-import { coinWithBalance } from '@haneullabs/sui/transactions';
-import { fromBase64, fromHex, parseStructTag } from '@haneullabs/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { HaneulClient } from '@haneullabs/haneul/client';
+import type { Transaction } from '@haneullabs/haneul/transactions';
+import { coinWithBalance } from '@haneullabs/haneul/transactions';
+import { fromBase64, fromHex, parseStructTag } from '@haneullabs/haneul/utils';
 
 import type { HexString } from './PriceServiceConnection.js';
 import { PriceServiceConnection } from './PriceServiceConnection.js';

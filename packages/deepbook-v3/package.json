@@ -42,7 +42,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@noble/hashes": "^1.8.0",
 		"axios": "^1.13.2",
 		"axios-retry": "^4.5.0"

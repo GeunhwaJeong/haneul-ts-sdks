@@ -5,8 +5,8 @@
 
 import { MoveStruct, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import * as vec_map from './deps/sui/vec_map.js';
 const $moduleName = '@local-pkg/walrus::node_metadata';
 export const NodeMetadata = new MoveStruct({

@@ -8,13 +8,13 @@ import {
   useSignTransaction,
   useHaneulClientContext,
 } from "@haneullabs/dapp-kit";
-import { Transaction } from "@haneullabs/sui/transactions";
+import { Transaction } from "@haneullabs/haneul/transactions";
 import {
   verifyPersonalMessageSignature,
   verifyTransactionSignature,
-} from "@haneullabs/sui/verify";
+} from "@haneullabs/haneul/verify";
 import { Button, Container } from "@radix-ui/themes";
-import { fromBase64 } from "@haneullabs/sui/utils";
+import { fromBase64 } from "@haneullabs/haneul/utils";
 import type {
   HaneulChain,
   WalletAccount,

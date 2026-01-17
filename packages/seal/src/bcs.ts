@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { fromHex, toHex } from '@haneullabs/bcs';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 
 export const IBEEncryptions = bcs.enum('IBEEncryptions', {
 	BonehFranklinBLS12381: bcs.struct('BonehFranklinBLS12381', {

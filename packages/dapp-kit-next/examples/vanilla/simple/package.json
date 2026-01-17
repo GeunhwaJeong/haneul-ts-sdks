@@ -10,7 +10,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/dapp-kit-core": "workspace:*",
-		"@haneullabs/sui": "workspace:*"
+		"@haneullabs/haneul": "workspace:*"
 	},
 	"devDependencies": {
 		"typescript": "^5.9.3",

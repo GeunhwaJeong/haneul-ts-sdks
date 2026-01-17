@@ -52,7 +52,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@haneullabs/wallet-standard": "workspace:*",
 		"valibot": "^1.2.0"
 	}

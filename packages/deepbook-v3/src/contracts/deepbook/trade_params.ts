@@ -4,7 +4,7 @@
 /** TradeParams module contains the trade parameters for a trading pair. */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '@deepbook/core::trade_params';
 export const TradeParams = new MoveStruct({
 	name: `${$moduleName}::TradeParams`,

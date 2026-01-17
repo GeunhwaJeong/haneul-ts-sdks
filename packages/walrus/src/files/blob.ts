@@ -4,7 +4,7 @@
 import type { WalrusClient } from '../client.js';
 import type { BlobReader } from './readers/blob.js';
 import { WalrusFile } from './file.js';
-import { ClientCache } from '@haneullabs/sui/experimental';
+import { ClientCache } from '@haneullabs/haneul/experimental';
 
 export class WalrusBlob {
 	#reader: BlobReader;

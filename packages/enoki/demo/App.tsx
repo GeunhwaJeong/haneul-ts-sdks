@@ -9,7 +9,7 @@ import {
 	useHaneulClientContext,
 	useWallets,
 } from '@haneullabs/dapp-kit';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { useState } from 'react';
 
 import { isEnokiWallet, isGoogleWallet } from '../src/wallet/utils.js';

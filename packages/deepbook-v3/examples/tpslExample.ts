@@ -12,8 +12,8 @@
  */
 
 import { execSync } from 'child_process';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { DeepBookClient, OrderType, SelfMatchingOptions } from '../src/index.js';
 

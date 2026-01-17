@@ -1,14 +1,14 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { PublicKey, SignatureScheme } from '@haneullabs/sui/cryptography';
-import { SIGNATURE_FLAG_TO_SCHEME, Signer } from '@haneullabs/sui/cryptography';
+import type { PublicKey, SignatureScheme } from '@haneullabs/haneul/cryptography';
+import { SIGNATURE_FLAG_TO_SCHEME, Signer } from '@haneullabs/haneul/cryptography';
 import type { DAppKit } from '../core/index.js';
-import type { Transaction } from '@haneullabs/sui/transactions';
-import type { Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
-import { parseTransactionBcs, parseTransactionEffectsBcs } from '@haneullabs/sui/experimental';
-import { toBase64, fromBase64 } from '@haneullabs/sui/utils';
-import { publicKeyFromSuiBytes } from '@haneullabs/sui/verify';
+import type { Transaction } from '@haneullabs/haneul/transactions';
+import type { Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
+import { parseTransactionBcs, parseTransactionEffectsBcs } from '@haneullabs/haneul/experimental';
+import { toBase64, fromBase64 } from '@haneullabs/haneul/utils';
+import { publicKeyFromSuiBytes } from '@haneullabs/haneul/verify';
 
 export class CurrentAccountSigner extends Signer {
 	#publicKeyCache = new Map<string, PublicKey>();

@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import { objects, objectsById } from './objects.js';
 import type { AnalyzedObject } from './objects.js';
 import { createAnalyzer } from '../analyzer.js';
-import { normalizeStructTag, parseStructTag } from '@haneullabs/sui/utils';
+import { normalizeStructTag, parseStructTag } from '@haneullabs/haneul/utils';
 import { data } from './core.js';
 
 export type AnalyzedCoin = AnalyzedObject & { balance: bigint; coinType: string };

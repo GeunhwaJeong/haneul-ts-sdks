@@ -174,8 +174,8 @@ cryptographic operations.
 import Transport from '@ledgerhq/hw-transport-node-hid';
 import SuiLedgerClient from '@haneullabs/ledgerjs-hw-app-sui';
 import { LedgerSigner } from '@haneullabs/signers/ledger';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const transport = await Transport.open(undefined);
 const ledgerClient = new SuiLedgerClient(transport);

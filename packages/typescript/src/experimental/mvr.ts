@@ -17,7 +17,7 @@ import type { Experimental_HaneulClientTypes } from './types.js';
 
 const NAME_SEPARATOR = '/';
 const MVR_API_HEADER = {
-	'Mvr-Source': `@haneullabs/sui@${PACKAGE_VERSION}`,
+	'Mvr-Source': `@haneullabs/haneul@${PACKAGE_VERSION}`,
 };
 
 export interface MvrClientOptions {

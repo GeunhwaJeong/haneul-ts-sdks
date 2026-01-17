@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MoveStruct, MoveEnum, MoveTuple, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import * as object from './deps/sui/object.js';
 import * as vec_map from './deps/sui/vec_map.js';
 import * as config from './config.js';

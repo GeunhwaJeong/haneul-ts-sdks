@@ -6,9 +6,9 @@ import {
 	BcsStruct,
 	BcsEnum,
 	BcsTuple,
-} from '@haneullabs/sui/bcs';
-import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
-import { TransactionArgument, isArgument } from '@haneullabs/sui/transactions';
+} from '@haneullabs/haneul/bcs';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
+import { TransactionArgument, isArgument } from '@haneullabs/haneul/transactions';
 
 const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress('0x1');
 const SUI_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');

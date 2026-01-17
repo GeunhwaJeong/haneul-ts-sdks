@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { MoveEnum } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as type_name from './deps/std/type_name.js';
 const $moduleName = '@haneullabs/payment-kit::config';
 export const Value = new MoveEnum({

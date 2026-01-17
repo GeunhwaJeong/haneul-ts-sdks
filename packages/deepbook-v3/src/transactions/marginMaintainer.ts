@@ -5,7 +5,7 @@ import type {
 	Transaction,
 	TransactionArgument,
 	TransactionObjectArgument,
-} from '@haneullabs/sui/transactions';
+} from '@haneullabs/haneul/transactions';
 
 import type { DeepBookConfig } from '../utils/config.js';
 import type { MarginPoolConfigParams, InterestConfigParams } from '../types/index.js';

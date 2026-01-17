@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { isValidNamedType, isValidHaneulAddress, isValidHaneulObjectId } from '@haneullabs/sui/utils';
+import { isValidNamedType, isValidHaneulAddress, isValidHaneulObjectId } from '@haneullabs/haneul/utils';
 import type { PaymentUriParams } from './types.js';
 import { PaymentKitUriError } from './error.js';
 import { SUI_PAYMENT_KIT_PROTOCOL } from './constants.js';

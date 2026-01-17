@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
-import { Experimental_CoreClient } from '@haneullabs/sui/experimental';
-import { normalizeHaneulAddress, normalizeStructTag, parseStructTag } from '@haneullabs/sui/utils';
-import type { TransactionPlugin } from '@haneullabs/sui/transactions';
-import { Inputs } from '@haneullabs/sui/transactions';
+import type { Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
+import { Experimental_CoreClient } from '@haneullabs/haneul/experimental';
+import { normalizeHaneulAddress, normalizeStructTag, parseStructTag } from '@haneullabs/haneul/utils';
+import type { TransactionPlugin } from '@haneullabs/haneul/transactions';
+import { Inputs } from '@haneullabs/haneul/transactions';
 import {
 	DEFAULT_OBJECTS,
 	DEFAULT_MOVE_FUNCTIONS,

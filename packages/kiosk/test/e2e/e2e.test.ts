@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import {

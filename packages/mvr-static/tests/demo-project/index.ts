@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable */
 
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const _demoFunction = () => {
 	const transaction = new Transaction();

@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Argument, Command } from '@haneullabs/sui/transactions';
-import type { Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
+import type { Argument, Command } from '@haneullabs/haneul/transactions';
+import type { Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
 import { inputs } from './inputs.js';
 import type { AnalyzedCommandInput } from './inputs.js';
 import type { TransactionAnalysisIssue } from '../analyzer.js';

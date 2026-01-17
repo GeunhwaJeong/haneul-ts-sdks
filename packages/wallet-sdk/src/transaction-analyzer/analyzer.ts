@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import type { Defined, Simplify, UnionToIntersection } from '../util.js';
 
 export function createAnalyzer<

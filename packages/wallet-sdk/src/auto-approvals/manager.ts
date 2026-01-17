@@ -1,13 +1,13 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
+import type { Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
 import { parse, safeParse } from 'valibot';
 import type { AutoApprovalState } from './schemas/state.js';
 import { AutoApprovalStateSchema } from './schemas/state.js';
 import type { AutoApprovalSettings } from './schemas/policy.js';
 import { AutoApprovalPolicySchema, AutoApprovalSettingsSchema } from './schemas/policy.js';
-import { parseStructTag } from '@haneullabs/sui/utils';
+import { parseStructTag } from '@haneullabs/haneul/utils';
 import type { AutoApprovalResult } from './analyzer.js';
 
 export interface AutoApprovalManagerOptions {

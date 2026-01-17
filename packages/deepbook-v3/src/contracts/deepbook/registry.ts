@@ -5,8 +5,8 @@
 
 import { MoveStruct, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import * as object from './deps/sui/object.js';
 import * as versioned from './deps/sui/versioned.js';
 import * as vec_set from './deps/sui/vec_set.js';

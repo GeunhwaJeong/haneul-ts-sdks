@@ -2,7 +2,7 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { type Transaction } from '@haneullabs/sui/transactions';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 import * as object from './deps/sui/object.js';
 import * as blob from './blob.js';
 import * as balance from './deps/sui/balance.js';

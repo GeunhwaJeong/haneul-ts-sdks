@@ -40,7 +40,7 @@
 		"lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix"
 	},
 	"dependencies": {
-		"@haneullabs/sui": "workspace:*"
+		"@haneullabs/haneul": "workspace:*"
 	},
 	"devDependencies": {
 		"@haneullabs/build-scripts": "workspace:*",

@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getFullnodeUrl, HaneulClient, HaneulObjectChange } from '@haneullabs/sui/client';
-import { decodeHaneulPrivateKey, Keypair } from '@haneullabs/sui/cryptography';
-import { getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/sui/faucet';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { Transaction } from '@haneullabs/sui/transactions';
-import { GEUNHWA_PER_HANEUL, toBase64 } from '@haneullabs/sui/utils';
+import { getFullnodeUrl, HaneulClient, HaneulObjectChange } from '@haneullabs/haneul/client';
+import { decodeHaneulPrivateKey, Keypair } from '@haneullabs/haneul/cryptography';
+import { getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { GEUNHWA_PER_HANEUL, toBase64 } from '@haneullabs/haneul/utils';
 import { beforeAll, describe, expect, test } from 'vitest';
 
 import {

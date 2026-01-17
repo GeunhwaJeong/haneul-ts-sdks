@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Transaction } from '@haneullabs/sui/transactions';
-import { fromBase64, toBase64 } from '@haneullabs/sui/utils';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { fromBase64, toBase64 } from '@haneullabs/haneul/utils';
 import type {
 	IdentifierString,
 	StandardConnectFeature,
@@ -40,8 +40,8 @@ import type {
 	EnokiGetSessionMethod,
 } from './features.js';
 import { EnokiGetMetadata, EnokiGetSession } from './features.js';
-import type { Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
-import { decodeJwt } from '@haneullabs/sui/zklogin';
+import type { Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
+import { decodeJwt } from '@haneullabs/haneul/zklogin';
 import type { ExportedWebCryptoKeypair } from '@haneullabs/signers/webcrypto';
 import { WebCryptoSigner } from '@haneullabs/signers/webcrypto';
 import { get, set } from 'idb-keyval';

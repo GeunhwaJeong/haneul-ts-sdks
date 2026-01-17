@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { init as FeedModule } from './tests/generated/feed.js';
 import { init as ManagedObjectModule } from './tests/generated/managed.js';

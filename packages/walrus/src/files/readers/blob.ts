@@ -1,6 +1,6 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { ClientCache } from '@haneullabs/sui/experimental';
+import { ClientCache } from '@haneullabs/haneul/experimental';
 import type { FileReader } from '../file.js';
 import type { WalrusClient } from '../../client.js';
 import { getSizes, getSourceSymbols } from '../../utils/index.js';

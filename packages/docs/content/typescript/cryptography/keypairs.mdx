@@ -9,19 +9,19 @@ The Sui TypeScript SDK supports three signing schemes:
 
 | Sign scheme     | Class name         | Import folder                    |
 | --------------- | ------------------ | -------------------------------- |
-| Ed25519         | `Ed25519Keypair`   | `@haneullabs/sui/keypairs/ed25519`   |
-| ECDSA Secp256k1 | `Secp256k1Keypair` | `@haneullabs/sui/keypairs/secp256k1` |
-| ECDSA Secp256r1 | `Secp256r1Keypair` | `@haneullabs/sui/keypairs/secp256r1` |
+| Ed25519         | `Ed25519Keypair`   | `@haneullabs/haneul/keypairs/ed25519`   |
+| ECDSA Secp256k1 | `Secp256k1Keypair` | `@haneullabs/haneul/keypairs/secp256k1` |
+| ECDSA Secp256r1 | `Secp256r1Keypair` | `@haneullabs/haneul/keypairs/secp256r1` |
 
 For information on these schemes, see the
 [Signatures](https://docs.sui.io/concepts/cryptography/transaction-auth/signatures) topic.
 
-To use, import the key pair class your project uses from the `@haneullabs/sui/keypairs` folder. For
+To use, import the key pair class your project uses from the `@haneullabs/haneul/keypairs` folder. For
 example, to use the Ed25519 scheme, import the `Ed25519Keypair` class from
-`@haneullabs/sui/keypairs/ed25519`.
+`@haneullabs/haneul/keypairs/ed25519`.
 
 ```typescript
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 ```
 
 To create a random key pair (which identifies a Haneul address), instantiate a new `Keypair` class. To
@@ -53,7 +53,7 @@ to retrieve its associated Haneul address. You can access a `Keypair` from its `
 it from the bytes (as a `Uint8Array`) of the `PublicKey`, as in the following code:
 
 ```typescript
-import { Ed25519Keypair, Ed25519PublicKey } from '@haneullabs/sui/keypairs/ed25519';
+import { Ed25519Keypair, Ed25519PublicKey } from '@haneullabs/haneul/keypairs/ed25519';
 
 const keypair = new Ed25519Keypair();
 
@@ -78,8 +78,8 @@ then verifies the message to retrieve the public key. The code then uses `toHane
 if the address associated with the public key matches the address that the key pair defines.
 
 ```typescript
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { verifyPersonalMessageSignature } from '@haneullabs/sui/verify';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { verifyPersonalMessageSignature } from '@haneullabs/haneul/verify';
 
 const keypair = new Ed25519Keypair();
 const message = new TextEncoder().encode('hello world');
@@ -98,8 +98,8 @@ if (!publicKey.verifyAddress(keypair.toHaneulAddress())) {
 will throw an error if the signature is not valid for the provided address.
 
 ```typescript
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { verifyPersonalMessageSignature } from '@haneullabs/sui/verify';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { verifyPersonalMessageSignature } from '@haneullabs/haneul/verify';
 
 const keypair = new Ed25519Keypair();
 const message = new TextEncoder().encode('hello world');
@@ -117,9 +117,9 @@ use `verifyTransactionSignature`:
 
 ```typescript
 // import HaneulClient to create a network client and the getFullnodeUrl helper function
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { verifyTransactionSignature } from '@haneullabs/sui/verify';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { verifyTransactionSignature } from '@haneullabs/haneul/verify';
 
 // see Network Interactions with HaneulClient for more info on creating clients
 const client = new HaneulClient({ url: getFullnodeUrl('testnet') });
@@ -145,8 +145,8 @@ additional configuration.
 For testnet signatures, you will need to provide a testnet GraphQL Client:
 
 ```typescript
-import { HaneulGraphQLClient } from '@haneullabs/sui/graphql';
-import { verifyPersonalMessageSignature } from '@haneullabs/sui/verify';
+import { HaneulGraphQLClient } from '@haneullabs/haneul/graphql';
+import { verifyPersonalMessageSignature } from '@haneullabs/haneul/verify';
 
 const publicKey = await verifyPersonalMessageSignature(message, zkSignature, {
 	client: new HaneulGraphQLClient({
@@ -163,8 +163,8 @@ Instead, you can either pass in the expected address during verification, or use
 `publicKey.verifyAddress(address)` method:
 
 ```typescript
-import { HaneulGraphQLClient } from '@haneullabs/sui/graphql';
-import { verifyPersonalMessageSignature } from '@haneullabs/sui/verify';
+import { HaneulGraphQLClient } from '@haneullabs/haneul/graphql';
+import { verifyPersonalMessageSignature } from '@haneullabs/haneul/verify';
 
 const publicKey = await verifyPersonalMessageSignature(message, zkSignature, {
 	client: new HaneulGraphQLClient({
@@ -200,7 +200,7 @@ If you know the Keypair scheme for your secret key, you can use the `fromSecretK
 appropriate `Keypair` class to derive the keypair from the secret key.
 
 ```typescript
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 
 // Example bech32 encoded secret key (which always starts with 'suiprivkey')
 const secretKey = 'suiprivkey1qzse89atw7d3zum8ujep76d2cxmgduyuast0y9fu23xcl0mpafgkktllhyc';
@@ -213,10 +213,10 @@ keyScheme, and get the keypairs private key bytes, which can be used to instanti
 `Keypair` class.
 
 ```typescript
-import { decodeHaneulPrivateKey } from '@haneullabs/sui/cryptography';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { Secp256r1Keypair } from '@haneullabs/sui/keypairs/secp256r1';
-import { Secp256k1Keypair } from '@haneullabs/sui/keypairs/secp256k1';
+import { decodeHaneulPrivateKey } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Secp256r1Keypair } from '@haneullabs/haneul/keypairs/secp256r1';
+import { Secp256k1Keypair } from '@haneullabs/haneul/keypairs/secp256k1';
 
 const { scheme, secretKey } = decodeHaneulPrivateKey(encoded);
 
@@ -258,7 +258,7 @@ If you have only the raw private key bytes for your keypair, you can encode to t
 using the `encodeHaneulPrivateKey` function.
 
 ```typescript
-import { encodeHaneulPrivateKey } from '@haneullabs/sui/cryptography';
+import { encodeHaneulPrivateKey } from '@haneullabs/haneul/cryptography';
 
 const encoded = encodeHaneulPrivateKey(
 	new Uint8Array([
@@ -276,8 +276,8 @@ converting the secret key to a `Uint8Array` and passing it to the `fromSecretKey
 `Keypair` class.
 
 ```typescript
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { fromHex } from '@haneullabs/sui/utils';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { fromHex } from '@haneullabs/haneul/utils';
 
 const secret = '0x...';
 const keypair = Ed25519Keypair.fromSecretKey(fromHex(secret));

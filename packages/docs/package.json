@@ -28,7 +28,7 @@
 		"@haneullabs/seal": "workspace:*",
 		"@haneullabs/signers": "workspace:*",
 		"@haneullabs/slush-wallet": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@haneullabs/haneulns": "workspace:*",
 		"@haneullabs/utils": "workspace:*",
 		"@haneullabs/wallet-standard": "workspace:*",

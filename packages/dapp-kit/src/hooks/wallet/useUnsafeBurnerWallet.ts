@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { HaneulClient } from '@haneullabs/sui/client';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { Transaction } from '@haneullabs/sui/transactions';
-import { toBase64 } from '@haneullabs/sui/utils';
+import type { HaneulClient } from '@haneullabs/haneul/client';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { toBase64 } from '@haneullabs/haneul/utils';
 import type {
 	StandardConnectFeature,
 	StandardConnectMethod,

@@ -4,7 +4,7 @@
 /** This module is deprecated due to our different approach to display. */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '@haneulns/core::update_image';
 export const UpdateImage = new MoveStruct({
 	name: `${$moduleName}::UpdateImage`,

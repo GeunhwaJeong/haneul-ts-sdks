@@ -3,11 +3,11 @@
 
 import type { ExportedWebCryptoKeypair } from '@haneullabs/signers/webcrypto';
 import { WebCryptoSigner } from '@haneullabs/signers/webcrypto';
-import { decodeHaneulPrivateKey } from '@haneullabs/sui/cryptography';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { fromBase64, toBase64 } from '@haneullabs/sui/utils';
-import { decodeJwt } from '@haneullabs/sui/zklogin';
-import type { ZkLoginSignatureInputs } from '@haneullabs/sui/zklogin';
+import { decodeHaneulPrivateKey } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { fromBase64, toBase64 } from '@haneullabs/haneul/utils';
+import { decodeJwt } from '@haneullabs/haneul/zklogin';
+import type { ZkLoginSignatureInputs } from '@haneullabs/haneul/zklogin';
 import type { UseStore } from 'idb-keyval';
 import { clear, createStore, get, set } from 'idb-keyval';
 import type { WritableAtom } from 'nanostores';

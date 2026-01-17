@@ -44,6 +44,6 @@
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:*",
-		"@haneullabs/sui": "workspace:*"
+		"@haneullabs/haneul": "workspace:*"
 	}
 }

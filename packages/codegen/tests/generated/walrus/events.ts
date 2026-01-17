@@ -8,7 +8,7 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '@local-pkg/walrus::events';
 export const BlobRegistered = new MoveStruct({
 	name: `${$moduleName}::BlobRegistered`,

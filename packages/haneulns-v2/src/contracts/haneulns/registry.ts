@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MoveStruct, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import * as table from './deps/sui/table.js';
 const $moduleName = '@haneulns/core::registry';
 export const Registry = new MoveStruct({

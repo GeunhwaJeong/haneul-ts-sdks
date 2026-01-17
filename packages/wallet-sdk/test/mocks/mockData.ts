@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@haneullabs/sui/bcs';
-import { normalizeHaneulAddress, normalizeStructTag } from '@haneullabs/sui/utils';
-import type { Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { normalizeHaneulAddress, normalizeStructTag } from '@haneullabs/haneul/utils';
+import type { Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
 
 export const DEFAULT_SENDER = '0x0000000000000000000000000000000000000000000000000000000000000123';
 

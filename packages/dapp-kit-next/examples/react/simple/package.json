@@ -10,7 +10,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/dapp-kit-react": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@nanostores/react": "^1.0.0",
 		"react": "^19.2.1",
 		"react-dom": "^19.2.1"

@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ObjectOwner, HaneulObjectChange, HaneulTransactionBlockResponse } from '@haneullabs/sui/client';
-import type { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeStructTag, normalizeHaneulAddress, parseStructTag } from '@haneullabs/sui/utils';
+import type { ObjectOwner, HaneulObjectChange, HaneulTransactionBlockResponse } from '@haneullabs/haneul/client';
+import type { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeStructTag, normalizeHaneulAddress, parseStructTag } from '@haneullabs/haneul/utils';
 
 export interface LinkAssets {
 	balances: {

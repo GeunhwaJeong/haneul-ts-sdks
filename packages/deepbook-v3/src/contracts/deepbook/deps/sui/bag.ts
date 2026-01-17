@@ -27,7 +27,7 @@
  */
 
 import { MoveStruct } from '../../../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as object from './object.js';
 const $moduleName = '0x2::bag';
 export const Bag = new MoveStruct({

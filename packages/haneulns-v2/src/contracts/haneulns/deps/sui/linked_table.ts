@@ -6,8 +6,8 @@
  * insertion and removal
  */
 
-import { bcs } from '@haneullabs/sui/bcs';
-import type { BcsType } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { BcsType } from '@haneullabs/haneul/bcs';
 import { MoveStruct } from '../../../utils/index.js';
 import * as object from './object.js';
 const $moduleName = '0x2::linked_table';

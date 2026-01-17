@@ -8,7 +8,7 @@
  */
 
 import { MoveEnum, MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '@local-pkg/walrus::pool_exchange_rate';
 /** Represents the exchange rate for the staking pool. */
 export const PoolExchangeRate = new MoveEnum({

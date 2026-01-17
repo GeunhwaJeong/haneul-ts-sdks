@@ -216,7 +216,7 @@ const tx = client.paymentKit.tx.processRegistryPayment({
 You can configure both settings independently:
 
 ```ts
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const tx = new Transaction();
 
@@ -392,9 +392,9 @@ const record = await client.paymentKit.getPaymentRecord({
 Here's a complete workflow for setting up a custom registry:
 
 ```ts
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
 import { paymentKit } from '@haneullabs/payment-kit';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 
 const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),

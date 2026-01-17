@@ -12,7 +12,7 @@
 
 import { MoveStruct, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import * as object from './deps/sui/object.js';
 import * as haneulns_registration from './haneulns_registration.js';
 const $moduleName = '@haneulns/core::subdomain_registration';

@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-npm install --save @haneullabs/walrus @haneullabs/sui
+npm install --save @haneullabs/walrus @haneullabs/haneul
 ```
 
 ## Setup
@@ -12,7 +12,7 @@ To use the walrus SDK you will need to create a Client from the typescript SDK, 
 the walrus SDK.
 
 ```ts
-import { getFullnodeUrl, SuiJsonRpcClient } from '@haneullabs/sui/jsonRpc';
+import { getFullnodeUrl, SuiJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
 import { walrus } from '@haneullabs/walrus';
 
 const client = new SuiJsonRpcClient({
@@ -27,7 +27,7 @@ testnet. You can also manually configure the walrus sdk to use a different set o
 to connect to a different network or updated deployment of the walrus contracts.
 
 ```ts
-import { getFullnodeUrl, SuiJsonRpcClient } from '@haneullabs/sui/jsonRpc';
+import { getFullnodeUrl, SuiJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
 import { walrus } from '@haneullabs/walrus';
 
 const client = new SuiJsonRpcClient({
@@ -47,7 +47,7 @@ const client = new SuiJsonRpcClient({
 For some environments you may need to customize how data is fetched:
 
 ```ts
-import { getFullnodeUrl, SuiJsonRpcClient } from '@haneullabs/sui/jsonRpc';
+import { getFullnodeUrl, SuiJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
 import { walrus } from '@haneullabs/walrus';
 
 const client = new SuiJsonRpcClient({

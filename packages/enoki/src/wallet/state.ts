@@ -9,7 +9,7 @@ import { atom, onMount, onSet, task } from 'nanostores';
 import type { Encryption } from '../encryption.js';
 import { createDefaultEncryption } from '../encryption.js';
 import type { EnokiClientConfig } from '../EnokiClient/index.js';
-import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
+import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
 
 import type { EnokiSessionContext, ZkLoginSession, ZkLoginState } from './types.js';
 

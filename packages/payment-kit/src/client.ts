@@ -14,8 +14,8 @@ import type {
 	GetPaymentRecordOptions,
 	GetPaymentRecordResponse,
 } from './types.js';
-import type { ClientWithCoreApi } from '@haneullabs/sui/experimental';
-import { normalizeStructTag } from '@haneullabs/sui/utils';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/experimental';
+import { normalizeStructTag } from '@haneullabs/haneul/utils';
 import { PaymentKitTransactions } from './transactions.js';
 import { PaymentKitCalls } from './calls.js';
 import { getRegistryIdFromName } from './utils.js';

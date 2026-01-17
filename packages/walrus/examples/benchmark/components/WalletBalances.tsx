@@ -3,10 +3,10 @@
 
 import { useDAppKit, useHaneulClient } from '@haneullabs/dapp-kit-react';
 import { useState, useEffect, useCallback } from 'react';
-import { MIST_PER_SUI, parseStructTag } from '@haneullabs/sui/utils';
-import { coinWithBalance, Transaction } from '@haneullabs/sui/transactions';
+import { MIST_PER_SUI, parseStructTag } from '@haneullabs/haneul/utils';
+import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
 import { TESTNET_WALRUS_PACKAGE_CONFIG } from '../../../src/index.js';
-import type { Signer } from '@haneullabs/sui/cryptography';
+import type { Signer } from '@haneullabs/haneul/cryptography';
 
 interface WalletBalancesProps {
 	onError: (error: string) => void;

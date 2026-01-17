@@ -21,11 +21,11 @@ export default defineConfig({
 			'@haneullabs/wallet-standard': new URL('../wallet-standard/src', import.meta.url).pathname,
 			'@haneullabs/bcs': new URL('../bcs/src', import.meta.url).pathname,
 			'@haneullabs/utils': new URL('../utils/src', import.meta.url).pathname,
-			'@haneullabs/sui/keypairs/ed25519': new URL('../typescript/src/keypairs/ed25519', import.meta.url)
+			'@haneullabs/haneul/keypairs/ed25519': new URL('../typescript/src/keypairs/ed25519', import.meta.url)
 				.pathname,
-			'@haneullabs/sui/client': new URL('../typescript/src/client', import.meta.url).pathname,
-			'@haneullabs/sui/utils': new URL('../typescript/src/utils', import.meta.url).pathname,
-			'@haneullabs/sui/transactions': new URL('../typescript/src/transactions', import.meta.url)
+			'@haneullabs/haneul/client': new URL('../typescript/src/client', import.meta.url).pathname,
+			'@haneullabs/haneul/utils': new URL('../typescript/src/utils', import.meta.url).pathname,
+			'@haneullabs/haneul/transactions': new URL('../typescript/src/transactions', import.meta.url)
 				.pathname,
 		},
 	},

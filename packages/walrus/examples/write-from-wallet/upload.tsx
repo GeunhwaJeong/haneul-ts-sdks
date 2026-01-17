@@ -6,7 +6,7 @@ import { useState, useRef } from 'react';
 
 import type { WalrusClient, WriteFilesFlow } from '../../src/index.js';
 import { WalrusFile } from '../../src/index.js';
-import type { HaneulClient } from '@haneullabs/sui/client';
+import type { HaneulClient } from '@haneullabs/haneul/client';
 
 export function FileUpload({ onComplete }: { onComplete: (ids: string[]) => void }) {
 	const dAppKit = useDAppKit();

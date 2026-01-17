@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { fromBase64 } from '@haneullabs/bcs';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 
 import { GeneralError } from '../../src/error.js';
 import {

@@ -5,7 +5,7 @@ import type {
 	Transaction,
 	TransactionArgument,
 	TransactionObjectArgument,
-} from '@haneullabs/sui/transactions';
+} from '@haneullabs/haneul/transactions';
 
 import * as kioskTx from '../tx/kiosk.js';
 import { convertToPersonalTx, transferPersonalCapTx } from '../tx/personal-kiosk.js';

@@ -5,7 +5,7 @@
 /** Module to certify event blobs. */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as vec_map from './deps/sui/vec_map.js';
 const $moduleName = '@local-pkg/walrus::event_blob';
 export const EventBlobAttestation = new MoveStruct({

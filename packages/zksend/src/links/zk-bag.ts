@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Argument, Transaction, TransactionObjectArgument } from '@haneullabs/sui/transactions';
+import type { Argument, Transaction, TransactionObjectArgument } from '@haneullabs/haneul/transactions';
 
 export interface ZkBagContractOptions {
 	packageId: string;

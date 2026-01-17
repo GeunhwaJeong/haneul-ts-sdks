@@ -11,7 +11,7 @@ import { Theme } from "@radix-ui/themes";
 import App from "./App.tsx";
 import { networkConfig } from "./networkConfig.ts";
 import { registerWalletConnectWallet } from "@haneullabs/walletconnect-wallet";
-import { HaneulClient, getFullnodeUrl } from "@haneullabs/sui/client";
+import { HaneulClient, getFullnodeUrl } from "@haneullabs/haneul/client";
 
 const queryClient = new QueryClient();
 

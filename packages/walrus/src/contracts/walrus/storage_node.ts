@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MoveStruct, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import * as group_ops from './deps/sui/group_ops.js';
 import * as extended_field from './extended_field.js';
 import * as object from './deps/sui/object.js';

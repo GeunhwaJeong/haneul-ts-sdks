@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { bcs } from '@haneullabs/sui/bcs';
-import type { BcsType } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { BcsType } from '@haneullabs/haneul/bcs';
 import { MoveStruct } from '../../../utils/index.js';
 const $moduleName = '0x2::vec_set';
 /**

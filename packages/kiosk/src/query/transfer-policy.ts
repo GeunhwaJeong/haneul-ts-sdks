@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { HaneulClient } from '@haneullabs/sui/client';
-import { fromBase64, isValidHaneulAddress } from '@haneullabs/sui/utils';
+import type { HaneulClient } from '@haneullabs/haneul/client';
+import { fromBase64, isValidHaneulAddress } from '@haneullabs/haneul/utils';
 
 import '../bcs.js';
 

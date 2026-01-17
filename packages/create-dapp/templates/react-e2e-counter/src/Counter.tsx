@@ -4,8 +4,8 @@ import {
   useHaneulClient,
   useHaneulClientQuery,
 } from "@haneullabs/dapp-kit";
-import type { HaneulObjectData } from "@haneullabs/sui/client";
-import { Transaction } from "@haneullabs/sui/transactions";
+import type { HaneulObjectData } from "@haneullabs/haneul/client";
+import { Transaction } from "@haneullabs/haneul/transactions";
 import { Button, Flex, Heading, Text } from "@radix-ui/themes";
 import { useNetworkVariable } from "./networkConfig";
 import { useState } from "react";

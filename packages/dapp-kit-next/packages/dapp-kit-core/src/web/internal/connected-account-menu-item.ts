@@ -3,7 +3,7 @@
 
 import { when } from 'lit/directives/when.js';
 import { html, LitElement } from 'lit';
-import { formatAddress } from '@haneullabs/sui/utils';
+import { formatAddress } from '@haneullabs/haneul/utils';
 import { property, state } from 'lit/decorators.js';
 import type { UiWalletAccount } from '@wallet-standard/ui';
 import { copyIcon } from './icons/copy-icon.js';

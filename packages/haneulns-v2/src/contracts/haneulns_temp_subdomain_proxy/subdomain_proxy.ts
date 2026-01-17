@@ -11,7 +11,7 @@
  * This package will stop being used when we've implemented references in PTBs.
  */
 
-import type { Transaction } from '@haneullabs/sui/transactions';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import { normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
 export interface NewArguments {

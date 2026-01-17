@@ -4,7 +4,7 @@
 import type { LocalContext } from '../../context.js';
 import { generateFromPackageSummary } from '../../../index.js';
 import { loadConfig } from '../../../config.js';
-import { isValidNamedPackage, isValidHaneulObjectId } from '@haneullabs/sui/utils';
+import { isValidNamedPackage, isValidHaneulObjectId } from '@haneullabs/haneul/utils';
 import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 

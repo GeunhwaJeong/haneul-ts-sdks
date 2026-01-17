@@ -12,7 +12,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/dapp-kit-core": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"vue": "^3.5.25"
 	},
 	"devDependencies": {

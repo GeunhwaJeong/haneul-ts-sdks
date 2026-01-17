@@ -41,7 +41,7 @@
 		"node": ">=16"
 	},
 	"dependencies": {
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"axios": "^1.13.2",
 		"axios-retry": "^4.5.0"
 	},

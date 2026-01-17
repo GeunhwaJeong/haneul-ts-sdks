@@ -3,7 +3,7 @@
 
 import { useCurrentAccount, useHaneulClient } from '@haneullabs/dapp-kit-react';
 import { useState, useEffect } from 'react';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { ErrorDisplay } from './components/ErrorDisplay.js';
 import { BenchmarkSettingsForm } from './components/BenchmarkSettings.js';
 import type { BenchmarkSettings } from './components/BenchmarkSettings.js';

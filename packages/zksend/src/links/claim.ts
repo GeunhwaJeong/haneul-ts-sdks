@@ -1,18 +1,18 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@haneullabs/sui/bcs';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
 import type {
 	CoinStruct,
 	HaneulObjectData,
 	HaneulTransaction,
 	HaneulTransactionBlockResponse,
-} from '@haneullabs/sui/client';
-import type { Keypair } from '@haneullabs/sui/cryptography';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import type { TransactionObjectArgument } from '@haneullabs/sui/transactions';
-import { Transaction } from '@haneullabs/sui/transactions';
+} from '@haneullabs/haneul/client';
+import type { Keypair } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import type { TransactionObjectArgument } from '@haneullabs/haneul/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import {
 	fromBase64,
 	normalizeStructTag,
@@ -21,7 +21,7 @@ import {
 	parseStructTag,
 	SUI_TYPE_ARG,
 	toBase64,
-} from '@haneullabs/sui/utils';
+} from '@haneullabs/haneul/utils';
 
 import type { ZkSendLinkBuilderOptions } from './builder.js';
 import { ZkSendLinkBuilder } from './builder.js';

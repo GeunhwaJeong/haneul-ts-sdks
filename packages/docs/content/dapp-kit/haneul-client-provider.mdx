@@ -15,7 +15,7 @@ currently active network.
 
 ```tsx
 import { createNetworkConfig, HaneulClientProvider, WalletProvider } from '@haneullabs/dapp-kit';
-import { getFullnodeUrl } from '@haneullabs/sui/client';
+import { getFullnodeUrl } from '@haneullabs/haneul/client';
 
 // Config options for the networks you want to connect to
 const { networkConfig } = createNetworkConfig({
@@ -51,7 +51,7 @@ The following example demonstrates a `HaneulClientProvider` used as a controlled
 
 ```tsx
 import { createNetworkConfig, HaneulClientProvider } from '@haneullabs/dapp-kit';
-import { getFullnodeUrl } from '@haneullabs/sui/client';
+import { getFullnodeUrl } from '@haneullabs/haneul/client';
 import { useState } from 'react';
 
 // Config options for the networks you want to connect to
@@ -83,7 +83,7 @@ The following example demonstrates how to create a custom `HaneulClient`.
 
 ```tsx
 import { HaneulClientProvider } from '@haneullabs/dapp-kit';
-import { getFullnodeUrl, HaneulClient, HaneulHTTPTransport } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient, HaneulHTTPTransport } from '@haneullabs/haneul/client';
 
 // Config options for the networks you want to connect to
 const networks = {
@@ -166,7 +166,7 @@ to get the variables defined in your configuration.
 
 ```tsx
 import { createNetworkConfig, HaneulClientProvider, WalletProvider } from '@haneullabs/dapp-kit';
-import { getFullnodeUrl } from '@haneullabs/sui/client';
+import { getFullnodeUrl } from '@haneullabs/haneul/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Config options for the networks you want to connect to

@@ -8,7 +8,7 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as table from './deps/sui/table.js';
 import * as history from './history.js';
 import * as governance from './governance.js';

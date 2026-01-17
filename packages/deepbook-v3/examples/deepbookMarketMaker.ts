@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import { decodeHaneulPrivateKey } from '@haneullabs/sui/cryptography';
-import type { Keypair } from '@haneullabs/sui/cryptography';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import { decodeHaneulPrivateKey } from '@haneullabs/haneul/cryptography';
+import type { Keypair } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 
 import { DeepBookClient } from '../src/index.js'; // Adjust path according to new structure
 import type { BalanceManager } from '../src/types/index.js';

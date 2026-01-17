@@ -156,7 +156,7 @@ importers:
       '@haneullabs/bcs':
         specifier: workspace:*
         version: link:../bcs
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@stricli/auto-complete':
@@ -196,7 +196,7 @@ importers:
       '@haneullabs/dapp-kit':
         specifier: workspace:*
         version: link:../dapp-kit
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@types/node':
@@ -218,7 +218,7 @@ importers:
       '@haneullabs/dapp-kit':
         specifier: workspace:*
         version: link:../../../dapp-kit
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../../typescript
       '@radix-ui/colors':
@@ -279,7 +279,7 @@ importers:
       '@haneullabs/dapp-kit':
         specifier: workspace:*
         version: link:../../../dapp-kit
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../../typescript
       '@radix-ui/colors':
@@ -343,7 +343,7 @@ importers:
       '@haneullabs/slush-wallet':
         specifier: workspace:*
         version: link:../slush-wallet
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/utils':
@@ -440,7 +440,7 @@ importers:
       '@haneullabs/dapp-kit-react':
         specifier: workspace:*
         version: link:../../../packages/dapp-kit-react
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../../../typescript
       next:
@@ -474,7 +474,7 @@ importers:
       '@haneullabs/dapp-kit-react':
         specifier: workspace:*
         version: link:../../../packages/dapp-kit-react
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../../../typescript
       '@nanostores/react':
@@ -511,7 +511,7 @@ importers:
       '@haneullabs/dapp-kit-core':
         specifier: workspace:*
         version: link:../../../packages/dapp-kit-core
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../../../typescript
     devDependencies:
@@ -527,7 +527,7 @@ importers:
       '@haneullabs/dapp-kit-core':
         specifier: workspace:*
         version: link:../../../packages/dapp-kit-core
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../../../typescript
       vue:
@@ -567,7 +567,7 @@ importers:
       '@haneullabs/slush-wallet':
         specifier: workspace:*
         version: link:../../../slush-wallet
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../../typescript
       '@haneullabs/utils':
@@ -656,7 +656,7 @@ importers:
 
   packages/deepbook:
     dependencies:
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
     devDependencies:
@@ -693,7 +693,7 @@ importers:
       '@haneullabs/bcs':
         specifier: workspace:*
         version: link:../bcs
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@noble/hashes':
@@ -784,7 +784,7 @@ importers:
       '@haneullabs/slush-wallet':
         specifier: workspace:*
         version: link:../slush-wallet
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/utils':
@@ -881,7 +881,7 @@ importers:
       '@haneullabs/signers':
         specifier: workspace:*
         version: link:../signers
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/wallet-standard':
@@ -939,7 +939,7 @@ importers:
 
   packages/enoki-connect:
     dependencies:
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/utils':
@@ -979,7 +979,7 @@ importers:
       '@haneullabs/enoki-connect':
         specifier: workspace:*
         version: link:..
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../typescript
       '@haneullabs/wallet-standard':
@@ -1040,7 +1040,7 @@ importers:
 
   packages/haneulns:
     dependencies:
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       axios:
@@ -1074,7 +1074,7 @@ importers:
       '@haneullabs/bcs':
         specifier: workspace:*
         version: link:../bcs
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
     devDependencies:
@@ -1099,7 +1099,7 @@ importers:
 
   packages/kiosk:
     dependencies:
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/utils':
@@ -1200,7 +1200,7 @@ importers:
 
   packages/mvr-static:
     dependencies:
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@types/node':
@@ -1231,7 +1231,7 @@ importers:
       '@haneullabs/bcs':
         specifier: workspace:*
         version: link:../bcs
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
     devDependencies:
@@ -1250,7 +1250,7 @@ importers:
       '@haneullabs/bcs':
         specifier: workspace:*
         version: link:../bcs
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@noble/curves':
@@ -1284,7 +1284,7 @@ importers:
       '@haneullabs/ledgerjs-hw-app-sui':
         specifier: workspace:*
         version: link:../ledgerjs-hw-app-sui
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@noble/curves':
@@ -1315,7 +1315,7 @@ importers:
 
   packages/slush-wallet:
     dependencies:
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/utils':
@@ -1489,7 +1489,7 @@ importers:
       '@haneullabs/bcs':
         specifier: workspace:*
         version: link:../bcs
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/wallet-standard':
@@ -1520,7 +1520,7 @@ importers:
 
   packages/wallet-standard:
     dependencies:
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@wallet-standard/core':
@@ -1539,7 +1539,7 @@ importers:
 
   packages/walletconnect-wallet:
     dependencies:
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/utils':
@@ -1576,7 +1576,7 @@ importers:
       '@haneullabs/dapp-kit':
         specifier: workspace:*
         version: link:../../dapp-kit
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../../typescript
       '@haneullabs/wallet-standard':
@@ -1643,7 +1643,7 @@ importers:
       '@haneullabs/bcs':
         specifier: workspace:*
         version: link:../bcs
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/utils':
@@ -1744,7 +1744,7 @@ importers:
 
   packages/zksend:
     dependencies:
-      '@haneullabs/sui':
+      '@haneullabs/haneul':
         specifier: workspace:*
         version: link:../typescript
       '@haneullabs/utils':

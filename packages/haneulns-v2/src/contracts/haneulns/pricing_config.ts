@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MoveTuple, MoveStruct, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 import * as vec_map from './deps/sui/vec_map.js';
 const $moduleName = '@haneulns/core::pricing_config';
 export const Range = new MoveTuple({

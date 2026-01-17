@@ -9,13 +9,13 @@ import type {
 	HaneulObjectDataFilter,
 	HaneulObjectDataOptions,
 	HaneulObjectResponse,
-} from '@haneullabs/sui/client';
+} from '@haneullabs/haneul/client';
 import {
 	fromBase64,
 	normalizeStructTag,
 	normalizeHaneulAddress,
 	parseStructTag,
-} from '@haneullabs/sui/utils';
+} from '@haneullabs/haneul/utils';
 
 import { KioskType } from './bcs.js';
 import type { Kiosk, KioskData, KioskListing, TransferPolicyCap } from './types/index.js';

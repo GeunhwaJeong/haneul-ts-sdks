@@ -14,29 +14,29 @@ highlights:
 - [New Transaction Intents to simplify common transaction patterns](../transaction-building/intents)
 - [A new Plugin system for Extending Transaction Building](../plugins)
 
-The majority of changes in this release are in the `@haneullabs/sui` package, but the changes to API
+The majority of changes in this release are in the `@haneullabs/haneul` package, but the changes to API
 require some breaking changes across all the Typescript SDKs. You can find migration guides for all
 affected packages below:
 
-## Changes to `@haneullabs/sui`
+## Changes to `@haneullabs/haneul`
 
-As part of the 1.0 release the `@haneullabs/sui.js` package has been renamed to `@haneullabs/sui`
+As part of the 1.0 release the `@haneullabs/haneul.js` package has been renamed to `@haneullabs/haneul`
 
 To upgrade to the new version, uninstall the old package and install the new one:
 
 ```sh npm2yarn
-npm uninstall @haneullabs/sui.js
-npm install @haneullabs/sui
+npm uninstall @haneullabs/haneul.js
+npm install @haneullabs/haneul
 ```
 
 Then update all imports to use the new package name:
 
 ```diff
-- import { HaneulClient } from '@haneullabs/sui.js'
-+ import { HaneulClient } from '@haneullabs/sui'
+- import { HaneulClient } from '@haneullabs/haneul.js'
++ import { HaneulClient } from '@haneullabs/haneul'
 ```
 
-### `@haneullabs/sui/transactions`
+### `@haneullabs/haneul/transactions`
 
 The largest changes in the 1.0 release are all centered around how Transactions are built and
 executed. This includes are complete rewrite of the internal representation of transactions, as well
@@ -135,8 +135,8 @@ the bcs library, or use one of the provided helper methods.
 The `Transactions` export has been renamed to `Commands` and some of the options have been renamed:
 
 ```diff
-- import { Transactions } from '@haneullabs/sui/transactions'
-+ import { Commands } from '@haneullabs/sui/transactions'
+- import { Transactions } from '@haneullabs/haneul/transactions'
++ import { Commands } from '@haneullabs/haneul/transactions'
 
  tx.makeMoveVec({
    type: '0x123::foo:Bar'
@@ -175,7 +175,7 @@ have been updated to return the new format
 
 The `getPureSerializationType` utility function has been removed.
 
-## `@haneullabs/sui/bcs`
+## `@haneullabs/haneul/bcs`
 
 ### Bcs Types
 
@@ -190,7 +190,7 @@ The correct way to get Typescript types for the exported BCS types is to use the
 helper:
 
 ```ts
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 
 function callArg(arg: typeof bcs.CallArg.$inferType) {
 	// ...
@@ -204,11 +204,11 @@ helpers have been removed.
 
 ## /multisig
 
-The `publicKeyFromSuiBytes` has been moved to `@haneullabs/sui/verify`
+The `publicKeyFromSuiBytes` has been moved to `@haneullabs/haneul/verify`
 
 ```diff
-- import { publicKeyFromSuiBytes } from '@haneullabs/sui/multisig'
-+ import { publicKeyFromSuiBytes } from '@haneullabs/sui/verify'
+- import { publicKeyFromSuiBytes } from '@haneullabs/haneul/multisig'
++ import { publicKeyFromSuiBytes } from '@haneullabs/haneul/verify'
 ```
 
 ## /verify
@@ -219,11 +219,11 @@ The methods for verifying signatures have been renamed
 - import {
 -   verifyTransactionBlock
 -   verifyPersonalMessage
-- } from '@haneullabs/sui/verify'
+- } from '@haneullabs/haneul/verify'
 + import {
 +   verifyTransactionSignature
 +   verifyPersonalMessageSignature
-+ } from '@haneullabs/sui/verify'
++ } from '@haneullabs/haneul/verify'
 ```
 
 ## /cryptography

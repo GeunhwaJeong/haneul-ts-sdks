@@ -16,14 +16,14 @@
 ### Patch Changes
 
 - Updated dependencies [29e8b92]
-  - @haneullabs/sui@1.45.2
+  - @haneullabs/haneul@1.45.2
 
 ## 0.5.11
 
 ### Patch Changes
 
 - Updated dependencies [e3811f1]
-  - @haneullabs/sui@1.45.1
+  - @haneullabs/haneul@1.45.1
 
 ## 0.5.10
 
@@ -37,14 +37,14 @@
   consistency with the privateMethods option added in version 0.5.0.
 
 - Updated dependencies [88bdbac]
-  - @haneullabs/sui@1.45.0
+  - @haneullabs/haneul@1.45.0
 
 ## 0.5.9
 
 ### Patch Changes
 
 - Updated dependencies [44d9b4f]
-  - @haneullabs/sui@1.44.0
+  - @haneullabs/haneul@1.44.0
 
 ## 0.5.8
 
@@ -52,7 +52,7 @@
 
 - Updated dependencies [89fa2dc]
   - @haneullabs/bcs@1.9.2
-  - @haneullabs/sui@1.43.2
+  - @haneullabs/haneul@1.43.2
 
 ## 0.5.7
 
@@ -60,7 +60,7 @@
 
 - Updated dependencies [a37829f]
   - @haneullabs/bcs@1.9.1
-  - @haneullabs/sui@1.43.1
+  - @haneullabs/haneul@1.43.1
 
 ## 0.5.6
 
@@ -69,7 +69,7 @@
 - Updated dependencies [f3b19a7]
 - Updated dependencies [f3b19a7]
 - Updated dependencies [bf9f85c]
-  - @haneullabs/sui@1.43.0
+  - @haneullabs/haneul@1.43.0
   - @haneullabs/bcs@1.9.0
 
 ## 0.5.5
@@ -77,7 +77,7 @@
 ### Patch Changes
 
 - Updated dependencies [98c8a27]
-  - @haneullabs/sui@1.42.0
+  - @haneullabs/haneul@1.42.0
 
 ## 0.5.4
 
@@ -87,21 +87,21 @@
 - Updated dependencies [d554cd2]
 - Updated dependencies [04fcfbc]
   - @haneullabs/bcs@1.8.1
-  - @haneullabs/sui@1.41.0
+  - @haneullabs/haneul@1.41.0
 
 ## 0.5.3
 
 ### Patch Changes
 
 - Updated dependencies [f5fc0c0]
-  - @haneullabs/sui@1.40.0
+  - @haneullabs/haneul@1.40.0
 
 ## 0.5.2
 
 ### Patch Changes
 
 - Updated dependencies [a9f9035]
-  - @haneullabs/sui@1.39.1
+  - @haneullabs/haneul@1.39.1
 
 ## 0.5.1
 
@@ -110,7 +110,7 @@
 - 24e6b36: Optional struct generation should be bcs.option instead of bcs.vector
 - Updated dependencies [ca92487]
 - Updated dependencies [5ab3c0a]
-  - @haneullabs/sui@1.39.0
+  - @haneullabs/haneul@1.39.0
 
 ## 0.5.0
 
@@ -124,7 +124,7 @@
 
 - Updated dependencies [3c1741f]
 - Updated dependencies [ea1ac70]
-  - @haneullabs/sui@1.38.0
+  - @haneullabs/haneul@1.38.0
   - @haneullabs/bcs@1.8.0
 
 ## 0.4.5
@@ -134,35 +134,35 @@
 - 78bd0e9: Update codegen arg normalization for object args
 - Updated dependencies [c689b98]
 - Updated dependencies [5b9ff1a]
-  - @haneullabs/sui@1.37.6
+  - @haneullabs/haneul@1.37.6
 
 ## 0.4.4
 
 ### Patch Changes
 
 - Updated dependencies [3980d04]
-  - @haneullabs/sui@1.37.5
+  - @haneullabs/haneul@1.37.5
 
 ## 0.4.3
 
 ### Patch Changes
 
 - Updated dependencies [6b03e57]
-  - @haneullabs/sui@1.37.4
+  - @haneullabs/haneul@1.37.4
 
 ## 0.4.2
 
 ### Patch Changes
 
 - Updated dependencies [8ff1471]
-  - @haneullabs/sui@1.37.3
+  - @haneullabs/haneul@1.37.3
 
 ## 0.4.1
 
 ### Patch Changes
 
 - Updated dependencies [660377c]
-  - @haneullabs/sui@1.37.2
+  - @haneullabs/haneul@1.37.2
 
 ## 0.4.0
 
@@ -184,28 +184,28 @@
 - Updated dependencies [33230ed]
 - Updated dependencies [33230ed]
   - @haneullabs/bcs@1.7.0
-  - @haneullabs/sui@1.37.1
+  - @haneullabs/haneul@1.37.1
 
 ## 0.2.5
 
 ### Patch Changes
 
 - Updated dependencies [72168f0]
-  - @haneullabs/sui@1.37.0
+  - @haneullabs/haneul@1.37.0
 
 ## 0.2.4
 
 ### Patch Changes
 
 - Updated dependencies [44354ab]
-  - @haneullabs/sui@1.36.2
+  - @haneullabs/haneul@1.36.2
 
 ## 0.2.3
 
 ### Patch Changes
 
 - Updated dependencies [c76ddc5]
-  - @haneullabs/sui@1.36.1
+  - @haneullabs/haneul@1.36.1
 
 ## 0.2.2
 
@@ -224,7 +224,7 @@
 - Updated dependencies [783bb9e]
 - Updated dependencies [5cbbb21]
   - @haneullabs/bcs@1.6.4
-  - @haneullabs/sui@1.36.0
+  - @haneullabs/haneul@1.36.0
 
 ## 0.2.0
 
@@ -240,7 +240,7 @@
 - 888afe6: Fix falsy args
 - 4ee5185: Add argument interfaces for move calls
 - Updated dependencies [888afe6]
-  - @haneullabs/sui@1.35.0
+  - @haneullabs/haneul@1.35.0
 
 ## 0.1.0
 
@@ -256,4 +256,4 @@
 - c0560fe: Fix check for context arg
 - c0560fe: remove support for generating from bytecode
 - Updated dependencies [3fb7a83]
-  - @haneullabs/sui@1.34.0
+  - @haneullabs/haneul@1.34.0

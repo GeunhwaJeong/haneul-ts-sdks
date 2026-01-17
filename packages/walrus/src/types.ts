@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Signer } from '@haneullabs/sui/cryptography';
-import type { ClientWithCoreApi } from '@haneullabs/sui/experimental';
-import type { Transaction, TransactionObjectArgument } from '@haneullabs/sui/transactions';
+import type { Signer } from '@haneullabs/haneul/cryptography';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/experimental';
+import type { Transaction, TransactionObjectArgument } from '@haneullabs/haneul/transactions';
 
 import type { StorageNodeInfo } from './contracts/walrus/storage_node.js';
 import type { RequestOptions, StorageNodeClientOptions } from './storage-node/client.js';

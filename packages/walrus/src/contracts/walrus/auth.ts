@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import { MoveEnum, normalizeMoveArguments } from '../utils/index.js';
 import type { RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { BcsType } from '@haneullabs/sui/bcs';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { BcsType } from '@haneullabs/haneul/bcs';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 const $moduleName = '@local-pkg/walrus::auth';
 /**
  * Authentication for either a sender or an object. Unlike the `Authorized` type,

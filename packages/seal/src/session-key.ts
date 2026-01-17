@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { toBase64 } from '@haneullabs/bcs';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { Signer } from '@haneullabs/sui/cryptography';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { isValidNamedPackage, isValidHaneulAddress, isValidHaneulObjectId } from '@haneullabs/sui/utils';
-import { verifyPersonalMessageSignature } from '@haneullabs/sui/verify';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Signer } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { isValidNamedPackage, isValidHaneulAddress, isValidHaneulObjectId } from '@haneullabs/haneul/utils';
+import { verifyPersonalMessageSignature } from '@haneullabs/haneul/verify';
 import { generateSecretKey, toPublicKey, toVerificationKey } from './elgamal.js';
 import {
 	ExpiredSessionKeyError,

@@ -4,9 +4,9 @@ import { execSync } from 'child_process';
 import { mkdtemp } from 'fs/promises';
 import { tmpdir } from 'os';
 import path from 'path';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import { FaucetRateLimitError, getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/sui/faucet';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import { FaucetRateLimitError, getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { retry } from 'ts-retry-promise';
 
 //@ts-ignore-next-line
@@ -43,7 +43,7 @@ export function getClient(): HaneulClient {
 	});
 }
 
-// TODO: expose these testing utils from @haneullabs/sui
+// TODO: expose these testing utils from @haneullabs/haneul
 export async function setupHaneulClient() {
 	const keypair = Ed25519Keypair.generate();
 	const address = keypair.getPublicKey().toHaneulAddress();

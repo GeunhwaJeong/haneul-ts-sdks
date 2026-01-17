@@ -1,7 +1,7 @@
 {
-	"name": "@haneullabs/sui",
+	"name": "@haneullabs/haneul",
 	"author": "Haneul Labs <build@haneullabs.com>",
-	"description": "Sui TypeScript API",
+	"description": "Haneul TypeScript API",
 	"homepage": "https://sdk.haneullabs.com",
 	"version": "1.45.2",
 	"license": "Apache-2.0",

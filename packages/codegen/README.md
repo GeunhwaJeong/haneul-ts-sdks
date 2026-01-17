@@ -131,7 +131,7 @@ To create new objects from your Move package, use the generated `create` functio
 This example assumes a simple `counter` package based on the `create-dapp` template:
 
 ```tsx
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import * as counter from './generated/counter/counter';
 
 async function createCounter() {

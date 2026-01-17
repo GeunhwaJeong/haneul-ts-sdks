@@ -1,4 +1,4 @@
-import { getFullnodeUrl } from "@haneullabs/sui/client";
+import { getFullnodeUrl } from "@haneullabs/haneul/client";
 import {
   DEVNET_COUNTER_PACKAGE_ID,
   TESTNET_COUNTER_PACKAGE_ID,

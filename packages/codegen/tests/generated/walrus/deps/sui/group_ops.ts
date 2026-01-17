@@ -5,7 +5,7 @@
 /** Generic Move and native functions for group operations. */
 
 import { MoveStruct } from '../../../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '0x2::group_ops';
 export const Element = new MoveStruct({
 	name: `${$moduleName}::Element`,

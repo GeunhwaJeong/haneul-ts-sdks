@@ -26,7 +26,7 @@ import {
 } from './contracts/haneulns_payments/payments.js';
 import type { ApplyPercentageDiscountArguments } from './contracts/haneulns_discounts/discounts.js';
 import { applyPercentageDiscount } from './contracts/haneulns_discounts/discounts.js';
-import type { Transaction, TransactionObjectInput } from '@haneullabs/sui/transactions';
+import type { Transaction, TransactionObjectInput } from '@haneullabs/haneul/transactions';
 
 export interface HaneulNsPackageIds {
 	haneulns?: string;

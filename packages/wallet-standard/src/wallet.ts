@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@haneullabs/sui/bcs';
-import { Transaction } from '@haneullabs/sui/transactions';
-import { fromBase64, toBase64 } from '@haneullabs/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { fromBase64, toBase64 } from '@haneullabs/haneul/utils';
 import type { WalletWithFeatures } from '@wallet-standard/core';
 
 import type {

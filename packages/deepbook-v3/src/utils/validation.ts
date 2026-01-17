@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { isValidHaneulAddress } from '@haneullabs/sui/utils';
+import { isValidHaneulAddress } from '@haneullabs/haneul/utils';
 import { ValidationError, ConfigurationError } from './errors.js';
 
 /**

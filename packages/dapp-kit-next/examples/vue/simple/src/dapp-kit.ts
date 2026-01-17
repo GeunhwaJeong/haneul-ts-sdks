@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createDAppKit } from '@haneullabs/dapp-kit-core';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
 
 export const dAppKit = createDAppKit({
 	enableBurnerWallet: import.meta.env.DEV,

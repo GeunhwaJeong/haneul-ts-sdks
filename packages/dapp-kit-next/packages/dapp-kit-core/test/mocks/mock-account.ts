@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { WalletAccount } from '@haneullabs/wallet-standard';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { ReadonlyWalletAccount } from '@haneullabs/wallet-standard';
 import { TEST_NETWORKS } from '../test-utils.js';
 

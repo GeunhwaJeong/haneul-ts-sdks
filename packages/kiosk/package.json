@@ -43,7 +43,7 @@
 		"test:e2e": "vitest run e2e"
 	},
 	"dependencies": {
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@haneullabs/utils": "workspace:*"
 	},
 	"devDependencies": {

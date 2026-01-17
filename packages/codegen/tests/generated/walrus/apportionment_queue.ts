@@ -8,9 +8,9 @@
  * ties when priorities are equal.
  */
 
-import { type BcsType, bcs } from '@haneullabs/sui/bcs';
+import { type BcsType, bcs } from '@haneullabs/haneul/bcs';
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { type Transaction } from '@haneullabs/sui/transactions';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 import * as uq64_64 from './deps/std/uq64_64.js';
 const $moduleName = '@local-pkg/walrus::apportionment_queue';
 export function Entry<T extends BcsType<any>>(...typeParameters: [T]) {

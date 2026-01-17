@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import type {
 	IdentifierArray,
 	IdentifierString,
@@ -26,7 +26,7 @@ import {
 } from '@haneullabs/wallet-standard';
 import type { Wallet } from '@haneullabs/wallet-standard';
 import { toBase64 } from '@haneullabs/utils';
-import type { ClientWithCoreApi } from '@haneullabs/sui/experimental';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/experimental';
 import type { WalletInitializer } from './index.js';
 import { getChain } from '../utils/networks.js';
 

@@ -2,7 +2,7 @@
 
 The mvr-static tool is a typescript CLI tool to generate a static file for Move Registry (mvr)
 resolution. This can be used to cache all MVR names for performance & security reasons, and used in
-the `NamedPackagesPlugin` (exported from `@haneullabs/sui`) in your project.
+the `NamedPackagesPlugin` (exported from `@haneullabs/haneul`) in your project.
 
 ## Usage
 
@@ -35,7 +35,7 @@ Once you have your static file, you can use it in your project by importing it a
 `NamedPackagesPlugin` in your project.
 
 ```ts
-import { NamedPackagesPlugin } from '@haneullabs/sui/src/transactions';
+import { NamedPackagesPlugin } from '@haneullabs/haneul/src/transactions';
 
 import { getMvrCache } from './mvr.ts';
 

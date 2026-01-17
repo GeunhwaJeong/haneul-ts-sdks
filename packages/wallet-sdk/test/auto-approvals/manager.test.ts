@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, test, expect } from 'vitest';
-import { Transaction } from '@haneullabs/sui/transactions';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import {
 	analyze,
 	autoApprovalAnalyzer,
@@ -11,8 +11,8 @@ import {
 	AutoApprovalPolicy,
 	operationType,
 } from '../../src';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import { GEUNHWA_PER_HANEUL } from '@haneullabs/sui/utils';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import { GEUNHWA_PER_HANEUL } from '@haneullabs/haneul/utils';
 
 const policy: AutoApprovalPolicy = {
 	schemaVersion: '1.0.0',

@@ -18,9 +18,9 @@ export default defineConfig({
 		alias: {
 			'@haneullabs/bcs': new URL('../bcs/src', import.meta.url).pathname,
 			'@haneullabs/utils': new URL('../utils/src', import.meta.url).pathname,
-			'@haneullabs/sui/transactions': new URL('../typescript/src/transactions', import.meta.url)
+			'@haneullabs/haneul/transactions': new URL('../typescript/src/transactions', import.meta.url)
 				.pathname,
-			'@haneullabs/sui': new URL('../typescript/src', import.meta.url).pathname,
+			'@haneullabs/haneul': new URL('../typescript/src', import.meta.url).pathname,
 		},
 	},
 });

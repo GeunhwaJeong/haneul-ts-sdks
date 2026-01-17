@@ -1,6 +1,6 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { getFullnodeUrl } from "@haneullabs/sui/client";
+import { getFullnodeUrl } from "@haneullabs/haneul/client";
 import { createNetworkConfig } from "@haneullabs/dapp-kit";
 
 const { networkConfig, useNetworkVariable, useNetworkVariables } =

@@ -1,6 +1,6 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import { BalanceManagerContract } from '../transactions/balanceManager.js';
 import type {

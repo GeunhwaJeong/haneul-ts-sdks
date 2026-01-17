@@ -10,7 +10,7 @@ import {
 	useCurrentAccount,
 	WalletProvider,
 } from '@haneullabs/dapp-kit';
-import { getFullnodeUrl } from '@haneullabs/sui/client';
+import { getFullnodeUrl } from '@haneullabs/haneul/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 

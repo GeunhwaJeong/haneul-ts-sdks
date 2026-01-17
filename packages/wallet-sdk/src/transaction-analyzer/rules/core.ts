@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Transaction } from '@haneullabs/sui/transactions';
-import { TransactionDataBuilder } from '@haneullabs/sui/transactions';
-import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
+import type { Transaction } from '@haneullabs/haneul/transactions';
+import { TransactionDataBuilder } from '@haneullabs/haneul/transactions';
+import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
 import type { AnalyzerResult } from '../analyzer.js';
 import { createAnalyzer } from '../analyzer.js';
 

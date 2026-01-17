@@ -9,7 +9,7 @@
  * place of storing constants and proving convenient APIs for reading.
  */
 
-import type { Transaction } from '@haneullabs/sui/transactions';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 export interface SuiTldOptions {
 	package?: string;
 	arguments?: [];

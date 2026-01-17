@@ -19,7 +19,7 @@ pnpm turbo build
 pnpm build
 
 # Build a specific package with dependencies
-pnpm turbo build --filter=@haneullabs/sui
+pnpm turbo build --filter=@haneullabs/haneul
 ```
 
 ### Testing
@@ -29,10 +29,10 @@ pnpm turbo build --filter=@haneullabs/sui
 pnpm test
 
 # Run unit tests for a specific package
-pnpm --filter @haneullabs/sui test
+pnpm --filter @haneullabs/haneul test
 
 # Run a single test file
-pnpm --filter @haneullabs/sui vitest run path/to/test.spec.ts
+pnpm --filter @haneullabs/haneul vitest run path/to/test.spec.ts
 
 # Run e2e tests (requires Docker)
 pnpm test:e2e
@@ -83,7 +83,7 @@ pnpm changeset-version
 
 ### Key Patterns
 
-1. **Modular exports**: Packages use subpath exports (e.g., `@haneullabs/sui/client`, `@haneullabs/sui/bcs`)
+1. **Modular exports**: Packages use subpath exports (e.g., `@haneullabs/haneul/client`, `@haneullabs/haneul/bcs`)
 2. **Shared utilities**: Common functionality in `packages/utils`
 3. **Code generation**: Some packages use GraphQL codegen and version generation scripts
 4. **Testing**: Unit tests alongside source files, e2e tests in separate directories

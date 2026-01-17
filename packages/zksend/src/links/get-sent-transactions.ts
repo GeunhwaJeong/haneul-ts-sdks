@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { HaneulTransactionBlockResponseOptions } from '@haneullabs/sui/client';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
+import type { HaneulTransactionBlockResponseOptions } from '@haneullabs/haneul/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import { ZkSendLink } from './claim.js';
 import { getContractIds } from './zk-bag.js';

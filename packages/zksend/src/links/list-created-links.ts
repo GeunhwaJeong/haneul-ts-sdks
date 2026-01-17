@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@haneullabs/sui/bcs';
-import type { HaneulClient } from '@haneullabs/sui/client';
-import { HaneulGraphQLClient } from '@haneullabs/sui/graphql';
-import { graphql } from '@haneullabs/sui/graphql/schemas/latest';
-import { fromBase64, normalizeHaneulAddress } from '@haneullabs/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { HaneulClient } from '@haneullabs/haneul/client';
+import { HaneulGraphQLClient } from '@haneullabs/haneul/graphql';
+import { graphql } from '@haneullabs/haneul/graphql/schemas/latest';
+import { fromBase64, normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import { ZkSendLink } from './claim.js';
 import type { ZkBagContractOptions } from './zk-bag.js';

@@ -166,7 +166,7 @@
 
 ### Major Changes
 
-- a92b03de42: The Typescript SDK has been renamed to `@haneullabs/sui` and includes many new features
+- a92b03de42: The Typescript SDK has been renamed to `@haneullabs/haneul` and includes many new features
   and breaking changes. See the
   [full migration guide](https://sdk.haneullabs.com/typescript/migrations/haneul-1.0) for details on
   how to upgrade.

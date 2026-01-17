@@ -7,7 +7,7 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as balance from './deps/sui/balance.js';
 import * as type_name from './deps/std/type_name.js';
 const $moduleName = '@deepbook/core::vault';

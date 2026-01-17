@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import type { DAppKitConnectButton } from './dapp-kit-connect-button.js';
 import { createDAppKit } from '../core/index.js';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
 
 const dAppKit = createDAppKit({
 	networks: ['testnet'],

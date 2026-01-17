@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import type { BcsType, TypeTag } from '@haneullabs/sui/bcs';
-import { bcs, TypeTagSerializer, BcsStruct, BcsEnum, BcsTuple } from '@haneullabs/sui/bcs';
-import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
-import type { TransactionArgument } from '@haneullabs/sui/transactions';
-import { isArgument } from '@haneullabs/sui/transactions';
+import type { BcsType, TypeTag } from '@haneullabs/haneul/bcs';
+import { bcs, TypeTagSerializer, BcsStruct, BcsEnum, BcsTuple } from '@haneullabs/haneul/bcs';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
+import type { TransactionArgument } from '@haneullabs/haneul/transactions';
+import { isArgument } from '@haneullabs/haneul/transactions';
 import { ValidationError, ErrorMessages } from '../../utils/errors.js';
 
 const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress('0x1');

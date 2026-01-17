@@ -21,7 +21,7 @@ buffers.
 To get started, create a `SuiGrpcClient` instance by specifying a network and base URL:
 
 ```typescript
-import { SuiGrpcClient } from '@haneullabs/sui/grpc';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 
 const grpcClient = new SuiGrpcClient({
 	network: 'testnet',
@@ -41,7 +41,7 @@ const grpcClient = new SuiGrpcClient({
 You can also provide a custom transport for advanced use cases:
 
 ```typescript
-import { SuiGrpcClient } from '@haneullabs/sui/grpc';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 import { GrpcWebFetchTransport } from '@protobuf-ts/grpcweb-transport';
 
 const transport = new GrpcWebFetchTransport({

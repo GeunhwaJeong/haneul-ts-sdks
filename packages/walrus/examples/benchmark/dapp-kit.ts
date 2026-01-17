@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createDAppKit } from '@haneullabs/dapp-kit-react';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
 import { walrus } from '../../src/index.js';
 
 export const dAppKit = createDAppKit({

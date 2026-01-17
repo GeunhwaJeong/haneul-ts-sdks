@@ -3,7 +3,7 @@
 
 import { fromBase64, toBase64 } from '@haneullabs/bcs';
 import type { InferBcsType } from '@haneullabs/bcs';
-import type { HaneulMoveNormalizedType } from '@haneullabs/sui/client';
+import type { HaneulMoveNormalizedType } from '@haneullabs/haneul/client';
 
 import type { Committee } from '../contracts/walrus/committee.js';
 import type { EncodingType } from '../types.js';

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { PaymentKitPackageConfig } from './types.js';
-import { SUI_TYPE_ARG, normalizeStructTag } from '@haneullabs/sui/utils';
+import { SUI_TYPE_ARG, normalizeStructTag } from '@haneullabs/haneul/utils';
 
 export const TESTNET_PAYMENT_KIT_PACKAGE_CONFIG = {
 	packageId: '0x7e069abe383e80d32f2aec17b3793da82aabc8c2edf84abbf68dd7b719e71497',

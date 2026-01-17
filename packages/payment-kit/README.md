@@ -7,7 +7,7 @@
 ## Installation
 
 ```bash
-npm install --save @haneullabs/payment-kit @haneullabs/sui
+npm install --save @haneullabs/payment-kit @haneullabs/haneul
 ```
 
 ## Setup
@@ -16,7 +16,7 @@ In order to use the Payment Kit SDK you will first need to create an instance of
 Typescript SDK, and a client instance of the Payment Kit SDK.
 
 ```ts
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
 import { paymentKit } from '@haneullabs/payment-kit';
 
 // Create a Haneul client with a Payment Kit extension

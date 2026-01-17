@@ -51,7 +51,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@noble/curves": "=1.9.4",
 		"@noble/hashes": "^1.8.0"
 	}

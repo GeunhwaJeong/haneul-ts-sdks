@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { normalizeHaneulNSName } from '@haneullabs/sui/utils';
+import { normalizeHaneulNSName } from '@haneullabs/haneul/utils';
 import type { DAppKitCompatibleClient } from '../core/types.js';
 
 const cache = new Map<string, string | null>();

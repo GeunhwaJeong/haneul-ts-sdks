@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { isValidNamedPackage, isValidHaneulObjectId } from '@haneullabs/sui/utils';
+import { isValidNamedPackage, isValidHaneulObjectId } from '@haneullabs/haneul/utils';
 import { cosmiconfig } from 'cosmiconfig';
 import * as z from 'zod/v4';
 

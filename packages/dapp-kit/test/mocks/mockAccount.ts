@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import type { WalletAccount } from '@haneullabs/wallet-standard';
 import { ReadonlyWalletAccount } from '@haneullabs/wallet-standard';
 

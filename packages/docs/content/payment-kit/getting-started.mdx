@@ -22,7 +22,7 @@ Before you begin, ensure you have:
 Install the Payment Kit SDK and the Haneul TypeScript SDK:
 
 ```bash npm2yarn
-npm install --save @haneullabs/payment-kit @haneullabs/sui
+npm install --save @haneullabs/payment-kit @haneullabs/haneul
 ```
 
 ## Setting Up the Client
@@ -31,7 +31,7 @@ The Payment Kit SDK extends the standard `HaneulClient` to provide payment funct
 set it up:
 
 ```ts
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
 import { paymentKit } from '@haneullabs/payment-kit';
 
 // Create a Haneul client with Payment Kit extension
@@ -49,7 +49,7 @@ The client will automatically configure the correct package IDs for the network 
 Let's process a simple registry-based payment using the default payment registry:
 
 ```ts
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 
 // Create or load your keypair
 const keypair = Ed25519Keypair.generate();

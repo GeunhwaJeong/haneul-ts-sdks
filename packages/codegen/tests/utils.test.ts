@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { describe, expect, it } from 'vitest';
 import { normalizeMoveArguments } from './generated/utils';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const CLOCK_TYPE_ARG =
 	'0x0000000000000000000000000000000000000000000000000000000000000002::clock::Clock';

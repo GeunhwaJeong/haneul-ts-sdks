@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { coinWithBalance } from '@haneullabs/sui/transactions';
-import type { Transaction } from '@haneullabs/sui/transactions';
+import { coinWithBalance } from '@haneullabs/haneul/transactions';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 
 import { OrderType, SelfMatchingOptions } from '../types/index.js';
 import type {

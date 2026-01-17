@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, it, expect } from 'vitest';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { analyze } from '../../src/transaction-analyzer/analyzer';
 import { moveFunctions } from '../../src/transaction-analyzer/rules/functions';
 import { MockHaneulClient } from '../mocks/MockHaneulClient';

@@ -57,7 +57,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@stricli/auto-complete": "^1.2.4",
 		"@stricli/core": "^1.2.4",
 		"@types/node": "^24.10.1",

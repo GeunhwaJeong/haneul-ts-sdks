@@ -105,14 +105,14 @@
 ### Patch Changes
 
 - Updated dependencies [29e8b92]
-  - @haneullabs/sui@1.45.2
+  - @haneullabs/haneul@1.45.2
 
 ## 0.22.1
 
 ### Patch Changes
 
 - Updated dependencies [e3811f1]
-  - @haneullabs/sui@1.45.1
+  - @haneullabs/haneul@1.45.1
 
 ## 0.22.0
 
@@ -140,7 +140,7 @@
 - a2f84a3: Update margin withdraw referral function
 - e0490df: Fix deepbook admin function
 - Updated dependencies [88bdbac]
-  - @haneullabs/sui@1.45.0
+  - @haneullabs/haneul@1.45.0
 
 ## 0.20.2
 
@@ -153,7 +153,7 @@
 ### Patch Changes
 
 - Updated dependencies [44d9b4f]
-  - @haneullabs/sui@1.44.0
+  - @haneullabs/haneul@1.44.0
 
 ## 0.20.0
 
@@ -167,7 +167,7 @@
 
 - Updated dependencies [89fa2dc]
   - @haneullabs/bcs@1.9.2
-  - @haneullabs/sui@1.43.2
+  - @haneullabs/haneul@1.43.2
 
 ## 0.19.6
 
@@ -177,7 +177,7 @@
 - a05eba1: New testnet margin package, small function changes
 - Updated dependencies [a37829f]
   - @haneullabs/bcs@1.9.1
-  - @haneullabs/sui@1.43.1
+  - @haneullabs/haneul@1.43.1
 
 ## 0.19.5
 
@@ -186,7 +186,7 @@
 - Updated dependencies [f3b19a7]
 - Updated dependencies [f3b19a7]
 - Updated dependencies [bf9f85c]
-  - @haneullabs/sui@1.43.0
+  - @haneullabs/haneul@1.43.0
   - @haneullabs/bcs@1.9.0
 
 ## 0.19.4
@@ -194,7 +194,7 @@
 ### Patch Changes
 
 - Updated dependencies [98c8a27]
-  - @haneullabs/sui@1.42.0
+  - @haneullabs/haneul@1.42.0
 
 ## 0.19.3
 
@@ -204,21 +204,21 @@
 - Updated dependencies [d554cd2]
 - Updated dependencies [04fcfbc]
   - @haneullabs/bcs@1.8.1
-  - @haneullabs/sui@1.41.0
+  - @haneullabs/haneul@1.41.0
 
 ## 0.19.2
 
 ### Patch Changes
 
 - Updated dependencies [f5fc0c0]
-  - @haneullabs/sui@1.40.0
+  - @haneullabs/haneul@1.40.0
 
 ## 0.19.1
 
 ### Patch Changes
 
 - Updated dependencies [a9f9035]
-  - @haneullabs/sui@1.39.1
+  - @haneullabs/haneul@1.39.1
 
 ## 0.19.0
 
@@ -230,7 +230,7 @@
 
 - Updated dependencies [ca92487]
 - Updated dependencies [5ab3c0a]
-  - @haneullabs/sui@1.39.0
+  - @haneullabs/haneul@1.39.0
 
 ## 0.18.0
 
@@ -248,7 +248,7 @@
 
 - Updated dependencies [3c1741f]
 - Updated dependencies [ea1ac70]
-  - @haneullabs/sui@1.38.0
+  - @haneullabs/haneul@1.38.0
   - @haneullabs/bcs@1.8.0
 
 ## 0.16.1
@@ -258,7 +258,7 @@
 - 78bd0e9: Update codegen arg normalization for object args
 - Updated dependencies [c689b98]
 - Updated dependencies [5b9ff1a]
-  - @haneullabs/sui@1.37.6
+  - @haneullabs/haneul@1.37.6
 
 ## 0.16.0
 
@@ -269,14 +269,14 @@
 ### Patch Changes
 
 - Updated dependencies [3980d04]
-  - @haneullabs/sui@1.37.5
+  - @haneullabs/haneul@1.37.5
 
 ## 0.15.16
 
 ### Patch Changes
 
 - Updated dependencies [6b03e57]
-  - @haneullabs/sui@1.37.4
+  - @haneullabs/haneul@1.37.4
 
 ## 0.15.15
 
@@ -289,14 +289,14 @@
 ### Patch Changes
 
 - Updated dependencies [8ff1471]
-  - @haneullabs/sui@1.37.3
+  - @haneullabs/haneul@1.37.3
 
 ## 0.15.13
 
 ### Patch Changes
 
 - Updated dependencies [660377c]
-  - @haneullabs/sui@1.37.2
+  - @haneullabs/haneul@1.37.2
 
 ## 0.15.12
 
@@ -308,7 +308,7 @@
 
 ### Patch Changes
 
-- @haneullabs/sui@1.37.1
+- @haneullabs/haneul@1.37.1
 
 ## 0.15.10
 
@@ -327,21 +327,21 @@
 ### Patch Changes
 
 - Updated dependencies [72168f0]
-  - @haneullabs/sui@1.37.0
+  - @haneullabs/haneul@1.37.0
 
 ## 0.15.7
 
 ### Patch Changes
 
 - Updated dependencies [44354ab]
-  - @haneullabs/sui@1.36.2
+  - @haneullabs/haneul@1.36.2
 
 ## 0.15.6
 
 ### Patch Changes
 
 - Updated dependencies [c76ddc5]
-  - @haneullabs/sui@1.36.1
+  - @haneullabs/haneul@1.36.1
 
 ## 0.15.5
 
@@ -350,28 +350,28 @@
 - Updated dependencies [783bb9e]
 - Updated dependencies [783bb9e]
 - Updated dependencies [5cbbb21]
-  - @haneullabs/sui@1.36.0
+  - @haneullabs/haneul@1.36.0
 
 ## 0.15.4
 
 ### Patch Changes
 
 - Updated dependencies [888afe6]
-  - @haneullabs/sui@1.35.0
+  - @haneullabs/haneul@1.35.0
 
 ## 0.15.3
 
 ### Patch Changes
 
 - Updated dependencies [3fb7a83]
-  - @haneullabs/sui@1.34.0
+  - @haneullabs/haneul@1.34.0
 
 ## 0.15.2
 
 ### Patch Changes
 
 - Updated dependencies [a00522b]
-  - @haneullabs/sui@1.33.0
+  - @haneullabs/haneul@1.33.0
 
 ## 0.15.1
 
@@ -388,7 +388,7 @@
 ### Patch Changes
 
 - Updated dependencies [6b7deb8]
-  - @haneullabs/sui@1.32.0
+  - @haneullabs/haneul@1.32.0
 
 ## 0.14.17
 
@@ -397,14 +397,14 @@
 - Updated dependencies [1ff4e57]
 - Updated dependencies [550e2e3]
 - Updated dependencies [550e2e3]
-  - @haneullabs/sui@1.31.0
+  - @haneullabs/haneul@1.31.0
 
 ## 0.14.16
 
 ### Patch Changes
 
 - Updated dependencies [5bd6ca3]
-  - @haneullabs/sui@1.30.5
+  - @haneullabs/haneul@1.30.5
 
 ## 0.14.15
 
@@ -412,7 +412,7 @@
 
 - Updated dependencies [5dce590]
 - Updated dependencies [4a5aef6]
-  - @haneullabs/sui@1.30.4
+  - @haneullabs/haneul@1.30.4
 
 ## 0.14.14
 
@@ -421,14 +421,14 @@
 - bb7c03a: Update dependencies
 - Updated dependencies [4457f10]
 - Updated dependencies [bb7c03a]
-  - @haneullabs/sui@1.30.3
+  - @haneullabs/haneul@1.30.3
 
 ## 0.14.13
 
 ### Patch Changes
 
 - Updated dependencies [b265f7e]
-  - @haneullabs/sui@1.30.2
+  - @haneullabs/haneul@1.30.2
 
 ## 0.14.12
 
@@ -454,7 +454,7 @@
 
 - 7b6dbe1: Add XBTC to assets
 - Updated dependencies [ec519fc]
-  - @haneullabs/sui@1.30.1
+  - @haneullabs/haneul@1.30.1
 
 ## 0.14.8
 
@@ -466,7 +466,7 @@
 - Updated dependencies [2456052]
 - Updated dependencies [2456052]
 - Updated dependencies [2456052]
-  - @haneullabs/sui@1.30.0
+  - @haneullabs/haneul@1.30.0
 
 ## 0.14.7
 
@@ -484,7 +484,7 @@
 
 ### Patch Changes
 
-- @haneullabs/sui@1.29.1
+- @haneullabs/haneul@1.29.1
 
 ## 0.14.4
 
@@ -493,28 +493,28 @@
 - Updated dependencies [7d66a32]
 - Updated dependencies [eb91fba]
 - Updated dependencies [19a8045]
-  - @haneullabs/sui@1.29.0
+  - @haneullabs/haneul@1.29.0
 
 ## 0.14.3
 
 ### Patch Changes
 
 - Updated dependencies [9a94aea]
-  - @haneullabs/sui@1.28.2
+  - @haneullabs/haneul@1.28.2
 
 ## 0.14.2
 
 ### Patch Changes
 
 - Updated dependencies [3cd4e53]
-  - @haneullabs/sui@1.28.1
+  - @haneullabs/haneul@1.28.1
 
 ## 0.14.1
 
 ### Patch Changes
 
 - Updated dependencies [2705dc8]
-  - @haneullabs/sui@1.28.0
+  - @haneullabs/haneul@1.28.0
 
 ## 0.14.0
 
@@ -527,7 +527,7 @@
 ### Patch Changes
 
 - Updated dependencies [5cea435]
-  - @haneullabs/sui@1.27.1
+  - @haneullabs/haneul@1.27.1
 
 ## 0.13.6
 
@@ -535,7 +535,7 @@
 
 - Updated dependencies [4d13ef8]
 - Updated dependencies [4d13ef8]
-  - @haneullabs/sui@1.27.0
+  - @haneullabs/haneul@1.27.0
 
 ## 0.13.5
 
@@ -543,14 +543,14 @@
 
 - 7ba32a4: update dependencies
 - Updated dependencies [7ba32a4]
-  - @haneullabs/sui@1.26.1
+  - @haneullabs/haneul@1.26.1
 
 ## 0.13.4
 
 ### Patch Changes
 
 - Updated dependencies [906dd14]
-  - @haneullabs/sui@1.26.0
+  - @haneullabs/haneul@1.26.0
 
 ## 0.13.3
 
@@ -558,7 +558,7 @@
 
 - 98d25ad: WAL pools support
 - Updated dependencies [e8b5d04]
-  - @haneullabs/sui@1.25.0
+  - @haneullabs/haneul@1.25.0
 
 ## 0.13.2
 
@@ -571,7 +571,7 @@
 ### Patch Changes
 
 - Updated dependencies [cf3d12d]
-  - @haneullabs/sui@1.24.0
+  - @haneullabs/haneul@1.24.0
 
 ## 0.13.0
 
@@ -584,7 +584,7 @@
 - ba6f895: SEND pool
 - Updated dependencies [8baac61]
 - Updated dependencies [8baac61]
-  - @haneullabs/sui@1.23.0
+  - @haneullabs/haneul@1.23.0
 
 ## 0.12.30
 
@@ -592,7 +592,7 @@
 
 - da31bc5: Add SEND token to SDK
 - Updated dependencies [03975f4]
-  - @haneullabs/sui@1.22.0
+  - @haneullabs/haneul@1.22.0
 
 ## 0.12.29
 
@@ -604,13 +604,13 @@
 
 ### Patch Changes
 
-- @haneullabs/sui@1.21.2
+- @haneullabs/haneul@1.21.2
 
 ## 0.12.27
 
 ### Patch Changes
 
-- @haneullabs/sui@1.21.1
+- @haneullabs/haneul@1.21.1
 
 ## 0.12.26
 
@@ -618,14 +618,14 @@
 
 - Updated dependencies [3d8a0d9]
 - Updated dependencies [20a5aaa]
-  - @haneullabs/sui@1.21.0
+  - @haneullabs/haneul@1.21.0
 
 ## 0.12.25
 
 ### Patch Changes
 
 - Updated dependencies [827a200]
-  - @haneullabs/sui@1.20.0
+  - @haneullabs/haneul@1.20.0
 
 ## 0.12.24
 
@@ -633,7 +633,7 @@
 
 - Updated dependencies [c39f32f]
 - Updated dependencies [539168a]
-  - @haneullabs/sui@1.19.0
+  - @haneullabs/haneul@1.19.0
 
 ## 0.12.23
 
@@ -641,7 +641,7 @@
 
 - 7abd243: Update repo links
 - Updated dependencies [7abd243]
-  - @haneullabs/sui@1.18.1
+  - @haneullabs/haneul@1.18.1
 
 ## 0.12.22
 
@@ -654,7 +654,7 @@
 - Updated dependencies [dc0e21e]
 - Updated dependencies [85bd9e4]
 - Updated dependencies [a872b97]
-  - @haneullabs/sui@1.18.0
+  - @haneullabs/haneul@1.18.0
 
 ## 0.12.21
 
@@ -673,20 +673,20 @@
 ### Patch Changes
 
 - Updated dependencies [20af12d]
-  - @haneullabs/sui@1.17.0
+  - @haneullabs/haneul@1.17.0
 
 ## 0.12.18
 
 ### Patch Changes
 
 - Updated dependencies [100207f]
-  - @haneullabs/sui@1.16.2
+  - @haneullabs/haneul@1.16.2
 
 ## 0.12.17
 
 ### Patch Changes
 
-- @haneullabs/sui@1.16.1
+- @haneullabs/haneul@1.16.1
 
 ## 0.12.16
 
@@ -700,13 +700,13 @@
 
 - Updated dependencies [ec2dc7f]
 - Updated dependencies [ec2dc7f]
-  - @haneullabs/sui@1.16.0
+  - @haneullabs/haneul@1.16.0
 
 ## 0.12.14
 
 ### Patch Changes
 
-- @haneullabs/sui@1.15.1
+- @haneullabs/haneul@1.15.1
 
 ## 0.12.13
 
@@ -719,7 +719,7 @@
 ### Patch Changes
 
 - Updated dependencies [6460e45]
-  - @haneullabs/sui@1.15.0
+  - @haneullabs/haneul@1.15.0
 
 ## 0.12.11
 
@@ -744,7 +744,7 @@
 ### Patch Changes
 
 - Updated dependencies [938fb6e]
-  - @haneullabs/sui@1.14.4
+  - @haneullabs/haneul@1.14.4
 
 ## 0.12.7
 
@@ -758,7 +758,7 @@
 
 - a43ae92: NS Token
 - Updated dependencies [d5a23d7]
-  - @haneullabs/sui@1.14.3
+  - @haneullabs/haneul@1.14.3
 
 ## 0.12.5
 
@@ -772,28 +772,28 @@
 
 - 6a571f1: Deep conversion
 - Updated dependencies [e7bc63e]
-  - @haneullabs/sui@1.14.2
+  - @haneullabs/haneul@1.14.2
 
 ## 0.12.3
 
 ### Patch Changes
 
 - Updated dependencies [69ef100]
-  - @haneullabs/sui@1.14.1
+  - @haneullabs/haneul@1.14.1
 
 ## 0.12.2
 
 ### Patch Changes
 
 - Updated dependencies [c24814b]
-  - @haneullabs/sui@1.14.0
+  - @haneullabs/haneul@1.14.0
 
 ## 0.12.1
 
 ### Patch Changes
 
 - Updated dependencies [477d2a4]
-  - @haneullabs/sui@1.13.0
+  - @haneullabs/haneul@1.13.0
 
 ## 0.12.0
 
@@ -837,7 +837,7 @@
 
 - Updated dependencies [5436a90]
 - Updated dependencies [5436a90]
-  - @haneullabs/sui@1.12.0
+  - @haneullabs/haneul@1.12.0
 
 ## 0.8.2
 
@@ -851,7 +851,7 @@
 
 - Updated dependencies [489f421]
 - Updated dependencies [489f421]
-  - @haneullabs/sui@1.11.0
+  - @haneullabs/haneul@1.11.0
 
 ## 0.8.0
 
@@ -874,7 +874,7 @@
 ### Patch Changes
 
 - Updated dependencies [830b8d8]
-  - @haneullabs/sui@1.10.0
+  - @haneullabs/haneul@1.10.0
 
 ## 0.6.0
 
@@ -888,7 +888,7 @@
 
 - Updated dependencies [2c96b06]
 - Updated dependencies [1fd22cc]
-  - @haneullabs/sui@1.9.0
+  - @haneullabs/haneul@1.9.0
 
 ## 0.5.0
 
@@ -901,7 +901,7 @@
 ### Patch Changes
 
 - Updated dependencies [569511a]
-  - @haneullabs/sui@1.8.0
+  - @haneullabs/haneul@1.8.0
 
 ## 0.4.2
 
@@ -936,7 +936,7 @@
 - Updated dependencies [4019dd7]
 - Updated dependencies [4019dd7]
 - Updated dependencies [00a974d]
-  - @haneullabs/sui@1.7.0
+  - @haneullabs/haneul@1.7.0
 
 ## 0.3.1
 
@@ -956,7 +956,7 @@
 ### Patch Changes
 
 - Updated dependencies [a3e32fe]
-  - @haneullabs/sui@1.6.0
+  - @haneullabs/haneul@1.6.0
 
 ## 0.2.0
 
@@ -974,11 +974,11 @@
 
 - Updated dependencies [0851b31]
 - Updated dependencies [f37b3c2]
-  - @haneullabs/sui@1.5.0
+  - @haneullabs/haneul@1.5.0
 
 ## 0.0.1
 
 ### Patch Changes
 
 - Updated dependencies [4419234]
-  - @haneullabs/sui@1.4.0
+  - @haneullabs/haneul@1.4.0

@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Secp256k1PublicKey } from '@haneullabs/sui/keypairs/secp256k1';
-import { Secp256r1PublicKey } from '@haneullabs/sui/keypairs/secp256r1';
-import { fromBase64 } from '@haneullabs/sui/utils';
+import { Secp256k1PublicKey } from '@haneullabs/haneul/keypairs/secp256k1';
+import { Secp256r1PublicKey } from '@haneullabs/haneul/keypairs/secp256r1';
+import { fromBase64 } from '@haneullabs/haneul/utils';
 
 import { publicKeyFromDER } from '../utils/utils.js';
 import { AwsClient } from './aws4fetch.js';

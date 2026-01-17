@@ -8,7 +8,7 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as vec_map from './deps/sui/vec_map.js';
 import * as trade_params from './trade_params.js';
 const $moduleName = '@deepbook/core::governance';

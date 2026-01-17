@@ -3,12 +3,12 @@
 
 import type { InferBcsType } from '@haneullabs/bcs';
 import { bcs } from '@haneullabs/bcs';
-import { HaneulClient } from '@haneullabs/sui/client';
-import type { Signer } from '@haneullabs/sui/cryptography';
-import type { ClientCache, ClientWithCoreApi } from '@haneullabs/sui/experimental';
-import type { TransactionObjectArgument, TransactionResult } from '@haneullabs/sui/transactions';
-import { coinWithBalance, Transaction } from '@haneullabs/sui/transactions';
-import { normalizeStructTag, parseStructTag } from '@haneullabs/sui/utils';
+import { HaneulClient } from '@haneullabs/haneul/client';
+import type { Signer } from '@haneullabs/haneul/cryptography';
+import type { ClientCache, ClientWithCoreApi } from '@haneullabs/haneul/experimental';
+import type { TransactionObjectArgument, TransactionResult } from '@haneullabs/haneul/transactions';
+import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeStructTag, parseStructTag } from '@haneullabs/haneul/utils';
 
 import {
 	MAINNET_WALRUS_PACKAGE_CONFIG,

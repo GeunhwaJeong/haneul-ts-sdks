@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type HaneulLedgerClient from '@haneullabs/ledgerjs-hw-app-sui';
-import type { HaneulClient } from '@haneullabs/sui/client';
-import type { SignatureWithBytes } from '@haneullabs/sui/cryptography';
-import { messageWithIntent, Signer, toSerializedSignature } from '@haneullabs/sui/cryptography';
-import { Ed25519PublicKey } from '@haneullabs/sui/keypairs/ed25519';
-import { Transaction } from '@haneullabs/sui/transactions';
-import { toBase64 } from '@haneullabs/sui/utils';
+import type { HaneulClient } from '@haneullabs/haneul/client';
+import type { SignatureWithBytes } from '@haneullabs/haneul/cryptography';
+import { messageWithIntent, Signer, toSerializedSignature } from '@haneullabs/haneul/cryptography';
+import { Ed25519PublicKey } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { toBase64 } from '@haneullabs/haneul/utils';
 
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import { getInputObjects } from './objects.js';
 import type { Resolution } from '@haneullabs/ledgerjs-hw-app-sui';
 

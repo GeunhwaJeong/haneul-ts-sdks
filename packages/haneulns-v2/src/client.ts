@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi, HaneulClientRegistration } from '@haneullabs/sui/src/experimental';
+import type { ClientWithCoreApi, HaneulClientRegistration } from '@haneullabs/haneul/src/experimental';
 import { HaneulNsCalls } from './calls.js';
 import type { HaneulNsObjectIds, HaneulNsPackageIds } from './calls.js';
 

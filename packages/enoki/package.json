@@ -57,7 +57,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/signers": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@haneullabs/wallet-standard": "workspace:*",
 		"@nanostores/react": "^1.0.0",
 		"@wallet-standard/ui": "^1.0.1",

@@ -63,7 +63,7 @@
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:*",
-		"@haneullabs/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"@haneullabs/utils": "workspace:*",
 		"@haneullabs/walrus-wasm": "workspace:*",
 		"dataloader": "^2.2.3"

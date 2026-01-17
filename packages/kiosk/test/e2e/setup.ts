@@ -6,11 +6,11 @@ import type {
 	DevInspectResults,
 	HaneulObjectChangePublished,
 	HaneulTransactionBlockResponse,
-} from '@haneullabs/sui/client';
-import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
-import { FaucetRateLimitError, getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/sui/faucet';
-import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { Transaction } from '@haneullabs/sui/transactions';
+} from '@haneullabs/haneul/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
+import { FaucetRateLimitError, getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import type { ContainerRuntimeClient } from 'testcontainers';
 import { getContainerRuntimeClient } from 'testcontainers';
 import { retry } from 'ts-retry-promise';
@@ -48,7 +48,7 @@ export function getClient(): HaneulClient {
 	});
 }
 
-// TODO: expose these testing utils from @haneullabs/sui
+// TODO: expose these testing utils from @haneullabs/haneul
 export async function setupHaneulClient() {
 	const keypair = Ed25519Keypair.generate();
 	const address = keypair.getPublicKey().toHaneulAddress();

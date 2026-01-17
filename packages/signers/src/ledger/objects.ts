@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Transaction } from '@haneullabs/sui/transactions';
-import type { HaneulClient } from '@haneullabs/sui/client';
+import type { Transaction } from '@haneullabs/haneul/transactions';
+import type { HaneulClient } from '@haneullabs/haneul/client';
 import { HaneulMoveObject } from './bcs.js';
 
 export const getInputObjects = async (transaction: Transaction, client: HaneulClient) => {

@@ -18,8 +18,8 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
-import type { BcsType } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { BcsType } from '@haneullabs/haneul/bcs';
 import * as object from './deps/sui/object.js';
 const $moduleName = '@deepbook/core::big_vector';
 export const BigVector = new MoveStruct({

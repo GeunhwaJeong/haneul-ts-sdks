@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BcsType } from '@haneullabs/bcs';
-import { pureBcsSchemaFromTypeName } from '@haneullabs/sui/bcs';
-import type { PureTypeName, ShapeFromPureTypeName } from '@haneullabs/sui/bcs';
-import type { HaneulObjectData } from '@haneullabs/sui/client';
+import { pureBcsSchemaFromTypeName } from '@haneullabs/haneul/bcs';
+import type { PureTypeName, ShapeFromPureTypeName } from '@haneullabs/haneul/bcs';
+import type { HaneulObjectData } from '@haneullabs/haneul/client';
 import type {
 	Experimental_BaseClient,
 	Experimental_HaneulClientTypes,
-} from '@haneullabs/sui/experimental';
-import { deriveDynamicFieldID } from '@haneullabs/sui/utils';
+} from '@haneullabs/haneul/experimental';
+import { deriveDynamicFieldID } from '@haneullabs/haneul/utils';
 import DataLoader from 'dataloader';
 import { Field } from './bcs.js';
 

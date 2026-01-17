@@ -2,8 +2,8 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveEnum, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs, type BcsType } from '@haneullabs/sui/bcs';
-import { type Transaction } from '@haneullabs/sui/transactions';
+import { bcs, type BcsType } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 const $moduleName = '@local-pkg/walrus::auth';
 /**
  * Authentication for either a sender or an object. Unlike the `Authorized` type,

@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@haneullabs/dapp-kit": "workspace:*",
-    "@haneullabs/sui": "workspace:*",
+    "@haneullabs/haneul": "workspace:*",
     "@haneullabs/wallet-standard": "workspace:*",
     "@haneullabs/walletconnect-wallet": "workspace:*",
     "@radix-ui/colors": "^3.0.0",

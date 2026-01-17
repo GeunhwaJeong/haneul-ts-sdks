@@ -5,7 +5,7 @@
 /** Sui object identifiers */
 
 import { MoveStruct } from '../../../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '0x2::object';
 export const UID = new MoveStruct({
 	name: `${$moduleName}::UID`,

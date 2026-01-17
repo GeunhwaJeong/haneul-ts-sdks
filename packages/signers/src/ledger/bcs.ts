@@ -1,14 +1,14 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs, TypeTagSerializer } from '@haneullabs/sui/bcs';
-import type { ObjectOwner } from '@haneullabs/sui/client';
+import { bcs, TypeTagSerializer } from '@haneullabs/haneul/bcs';
+import type { ObjectOwner } from '@haneullabs/haneul/client';
 import {
 	fromBase64,
 	normalizeStructTag,
 	normalizeHaneulAddress,
 	parseStructTag,
-} from '@haneullabs/sui/utils';
+} from '@haneullabs/haneul/utils';
 
 const SUI_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
 const SUI_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');

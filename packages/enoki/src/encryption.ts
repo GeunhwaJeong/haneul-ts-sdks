@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromBase64, toBase64 } from '@haneullabs/sui/utils';
+import { fromBase64, toBase64 } from '@haneullabs/haneul/utils';
 
 /**
  * A general interface for specifying how data should be encrypted and decrypted.

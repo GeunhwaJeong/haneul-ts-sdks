@@ -5,7 +5,7 @@ import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
 
 import { html, LitElement } from 'lit';
 import { Button } from './button.js';
-import { formatAddress } from '@haneullabs/sui/utils';
+import { formatAddress } from '@haneullabs/haneul/utils';
 import { property, query, state } from 'lit/decorators.js';
 import { unlinkIcon } from './icons/unlink-icon.js';
 import { styles } from './connected-account-menu.styles.js';

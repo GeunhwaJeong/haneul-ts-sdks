@@ -10,7 +10,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@haneullabs/bcs': new URL('../bcs/src', import.meta.url).pathname,
-			'@haneullabs/sui': new URL('../typescript/src', import.meta.url).pathname,
+			'@haneullabs/haneul': new URL('../typescript/src', import.meta.url).pathname,
 			'@haneullabs/utils': new URL('../utils/src', import.meta.url).pathname,
 			'@haneullabs/walrus-wasm': new URL('../walrus-wasm/src', import.meta.url).pathname,
 		},

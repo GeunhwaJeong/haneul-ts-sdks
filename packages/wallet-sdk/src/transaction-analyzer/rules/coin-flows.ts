@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { normalizeStructTag } from '@haneullabs/sui/utils';
+import { normalizeStructTag } from '@haneullabs/haneul/utils';
 import type { TransactionAnalysisIssue } from '../analyzer.js';
 import { createAnalyzer } from '../analyzer.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import { commands } from './commands.js';
 import type { AnalyzedCommand, AnalyzedCommandArgument } from './commands.js';
 import { data } from './core.js';

@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromBase64, toBase64 } from '@haneullabs/sui/utils';
+import { fromBase64, toBase64 } from '@haneullabs/haneul/utils';
 import type {
 	IdentifierArray,
 	StandardConnectFeature,
@@ -37,8 +37,8 @@ import type { InferOutput } from 'valibot';
 import { boolean, object, string } from 'valibot';
 import type { CustomCaipNetwork } from '@reown/appkit-universal-connector';
 import { UniversalConnector } from '@reown/appkit-universal-connector';
-import type { Experimental_BaseClient } from '@haneullabs/sui/experimental';
-import { Transaction } from '@haneullabs/sui/transactions';
+import type { Experimental_BaseClient } from '@haneullabs/haneul/experimental';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 // -- Types --
 type WalletEventsMap = {

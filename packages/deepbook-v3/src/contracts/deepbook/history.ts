@@ -8,7 +8,7 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@haneullabs/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as balances from './balances.js';
 import * as trade_params from './trade_params.js';
 import * as table from './deps/sui/table.js';

@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { PublicKey } from '@haneullabs/sui/cryptography';
-import type { ZkLoginSignatureInputs } from '@haneullabs/sui/zklogin';
+import type { PublicKey } from '@haneullabs/haneul/cryptography';
+import type { ZkLoginSignatureInputs } from '@haneullabs/haneul/zklogin';
 
 export type AuthProvider = 'google' | 'facebook' | 'twitch' | 'onefc' | 'playtron';
 export type EnokiNetwork = 'mainnet' | 'testnet' | 'devnet';

@@ -23,7 +23,7 @@ The following example is from the original Kiosk SDK V1 documentation.
 
 ```typescript
 import { placeAndList } from '@haneullabs/kiosk';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const placeAndListToKiosk = async () => {
 	const kiosk = 'SomeKioskId';
@@ -81,7 +81,7 @@ The following example is from the original Kiosk SDK V1 documentation.
 
 ```typescript
 import { createKioskAndShare } from '@haneullabs/kiosk';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const createKiosk = async () => {
 	const accountAddress = '0xSomeHaneulAddress';
@@ -133,7 +133,7 @@ import {
 	place,
 	testnetEnvironment,
 } from '@haneullabs/kiosk';
-import { HaneulClient } from '@haneullabs/sui/client';
+import { HaneulClient } from '@haneullabs/haneul/client';
 
 const client = new HaneulClient({
 	url: 'https://fullnode.testnet.sui.io:443',
@@ -259,7 +259,7 @@ import {
 	percentageToBasisPoints,
 	testnetEnvironment,
 } from '@haneullabs/kiosk';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 // Attaches a royalty rule of 1% or 0.1 SUI (whichever is bigger)
 // as well as a kiosk lock, making the objects tradeable only from/to a kiosk.

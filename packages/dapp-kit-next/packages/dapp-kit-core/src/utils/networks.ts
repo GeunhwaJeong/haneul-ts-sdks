@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
+import type { Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
 import type { IdentifierString } from '@haneullabs/wallet-standard';
 import { DAppKitError } from './errors.js';
 import type { DAppKitCompatibleClient } from '../core/types.js';

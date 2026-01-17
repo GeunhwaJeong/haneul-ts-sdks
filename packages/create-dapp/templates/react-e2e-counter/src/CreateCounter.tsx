@@ -1,4 +1,4 @@
-import { Transaction } from "@haneullabs/sui/transactions";
+import { Transaction } from "@haneullabs/haneul/transactions";
 import { Button, Container } from "@radix-ui/themes";
 import { useSignAndExecuteTransaction, useHaneulClient } from "@haneullabs/dapp-kit";
 import { useNetworkVariable } from "./networkConfig";

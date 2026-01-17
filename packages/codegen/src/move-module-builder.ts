@@ -226,7 +226,7 @@ export class MoveModuleBuilder extends FileBuilder {
 				renderTypeSignature(field.type_, {
 					format: 'bcs',
 					onBcsType: () => {
-						this.addImport('@haneullabs/sui/bcs', 'bcs');
+						this.addImport('@haneullabs/haneul/bcs', 'bcs');
 					},
 					summary: this.summary,
 					typeParameters,
@@ -262,7 +262,7 @@ export class MoveModuleBuilder extends FileBuilder {
 				summary: this.summary,
 				typeParameters,
 				onBcsType: () => {
-					this.addImport('@haneullabs/sui/bcs', 'bcs');
+					this.addImport('@haneullabs/haneul/bcs', 'bcs');
 				},
 				resolveAddress: (address) => this.#resolveAddress(address),
 				onDependency: (address, mod) => {
@@ -310,7 +310,7 @@ export class MoveModuleBuilder extends FileBuilder {
 				}`,
 			);
 		} else {
-			this.addImport('@haneullabs/sui/bcs', 'type BcsType');
+			this.addImport('@haneullabs/haneul/bcs', 'type BcsType');
 
 			const typeParams = `...typeParameters: [${params.map((param, i) => param.name ?? `T${i}`).join(', ')}]`;
 			const typeGenerics = `${params.map((param, i) => `${param.name ?? `T${i}`} extends BcsType<any>`).join(', ')}`;
@@ -371,7 +371,7 @@ export class MoveModuleBuilder extends FileBuilder {
 									summary: this.summary,
 									typeParameters: enumDef.type_parameters,
 									onBcsType: () => {
-										this.addImport('@haneullabs/sui/bcs', 'bcs');
+										this.addImport('@haneullabs/haneul/bcs', 'bcs');
 									},
 									resolveAddress: (address) => this.#resolveAddress(address),
 									onDependency: (address, mod) => {
@@ -410,7 +410,7 @@ export class MoveModuleBuilder extends FileBuilder {
 				)),
 			);
 		} else {
-			this.addImport('@haneullabs/sui/bcs', 'type BcsType');
+			this.addImport('@haneullabs/haneul/bcs', 'type BcsType');
 
 			const typeParams = `...typeParameters: [${params.map((param, i) => param.name ?? `T${i}`).join(', ')}]`;
 			const typeGenerics = `${params.map((param, i) => `${param.name ?? `T${i}`} extends BcsType<any>`).join(', ')}`;
@@ -434,7 +434,7 @@ export class MoveModuleBuilder extends FileBuilder {
 		if (!this.hasFunctions()) {
 			return;
 		}
-		this.addImport('@haneullabs/sui/transactions', 'type Transaction');
+		this.addImport('@haneullabs/haneul/transactions', 'type Transaction');
 
 		for (const [name, func] of Object.entries(this.summary.functions)) {
 			if (func.macro_ || !this.#includedFunctions.has(name)) {
@@ -483,7 +483,7 @@ export class MoveModuleBuilder extends FileBuilder {
 			}
 
 			if (usedTypeParameters.size > 0) {
-				this.addImport('@haneullabs/sui/bcs', 'type BcsType');
+				this.addImport('@haneullabs/haneul/bcs', 'type BcsType');
 			}
 
 			const filteredTypeParameters = func.type_parameters.filter(

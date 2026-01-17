@@ -19,8 +19,8 @@ import {
 	useWallets,
 	WalletProvider,
 } from '@haneullabs/dapp-kit';
-import { getFullnodeUrl } from '@haneullabs/sui/client';
-import { Transaction } from '@haneullabs/sui/transactions';
+import { getFullnodeUrl } from '@haneullabs/haneul/client';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ComponentProps } from 'react';
 import { useState } from 'react';

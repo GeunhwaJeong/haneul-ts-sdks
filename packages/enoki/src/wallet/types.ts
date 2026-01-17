@@ -1,13 +1,13 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { HaneulClient } from '@haneullabs/sui/client';
+import type { HaneulClient } from '@haneullabs/haneul/client';
 import type { StandardEventsListeners, Wallet } from '@haneullabs/wallet-standard';
 
 import type { EnokiClientConfig } from '../EnokiClient/index.js';
 import type { AuthProvider, EnokiNetwork } from '../EnokiClient/type.js';
-import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
-import type { ZkLoginSignatureInputs } from '@haneullabs/sui/zklogin';
+import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/haneul/experimental';
+import type { ZkLoginSignatureInputs } from '@haneullabs/haneul/zklogin';
 import type { UseStore } from 'idb-keyval';
 import type { WritableAtom } from 'nanostores';
 
