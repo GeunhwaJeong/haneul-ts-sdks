@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 query getCoins(
-	$owner: SuiAddress!
+	$owner: HaneulAddress!
 	$first: Int
 	$cursor: String
 	$type: String! = "0x2::coin::Coin<0x2::haneul::HANEUL>"

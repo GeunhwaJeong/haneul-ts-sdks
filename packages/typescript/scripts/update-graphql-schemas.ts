@@ -6,13 +6,13 @@ import { readFile } from 'fs/promises';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const result = execSync(`git ls-remote -h git@github.com:HaneulLabs/sui.git`)
+const result = execSync(`git ls-remote -h git@github.com:GeunhwaJeong/haneul.git`)
 	.toString()
 	.trim()
 	.split('\n')
 	.map((ref) => {
 		const branch = ref.trim().split('refs/heads/')[1];
-		const match = branch?.match(/^releases\/sui-graphql-rpc-v([\d.]+)-release$/);
+		const match = branch?.match(/^releases\/haneul-graphql-rpc-v([\d.]+)-release$/);
 
 		if (!match) {
 			return null;
@@ -29,7 +29,7 @@ const result = execSync(`git ls-remote -h git@github.com:HaneulLabs/sui.git`)
 					minor,
 					patch,
 					branch,
-					schema: `https://raw.githubusercontent.com/HaneulLabs/sui/${branch}/crates/sui-graphql-rpc/schema/current_progress_schema.graphql`,
+					schema: `https://raw.githubusercontent.com/GeunhwaJeong/haneul/${branch}/crates/haneul-graphql-rpc/schema/current_progress_schema.graphql`,
 				}
 			: null;
 	})
@@ -50,7 +50,7 @@ for (const { minorVersion, schema } of releasesByVersion.values()) {
 
 await addSchemaVersion(
 	'latest',
-	'https://raw.githubusercontent.com/HaneulLabs/sui/refs/heads/main/crates/sui-indexer-alt-graphql/schema.graphql',
+	'https://raw.githubusercontent.com/GeunhwaJeong/haneul/refs/heads/main/crates/haneul-indexer-alt-graphql/schema.graphql',
 );
 
 await addExportsToPackageJson([...releasesByVersion.keys(), 'latest']);

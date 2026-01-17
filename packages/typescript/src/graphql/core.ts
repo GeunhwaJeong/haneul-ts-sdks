@@ -9,7 +9,7 @@ import type {
 	Transaction_FieldsFragment,
 } from './generated/queries.js';
 import {
-	DefaultSuinsNameDocument,
+	DefaultHaneulnsNameDocument,
 	ExecuteTransactionDocument,
 	GetAllBalancesDocument,
 	GetBalanceDocument,
@@ -377,13 +377,13 @@ export class GraphQLCoreClient extends Experimental_CoreClient {
 	): Promise<Experimental_HaneulClientTypes.DefaultNameServiceNameResponse> {
 		const name = await this.#graphqlQuery(
 			{
-				query: DefaultSuinsNameDocument,
+				query: DefaultHaneulnsNameDocument,
 				signal: options.signal,
 				variables: {
 					address: options.address,
 				},
 			},
-			(result) => result.address?.defaultSuinsName ?? null,
+			(result) => result.address?.defaultHaneulnsName ?? null,
 		);
 
 		return {
