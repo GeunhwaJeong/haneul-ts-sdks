@@ -15,10 +15,10 @@ import { Timestamp } from '../../../google/protobuf/timestamp.js';
 import { GasCostSummary } from './gas_cost_summary.js';
 import { Bcs } from './bcs.js';
 /**
- * A header for a checkpoint on the Sui blockchain.
+ * A header for a checkpoint on the Haneul blockchain.
  *
- * On the Sui network, checkpoints define the history of the blockchain. They are quite similar to
- * the concept of blocks used by other blockchains like Bitcoin or Ethereum. The Sui blockchain,
+ * On the Haneul network, checkpoints define the history of the blockchain. They are quite similar to
+ * the concept of blocks used by other blockchains like Bitcoin or Ethereum. The Haneul blockchain,
  * however, forms checkpoints after transaction execution has already happened to provide a
  * certified history of the chain, instead of being formed before execution.
  *
@@ -170,7 +170,7 @@ export enum CheckpointCommitment_CheckpointCommitmentKind {
 	CHECKPOINT_COMMITMENT_KIND_UNKNOWN = 0,
 	/**
 	 * An elliptic curve multiset hash attesting to the set of objects that
-	 * comprise the live state of the Sui blockchain.
+	 * comprise the live state of the Haneul blockchain.
 	 *
 	 * @generated from protobuf enum value: ECMH_LIVE_OBJECT_SET = 1;
 	 */

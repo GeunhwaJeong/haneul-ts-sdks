@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { execSync } from 'child_process';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Transaction } from '@haneullabs/sui/transactions';
 
 import { DeepBookClient } from '../src/index.js'; // Adjust path according to new structure
@@ -31,7 +31,7 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	const marginManagers = {
 		MARGIN_MANAGER_1: {
 			address: '0x70a5f28a2400fca515adce1262da0b45ba8f3d1e48f1f2a9568aa29642b5c104',
-			poolKey: 'SUI_DBUSDC',
+			poolKey: 'HANEUL_DBUSDC',
 		},
 	};
 
@@ -43,7 +43,7 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	const dbClient = new DeepBookClient({
 		address: getActiveAddress(),
 		env: env,
-		client: new SuiClient({
+		client: new HaneulClient({
 			url: getFullnodeUrl(env),
 		}),
 		adminCap,
@@ -58,15 +58,15 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	// --- DeepBook Pool Referral Functions ---
 
 	// // 1. Mint a new referral for a pool (multiplier determines fee share)
-	dbClient.deepBook.mintReferral('SUI_DBUSDC', 1)(tx);
-	dbClient.deepBook.mintReferral('DEEP_SUI', 0.5)(tx);
+	dbClient.deepBook.mintReferral('HANEUL_DBUSDC', 1)(tx);
+	dbClient.deepBook.mintReferral('DEEP_HANEUL', 0.5)(tx);
 
 	// // 2. Update the multiplier for an existing referral
-	dbClient.deepBook.updatePoolReferralMultiplier('SUI_DBUSDC', suiDbusdcDeepbookReferral, 0.75)(tx);
+	dbClient.deepBook.updatePoolReferralMultiplier('HANEUL_DBUSDC', suiDbusdcDeepbookReferral, 0.75)(tx);
 
 	// // 3. Claim referral rewards (returns base, quote, and deep coins)
 	const { baseRewards, quoteRewards, deepRewards } = dbClient.deepBook.claimPoolReferralRewards(
-		'SUI_DBUSDC',
+		'HANEUL_DBUSDC',
 		suiDbusdcDeepbookReferral,
 	)(tx);
 	tx.transferObjects([baseRewards, quoteRewards, deepRewards], getActiveAddress());
@@ -83,7 +83,7 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	// // 5. Unset a referral for a balance manager (requires poolKey and tradeCap)
 	dbClient.balanceManager.unsetBalanceManagerReferral(
 		'BALANCE_MANAGER_1',
-		'SUI_DBUSDC',
+		'HANEUL_DBUSDC',
 		tx.object(balanceManagers.BALANCE_MANAGER_1.tradeCap),
 	)(tx);
 
@@ -96,7 +96,7 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	)(tx);
 
 	// // 7. Unset a referral for a margin manager
-	dbClient.marginManager.unsetMarginManagerReferral('MARGIN_MANAGER_1', 'SUI_DBUSDC')(tx);
+	dbClient.marginManager.unsetMarginManagerReferral('MARGIN_MANAGER_1', 'HANEUL_DBUSDC')(tx);
 
 	// // 8. Mint a supply referral for a margin pool
 	dbClient.marginPool.mintSupplyReferral('SUI')(tx);
@@ -115,26 +115,26 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	// 1. Get referral balances for each pool
 	console.log('\n--- DeepBook Pool Referral: getPoolReferralBalances ---');
 	const suiDbusdcReferralBalances = await dbClient.getPoolReferralBalances(
-		'SUI_DBUSDC',
+		'HANEUL_DBUSDC',
 		suiDbusdcDeepbookReferral,
 	);
-	console.log('SUI_DBUSDC Referral Balances:', suiDbusdcReferralBalances);
+	console.log('HANEUL_DBUSDC Referral Balances:', suiDbusdcReferralBalances);
 
 	const deepSuiReferralBalances = await dbClient.getPoolReferralBalances(
-		'DEEP_SUI',
+		'DEEP_HANEUL',
 		deepSuiDeepbookReferral,
 	);
-	console.log('DEEP_SUI Referral Balances:', deepSuiReferralBalances);
+	console.log('DEEP_HANEUL Referral Balances:', deepSuiReferralBalances);
 
 	// 2. Get multiplier for referrals
 	console.log('\n--- DeepBook Pool Referral: poolReferralMultiplier ---');
 	console.log(
-		'SUI_DBUSDC Multiplier:',
-		await dbClient.poolReferralMultiplier('SUI_DBUSDC', suiDbusdcDeepbookReferral),
+		'HANEUL_DBUSDC Multiplier:',
+		await dbClient.poolReferralMultiplier('HANEUL_DBUSDC', suiDbusdcDeepbookReferral),
 	);
 	console.log(
-		'DEEP_SUI Multiplier:',
-		await dbClient.poolReferralMultiplier('DEEP_SUI', deepSuiDeepbookReferral),
+		'DEEP_HANEUL Multiplier:',
+		await dbClient.poolReferralMultiplier('DEEP_HANEUL', deepSuiDeepbookReferral),
 	);
 
 	// --- Balance Manager Referral Read-only Functions ---
@@ -143,19 +143,19 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	console.log('\n--- Balance Manager Referral: balanceManagerReferralOwner ---');
 	const suiDbusdcReferralOwner =
 		await dbClient.balanceManagerReferralOwner(suiDbusdcDeepbookReferral);
-	console.log('SUI_DBUSDC Referral Owner:', suiDbusdcReferralOwner);
+	console.log('HANEUL_DBUSDC Referral Owner:', suiDbusdcReferralOwner);
 
 	const deepSuiReferralOwner = await dbClient.balanceManagerReferralOwner(deepSuiDeepbookReferral);
-	console.log('DEEP_SUI Referral Owner:', deepSuiReferralOwner);
+	console.log('DEEP_HANEUL Referral Owner:', deepSuiReferralOwner);
 
 	// 4. Get pool ID from referral
 	console.log('\n--- Balance Manager Referral: balanceManagerReferralPoolId ---');
 	console.log(
-		'SUI_DBUSDC Pool ID:',
+		'HANEUL_DBUSDC Pool ID:',
 		await dbClient.balanceManagerReferralPoolId(suiDbusdcDeepbookReferral),
 	);
 	console.log(
-		'DEEP_SUI Pool ID:',
+		'DEEP_HANEUL Pool ID:',
 		await dbClient.balanceManagerReferralPoolId(deepSuiDeepbookReferral),
 	);
 
@@ -163,13 +163,13 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	console.log('\n--- Balance Manager Referral: getBalanceManagerReferralId ---');
 	const suiDbusdcReferralId = await dbClient.getBalanceManagerReferralId(
 		'BALANCE_MANAGER_1',
-		'SUI_DBUSDC',
+		'HANEUL_DBUSDC',
 	);
-	console.log('SUI_DBUSDC Referral ID on BALANCE_MANAGER_1:', suiDbusdcReferralId);
+	console.log('HANEUL_DBUSDC Referral ID on BALANCE_MANAGER_1:', suiDbusdcReferralId);
 
 	const deepSuiReferralId = await dbClient.getBalanceManagerReferralId(
 		'BALANCE_MANAGER_1',
-		'DEEP_SUI',
+		'DEEP_HANEUL',
 	);
-	console.log('DEEP_SUI Referral ID on BALANCE_MANAGER_1:', deepSuiReferralId);
+	console.log('DEEP_HANEUL Referral ID on BALANCE_MANAGER_1:', deepSuiReferralId);
 })();

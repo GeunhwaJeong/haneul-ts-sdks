@@ -3,7 +3,7 @@
 
 import type { Transaction } from '@haneullabs/sui/transactions';
 import { TransactionDataBuilder } from '@haneullabs/sui/transactions';
-import type { ClientWithCoreApi, Experimental_SuiClientTypes } from '@haneullabs/sui/experimental';
+import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
 import type { AnalyzerResult } from '../analyzer.js';
 import { createAnalyzer } from '../analyzer.js';
 
@@ -44,9 +44,9 @@ export const transactionResponse = createAnalyzer({
 	analyze:
 		(options: {
 			client: ClientWithCoreApi;
-			transactionResponse?: Experimental_SuiClientTypes.TransactionResponse;
+			transactionResponse?: Experimental_HaneulClientTypes.TransactionResponse;
 		}) =>
-		async ({ bytes }): Promise<AnalyzerResult<Experimental_SuiClientTypes.TransactionResponse>> => {
+		async ({ bytes }): Promise<AnalyzerResult<Experimental_HaneulClientTypes.TransactionResponse>> => {
 			try {
 				return {
 					result:

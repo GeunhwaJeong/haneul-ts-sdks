@@ -110,14 +110,14 @@ describe('useSignPersonalMessage', () => {
 		signPersonalMessageMock.mockReturnValueOnce({ bytes: 'abc', signature: '123' });
 
 		const message = new Uint8Array().fill(123);
-		result.current.signPersonalMessage.mutate({ message, chain: 'sui:testnet' });
+		result.current.signPersonalMessage.mutate({ message, chain: 'haneul:testnet' });
 
 		await waitFor(() => expect(result.current.signPersonalMessage.isSuccess).toBe(true));
 
 		expect(signPersonalMessageMock).toHaveBeenCalledWith({
 			message,
 			account: mockWallet.accounts[0],
-			chain: `sui:testnet`,
+			chain: `haneul:testnet`,
 		});
 
 		expect(result.current.signPersonalMessage.data).toStrictEqual({

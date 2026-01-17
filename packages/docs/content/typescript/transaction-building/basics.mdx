@@ -19,7 +19,7 @@ You can then add commands to the transaction .
 const [coin] = tx.splitCoins(tx.gas, [100]);
 
 // transfer the split coin to a specific address
-tx.transferObjects([coin], '0xSomeSuiAddress');
+tx.transferObjects([coin], '0xSomeHaneulAddress');
 ```
 
 You can attach multiple commands of the same type to a transaction, as well. For example, to get a
@@ -64,7 +64,7 @@ may not be immediately observable.
 There are 2 ways to observe the results of a transaction. Methods like
 `client.signAndExecuteTransaction` accept an `options` object with options like `showObjectChanges`
 and `showBalanceChanges` (see
-[the SuiClient docs for more details](/typescript/sui-client#arguments)). These options will cause
+[the HaneulClient docs for more details](/typescript/haneul-client#arguments)). These options will cause
 the request to contain additional details about the effects of the transaction that can be
 immediately displayed to the user, or used for further processing in your application.
 
@@ -122,7 +122,7 @@ the command method. appropriate Move type automatically.
 // the amount to split off the gas coin is provided as a pure javascript number
 const [coin] = tx.splitCoins(tx.gas, [100]);
 // the address for the transfer is provided as a pure javascript string
-tx.transferObjects([coin], '0xSomeSuiAddress');
+tx.transferObjects([coin], '0xSomeHaneulAddress');
 ```
 
 #### Pure values
@@ -138,8 +138,8 @@ contains functions for each of the supported types.
 ```ts
 const [coin] = tx.splitCoins(tx.gas, [tx.pure.u64(100)]);
 const [coin] = tx.splitCoins(tx.gas, [tx.pure(bcs.U64.serialize(100))]);
-tx.transferObjects([coin], tx.pure.address('0xSomeSuiAddress'));
-tx.transferObjects([coin], tx.pure(bcs.Address.serialize('0xSomeSuiAddress')));
+tx.transferObjects([coin], tx.pure.address('0xSomeHaneulAddress'));
+tx.transferObjects([coin], tx.pure(bcs.Address.serialize('0xSomeHaneulAddress')));
 ```
 
 To pass `vector` or `option` types, you can pass use the corresponding methods on `tx.pure`, use
@@ -279,7 +279,7 @@ const tx = new Transaction();
 await tx.build({ client });
 ```
 
-In most cases, building requires your SuiClient to fully resolve input values.
+In most cases, building requires your HaneulClient to fully resolve input values.
 
 If you have transaction bytes, you can also convert them back into a `Transaction` class:
 

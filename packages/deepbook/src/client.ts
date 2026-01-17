@@ -3,13 +3,13 @@
 
 import { bcs } from '@haneullabs/sui/bcs';
 import type { OrderArguments, PaginatedEvents, PaginationArguments } from '@haneullabs/sui/client';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import type { Argument, TransactionObjectInput, TransactionResult } from '@haneullabs/sui/transactions';
 import { Transaction } from '@haneullabs/sui/transactions';
 import {
 	normalizeStructTag,
-	normalizeSuiAddress,
-	normalizeSuiObjectId,
+	normalizeHaneulAddress,
+	normalizeHaneulObjectId,
 	parseStructTag,
 	SUI_CLOCK_OBJECT_ID,
 } from '@haneullabs/sui/utils';
@@ -33,18 +33,18 @@ import {
 	PACKAGE_ID,
 } from './utils/index.js';
 
-const DUMMY_ADDRESS = normalizeSuiAddress('0x0');
+const DUMMY_ADDRESS = normalizeHaneulAddress('0x0');
 
 export class DeepBookClient {
 	#poolTypeArgsCache: Map<string, string[]> = new Map();
 	/**
 	 *
-	 * @param suiClient connection to fullnode
+	 * @param haneulClient connection to fullnode
 	 * @param accountCap (optional) only required for wrting operations
 	 * @param currentAddress (optional) address of the current user (default: DUMMY_ADDRESS)
 	 */
 	constructor(
-		public suiClient: SuiClient = new SuiClient({ url: getFullnodeUrl('testnet') }),
+		public haneulClient: HaneulClient = new HaneulClient({ url: getFullnodeUrl('testnet') }),
 		public accountCap: string | undefined = undefined,
 		public currentAddress: string = DUMMY_ADDRESS,
 		private clientOrderId: number = 0,
@@ -486,7 +486,7 @@ export class DeepBookClient {
 	async getAllPools(
 		input: PaginationArguments<PaginatedEvents['nextCursor']> & OrderArguments,
 	): Promise<PaginatedPoolSummary> {
-		const resp = await this.suiClient.queryEvents({
+		const resp = await this.haneulClient.queryEvents({
 			query: { MoveEventType: `${PACKAGE_ID}::${MODULE_CLOB}::PoolCreated` },
 			...input,
 		});
@@ -511,7 +511,7 @@ export class DeepBookClient {
 	 * @returns Metadata for the Pool
 	 */
 	async getPoolInfo(poolId: string): Promise<PoolSummary> {
-		const resp = await this.suiClient.getObject({
+		const resp = await this.haneulClient.getObject({
 			id: poolId,
 			options: { showContent: true },
 		});
@@ -558,7 +558,7 @@ export class DeepBookClient {
 			arguments: [tx.object(poolId), tx.pure.u64(orderId), tx.object(cap)],
 		});
 		const results = (
-			await this.suiClient.devInspectTransactionBlock({
+			await this.haneulClient.devInspectTransactionBlock({
 				transactionBlock: tx,
 				sender: this.currentAddress,
 			})
@@ -586,10 +586,10 @@ export class DeepBookClient {
 		tx.moveCall({
 			typeArguments: await this.getPoolTypeArgs(poolId),
 			target: `${PACKAGE_ID}::${MODULE_CLOB}::account_balance`,
-			arguments: [tx.object(normalizeSuiObjectId(poolId)), tx.object(cap)],
+			arguments: [tx.object(normalizeHaneulObjectId(poolId)), tx.object(cap)],
 		});
 		const [availableBaseAmount, lockedBaseAmount, availableQuoteAmount, lockedQuoteAmount] = (
-			await this.suiClient.devInspectTransactionBlock({
+			await this.haneulClient.devInspectTransactionBlock({
 				transactionBlock: tx,
 				sender: this.currentAddress,
 			})
@@ -621,7 +621,7 @@ export class DeepBookClient {
 		});
 
 		const results = (
-			await this.suiClient.devInspectTransactionBlock({
+			await this.haneulClient.devInspectTransactionBlock({
 				transactionBlock: tx,
 				sender: this.currentAddress,
 			})
@@ -646,7 +646,7 @@ export class DeepBookClient {
 			arguments: [tx.object(poolId)],
 		});
 		const resp = (
-			await this.suiClient.devInspectTransactionBlock({
+			await this.haneulClient.devInspectTransactionBlock({
 				transactionBlock: tx,
 				sender: this.currentAddress,
 			})
@@ -706,7 +706,7 @@ export class DeepBookClient {
 			});
 		}
 
-		const results = await this.suiClient.devInspectTransactionBlock({
+		const results = await this.haneulClient.devInspectTransactionBlock({
 			transactionBlock: tx,
 			sender: this.currentAddress,
 		});
@@ -744,18 +744,18 @@ export class DeepBookClient {
 		if (cap === undefined) {
 			throw new Error('accountCap is undefined, please call setAccountCap() first');
 		}
-		return normalizeSuiObjectId(cap);
+		return normalizeHaneulObjectId(cap);
 	}
 
 	#checkAddress(recipientAddress: string): string {
 		if (recipientAddress === DUMMY_ADDRESS) {
 			throw new Error('Current address cannot be DUMMY_ADDRESS');
 		}
-		return normalizeSuiAddress(recipientAddress);
+		return normalizeHaneulAddress(recipientAddress);
 	}
 
 	public async getCoinType(coinId: string) {
-		const resp = await this.suiClient.getObject({
+		const resp = await this.haneulClient.getObject({
 			id: coinId,
 			options: { showType: true },
 		});

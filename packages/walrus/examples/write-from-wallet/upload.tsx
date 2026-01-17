@@ -1,17 +1,17 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCurrentAccount, useDAppKit, useSuiClient } from '@haneullabs/dapp-kit-react';
+import { useCurrentAccount, useDAppKit, useHaneulClient } from '@haneullabs/dapp-kit-react';
 import { useState, useRef } from 'react';
 
 import type { WalrusClient, WriteFilesFlow } from '../../src/index.js';
 import { WalrusFile } from '../../src/index.js';
-import type { SuiClient } from '@haneullabs/sui/client';
+import type { HaneulClient } from '@haneullabs/sui/client';
 
 export function FileUpload({ onComplete }: { onComplete: (ids: string[]) => void }) {
 	const dAppKit = useDAppKit();
 	const currentAccount = useCurrentAccount();
-	const suiClient = useSuiClient() as SuiClient & { walrus: WalrusClient };
+	const haneulClient = useHaneulClient() as HaneulClient & { walrus: WalrusClient };
 	const flowRef = useRef<WriteFilesFlow | null>(null);
 	const [state, setState] = useState<
 		| 'empty'
@@ -39,7 +39,7 @@ export function FileUpload({ onComplete }: { onComplete: (ids: string[]) => void
 		setState('encoding');
 
 		const arrayBuffer = await file.arrayBuffer();
-		const flow = suiClient.walrus.writeFilesFlow({
+		const flow = haneulClient.walrus.writeFilesFlow({
 			files: [
 				WalrusFile.from({
 					contents: new Uint8Array(arrayBuffer),

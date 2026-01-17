@@ -7,10 +7,10 @@ import { Transaction, TransactionResult } from '../../src/transactions';
 import { Commands } from '../../src/transactions/Commands';
 import type { TransactionDataBuilder } from '../../src/transactions/TransactionData';
 import type { BuildTransactionOptions } from '../../src/transactions/resolve';
-import { normalizeSuiObjectId } from '../../src/utils';
+import { normalizeHaneulObjectId } from '../../src/utils';
 import { publishPackage, setup, TestToolbox } from './utils/setup';
 
-export const SUI_CLOCK_OBJECT_ID = normalizeSuiObjectId('0x6');
+export const SUI_CLOCK_OBJECT_ID = normalizeHaneulObjectId('0x6');
 
 describe('TransactionData.insertTransaction', () => {
 	let toolbox: TestToolbox;

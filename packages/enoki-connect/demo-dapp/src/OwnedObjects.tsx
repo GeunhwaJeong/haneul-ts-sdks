@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { useCurrentAccount, useSuiClientQuery } from "@haneullabs/dapp-kit";
+import { useCurrentAccount, useHaneulClientQuery } from "@haneullabs/dapp-kit";
 import { Flex, Heading, Text } from "@radix-ui/themes";
 
 export function OwnedObjects() {
   const account = useCurrentAccount();
-  const { data, isPending, error } = useSuiClientQuery(
+  const { data, isPending, error } = useHaneulClientQuery(
     "getOwnedObjects",
     {
       owner: account?.address as string,

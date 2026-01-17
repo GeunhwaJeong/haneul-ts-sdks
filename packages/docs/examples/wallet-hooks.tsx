@@ -5,7 +5,7 @@
 
 import {
 	ConnectButton,
-	SuiClientProvider,
+	HaneulClientProvider,
 	useAccounts,
 	useAutoConnectWallet,
 	useConnectWallet,
@@ -244,7 +244,7 @@ export const UseSignTransactionExample = withProviders(() => {
 								signTransaction(
 									{
 										transaction: new Transaction(),
-										chain: 'sui:devnet',
+										chain: 'haneul:devnet',
 									},
 									{
 										onSuccess: (result) => {
@@ -281,7 +281,7 @@ export const UseSignAndExecuteTransactionExample = withProviders(() => {
 								signAndExecuteTransaction(
 									{
 										transaction: new Transaction(),
-										chain: 'sui:devnet',
+										chain: 'haneul:devnet',
 									},
 									{
 										onSuccess: (result) => {
@@ -324,11 +324,11 @@ function withProviders(
 
 		return (
 			<QueryClientProvider client={queryClient}>
-				<SuiClientProvider networks={networks}>
+				<HaneulClientProvider networks={networks}>
 					<WalletProvider {...walletProviderProps}>
 						<Component />
 					</WalletProvider>
-				</SuiClientProvider>
+				</HaneulClientProvider>
 			</QueryClientProvider>
 		);
 	};

@@ -4,7 +4,7 @@
 import { bcs } from '@haneullabs/bcs';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { SuiTransactionBlockResponse } from '../../src/client';
+import { HaneulTransactionBlockResponse } from '../../src/client';
 import { Transaction } from '../../src/transactions';
 import { TransactionDataBuilder } from '../../src/transactions/TransactionData';
 import { SUI_SYSTEM_STATE_OBJECT_ID } from '../../src/utils';
@@ -12,7 +12,7 @@ import { publishPackage, setup, TestToolbox } from './utils/setup';
 
 let toolbox: TestToolbox;
 let packageId: string;
-let publishTxn: SuiTransactionBlockResponse;
+let publishTxn: HaneulTransactionBlockResponse;
 let sharedObjectId: string;
 beforeAll(async () => {
 	toolbox = await setup();
@@ -50,7 +50,7 @@ describe('Transaction bcs Serialization and deserialization', () => {
 		const tx = new Transaction();
 		const coin = coins.data[2];
 		tx.moveCall({
-			target: '0x3::sui_system::request_add_stake',
+			target: '0x3::haneul_system::request_add_stake',
 			arguments: [
 				tx.object(SUI_SYSTEM_STATE_OBJECT_ID),
 				tx.object(coin.coinObjectId),
@@ -119,7 +119,7 @@ describe('TXB v2 JSON serialization', () => {
 		const tx = new Transaction();
 		const coin = coins.data[2];
 		tx.moveCall({
-			target: '0x3::sui_system::request_add_stake',
+			target: '0x3::haneul_system::request_add_stake',
 			arguments: [
 				tx.object(SUI_SYSTEM_STATE_OBJECT_ID),
 				tx.object(coin.coinObjectId),
@@ -218,7 +218,7 @@ describe('TXB v1 JSON serialization', () => {
 		const tx = new Transaction();
 		const coin = coins.data[2];
 		tx.moveCall({
-			target: '0x3::sui_system::request_add_stake',
+			target: '0x3::haneul_system::request_add_stake',
 			arguments: [
 				tx.object(SUI_SYSTEM_STATE_OBJECT_ID),
 				tx.object(coin.coinObjectId),

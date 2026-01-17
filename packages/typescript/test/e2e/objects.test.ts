@@ -4,7 +4,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { Transaction } from '../../src/transactions';
-import { normalizeSuiAddress, SUI_TYPE_ARG } from '../../src/utils';
+import { normalizeHaneulAddress, SUI_TYPE_ARG } from '../../src/utils';
 import { setup, TestToolbox } from './utils/setup';
 
 describe('Object Reading API', () => {
@@ -33,7 +33,7 @@ describe('Object Reading API', () => {
 			}),
 		);
 		objectInfos.forEach((objectInfo) => {
-			expect(objectInfo.data?.type).to.equal('0x2::coin::Coin<0x2::sui::SUI>');
+			expect(objectInfo.data?.type).to.equal('0x2::coin::Coin<0x2::haneul::HANEUL>');
 		});
 	});
 
@@ -53,13 +53,13 @@ describe('Object Reading API', () => {
 		expect(gasObjects.data.length).to.equal(objectInfos.length);
 
 		objectInfos.forEach((objectInfo) => {
-			expect(objectInfo.data?.type).to.equal('0x2::coin::Coin<0x2::sui::SUI>');
+			expect(objectInfo.data?.type).to.equal('0x2::coin::Coin<0x2::haneul::HANEUL>');
 		});
 	});
 
 	it('handles trying to get non-existent old objects', async () => {
 		const res = await toolbox.client.tryGetPastObject({
-			id: normalizeSuiAddress('0x9999'),
+			id: normalizeHaneulAddress('0x9999'),
 			version: 0,
 		});
 
@@ -117,7 +117,7 @@ describe('Object Reading API', () => {
 
 		const tx = new Transaction();
 		// Transfer the entire gas object:
-		tx.transferObjects([tx.gas], normalizeSuiAddress('0x2'));
+		tx.transferObjects([tx.gas], normalizeHaneulAddress('0x2'));
 
 		const { digest } = await toolbox.client.signAndExecuteTransaction({
 			signer: toolbox.keypair,

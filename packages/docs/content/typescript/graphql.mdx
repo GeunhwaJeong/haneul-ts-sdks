@@ -1,20 +1,20 @@
 ---
-title: SuiGraphQLClient
+title: HaneulGraphQLClient
 ---
 
 <Callout type="warn">
-	SuiGraphQLClient is still in development and may change rapidly as it is being developed.
+	HaneulGraphQLClient is still in development and may change rapidly as it is being developed.
 </Callout>
 
 <Callout type="info">
-	The `SuiGraphQLClient` can be used for reading and writing data directly, but deeper integration
+	The `HaneulGraphQLClient` can be used for reading and writing data directly, but deeper integration
 	into other SDKs is not ready yet. In a future release, GraphQL clients will be able to be passed
 	into any Mysten SDK method that currently accepts a JSON-RPC client.
 </Callout>
 
-To support GraphQL Queries, the Typescript SDK includes the `SuiGraphQLClient` which can help you
-write and execute GraphQL queries against the Sui GraphQL API that are type-safe and easy to use.
-For more details on the Sui GraphQL API, see the
+To support GraphQL Queries, the Typescript SDK includes the `HaneulGraphQLClient` which can help you
+write and execute GraphQL queries against the Haneul GraphQL API that are type-safe and easy to use.
+For more details on the Haneul GraphQL API, see the
 [GraphQL reference](https://docs.sui.io/references/sui-graphql).
 
 ## Writing your first query
@@ -22,10 +22,10 @@ For more details on the Sui GraphQL API, see the
 We'll start by creating our client, and executing a very basic query:
 
 ```typescript
-import { SuiGraphQLClient } from '@haneullabs/sui/graphql';
+import { HaneulGraphQLClient } from '@haneullabs/sui/graphql';
 import { graphql } from '@haneullabs/sui/graphql/schemas/latest';
 
-const gqlClient = new SuiGraphQLClient({
+const gqlClient = new HaneulGraphQLClient({
 	url: 'https://graphql.testnet.sui.io/graphql',
 });
 
@@ -49,7 +49,7 @@ async function getChainIdentifier() {
 You may have noticed the example above does not include any type definitions for the query. The
 `graphql` function used in the example is powered by [`gql.tada`](https://gql-tada.0no.co/) and will
 automatically provide the required type information to ensure that your queries are properly typed
-when executed through `SuiGraphQLClient`.
+when executed through `HaneulGraphQLClient`.
 
 The `graphql` function itself is imported from a versioned schema file, and you should ensure that
 you are using the version that corresponds to the latest release of the GraphQL API.
@@ -59,7 +59,7 @@ to your query are properly typed.
 
 ```typescript
 const getSuinsName = graphql(`
-	query getSuiName($address: SuiAddress!) {
+	query getSuiName($address: HaneulAddress!) {
 		address(address: $address) {
 			defaultSuinsName
 		}

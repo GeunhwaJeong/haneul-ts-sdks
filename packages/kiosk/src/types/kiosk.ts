@@ -3,8 +3,8 @@
 
 import type {
 	PaginatedObjectsResponse,
-	SuiObjectData,
-	SuiObjectDataOptions,
+	HaneulObjectData,
+	HaneulObjectDataOptions,
 } from '@haneullabs/sui/client';
 import type { TransactionArgument } from '@haneullabs/sui/transactions';
 
@@ -106,7 +106,7 @@ export type KioskItem = {
 	/** The ID of the kiosk the item is placed in */
 	kioskId: string;
 	/** Optional Kiosk Data */
-	data?: SuiObjectData;
+	data?: HaneulObjectData;
 };
 
 /** The overview type returned from `getKiosk` */
@@ -152,7 +152,7 @@ export type FetchKioskOptions = {
 	/** Include the objects for the Items in the kiosk. Defaults to `display` only. */
 	withObjects?: boolean;
 	/** Pass the data options for the objects, when fetching, in case you want to query other details. */
-	objectOptions?: SuiObjectDataOptions;
+	objectOptions?: HaneulObjectDataOptions;
 };
 
 export type OwnedKiosks = {

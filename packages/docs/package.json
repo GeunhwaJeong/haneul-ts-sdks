@@ -29,7 +29,7 @@
 		"@haneullabs/signers": "workspace:*",
 		"@haneullabs/slush-wallet": "workspace:*",
 		"@haneullabs/sui": "workspace:*",
-		"@haneullabs/suins": "workspace:*",
+		"@haneullabs/haneulns": "workspace:*",
 		"@haneullabs/utils": "workspace:*",
 		"@haneullabs/wallet-standard": "workspace:*",
 		"@haneullabs/walrus": "workspace:*",

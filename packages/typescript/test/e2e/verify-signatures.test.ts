@@ -3,7 +3,7 @@
 import { fromBase64 } from '@haneullabs/bcs';
 import { describe, expect, it } from 'vitest';
 
-import { SuiGraphQLClient } from '../../src/graphql';
+import { HaneulGraphQLClient } from '../../src/graphql';
 import { Ed25519Keypair } from '../../src/keypairs/ed25519';
 import { Secp256k1Keypair } from '../../src/keypairs/secp256k1';
 import { Secp256r1Keypair } from '../../src/keypairs/secp256r1';
@@ -19,13 +19,13 @@ describe('Verify Signatures', () => {
 		describe('single signatures', () => {
 			describe('Ed25519', () => {
 				const keypair = new Ed25519Keypair();
-				const address = keypair.getPublicKey().toSuiAddress();
+				const address = keypair.getPublicKey().toHaneulAddress();
 				const message = new TextEncoder().encode('hello world');
 
 				it('verifies valid signatures', async () => {
 					const { signature } = await keypair.signPersonalMessage(message);
 					const publicKey = await verifyPersonalMessageSignature(message, signature);
-					expect(publicKey.toSuiAddress()).toBe(address);
+					expect(publicKey.toHaneulAddress()).toBe(address);
 				});
 
 				it('verifies signatures against provided address', async () => {
@@ -43,7 +43,7 @@ describe('Verify Signatures', () => {
 
 				it('fails for wrong address', async () => {
 					const { signature } = await keypair.signPersonalMessage(message);
-					const wrongAddress = new Ed25519Keypair().getPublicKey().toSuiAddress();
+					const wrongAddress = new Ed25519Keypair().getPublicKey().toHaneulAddress();
 					await expect(
 						verifyPersonalMessageSignature(message, signature, { address: wrongAddress }),
 					).rejects.toThrow();
@@ -52,13 +52,13 @@ describe('Verify Signatures', () => {
 
 			describe('Secp256k1', () => {
 				const keypair = new Secp256k1Keypair();
-				const address = keypair.getPublicKey().toSuiAddress();
+				const address = keypair.getPublicKey().toHaneulAddress();
 				const message = new TextEncoder().encode('hello world');
 
 				it('verifies valid signatures', async () => {
 					const { signature } = await keypair.signPersonalMessage(message);
 					const publicKey = await verifyPersonalMessageSignature(message, signature);
-					expect(publicKey.toSuiAddress()).toBe(address);
+					expect(publicKey.toHaneulAddress()).toBe(address);
 				});
 
 				it('verifies signatures against provided address', async () => {
@@ -76,7 +76,7 @@ describe('Verify Signatures', () => {
 
 				it('fails for wrong address', async () => {
 					const { signature } = await keypair.signPersonalMessage(message);
-					const wrongAddress = new Secp256k1Keypair().getPublicKey().toSuiAddress();
+					const wrongAddress = new Secp256k1Keypair().getPublicKey().toHaneulAddress();
 					await expect(
 						verifyPersonalMessageSignature(message, signature, { address: wrongAddress }),
 					).rejects.toThrow();
@@ -85,13 +85,13 @@ describe('Verify Signatures', () => {
 
 			describe('Secp256r1', () => {
 				const keypair = new Secp256r1Keypair();
-				const address = keypair.getPublicKey().toSuiAddress();
+				const address = keypair.getPublicKey().toHaneulAddress();
 				const message = new TextEncoder().encode('hello world');
 
 				it('verifies valid signatures', async () => {
 					const { signature } = await keypair.signPersonalMessage(message);
 					const publicKey = await verifyPersonalMessageSignature(message, signature);
-					expect(publicKey.toSuiAddress()).toBe(address);
+					expect(publicKey.toHaneulAddress()).toBe(address);
 				});
 
 				it('verifies signatures against provided address', async () => {
@@ -109,7 +109,7 @@ describe('Verify Signatures', () => {
 
 				it('fails for wrong address', async () => {
 					const { signature } = await keypair.signPersonalMessage(message);
-					const wrongAddress = new Secp256r1Keypair().getPublicKey().toSuiAddress();
+					const wrongAddress = new Secp256r1Keypair().getPublicKey().toHaneulAddress();
 					await expect(
 						verifyPersonalMessageSignature(message, signature, { address: wrongAddress }),
 					).rejects.toThrow();
@@ -145,7 +145,7 @@ describe('Verify Signatures', () => {
 				]);
 
 				const publicKey = await verifyPersonalMessageSignature(message, multisig);
-				expect(publicKey.toSuiAddress()).toBe(multiSigPublicKey.toSuiAddress());
+				expect(publicKey.toHaneulAddress()).toBe(multiSigPublicKey.toHaneulAddress());
 			});
 
 			it('fails for invalid multisig signatures', async () => {
@@ -173,7 +173,7 @@ describe('Verify Signatures', () => {
 		});
 
 		describe('zkLogin signatures', () => {
-			const client = new SuiGraphQLClient({ url: DEFAULT_GRAPHQL_URL });
+			const client = new HaneulGraphQLClient({ url: DEFAULT_GRAPHQL_URL });
 			// this test assumes the localnet epoch is smaller than 3. it will fail if localnet has ran for too long and passed epoch 3.
 			// test case generated from `sui keytool zk-login-insecure-sign-personal-message --data "hello" --max-epoch 3`
 			const bytes = fromBase64('aGVsbG8='); // the base64 encoding of "hello"
@@ -187,7 +187,7 @@ describe('Verify Signatures', () => {
 				});
 				expect(publicKey).toBeDefined();
 
-				expect(publicKey.toSuiAddress()).toBe(
+				expect(publicKey.toHaneulAddress()).toBe(
 					'0xc0f0d0e2a2ca8b8d0e4055ec48210ec77d055db353402cda01d7085ba61d3d5c',
 				);
 			});
@@ -218,7 +218,7 @@ describe('Verify Signatures', () => {
 				});
 				expect(publicKey).toBeDefined();
 
-				expect(publicKey.toSuiAddress()).toBe(
+				expect(publicKey.toHaneulAddress()).toBe(
 					'0xc0f0d0e2a2ca8b8d0e4055ec48210ec77d055db353402cda01d7085ba61d3d5c',
 				);
 			});

@@ -10,19 +10,19 @@ import type {
 	StandardEventsFeature,
 	StandardEventsListeners,
 	StandardEventsOnMethod,
-	SuiChain,
-	SuiSignAndExecuteTransactionFeature,
-	SuiSignAndExecuteTransactionMethod,
-	SuiSignPersonalMessageFeature,
-	SuiSignPersonalMessageMethod,
-	SuiSignTransactionBlockFeature,
-	SuiSignTransactionBlockMethod,
-	SuiSignTransactionFeature,
-	SuiSignTransactionMethod,
+	HaneulChain,
+	HaneulSignAndExecuteTransactionFeature,
+	HaneulSignAndExecuteTransactionMethod,
+	HaneulSignPersonalMessageFeature,
+	HaneulSignPersonalMessageMethod,
+	HaneulSignTransactionBlockFeature,
+	HaneulSignTransactionBlockMethod,
+	HaneulSignTransactionFeature,
+	HaneulSignTransactionMethod,
 	Wallet,
 	WalletIcon,
 } from '@haneullabs/wallet-standard';
-import { getWallets, ReadonlyWalletAccount, SUI_CHAINS } from '@haneullabs/wallet-standard';
+import { getWallets, ReadonlyWalletAccount, HANEUL_CHAINS } from '@haneullabs/wallet-standard';
 import type { Emitter } from 'mitt';
 import mitt from 'mitt';
 import type { InferOutput } from 'valibot';
@@ -48,7 +48,7 @@ const METADATA_API_URL = 'https://api.slush.app/api/wallet/metadata';
 const FALLBACK_METADATA = {
 	id: 'com.haneullabs.suiwallet.web',
 	walletName: 'Slush',
-	description: 'Trade and earn on Sui.',
+	description: 'Trade and earn on Haneul.',
 	icon: SLUSH_WALLET_ICON,
 	enabled: true,
 };
@@ -87,7 +87,7 @@ function getAccountsFromSession(session: string) {
 	return payload.accounts.map((account) => {
 		return new ReadonlyWalletAccount({
 			address: account.address,
-			chains: SUI_CHAINS,
+			chains: HANEUL_CHAINS,
 			features: walletAccountFeatures,
 			publicKey: fromBase64(account.publicKey),
 		});
@@ -121,7 +121,7 @@ export class SlushWallet implements Wallet {
 	}
 
 	get chains() {
-		return SUI_CHAINS;
+		return HANEUL_CHAINS;
 	}
 
 	get accounts() {
@@ -131,10 +131,10 @@ export class SlushWallet implements Wallet {
 	get features(): StandardConnectFeature &
 		StandardDisconnectFeature &
 		StandardEventsFeature &
-		SuiSignTransactionBlockFeature &
-		SuiSignTransactionFeature &
-		SuiSignPersonalMessageFeature &
-		SuiSignAndExecuteTransactionFeature {
+		HaneulSignTransactionBlockFeature &
+		HaneulSignTransactionFeature &
+		HaneulSignPersonalMessageFeature &
+		HaneulSignAndExecuteTransactionFeature {
 		return {
 			'standard:connect': {
 				version: '1.0.0',
@@ -174,7 +174,7 @@ export class SlushWallet implements Wallet {
 	}: {
 		name: string;
 		origin?: string;
-		chain?: SuiChain;
+		chain?: HaneulChain;
 		metadata: WalletMetadata;
 	}) {
 		this.#id = metadata.id;
@@ -186,7 +186,7 @@ export class SlushWallet implements Wallet {
 		this.#icon = metadata.icon as WalletIcon;
 	}
 
-	#signTransactionBlock: SuiSignTransactionBlockMethod = async ({
+	#signTransactionBlock: HaneulSignTransactionBlockMethod = async ({
 		transactionBlock,
 		account,
 		chain,
@@ -209,7 +209,7 @@ export class SlushWallet implements Wallet {
 		};
 	};
 
-	#signTransaction: SuiSignTransactionMethod = async ({ transaction, account, chain }) => {
+	#signTransaction: HaneulSignTransactionMethod = async ({ transaction, account, chain }) => {
 		const popup = this.#getNewPopupChannel();
 
 		const tx = await transaction.toJSON();
@@ -228,7 +228,7 @@ export class SlushWallet implements Wallet {
 		};
 	};
 
-	#signAndExecuteTransaction: SuiSignAndExecuteTransactionMethod = async ({
+	#signAndExecuteTransaction: HaneulSignAndExecuteTransactionMethod = async ({
 		transaction,
 		account,
 		chain,
@@ -252,7 +252,7 @@ export class SlushWallet implements Wallet {
 		};
 	};
 
-	#signPersonalMessage: SuiSignPersonalMessageMethod = async ({ message, account, chain }) => {
+	#signPersonalMessage: HaneulSignPersonalMessageMethod = async ({ message, account, chain }) => {
 		const popup = this.#getNewPopupChannel();
 
 		const response = await popup.send({

@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { isValidNamedType, isValidSuiAddress, isValidSuiObjectId } from '@haneullabs/sui/utils';
+import { isValidNamedType, isValidHaneulAddress, isValidHaneulObjectId } from '@haneullabs/sui/utils';
 import type { PaymentUriParams } from './types.js';
 import { PaymentKitUriError } from './error.js';
 import { SUI_PAYMENT_KIT_PROTOCOL } from './constants.js';
@@ -27,7 +27,7 @@ const isValidCoinType = (coinType: string) => {
  * const uri = createPaymentTransactionUri({
  *   receiverAddress: "0x...",
  *   amount: "10000000", (0.01 SUI)
- *   coinType: "0x2::sui::SUI",
+ *   coinType: "0x2::haneul::HANEUL",
  *   nonce: <nonce>,
  *   registryName: "my-registry"
  * });
@@ -38,10 +38,10 @@ export const createPaymentTransactionUri = (params: PaymentUriParams): string =>
 
 	const uri = new URL(SUI_PAYMENT_KIT_PROTOCOL);
 
-	if (isValidSuiAddress(receiverAddress)) {
+	if (isValidHaneulAddress(receiverAddress)) {
 		uri.searchParams.append('receiver', receiverAddress);
 	} else {
-		throw new PaymentKitUriError('Invalid Sui address');
+		throw new PaymentKitUriError('Invalid Haneul address');
 	}
 
 	if (isValidAmount(amount)) {
@@ -63,10 +63,10 @@ export const createPaymentTransactionUri = (params: PaymentUriParams): string =>
 	}
 
 	if (registryId) {
-		if (isValidSuiObjectId(registryId)) {
+		if (isValidHaneulObjectId(registryId)) {
 			uri.searchParams.append('registry', registryId);
 		} else {
-			throw new PaymentKitUriError('Invalid Sui Object Id for Registry Id');
+			throw new PaymentKitUriError('Invalid Haneul Object Id for Registry Id');
 		}
 	}
 
@@ -118,7 +118,7 @@ export const parsePaymentTransactionUri = (uri: string): PaymentUriParams => {
 	}
 
 	// Validate the receiver address
-	if (!isValidSuiAddress(receiver)) {
+	if (!isValidHaneulAddress(receiver)) {
 		throw new PaymentKitUriError('Invalid URI: Receiver address is not valid');
 	}
 
@@ -144,7 +144,7 @@ export const parsePaymentTransactionUri = (uri: string): PaymentUriParams => {
 	let registryName: string | undefined;
 
 	if (registry) {
-		if (isValidSuiObjectId(registry)) {
+		if (isValidHaneulObjectId(registry)) {
 			registryId = registry;
 		} else {
 			registryName = registry;

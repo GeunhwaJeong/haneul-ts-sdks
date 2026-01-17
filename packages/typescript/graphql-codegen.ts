@@ -23,7 +23,7 @@ const config: CodegenConfig = {
 					Base64: 'string',
 					DateTime: 'string',
 					ObjectID: 'string',
-					SuiAddress: 'string',
+					HaneulAddress: 'string',
 					JSON: 'unknown',
 					UInt53: 'number',
 					MoveData: '../types.js#MoveData',

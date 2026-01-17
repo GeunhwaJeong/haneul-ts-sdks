@@ -21,7 +21,7 @@ export interface AwsKmsSignerOptions {
 }
 
 /**
- * Aws KMS Signer integrates AWS Key Management Service (KMS) with the Sui blockchain
+ * Aws KMS Signer integrates AWS Key Management Service (KMS) with the Haneul blockchain
  * to provide signing capabilities using AWS-managed cryptographic keys.
  */
 export class AwsKmsSigner extends Signer {

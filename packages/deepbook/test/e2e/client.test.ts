@@ -11,7 +11,7 @@ import {
 	executeTransaction,
 	setupDeepbookAccount,
 	setupPool,
-	setupSuiClient,
+	setupHaneulClient,
 	TestToolbox,
 } from './setup';
 
@@ -26,7 +26,7 @@ describe('Interacting with the pool', () => {
 	let accountCapId2: string;
 
 	beforeAll(async () => {
-		toolbox = await setupSuiClient();
+		toolbox = await setupHaneulClient();
 		pool = await setupPool(toolbox);
 		accountCapId = await setupDeepbookAccount(toolbox);
 		accountCapId2 = await setupDeepbookAccount(toolbox);
@@ -191,7 +191,7 @@ describe('Interacting with the pool', () => {
 	it('Test parsing sui coin id', async () => {
 		const deepbook = new DeepBookClient(toolbox.client, accountCapId);
 		const resp = await toolbox.client.getCoins({
-			owner: toolbox.keypair.getPublicKey().toSuiAddress(),
+			owner: toolbox.keypair.getPublicKey().toHaneulAddress(),
 			coinType: pool.baseAsset,
 		});
 		const baseCoin = resp.data[0].coinObjectId;

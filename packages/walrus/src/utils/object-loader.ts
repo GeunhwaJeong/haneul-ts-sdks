@@ -4,23 +4,23 @@
 import type { BcsType } from '@haneullabs/bcs';
 import { pureBcsSchemaFromTypeName } from '@haneullabs/sui/bcs';
 import type { PureTypeName, ShapeFromPureTypeName } from '@haneullabs/sui/bcs';
-import type { SuiObjectData } from '@haneullabs/sui/client';
+import type { HaneulObjectData } from '@haneullabs/sui/client';
 import type {
 	Experimental_BaseClient,
-	Experimental_SuiClientTypes,
+	Experimental_HaneulClientTypes,
 } from '@haneullabs/sui/experimental';
 import { deriveDynamicFieldID } from '@haneullabs/sui/utils';
 import DataLoader from 'dataloader';
 import { Field } from './bcs.js';
 
-export class SuiObjectDataLoader extends DataLoader<
+export class HaneulObjectDataLoader extends DataLoader<
 	string,
-	Experimental_SuiClientTypes.ObjectResponse
+	Experimental_HaneulClientTypes.ObjectResponse
 > {
-	#dynamicFieldCache = new Map<string, Map<string, Experimental_SuiClientTypes.ObjectResponse>>();
-	constructor(suiClient: Experimental_BaseClient) {
+	#dynamicFieldCache = new Map<string, Map<string, Experimental_HaneulClientTypes.ObjectResponse>>();
+	constructor(haneulClient: Experimental_BaseClient) {
 		super(async (ids: readonly string[]) => {
-			const { objects } = await suiClient.core.getObjects({
+			const { objects } = await haneulClient.core.getObjects({
 				objectIds: ids as string[],
 			});
 
@@ -28,7 +28,7 @@ export class SuiObjectDataLoader extends DataLoader<
 		});
 	}
 
-	override async load<T = SuiObjectData>(id: string, schema?: BcsType<T, any>): Promise<T> {
+	override async load<T = HaneulObjectData>(id: string, schema?: BcsType<T, any>): Promise<T> {
 		const data = await super.load(id);
 
 		if (schema) {
@@ -38,7 +38,7 @@ export class SuiObjectDataLoader extends DataLoader<
 		return data as T;
 	}
 
-	override async loadMany<T = SuiObjectData>(
+	override async loadMany<T = HaneulObjectData>(
 		ids: string[],
 		schema?: BcsType<T, any>,
 	): Promise<(T | Error)[]> {

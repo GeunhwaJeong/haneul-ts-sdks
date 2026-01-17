@@ -3,9 +3,9 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { getFullnodeUrl, SuiClient } from '../../src/client';
+import { getFullnodeUrl, HaneulClient } from '../../src/client';
 import { namedPackagesPlugin, Transaction } from '../../src/transactions';
-import { normalizeSuiAddress } from '../../src/utils';
+import { normalizeHaneulAddress } from '../../src/utils';
 import { extractMvrTypes } from '../../src/experimental/mvr';
 
 const MAINNET_URL = 'https://mainnet.mvr.haneullabs.com';
@@ -51,7 +51,7 @@ const localCachePlugin = namedPackagesPlugin({
 		types: {
 			'@framework/sui::vec_set::VecSet': '0x2::vec_set::VecSet',
 			'@framework/std::string::String': '0x1::string::String',
-			'@framework/sui::sui::SUI': '0x2::sui::SUI',
+			'@framework/sui::haneul::HANEUL': '0x2::haneul::HANEUL',
 		},
 	},
 });
@@ -64,7 +64,7 @@ const localMvrOverrides = {
 	types: {
 		'@framework/sui::vec_set::VecSet': '0x2::vec_set::VecSet',
 		'@framework/std::string::String': '0x1::string::String',
-		'@framework/sui::sui::SUI': '0x2::sui::SUI',
+		'@framework/sui::haneul::HANEUL': '0x2::haneul::HANEUL',
 	},
 };
 
@@ -98,12 +98,12 @@ describe.concurrent('Name Resolution Plugin', () => {
 		});
 
 		const json = JSON.parse(
-			await transaction.toJSON({ client: new SuiClient({ url: getFullnodeUrl('testnet') }) }),
+			await transaction.toJSON({ client: new HaneulClient({ url: getFullnodeUrl('testnet') }) }),
 		);
 
-		expect(json.commands[0].MoveCall.package).toBe(normalizeSuiAddress('0x1'));
+		expect(json.commands[0].MoveCall.package).toBe(normalizeHaneulAddress('0x1'));
 		expect(json.commands[1].MoveCall.typeArguments[0]).toBe(`0x1::string::String`);
-		expect(json.commands[2].MoveCall.package).toBe(normalizeSuiAddress('0x1'));
+		expect(json.commands[2].MoveCall.package).toBe(normalizeHaneulAddress('0x1'));
 		expect(json.commands[2].MoveCall.typeArguments[0]).toBe(
 			`0x1::vector::empty<0x1::string::String>`,
 		);
@@ -136,10 +136,10 @@ describe.concurrent('Name Resolution Plugin (With client overrides)', () => {
 
 		const zeroCoin = transaction.moveCall({
 			target: '@framework/sui::coin::zero',
-			typeArguments: ['@framework/sui::sui::SUI'],
+			typeArguments: ['@framework/sui::haneul::HANEUL'],
 		});
 
-		transaction.transferObjects([zeroCoin], normalizeSuiAddress('0x2'));
+		transaction.transferObjects([zeroCoin], normalizeHaneulAddress('0x2'));
 
 		// Types are composed here, without needing any API calls, even if we do not have the
 		// full type in the cache.
@@ -157,10 +157,10 @@ describe.concurrent('Name Resolution Plugin (With client overrides)', () => {
 
 		const zeroCoin = transaction.moveCall({
 			target: '@framework/sui::coin::zero',
-			typeArguments: ['@framework/sui::sui::SUI'],
+			typeArguments: ['@framework/sui::haneul::HANEUL'],
 		});
 
-		transaction.transferObjects([zeroCoin], normalizeSuiAddress('0x2'));
+		transaction.transferObjects([zeroCoin], normalizeHaneulAddress('0x2'));
 
 		// Types are composed here, without needing any API calls, even if we do not have the
 		// full type in the cache.
@@ -181,10 +181,10 @@ describe.concurrent('Name Resolution Plugin (Local Cache)', () => {
 
 		const zeroCoin = transaction.moveCall({
 			target: '@framework/sui::coin::zero',
-			typeArguments: ['@framework/sui::sui::SUI'],
+			typeArguments: ['@framework/sui::haneul::HANEUL'],
 		});
 
-		transaction.transferObjects([zeroCoin], normalizeSuiAddress('0x2'));
+		transaction.transferObjects([zeroCoin], normalizeHaneulAddress('0x2'));
 
 		// Types are composed here, without needing any API calls, even if we do not have the
 		// full type in the cache.
@@ -203,10 +203,10 @@ describe.concurrent('Name Resolution Plugin (Local Cache)', () => {
 
 		const zeroCoin = transaction.moveCall({
 			target: '@framework/sui::coin::zero',
-			typeArguments: ['@framework/sui::sui::SUI'],
+			typeArguments: ['@framework/sui::haneul::HANEUL'],
 		});
 
-		transaction.transferObjects([zeroCoin], normalizeSuiAddress('0x2'));
+		transaction.transferObjects([zeroCoin], normalizeHaneulAddress('0x2'));
 
 		// Types are composed here, without needing any API calls, even if we do not have the
 		// full type in the cache.
@@ -248,7 +248,7 @@ describe.concurrent('Utility functions', () => {
 				],
 			},
 			{
-				input: ['u64', '0x2::balance::Balance<0x2::sui::SUI>'],
+				input: ['u64', '0x2::balance::Balance<0x2::haneul::HANEUL>'],
 				output: [],
 			},
 		];
@@ -312,10 +312,10 @@ const simplePtb = async (network: 'mainnet' | 'testnet') => {
 	// a mix of addresses & names work too (in the same PTB).
 	const coin = transaction.moveCall({
 		target: '0x2::coin::zero',
-		typeArguments: ['0x2::sui::SUI'],
+		typeArguments: ['0x2::haneul::HANEUL'],
 	});
 
-	transaction.transferObjects([coin], normalizeSuiAddress('0x2'));
+	transaction.transferObjects([coin], normalizeHaneulAddress('0x2'));
 
 	const res = await dryRun(transaction, network);
 	expect(res.effects.status.status).toEqual('success');
@@ -346,7 +346,7 @@ const dryRun = async (
 	network: 'mainnet' | 'testnet',
 	withOverrides = false,
 ) => {
-	const client = new SuiClient({
+	const client = new HaneulClient({
 		url: getFullnodeUrl(network),
 		mvr: withOverrides
 			? {
@@ -355,7 +355,7 @@ const dryRun = async (
 			: undefined,
 	});
 
-	transaction.setSender(normalizeSuiAddress('0x2'));
+	transaction.setSender(normalizeHaneulAddress('0x2'));
 
 	return client.dryRunTransactionBlock({ transactionBlock: await transaction.build({ client }) });
 };

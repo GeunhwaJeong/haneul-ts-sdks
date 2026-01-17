@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi, Experimental_SuiClientTypes } from '@haneullabs/sui/experimental';
+import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
 import { registerEnokiWallets } from './register.js';
 import type { RegisterEnokiWalletsOptions } from './types.js';
 
@@ -14,8 +14,8 @@ export function enokiWalletsInitializer(
 			networks,
 			getClient,
 		}: {
-			networks: readonly Experimental_SuiClientTypes.Network[];
-			getClient: (network?: Experimental_SuiClientTypes.Network) => ClientWithCoreApi;
+			networks: readonly Experimental_HaneulClientTypes.Network[];
+			getClient: (network?: Experimental_HaneulClientTypes.Network) => ClientWithCoreApi;
 		}) {
 			const { unregister } = registerEnokiWallets({
 				...options,

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createDAppKit } from '@haneullabs/dapp-kit-core';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
 import '@haneullabs/dapp-kit-core/web';
 
@@ -13,7 +13,7 @@ const dAppKit = createDAppKit({
 	networks: ['mainnet', 'testnet'],
 	defaultNetwork: 'testnet',
 	createClient(network) {
-		return new SuiClient({ network, url: getFullnodeUrl(network) });
+		return new HaneulClient({ network, url: getFullnodeUrl(network) });
 	},
 });
 

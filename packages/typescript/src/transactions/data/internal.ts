@@ -24,7 +24,7 @@ import {
 	unknown,
 } from 'valibot';
 
-import { isValidSuiAddress, normalizeSuiAddress } from '../../utils/sui-types.js';
+import { isValidHaneulAddress, normalizeHaneulAddress } from '../../utils/haneul-types.js';
 import type { Simplify } from '@haneullabs/utils';
 
 type EnumSchemaInput<T extends Record<string, GenericSchema<any>>> = EnumInputShape<
@@ -59,12 +59,12 @@ export function safeEnum<T extends Record<string, GenericSchema<any>>>(options: 
 	) as EnumSchema<T>;
 }
 
-export const SuiAddress = pipe(
+export const HaneulAddress = pipe(
 	string(),
-	transform((value) => normalizeSuiAddress(value)),
-	check(isValidSuiAddress),
+	transform((value) => normalizeHaneulAddress(value)),
+	check(isValidHaneulAddress),
 );
-export const ObjectID = SuiAddress;
+export const ObjectID = HaneulAddress;
 export const BCSBytes = string();
 export const JsonU64 = pipe(
 	union([string(), pipe(number(), integer())]),
@@ -78,16 +78,16 @@ export const JsonU64 = pipe(
 		}
 	}, 'Invalid u64'),
 );
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/base_types.rs#L138
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/base_types.rs#L138
 // Implemented as a tuple in rust
 export const ObjectRefSchema = object({
-	objectId: SuiAddress,
+	objectId: HaneulAddress,
 	version: JsonU64,
 	digest: string(),
 });
 export type ObjectRef = InferOutput<typeof ObjectRefSchema>;
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L690-L702
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L690-L702
 export const ArgumentSchema = pipe(
 	union([
 		object({ GasCoin: literal(true) }),
@@ -117,11 +117,11 @@ export const ArgumentSchema = pipe(
 
 export type Argument = InferOutput<typeof ArgumentSchema>;
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L1387-L1392
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L1387-L1392
 export const GasDataSchema = object({
 	budget: nullable(JsonU64),
 	price: nullable(JsonU64),
-	owner: nullable(SuiAddress),
+	owner: nullable(HaneulAddress),
 	payment: nullable(array(ObjectRefSchema)),
 });
 export type GasData = InferOutput<typeof GasDataSchema>;
@@ -185,7 +185,7 @@ export const OpenMoveTypeSignatureSchema = object({
 });
 export type OpenMoveTypeSignature = InferOutput<typeof OpenMoveTypeSignatureSchema>;
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L707-L718
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L707-L718
 const ProgrammableMoveCallSchema = object({
 	package: ObjectID,
 	module: string(),
@@ -203,7 +203,7 @@ export const $Intent = object({
 	data: record(string(), unknown()),
 });
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L657-L685
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L657-L685
 export const CommandSchema = safeEnum({
 	MoveCall: ProgrammableMoveCallSchema,
 	TransferObjects: object({
@@ -277,7 +277,7 @@ export type Command<Arg = Argument> = EnumOutputShape<{
 	};
 }>;
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L102-L114
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L102-L114
 export const ObjectArgSchema = safeEnum({
 	ImmOrOwnedObject: ObjectRefSchema,
 	SharedObject: object({
@@ -289,7 +289,7 @@ export const ObjectArgSchema = safeEnum({
 	Receiving: ObjectRefSchema,
 });
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L75-L80
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L75-L80
 const CallArgSchema = safeEnum({
 	Object: ObjectArgSchema,
 	Pure: object({
@@ -324,7 +324,7 @@ export type TransactionExpiration = InferOutput<typeof TransactionExpiration>;
 
 export const TransactionDataSchema = object({
 	version: literal(2),
-	sender: nullish(SuiAddress),
+	sender: nullish(HaneulAddress),
 	expiration: nullish(TransactionExpiration),
 	gasData: GasDataSchema,
 	inputs: array(CallArgSchema),

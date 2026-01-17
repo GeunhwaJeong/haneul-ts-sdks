@@ -2,19 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { serve } from '@hono/node-server';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Hono } from 'hono';
 
 import { WalrusClient } from '../../src/index.js';
 import { getFundedKeypair } from '../funded-keypair.js';
 
-const suiClient = new SuiClient({
+const haneulClient = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 
 const walrusClient = new WalrusClient({
 	network: 'testnet',
-	suiClient,
+	haneulClient,
 });
 
 async function startServer() {
@@ -36,7 +36,7 @@ async function startServer() {
 			deletable,
 			epochs,
 			signer: keypair,
-			owner: sendObjectTo ?? keypair.toSuiAddress(),
+			owner: sendObjectTo ?? keypair.toHaneulAddress(),
 		});
 
 		// Match the format of the rust based aggregator

@@ -39,7 +39,7 @@ describe.runIf(E2E_GCP_KMS_TEST_ENABLE === 'true')('GCP KMS signer E2E testing',
 	it('should retrieve the correct sui address', async () => {
 		const publicKey = signer.getPublicKey();
 
-		expect(publicKey.toSuiAddress()).toEqual(
+		expect(publicKey.toHaneulAddress()).toEqual(
 			'0x2ac50bf55beac50aa004c6ac1f46a058e21c86980303d87b8e3b3d3fa7b8d9eb',
 		);
 	});

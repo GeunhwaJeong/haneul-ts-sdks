@@ -52,7 +52,7 @@ export function BenchmarkSettingsForm({
 		}
 		try {
 			const keypair = Ed25519Keypair.fromSecretKey(settings.secretKey);
-			return [keypair, keypair.toSuiAddress()] as const;
+			return [keypair, keypair.toHaneulAddress()] as const;
 		} catch {
 			return [null, null];
 		}

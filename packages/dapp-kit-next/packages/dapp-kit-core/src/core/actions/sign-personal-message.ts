@@ -2,17 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DAppKitStores } from '../store.js';
-import { SuiSignPersonalMessage } from '@haneullabs/wallet-standard';
+import { HaneulSignPersonalMessage } from '@haneullabs/wallet-standard';
 import type {
-	SuiSignPersonalMessageFeature,
-	SuiSignPersonalMessageInput,
+	HaneulSignPersonalMessageFeature,
+	HaneulSignPersonalMessageInput,
 } from '@haneullabs/wallet-standard';
 import { getWalletAccountForUiWalletAccount_DO_NOT_USE_OR_YOU_WILL_BE_FIRED as getWalletAccountForUiWalletAccount } from '@wallet-standard/ui-registry';
 import { WalletNotConnectedError } from '../../utils/errors.js';
 import { getChain } from '../../utils/networks.js';
 import { getAccountFeature } from '../../utils/wallets.js';
 
-export type SignPersonalMessageArgs = Omit<SuiSignPersonalMessageInput, 'account' | 'chain'>;
+export type SignPersonalMessageArgs = Omit<HaneulSignPersonalMessageInput, 'account' | 'chain'>;
 
 export function signPersonalMessageCreator({ $connection, $currentNetwork }: DAppKitStores) {
 	/**
@@ -30,8 +30,8 @@ export function signPersonalMessageCreator({ $connection, $currentNetwork }: DAp
 		const signPersonalMessageFeature = getAccountFeature({
 			account: account,
 			chain,
-			featureName: SuiSignPersonalMessage,
-		}) as SuiSignPersonalMessageFeature[typeof SuiSignPersonalMessage];
+			featureName: HaneulSignPersonalMessage,
+		}) as HaneulSignPersonalMessageFeature[typeof HaneulSignPersonalMessage];
 
 		return await signPersonalMessageFeature.signPersonalMessage({
 			...standardArgs,

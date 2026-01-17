@@ -3,7 +3,7 @@
 
 import { bcs } from '@haneullabs/bcs';
 
-import { Address, ObjectDigest, Owner, SuiObjectRef } from './bcs.js';
+import { Address, ObjectDigest, Owner, HaneulObjectRef } from './bcs.js';
 
 const PackageUpgradeError = bcs.enum('PackageUpgradeError', {
 	UnableToFetchPackage: bcs.struct('UnableToFetchPackage', { packageId: Address }),
@@ -139,15 +139,15 @@ const TransactionEffectsV1 = bcs.struct('TransactionEffectsV1', {
 	executedEpoch: bcs.u64(),
 	gasUsed: GasCostSummary,
 	modifiedAtVersions: bcs.vector(bcs.tuple([Address, bcs.u64()])),
-	sharedObjects: bcs.vector(SuiObjectRef),
+	sharedObjects: bcs.vector(HaneulObjectRef),
 	transactionDigest: ObjectDigest,
-	created: bcs.vector(bcs.tuple([SuiObjectRef, Owner])),
-	mutated: bcs.vector(bcs.tuple([SuiObjectRef, Owner])),
-	unwrapped: bcs.vector(bcs.tuple([SuiObjectRef, Owner])),
-	deleted: bcs.vector(SuiObjectRef),
-	unwrappedThenDeleted: bcs.vector(SuiObjectRef),
-	wrapped: bcs.vector(SuiObjectRef),
-	gasObject: bcs.tuple([SuiObjectRef, Owner]),
+	created: bcs.vector(bcs.tuple([HaneulObjectRef, Owner])),
+	mutated: bcs.vector(bcs.tuple([HaneulObjectRef, Owner])),
+	unwrapped: bcs.vector(bcs.tuple([HaneulObjectRef, Owner])),
+	deleted: bcs.vector(HaneulObjectRef),
+	unwrappedThenDeleted: bcs.vector(HaneulObjectRef),
+	wrapped: bcs.vector(HaneulObjectRef),
+	gasObject: bcs.tuple([HaneulObjectRef, Owner]),
 	eventsDigest: bcs.option(ObjectDigest),
 	dependencies: bcs.vector(ObjectDigest),
 });

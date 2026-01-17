@@ -4,17 +4,17 @@ import { fromBase58, toBase64, toHex } from '@haneullabs/bcs';
 
 import type { Signer } from '../cryptography/index.js';
 import { Experimental_BaseClient } from '../experimental/client.js';
-import type { Experimental_SuiClientTypes } from '../experimental/types.js';
+import type { Experimental_HaneulClientTypes } from '../experimental/types.js';
 import type { Transaction } from '../transactions/Transaction.js';
 import { isTransaction } from '../transactions/Transaction.js';
 import {
-	isValidSuiAddress,
-	isValidSuiObjectId,
+	isValidHaneulAddress,
+	isValidHaneulObjectId,
 	isValidTransactionDigest,
-	normalizeSuiAddress,
-	normalizeSuiObjectId,
-} from '../utils/sui-types.js';
-import { normalizeSuiNSName } from '../utils/suins.js';
+	normalizeHaneulAddress,
+	normalizeHaneulObjectId,
+} from '../utils/haneul-types.js';
+import { normalizeHaneulNSName } from '../utils/haneulns.js';
 import { JsonRpcHTTPTransport } from './http-transport.js';
 import type { JsonRpcTransport } from './http-transport.js';
 import type {
@@ -47,7 +47,7 @@ import type {
 	GetDynamicFieldObjectParams,
 	GetDynamicFieldsParams,
 	GetLatestCheckpointSequenceNumberParams,
-	GetLatestSuiSystemStateParams,
+	GetLatestHaneulSystemStateParams,
 	GetMoveFunctionArgTypesParams,
 	GetNormalizedMoveFunctionParams,
 	GetNormalizedMoveModuleParams,
@@ -79,17 +79,17 @@ import type {
 	ResolveNameServiceNamesParams,
 	SubscribeEventParams,
 	SubscribeTransactionParams,
-	SuiEvent,
-	SuiMoveFunctionArgType,
+	HaneulEvent,
+	HaneulMoveFunctionArgType,
 	SuiMoveNormalizedFunction,
 	SuiMoveNormalizedModule,
 	SuiMoveNormalizedModules,
 	SuiMoveNormalizedStruct,
-	SuiObjectResponse,
-	SuiObjectResponseQuery,
-	SuiSystemStateSummary,
-	SuiTransactionBlockResponse,
-	SuiTransactionBlockResponseQuery,
+	HaneulObjectResponse,
+	HaneulObjectResponseQuery,
+	HaneulSystemStateSummary,
+	HaneulTransactionBlockResponse,
+	HaneulTransactionBlockResponseQuery,
 	TransactionEffects,
 	TryGetPastObjectParams,
 	Unsubscribe,
@@ -113,12 +113,12 @@ export interface OrderArguments {
 }
 
 /**
- * Configuration options for the SuiClient
+ * Configuration options for the HaneulClient
  * You must provide either a `url` or a `transport`
  */
-export type SuiJsonRpcClientOptions = NetworkOrTransport & {
-	network?: Experimental_SuiClientTypes.Network;
-	mvr?: Experimental_SuiClientTypes.MvrOptions;
+export type HaneulJsonRpcClientOptions = NetworkOrTransport & {
+	network?: Experimental_HaneulClientTypes.Network;
+	mvr?: Experimental_HaneulClientTypes.MvrOptions;
 };
 
 type NetworkOrTransport =
@@ -131,15 +131,15 @@ type NetworkOrTransport =
 			url?: never;
 	  };
 
-const SUI_CLIENT_BRAND = Symbol.for('@haneullabs/SuiClient') as never;
+const SUI_CLIENT_BRAND = Symbol.for('@haneullabs/HaneulClient') as never;
 
-export function isSuiJsonRpcClient(client: unknown): client is SuiJsonRpcClient {
+export function isHaneulJsonRpcClient(client: unknown): client is HaneulJsonRpcClient {
 	return (
 		typeof client === 'object' && client !== null && (client as any)[SUI_CLIENT_BRAND] === true
 	);
 }
 
-export class SuiJsonRpcClient extends Experimental_BaseClient {
+export class HaneulJsonRpcClient extends Experimental_BaseClient {
 	core: JSONRpcCoreClient;
 	jsonRpc = this;
 	protected transport: JsonRpcTransport;
@@ -149,11 +149,11 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	}
 
 	/**
-	 * Establish a connection to a Sui RPC endpoint
+	 * Establish a connection to a Haneul RPC endpoint
 	 *
 	 * @param options configuration options for the API Client
 	 */
-	constructor(options: SuiJsonRpcClientOptions) {
+	constructor(options: HaneulJsonRpcClientOptions) {
 		super({ network: options.network ?? 'unknown' });
 		this.transport = options.transport ?? new JsonRpcHTTPTransport({ url: options.url });
 		this.core = new JSONRpcCoreClient({
@@ -182,8 +182,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 		limit,
 		signal,
 	}: GetCoinsParams): Promise<PaginatedCoins> {
-		if (!owner || !isValidSuiAddress(normalizeSuiAddress(owner))) {
-			throw new Error('Invalid Sui address');
+		if (!owner || !isValidHaneulAddress(normalizeHaneulAddress(owner))) {
+			throw new Error('Invalid Haneul address');
 		}
 
 		if (coinType && hasMvrName(coinType)) {
@@ -205,8 +205,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	 * Get all Coin objects owned by an address.
 	 */
 	async getAllCoins(input: GetAllCoinsParams): Promise<PaginatedCoins> {
-		if (!input.owner || !isValidSuiAddress(normalizeSuiAddress(input.owner))) {
-			throw new Error('Invalid Sui address');
+		if (!input.owner || !isValidHaneulAddress(normalizeHaneulAddress(input.owner))) {
+			throw new Error('Invalid Haneul address');
 		}
 
 		return await this.transport.request({
@@ -220,8 +220,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	 * Get the total coin balance for one coin type, owned by the address owner.
 	 */
 	async getBalance({ owner, coinType, signal }: GetBalanceParams): Promise<CoinBalance> {
-		if (!owner || !isValidSuiAddress(normalizeSuiAddress(owner))) {
-			throw new Error('Invalid Sui address');
+		if (!owner || !isValidHaneulAddress(normalizeHaneulAddress(owner))) {
+			throw new Error('Invalid Haneul address');
 		}
 
 		if (coinType && hasMvrName(coinType)) {
@@ -243,8 +243,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	 * Get the total coin balance for all coin types, owned by the address owner.
 	 */
 	async getAllBalances(input: GetAllBalancesParams): Promise<CoinBalance[]> {
-		if (!input.owner || !isValidSuiAddress(normalizeSuiAddress(input.owner))) {
-			throw new Error('Invalid Sui address');
+		if (!input.owner || !isValidHaneulAddress(normalizeHaneulAddress(input.owner))) {
+			throw new Error('Invalid Haneul address');
 		}
 		return await this.transport.request({
 			method: 'suix_getAllBalances',
@@ -312,7 +312,7 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 		module,
 		function: fn,
 		signal,
-	}: GetMoveFunctionArgTypesParams): Promise<SuiMoveFunctionArgType[]> {
+	}: GetMoveFunctionArgTypesParams): Promise<HaneulMoveFunctionArgType[]> {
 		if (pkg && isValidNamedPackage(pkg)) {
 			pkg = (
 				await this.core.mvr.resolvePackage({
@@ -426,8 +426,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	 * Get all objects owned by an address
 	 */
 	async getOwnedObjects(input: GetOwnedObjectsParams): Promise<PaginatedObjectsResponse> {
-		if (!input.owner || !isValidSuiAddress(normalizeSuiAddress(input.owner))) {
-			throw new Error('Invalid Sui address');
+		if (!input.owner || !isValidHaneulAddress(normalizeHaneulAddress(input.owner))) {
+			throw new Error('Invalid Haneul address');
 		}
 
 		const filter = input.filter
@@ -460,7 +460,7 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 				{
 					filter,
 					options: input.options,
-				} as SuiObjectResponseQuery,
+				} as HaneulObjectResponseQuery,
 				input.cursor,
 				input.limit,
 			],
@@ -471,9 +471,9 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	/**
 	 * Get details about an object
 	 */
-	async getObject(input: GetObjectParams): Promise<SuiObjectResponse> {
-		if (!input.id || !isValidSuiObjectId(normalizeSuiObjectId(input.id))) {
-			throw new Error('Invalid Sui Object id');
+	async getObject(input: GetObjectParams): Promise<HaneulObjectResponse> {
+		if (!input.id || !isValidHaneulObjectId(normalizeHaneulObjectId(input.id))) {
+			throw new Error('Invalid Haneul Object id');
 		}
 		return await this.transport.request({
 			method: 'sui_getObject',
@@ -493,10 +493,10 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	/**
 	 * Batch get details about a list of objects. If any of the object ids are duplicates the call will fail
 	 */
-	async multiGetObjects(input: MultiGetObjectsParams): Promise<SuiObjectResponse[]> {
+	async multiGetObjects(input: MultiGetObjectsParams): Promise<HaneulObjectResponse[]> {
 		input.ids.forEach((id) => {
-			if (!id || !isValidSuiObjectId(normalizeSuiObjectId(id))) {
-				throw new Error(`Invalid Sui Object id ${id}`);
+			if (!id || !isValidHaneulObjectId(normalizeHaneulObjectId(id))) {
+				throw new Error(`Invalid Haneul Object id ${id}`);
 			}
 		});
 		const hasDuplicates = input.ids.length !== new Set(input.ids).size;
@@ -541,7 +541,7 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 				{
 					filter,
 					options,
-				} as SuiTransactionBlockResponseQuery,
+				} as HaneulTransactionBlockResponseQuery,
 				cursor,
 				limit,
 				(order || 'descending') === 'descending',
@@ -552,7 +552,7 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 
 	async getTransactionBlock(
 		input: GetTransactionBlockParams,
-	): Promise<SuiTransactionBlockResponse> {
+	): Promise<HaneulTransactionBlockResponse> {
 		if (!isValidTransactionDigest(input.digest)) {
 			throw new Error('Invalid Transaction digest');
 		}
@@ -565,7 +565,7 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 
 	async multiGetTransactionBlocks(
 		input: MultiGetTransactionBlocksParams,
-	): Promise<SuiTransactionBlockResponse[]> {
+	): Promise<HaneulTransactionBlockResponse[]> {
 		input.digests.forEach((d) => {
 			if (!isValidTransactionDigest(d)) {
 				throw new Error(`Invalid Transaction digest ${d}`);
@@ -590,8 +590,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 		options,
 		requestType,
 		signal,
-	}: ExecuteTransactionBlockParams): Promise<SuiTransactionBlockResponse> {
-		const result: SuiTransactionBlockResponse = await this.transport.request({
+	}: ExecuteTransactionBlockParams): Promise<HaneulTransactionBlockResponse> {
+		const result: HaneulTransactionBlockResponse = await this.transport.request({
 			method: 'sui_executeTransactionBlock',
 			params: [
 				typeof transactionBlock === 'string' ? transactionBlock : toBase64(transactionBlock),
@@ -624,13 +624,13 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	} & Omit<
 		ExecuteTransactionBlockParams,
 		'transactionBlock' | 'signature'
-	>): Promise<SuiTransactionBlockResponse> {
+	>): Promise<HaneulTransactionBlockResponse> {
 		let transactionBytes;
 
 		if (transaction instanceof Uint8Array) {
 			transactionBytes = transaction;
 		} else {
-			transaction.setSenderIfNotSet(signer.toSuiAddress());
+			transaction.setSenderIfNotSet(signer.toHaneulAddress());
 			transactionBytes = await transaction.build({ client: this });
 		}
 
@@ -672,8 +672,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	 * Return the delegated stakes for an address
 	 */
 	async getStakes(input: GetStakesParams): Promise<DelegatedStake[]> {
-		if (!input.owner || !isValidSuiAddress(normalizeSuiAddress(input.owner))) {
-			throw new Error('Invalid Sui address');
+		if (!input.owner || !isValidHaneulAddress(normalizeHaneulAddress(input.owner))) {
+			throw new Error('Invalid Haneul address');
 		}
 		return await this.transport.request({
 			method: 'suix_getStakes',
@@ -687,8 +687,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	 */
 	async getStakesByIds(input: GetStakesByIdsParams): Promise<DelegatedStake[]> {
 		input.stakedSuiIds.forEach((id) => {
-			if (!id || !isValidSuiObjectId(normalizeSuiObjectId(id))) {
-				throw new Error(`Invalid Sui Stake id ${id}`);
+			if (!id || !isValidHaneulObjectId(normalizeHaneulObjectId(id))) {
+				throw new Error(`Invalid Haneul Stake id ${id}`);
 			}
 		});
 		return await this.transport.request({
@@ -701,11 +701,11 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	/**
 	 * Return the latest system state content.
 	 */
-	async getLatestSuiSystemState({
+	async getLatestHaneulSystemState({
 		signal,
-	}: GetLatestSuiSystemStateParams = {}): Promise<SuiSystemStateSummary> {
+	}: GetLatestHaneulSystemStateParams = {}): Promise<HaneulSystemStateSummary> {
 		return await this.transport.request({
-			method: 'suix_getLatestSuiSystemState',
+			method: 'suix_getLatestHaneulSystemState',
 			params: [],
 			signal,
 		});
@@ -775,7 +775,7 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	async subscribeEvent(
 		input: SubscribeEventParams & {
 			/** function to run when we receive a notification of a new event matching the filter */
-			onMessage: (event: SuiEvent) => void;
+			onMessage: (event: HaneulEvent) => void;
 		},
 	): Promise<Unsubscribe> {
 		return this.transport.subscribe({
@@ -859,8 +859,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	 * Return the list of dynamic field objects owned by an object
 	 */
 	async getDynamicFields(input: GetDynamicFieldsParams): Promise<DynamicFieldPage> {
-		if (!input.parentId || !isValidSuiObjectId(normalizeSuiObjectId(input.parentId))) {
-			throw new Error('Invalid Sui Object id');
+		if (!input.parentId || !isValidHaneulObjectId(normalizeHaneulObjectId(input.parentId))) {
+			throw new Error('Invalid Haneul Object id');
 		}
 		return await this.transport.request({
 			method: 'suix_getDynamicFields',
@@ -872,7 +872,7 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 	/**
 	 * Return the dynamic field object information for a specified object
 	 */
-	async getDynamicFieldObject(input: GetDynamicFieldObjectParams): Promise<SuiObjectResponse> {
+	async getDynamicFieldObject(input: GetDynamicFieldObjectParams): Promise<HaneulObjectResponse> {
 		return await this.transport.request({
 			method: 'suix_getDynamicFieldObject',
 			params: [input.parentId, input.name],
@@ -1049,7 +1049,7 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 		return {
 			hasNextPage,
 			nextCursor,
-			data: data.map((name) => normalizeSuiNSName(name, format)),
+			data: data.map((name) => normalizeHaneulNSName(name, format)),
 		};
 	}
 
@@ -1088,8 +1088,8 @@ export class SuiJsonRpcClient extends Experimental_BaseClient {
 		/** The amount of time to wait between checks for the transaction block. Defaults to 2 seconds. */
 		pollInterval?: number;
 	} & Parameters<
-		SuiJsonRpcClient['getTransactionBlock']
-	>[0]): Promise<SuiTransactionBlockResponse> {
+		HaneulJsonRpcClient['getTransactionBlock']
+	>[0]): Promise<HaneulTransactionBlockResponse> {
 		const timeoutSignal = AbortSignal.timeout(timeout);
 		const timeoutPromise = new Promise((_, reject) => {
 			timeoutSignal.addEventListener('abort', () => reject(timeoutSignal.reason));

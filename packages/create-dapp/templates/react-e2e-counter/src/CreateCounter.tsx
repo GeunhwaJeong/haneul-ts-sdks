@@ -1,6 +1,6 @@
 import { Transaction } from "@haneullabs/sui/transactions";
 import { Button, Container } from "@radix-ui/themes";
-import { useSignAndExecuteTransaction, useSuiClient } from "@haneullabs/dapp-kit";
+import { useSignAndExecuteTransaction, useHaneulClient } from "@haneullabs/dapp-kit";
 import { useNetworkVariable } from "./networkConfig";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -10,7 +10,7 @@ export function CreateCounter({
   onCreated: (id: string) => void;
 }) {
   const counterPackageId = useNetworkVariable("counterPackageId");
-  const suiClient = useSuiClient();
+  const haneulClient = useHaneulClient();
   const {
     mutate: signAndExecute,
     isSuccess,
@@ -31,7 +31,7 @@ export function CreateCounter({
       },
       {
         onSuccess: async ({ digest }) => {
-          const { effects } = await suiClient.waitForTransaction({
+          const { effects } = await haneulClient.waitForTransaction({
             digest: digest,
             options: {
               showEffects: true,

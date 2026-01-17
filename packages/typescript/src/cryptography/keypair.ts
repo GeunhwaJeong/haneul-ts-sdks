@@ -12,7 +12,7 @@ import { SIGNATURE_FLAG_TO_SCHEME, SIGNATURE_SCHEME_TO_FLAG } from './signature-
 import type { SignatureScheme } from './signature-scheme.js';
 import { toSerializedSignature } from './signature.js';
 import type { Transaction } from '../transactions/Transaction.js';
-import type { ClientWithCoreApi, Experimental_SuiClientTypes } from '../experimental/index.js';
+import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '../experimental/index.js';
 
 export const PRIVATE_KEY_SIZE = 32;
 export const LEGACY_PRIVATE_KEY_SIZE = 64;
@@ -84,7 +84,7 @@ export abstract class Signer {
 		transaction,
 		client,
 	}: SignAndExecuteOptions): Promise<
-		Omit<Experimental_SuiClientTypes.TransactionResponse, 'balanceChanges'>
+		Omit<Experimental_HaneulClientTypes.TransactionResponse, 'balanceChanges'>
 	> {
 		const bytes = await transaction.build({ client });
 		const { signature } = await this.signTransaction(bytes);
@@ -96,8 +96,8 @@ export abstract class Signer {
 		return response.transaction;
 	}
 
-	toSuiAddress(): string {
-		return this.getPublicKey().toSuiAddress();
+	toHaneulAddress(): string {
+		return this.getPublicKey().toHaneulAddress();
 	}
 
 	/**
@@ -123,7 +123,7 @@ export abstract class Keypair extends Signer {
  * 33-byte Bech32 encoded string starting with `suiprivkey`, and
  * parse out the signature scheme and the private key in bytes.
  */
-export function decodeSuiPrivateKey(value: string): ParsedKeypair {
+export function decodeHaneulPrivateKey(value: string): ParsedKeypair {
 	const { prefix, words } = bech32.decode(value as `${string}1${string}`);
 	if (prefix !== SUI_PRIVATE_KEY_PREFIX) {
 		throw new Error('invalid private key prefix');
@@ -145,7 +145,7 @@ export function decodeSuiPrivateKey(value: string): ParsedKeypair {
  * encoding 33-byte `flag || bytes` for the given the 32-byte private
  * key and its signature scheme.
  */
-export function encodeSuiPrivateKey(bytes: Uint8Array, scheme: SignatureScheme): string {
+export function encodeHaneulPrivateKey(bytes: Uint8Array, scheme: SignatureScheme): string {
 	if (bytes.length !== PRIVATE_KEY_SIZE) {
 		throw new Error('Invalid bytes length');
 	}

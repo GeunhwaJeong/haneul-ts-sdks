@@ -12,8 +12,8 @@ title: SuiGrpcClient
 	Mysten SDK method that currently accepts a JSON-RPC client.
 </Callout>
 
-The Typescript SDK includes the `SuiGrpcClient` which provides access to the Sui gRPC API. The gRPC
-client offers improved performance and type-safe access to Sui blockchain data through protocol
+The Typescript SDK includes the `SuiGrpcClient` which provides access to the Haneul gRPC API. The gRPC
+client offers improved performance and type-safe access to Haneul blockchain data through protocol
 buffers.
 
 ## Creating a gRPC client
@@ -96,7 +96,7 @@ const { response: epochInfo } = await grpcClient.ledgerService.getEpoch({});
 // List owned objects
 const { response } = await grpcClient.stateService.listOwnedObjects({
 	owner: '0xabc...',
-	objectType: '0x2::coin::Coin<0x2::sui::SUI>',
+	objectType: '0x2::coin::Coin<0x2::haneul::HANEUL>',
 });
 
 // Get dynamic fields

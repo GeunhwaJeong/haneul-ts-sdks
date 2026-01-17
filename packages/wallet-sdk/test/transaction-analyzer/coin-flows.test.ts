@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest';
 import { Transaction } from '@haneullabs/sui/transactions';
 import { analyze } from '../../src/transaction-analyzer/analyzer';
 import { coinFlows } from '../../src/transaction-analyzer/rules/coin-flows';
-import { MockSuiClient } from '../mocks/MockSuiClient';
+import { MockHaneulClient } from '../mocks/MockHaneulClient';
 import {
 	DEFAULT_SENDER,
 	createAddressOwner,
@@ -17,7 +17,7 @@ import {
 
 describe('TransactionAnalyzer - Coin Flows Rule', () => {
 	it('should handle empty transactions with no coin flows', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -33,14 +33,14 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 		// Gas coin is tracked with gas budget usage in empty transaction
 		expect(results.coinFlows.result?.outflows).toEqual([
 			{
-				coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+				coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 				amount: 10000000n, // Gas budget
 			},
 		]);
 	});
 
 	it('should track gas coin flows when splitting and transferring', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -60,13 +60,13 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 		expect(results.coinFlows.result?.outflows).toHaveLength(1);
 		const suiFlow = results.coinFlows.result?.outflows[0];
 		expect(suiFlow?.coinType).toBe(
-			'0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+			'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 		);
 		expect(suiFlow?.amount).toBe(110000000n); // 0.1 SUI + 0.01 SUI gas budget
 	});
 
 	it('should track full gas coin transfer', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -85,13 +85,13 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 		expect(results.coinFlows.result?.outflows).toHaveLength(1);
 		const suiFlow = results.coinFlows.result?.outflows[0];
 		expect(suiFlow?.coinType).toBe(
-			'0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+			'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 		);
 		expect(suiFlow?.amount).toBe(5000000000n); // Full gas balance transferred
 	});
 
 	it('should handle merge and split operations correctly', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -130,7 +130,7 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 	});
 
 	it('should track coins consumed in Move calls', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -158,7 +158,7 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 	});
 
 	it('should track coins consumed in MakeMoveVec', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -185,7 +185,7 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 	});
 
 	it('should track coins transferred back to sender (no outflow)', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -206,14 +206,14 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 		// But gas budget is still consumed
 		expect(results.coinFlows.result?.outflows).toEqual([
 			{
-				coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+				coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 				amount: 10000000n, // Gas budget
 			},
 		]);
 	});
 
 	it('should handle dynamic split amounts (assume full consumption)', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -235,13 +235,13 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 		const suiFlow = results.coinFlows.result?.outflows.find(
 			(flow) =>
 				flow.coinType ===
-				'0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+				'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 		);
 		expect(suiFlow?.amount).toBe(5000000000n); // assume split consumed full gas coin
 	});
 
 	it('should handle multiple coin types in single transaction', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -268,7 +268,7 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 
 		const coinTypes = results.coinFlows.result?.outflows.map((flow) => flow.coinType).sort();
 		expect(coinTypes).toEqual([
-			'0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+			'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 			'0x0000000000000000000000000000000000000000000000000000000000000a0b::usdc::USDC',
 			'0x0000000000000000000000000000000000000000000000000000000000000b0c::weth::WETH',
 		]);
@@ -277,7 +277,7 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 			[
 			  {
 			    "amount": 5010000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			  },
 			  {
 			    "amount": 500000000n,
@@ -292,7 +292,7 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 	});
 
 	it('should not double count coins in split-merge chains', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -326,19 +326,19 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 	});
 
 	it('should track coin flows when splitting and transferring coins', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 
 		// Add additional coins for comprehensive testing
 		client.addCoin({
 			objectId: '0xa5c010',
-			coinType: '0x2::sui::SUI',
+			coinType: '0x2::haneul::HANEUL',
 			balance: 5000000000n, // 5 SUI
 			owner: createAddressOwner(DEFAULT_SENDER),
 		});
 
 		client.addCoin({
 			objectId: '0xa5c011',
-			coinType: '0x2::sui::SUI',
+			coinType: '0x2::haneul::HANEUL',
 			balance: 2000000000n, // 2 SUI
 			owner: createAddressOwner(DEFAULT_SENDER),
 		});
@@ -402,7 +402,7 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 			[
 			  {
 			    "amount": 1610000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			  },
 			  {
 			    "amount": 500000000n,
@@ -419,7 +419,7 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 		const suiFlow = results.coinFlows.result?.outflows.find(
 			(flow) =>
 				flow.coinType ===
-				'0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+				'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 		);
 		expect(suiFlow?.amount).toBe(1610000000n); // 1.6 SUI + 0.01 SUI gas budget
 

@@ -1,18 +1,18 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
 import { WalrusClient } from '../../src/client.js';
 import { getFundedKeypair } from '../funded-keypair.js';
 
-const suiClient = new SuiClient({
+const haneulClient = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 
 const walrusClient = new WalrusClient({
 	network: 'testnet',
-	suiClient,
+	haneulClient,
 });
 
 async function uploadFile() {

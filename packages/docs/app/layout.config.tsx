@@ -20,7 +20,7 @@ export const baseOptions: BaseLayoutProps = {
 		},
 		{
 			text: 'Discord',
-			url: 'https://discord.com/invite/Sui',
+			url: 'https://discord.com/invit./Haneul',
 		},
 	],
 };

@@ -24,21 +24,21 @@ import { decrypt } from '../../src/decrypt';
 import { KeyCacheKey, SealCompatibleClient } from '../../src/types';
 import { G1Element } from '../../src/bls12381';
 import { createFullId } from '../../src/utils';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { seal } from '../../src/client';
 
 /**
  * Helper function
  * @param packageId
  * @param moduleName
- * @param suiClient
+ * @param haneulClient
  * @param innerId
  * @returns
  */
 async function constructTxBytes(
 	packageId: string,
 	moduleName: string,
-	suiClient: SealCompatibleClient,
+	haneulClient: SealCompatibleClient,
 	innerIds: string[],
 ): Promise<Uint8Array> {
 	const tx = new Transaction();
@@ -50,7 +50,7 @@ async function constructTxBytes(
 			arguments: [keyIdArg, objectArg],
 		});
 	}
-	return await tx.build({ client: suiClient, onlyTransactionKind: true });
+	return await tx.build({ client: haneulClient, onlyTransactionKind: true });
 }
 
 const pk = fromBase64(
@@ -111,7 +111,7 @@ const MOCK_KEY_SERVERS = new Map([
 describe('Integration test', () => {
 	let keypair: Ed25519Keypair;
 	let suiAddress: string;
-	let suiClient: SealCompatibleClient;
+	let haneulClient: SealCompatibleClient;
 	let TESTNET_PACKAGE_ID: string;
 	let serverObjectId: string;
 	let serverObjectId2: string;
@@ -121,8 +121,8 @@ describe('Integration test', () => {
 		keypair = Ed25519Keypair.fromSecretKey(
 			'suiprivkey1qqgzvw5zc2zmga0uyp4rzcgk42pzzw6387zqhahr82pp95yz0scscffh2d8',
 		);
-		suiAddress = keypair.getPublicKey().toSuiAddress();
-		suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
+		suiAddress = keypair.getPublicKey().toHaneulAddress();
+		haneulClient = new HaneulClient({ url: getFullnodeUrl('testnet') });
 		TESTNET_PACKAGE_ID = '0x8afa5d31dbaa0a8fb07082692940ca3d56b5e856c5126cb5a3693f0a4de63b82';
 		// Object ids pointing to ci key servers' urls
 		serverObjectId = '0x3cf2a38f061ede3239c1629cb80a9be0e0676b1c15d34c94d104d4ba9d99076f';
@@ -150,7 +150,7 @@ describe('Integration test', () => {
 		const data2 = new Uint8Array([4, 5, 6]);
 
 		const client = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds,
 			verifyKeyServers: true,
 		});
@@ -162,7 +162,7 @@ describe('Integration test', () => {
 			data,
 		});
 
-		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', suiClient, [
+		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', haneulClient, [
 			whitelistId,
 		]);
 
@@ -171,7 +171,7 @@ describe('Integration test', () => {
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
-			suiClient,
+			haneulClient,
 		});
 
 		// decrypt the object encrypted to whitelist 1.
@@ -193,7 +193,7 @@ describe('Integration test', () => {
 
 		// construct a ptb that contains two seal_approve
 		// for whitelist 1 and 2.
-		const txBytes2 = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', suiClient, [
+		const txBytes2 = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', haneulClient, [
 			whitelistId,
 			whitelistId2,
 		]);
@@ -226,7 +226,7 @@ describe('Integration test', () => {
 		// Create a new client with just one server.
 		// Decryption of encryptedObject3 will work but since checkShareConsistency is true, the client will have to fetch the public key from the second key server.
 		const client2 = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds.slice(0, 1),
 			verifyKeyServers: false,
 		});
@@ -270,12 +270,12 @@ describe('Integration test', () => {
 		const data = new Uint8Array([1, 2, 3]);
 
 		const client = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds,
 			verifyKeyServers: false,
 		});
 
-		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', suiClient, [
+		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', haneulClient, [
 			whitelistId,
 		]);
 
@@ -284,7 +284,7 @@ describe('Integration test', () => {
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
-			suiClient,
+			haneulClient,
 		});
 
 		const derivedKeys = await client.getDerivedKeys({
@@ -332,12 +332,12 @@ describe('Integration test', () => {
 		);
 
 		const client = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds,
 			verifyKeyServers: false,
 		});
 
-		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', suiClient, [
+		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', haneulClient, [
 			whitelistId,
 		]);
 
@@ -346,7 +346,7 @@ describe('Integration test', () => {
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
-			suiClient,
+			haneulClient,
 		});
 
 		// Decryption without checkLENonce should fail
@@ -394,19 +394,19 @@ describe('Integration test', () => {
 		const mvrName = '@pkg/seal-demo-1234';
 
 		const client = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds,
 			verifyKeyServers: false,
 		});
 
-		const txBytes = await constructTxBytes(packageId, 'allowlist', suiClient, [whitelistId]);
+		const txBytes = await constructTxBytes(packageId, 'allowlist', haneulClient, [whitelistId]);
 
 		const sessionKey = await SessionKey.create({
 			address: suiAddress,
 			packageId,
 			ttlMin: 10,
 			signer: keypair,
-			suiClient,
+			haneulClient,
 			mvrName,
 		});
 
@@ -444,7 +444,7 @@ describe('Integration test', () => {
 		const whitelistId = '0x5809c296d41e0d6177e8cf956010c1d2387299892bb9122ca4ba4ffd165e05cb';
 		const data = new Uint8Array([1, 2, 3]);
 
-		const client = suiClient.$extend(
+		const client = haneulClient.$extend(
 			seal({
 				serverConfigs: objectIds,
 				verifyKeyServers: false,
@@ -458,7 +458,7 @@ describe('Integration test', () => {
 			data,
 		});
 
-		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', suiClient, [
+		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', haneulClient, [
 			whitelistId,
 		]);
 
@@ -467,7 +467,7 @@ describe('Integration test', () => {
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
-			suiClient,
+			haneulClient,
 		});
 		// decrypt the object encrypted to whitelist 1.
 		const decryptedBytes = await client.seal.decrypt({
@@ -496,7 +496,7 @@ describe('Integration test', () => {
 
 		// encrypt using 2 out of 3
 		const clientAllServers = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds,
 			verifyKeyServers: false,
 		});
@@ -508,7 +508,7 @@ describe('Integration test', () => {
 			data,
 		});
 
-		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', suiClient, [
+		const txBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', haneulClient, [
 			whitelistId,
 		]);
 
@@ -517,12 +517,12 @@ describe('Integration test', () => {
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
-			suiClient,
+			haneulClient,
 		});
 
 		// client with only 2 servers should suffice
 		const client2Servers = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds.slice(0, 2),
 			verifyKeyServers: false,
 		});
@@ -537,7 +537,7 @@ describe('Integration test', () => {
 
 		// client with only 1 server should fail
 		const client1Server = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds.slice(2),
 			verifyKeyServers: false,
 		});
@@ -562,7 +562,7 @@ describe('Integration test', () => {
 			},
 		];
 		const clientDifferentWeight = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds,
 			verifyKeyServers: false,
 		});
@@ -580,7 +580,7 @@ describe('Integration test', () => {
 		// Setup encrypted object.
 		const whitelistId = '0x5809c296d41e0d6177e8cf956010c1d2387299892bb9122ca4ba4ffd165e05cb';
 		const client = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds,
 		});
 		const data = new Uint8Array([1, 2, 3]);
@@ -595,12 +595,12 @@ describe('Integration test', () => {
 		const encryptedObject = EncryptedObject.parse(encryptedBytes);
 
 		// Session key with mismatched sui address and personal msg signature fails.
-		const wrongSuiAddress = Ed25519Keypair.generate().getPublicKey().toSuiAddress();
+		const wrongHaneulAddress = Ed25519Keypair.generate().getPublicKey().toHaneulAddress();
 		const sessionKey = await SessionKey.create({
-			address: wrongSuiAddress,
+			address: wrongHaneulAddress,
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
-			suiClient,
+			haneulClient,
 		});
 		const sig = await keypair.signPersonalMessage(sessionKey.getPersonalMessage());
 		await expect(sessionKey.setPersonalMessageSignature(sig.signature)).rejects.toThrow(
@@ -613,10 +613,10 @@ describe('Integration test', () => {
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
-			suiClient,
+			haneulClient,
 		});
 
-		const wrongTxBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', suiClient, [
+		const wrongTxBytes = await constructTxBytes(TESTNET_PACKAGE_ID, 'allowlist', haneulClient, [
 			'0xd9da0a7307c753e4ee4e358261bd0848f1e98e358b175e1f05ef16ae744f2e29',
 		]);
 		await expect(
@@ -632,10 +632,10 @@ describe('Integration test', () => {
 		const tx = new Transaction();
 		const objectArg = tx.object(whitelistId);
 		tx.transferObjects([objectArg], suiAddress);
-		const txBytes3 = await tx.build({ client: suiClient, onlyTransactionKind: true });
+		const txBytes3 = await tx.build({ client: haneulClient, onlyTransactionKind: true });
 
 		const client2 = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds,
 			verifyKeyServers: false,
 		});
@@ -645,7 +645,7 @@ describe('Integration test', () => {
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
-			suiClient,
+			haneulClient,
 		});
 		await expect(
 			client2.fetchKeys({
@@ -664,10 +664,10 @@ describe('Integration test', () => {
 	it('test session key verify personal message signature', async () => {
 		const kp = Ed25519Keypair.generate();
 		const sessionKey = await SessionKey.create({
-			address: kp.getPublicKey().toSuiAddress(),
+			address: kp.getPublicKey().toHaneulAddress(),
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
-			suiClient,
+			haneulClient,
 		});
 		// Wrong signature set throws error.
 		const sig = await kp.signPersonalMessage(new TextEncoder().encode('hello'));
@@ -694,14 +694,14 @@ describe('Integration test', () => {
 			},
 		];
 		const client = new SealClient({
-			suiClient,
+			haneulClient,
 			serverConfigs: objectIds,
 			verifyKeyServers: false,
 		});
 		vi.spyOn(client as any, 'getKeyServers').mockResolvedValue(MOCK_KEY_SERVERS);
 
 		// Mock package version check
-		vi.spyOn(suiClient.core, 'getObject').mockResolvedValue({
+		vi.spyOn(haneulClient.core, 'getObject').mockResolvedValue({
 			object: {
 				version: '1',
 			},
@@ -720,7 +720,7 @@ describe('Integration test', () => {
 			packageId: TESTNET_PACKAGE_ID,
 			ttlMin: 10,
 			signer: keypair,
-			suiClient,
+			haneulClient,
 		});
 
 		const whitelistId = '0x5809c296d41e0d6177e8cf956010c1d2387299892bb9122ca4ba4ffd165e05cb';

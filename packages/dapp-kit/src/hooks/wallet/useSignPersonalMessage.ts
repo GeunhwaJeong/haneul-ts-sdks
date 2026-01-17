@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type {
-	SuiSignPersonalMessageInput,
-	SuiSignPersonalMessageOutput,
+	HaneulSignPersonalMessageInput,
+	HaneulSignPersonalMessageOutput,
 } from '@haneullabs/wallet-standard';
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
@@ -15,13 +15,13 @@ import {
 } from '../..//errors/walletErrors.js';
 import { walletMutationKeys } from '../../constants/walletMutationKeys.js';
 import type { PartialBy } from '../../types/utilityTypes.js';
-import { useSuiClientContext } from '../useSuiClient.js';
+import { useHaneulClientContext } from '../useHaneulClient.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useCurrentWallet } from './useCurrentWallet.js';
 
-type UseSignPersonalMessageArgs = PartialBy<SuiSignPersonalMessageInput, 'account' | 'chain'>;
+type UseSignPersonalMessageArgs = PartialBy<HaneulSignPersonalMessageInput, 'account' | 'chain'>;
 
-type UseSignPersonalMessageResult = SuiSignPersonalMessageOutput;
+type UseSignPersonalMessageResult = HaneulSignPersonalMessageOutput;
 
 type UseSignPersonalMessageError =
 	| WalletFeatureNotSupportedError
@@ -52,7 +52,7 @@ export function useSignPersonalMessage({
 > {
 	const { currentWallet } = useCurrentWallet();
 	const currentAccount = useCurrentAccount();
-	const { network } = useSuiClientContext();
+	const { network } = useHaneulClientContext();
 
 	return useMutation({
 		mutationKey: walletMutationKeys.signPersonalMessage(mutationKey),

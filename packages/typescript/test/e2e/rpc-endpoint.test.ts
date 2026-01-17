@@ -3,7 +3,7 @@
 
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { SuiGasData } from '../../src/client';
+import { HaneulGasData } from '../../src/client';
 import { setup, TestToolbox } from './utils/setup';
 
 describe('Invoke any RPC endpoint', () => {
@@ -17,7 +17,7 @@ describe('Invoke any RPC endpoint', () => {
 		const gasObjectsExpected = await toolbox.client.getOwnedObjects({
 			owner: toolbox.address(),
 		});
-		const gasObjects = await toolbox.client.call<{ data: SuiGasData }>('suix_getOwnedObjects', [
+		const gasObjects = await toolbox.client.call<{ data: HaneulGasData }>('suix_getOwnedObjects', [
 			toolbox.address(),
 		]);
 		expect(gasObjects.data).toStrictEqual(gasObjectsExpected.data);

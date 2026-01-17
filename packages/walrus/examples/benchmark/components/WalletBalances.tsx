@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useDAppKit, useSuiClient } from '@haneullabs/dapp-kit-react';
+import { useDAppKit, useHaneulClient } from '@haneullabs/dapp-kit-react';
 import { useState, useEffect, useCallback } from 'react';
 import { MIST_PER_SUI, parseStructTag } from '@haneullabs/sui/utils';
 import { coinWithBalance, Transaction } from '@haneullabs/sui/transactions';
@@ -27,7 +27,7 @@ export function WalletBalances({
 	refreshTrigger,
 }: WalletBalancesProps) {
 	const dAppKit = useDAppKit();
-	const suiClient = useSuiClient();
+	const haneulClient = useHaneulClient();
 	const [isFunding, setIsFunding] = useState(false);
 	const [isReturning, setIsReturning] = useState(false);
 	const [isSwapping, setIsSwapping] = useState(false);
@@ -41,12 +41,12 @@ export function WalletBalances({
 
 	useEffect(() => {
 		async function fetchBalances() {
-			const addressToCheck = signer?.toSuiAddress();
+			const addressToCheck = signer?.toHaneulAddress();
 			if (!addressToCheck) return;
 
 			const [suiBal, walBal] = await Promise.all([
-				suiClient.core.getBalance({ address: addressToCheck, coinType: '0x2::sui::SUI' }),
-				suiClient.core.getBalance({
+				haneulClient.core.getBalance({ address: addressToCheck, coinType: '0x2::haneul::HANEUL' }),
+				haneulClient.core.getBalance({
 					address: addressToCheck,
 					coinType: TESTNET_WAL_COIN_TYPE,
 				}),
@@ -57,7 +57,7 @@ export function WalletBalances({
 		}
 
 		fetchBalances().catch(onError);
-	}, [refreshTrigger, signer, suiClient, onError]);
+	}, [refreshTrigger, signer, haneulClient, onError]);
 
 	const fundKeypair = useCallback(async () => {
 		if (!signer) return;
@@ -68,7 +68,7 @@ export function WalletBalances({
 			// Create a transaction to send 1 SUI to the keypair
 			const tx = new Transaction();
 			const [coin] = tx.splitCoins(tx.gas, [1n * MIST_PER_SUI]);
-			tx.transferObjects([coin], signer.toSuiAddress());
+			tx.transferObjects([coin], signer.toHaneulAddress());
 
 			// Sign and execute the transaction
 			const { digest } = await dAppKit.signAndExecuteTransaction({ transaction: tx });
@@ -88,12 +88,12 @@ export function WalletBalances({
 		setIsReturning(true);
 
 		try {
-			const address = signer.toSuiAddress();
+			const address = signer.toHaneulAddress();
 			const tx = new Transaction();
 			tx.setSender(address);
 
-			const coins = await suiClient.core.getCoins({
-				address: signer.toSuiAddress(),
+			const coins = await haneulClient.core.getCoins({
+				address: signer.toHaneulAddress(),
 				coinType: TESTNET_WAL_COIN_TYPE,
 			});
 
@@ -109,11 +109,11 @@ export function WalletBalances({
 
 			const { digest } = await signer.signAndExecuteTransaction({
 				transaction: tx,
-				client: suiClient,
+				client: haneulClient,
 			});
 
 			// Wait for transaction to be processed
-			await suiClient.core.waitForTransaction({
+			await haneulClient.core.waitForTransaction({
 				digest,
 			});
 
@@ -125,7 +125,7 @@ export function WalletBalances({
 		} finally {
 			setIsReturning(false);
 		}
-	}, [signer, suiClient, onError, onTransaction]);
+	}, [signer, haneulClient, onError, onTransaction]);
 
 	const swapSuiForWal = useCallback(async () => {
 		if (!signer) return;
@@ -133,11 +133,11 @@ export function WalletBalances({
 		setIsSwapping(true);
 
 		try {
-			const address = signer.toSuiAddress();
+			const address = signer.toHaneulAddress();
 			const tx = new Transaction();
 			tx.setSender(address);
 
-			const { object: exchange } = await suiClient.core.getObject({
+			const { object: exchange } = await haneulClient.core.getObject({
 				objectId: TESTNET_WALRUS_PACKAGE_CONFIG.exchangeIds[0],
 			});
 
@@ -157,9 +157,9 @@ export function WalletBalances({
 			tx.transferObjects([wal], address);
 
 			// Sign and execute with the keypair
-			const txBytes = await tx.build({ client: suiClient });
+			const txBytes = await tx.build({ client: haneulClient });
 			const signedTx = await signer.signTransaction(txBytes);
-			const result = await suiClient.core.executeTransaction({
+			const result = await haneulClient.core.executeTransaction({
 				transaction: txBytes,
 				signatures: [signedTx.signature],
 			});
@@ -171,7 +171,7 @@ export function WalletBalances({
 		} finally {
 			setIsSwapping(false);
 		}
-	}, [signer, suiClient, onError, onTransaction]);
+	}, [signer, haneulClient, onError, onTransaction]);
 
 	return (
 		<div style={{ marginBottom: '15px' }}>

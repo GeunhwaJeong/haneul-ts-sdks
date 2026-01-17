@@ -6,8 +6,8 @@ import type { ClientWithCoreApi, Experimental_CoreClientOptions } from './core.j
 import { Experimental_CoreClient } from './core.js';
 import type {
 	ClientWithExtensions,
-	Experimental_SuiClientTypes,
-	SuiClientRegistration,
+	Experimental_HaneulClientTypes,
+	HaneulClientRegistration,
 } from './types.js';
 export { parseTransactionBcs, parseTransactionEffectsBcs } from './transports/utils.js';
 
@@ -16,8 +16,8 @@ export {
 	Experimental_CoreClient,
 	type Experimental_CoreClientOptions,
 	type ClientWithExtensions,
-	type Experimental_SuiClientTypes,
-	type SuiClientRegistration,
+	type Experimental_HaneulClientTypes,
+	type HaneulClientRegistration,
 	type ClientWithCoreApi,
 };
 

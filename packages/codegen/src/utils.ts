@@ -171,8 +171,8 @@ export function isWellKnownObjectParameter(
 	}
 
 	if (address === SUI_SYSTEM_ADDRESS) {
-		if (Datatype.module.name === 'sui_system') {
-			return Datatype.name === 'SuiSystemState';
+		if (Datatype.module.name === 'haneul_system') {
+			return Datatype.name === 'HaneulSystemState';
 		}
 	}
 

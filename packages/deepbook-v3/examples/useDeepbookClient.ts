@@ -32,7 +32,7 @@ config();
 
 	// Read only call
 	console.log(await mmClient.checkManagerBalance('MANAGER_1', 'SUI'));
-	console.log(await mmClient.getLevel2Range('SUI_DBUSDC', 0.1, 100, true));
+	console.log(await mmClient.getLevel2Range('HANEUL_DBUSDC', 0.1, 100, true));
 
 	// // Balance manager contract call
 	// mmClient.balanceManager.depositIntoManager('MANAGER_1', 'SUI', 10)(tx);

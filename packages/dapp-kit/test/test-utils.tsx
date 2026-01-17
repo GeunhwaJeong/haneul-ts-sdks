@@ -1,35 +1,35 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import type { IdentifierRecord, ReadonlyWalletAccount } from '@haneullabs/wallet-standard';
 import { getWallets } from '@haneullabs/wallet-standard';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ComponentProps } from 'react';
 
 import { WalletProvider } from '../src/components/WalletProvider.js';
-import { SuiClientProvider } from '../src/index.js';
+import { HaneulClientProvider } from '../src/index.js';
 import { createMockAccount } from './mocks/mockAccount.js';
 import { MockWallet } from './mocks/mockWallet.js';
 
-export function createSuiClientContextWrapper(client: SuiClient) {
-	return function SuiClientContextWrapper({ children }: { children: React.ReactNode }) {
-		return <SuiClientProvider networks={{ test: client }}>{children}</SuiClientProvider>;
+export function createHaneulClientContextWrapper(client: HaneulClient) {
+	return function HaneulClientContextWrapper({ children }: { children: React.ReactNode }) {
+		return <HaneulClientProvider networks={{ test: client }}>{children}</HaneulClientProvider>;
 	};
 }
 
 export function createWalletProviderContextWrapper(
 	providerProps: Omit<ComponentProps<typeof WalletProvider>, 'children'> = {},
-	suiClient: SuiClient = new SuiClient({ url: getFullnodeUrl('localnet') }),
+	haneulClient: HaneulClient = new HaneulClient({ url: getFullnodeUrl('localnet') }),
 ) {
 	const queryClient = new QueryClient();
 	return function WalletProviderContextWrapper({ children }: { children: React.ReactNode }) {
 		return (
-			<SuiClientProvider networks={{ test: suiClient }}>
+			<HaneulClientProvider networks={{ test: haneulClient }}>
 				<QueryClientProvider client={queryClient}>
 					<WalletProvider {...providerProps}>{children}</WalletProvider>;
 				</QueryClientProvider>
-			</SuiClientProvider>
+			</HaneulClientProvider>
 		);
 	};
 }

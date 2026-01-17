@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiTransactionBlockResponseOptions } from '@haneullabs/sui/client';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
-import { normalizeSuiAddress } from '@haneullabs/sui/utils';
+import type { HaneulTransactionBlockResponseOptions } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
+import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
 
 import { ZkSendLink } from './claim.js';
 import { getContractIds } from './zk-bag.js';
@@ -15,7 +15,7 @@ export async function getSentTransactionsWithLinks({
 	limit = 10,
 	network = 'mainnet',
 	contract = getContractIds(network),
-	client = new SuiClient({ url: getFullnodeUrl(network) }),
+	client = new HaneulClient({ url: getFullnodeUrl(network) }),
 	loadAssets = true,
 	loadClaimedAssets = false,
 	options,
@@ -33,10 +33,10 @@ export async function getSentTransactionsWithLinks({
 	host?: string;
 	path?: string;
 	claimApi?: string;
-	client?: SuiClient;
-	options?: SuiTransactionBlockResponseOptions;
+	client?: HaneulClient;
+	options?: HaneulTransactionBlockResponseOptions;
 }) {
-	const packageId = normalizeSuiAddress(contract.packageId);
+	const packageId = normalizeHaneulAddress(contract.packageId);
 
 	const page = await client.queryTransactionBlocks({
 		filter: {
@@ -90,7 +90,7 @@ export async function getSentTransactionsWithLinks({
 							throw new Error('Expected Address input to be a Pure value');
 						}
 
-						const address = normalizeSuiAddress(input.value as string);
+						const address = normalizeHaneulAddress(input.value as string);
 
 						const link = new ZkSendLink({
 							network,
@@ -137,7 +137,7 @@ export async function getSentTransactionsWithLinks({
 							throw new Error('Expected Address input to be a Pure value');
 						}
 
-						const address = normalizeSuiAddress(input.value as string);
+						const address = normalizeHaneulAddress(input.value as string);
 
 						const link = new ZkSendLink({
 							network,

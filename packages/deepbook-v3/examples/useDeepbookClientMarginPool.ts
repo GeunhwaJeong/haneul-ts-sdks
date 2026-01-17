@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { DeepBookClient } from '../src/client.js';
-import { SuiClient, getFullnodeUrl } from '@haneullabs/sui/client';
+import { HaneulClient, getFullnodeUrl } from '@haneullabs/sui/client';
 
 (async () => {
 	const dbClient = new DeepBookClient({
-		client: new SuiClient({
+		client: new HaneulClient({
 			url: getFullnodeUrl('testnet'),
 		}),
 		address: '0x0',
@@ -19,8 +19,8 @@ import { SuiClient, getFullnodeUrl } from '@haneullabs/sui/client';
 	try {
 		console.log('Manager Balance (SUI):', await dbClient.checkManagerBalance('MANAGER_1', 'SUI'));
 		console.log(
-			'Level 2 Range (SUI_DBUSDC):',
-			await dbClient.getLevel2Range('SUI_DBUSDC', 0.1, 100, true),
+			'Level 2 Range (HANEUL_DBUSDC):',
+			await dbClient.getLevel2Range('HANEUL_DBUSDC', 0.1, 100, true),
 		);
 	} catch (error) {
 		console.log('Error with original functions:', (error as Error).message);

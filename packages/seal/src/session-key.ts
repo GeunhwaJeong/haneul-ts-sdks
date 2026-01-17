@@ -5,7 +5,7 @@ import { toBase64 } from '@haneullabs/bcs';
 import { bcs } from '@haneullabs/sui/bcs';
 import type { Signer } from '@haneullabs/sui/cryptography';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
-import { isValidNamedPackage, isValidSuiAddress, isValidSuiObjectId } from '@haneullabs/sui/utils';
+import { isValidNamedPackage, isValidHaneulAddress, isValidHaneulObjectId } from '@haneullabs/sui/utils';
 import { verifyPersonalMessageSignature } from '@haneullabs/sui/verify';
 import { generateSecretKey, toPublicKey, toVerificationKey } from './elgamal.js';
 import {
@@ -50,7 +50,7 @@ export class SessionKey {
 	#sessionKey: Ed25519Keypair;
 	#personalMessageSignature?: string;
 	#signer?: Signer;
-	#suiClient: SealCompatibleClient;
+	#haneulClient: SealCompatibleClient;
 
 	private constructor({
 		address,
@@ -58,25 +58,25 @@ export class SessionKey {
 		mvrName,
 		ttlMin,
 		signer,
-		suiClient,
+		haneulClient,
 	}: {
 		address: string;
 		packageId: string;
 		mvrName?: string;
 		ttlMin: number;
 		signer?: Signer;
-		suiClient: SealCompatibleClient;
+		haneulClient: SealCompatibleClient;
 	}) {
 		if (mvrName && !isValidNamedPackage(mvrName)) {
 			throw new UserError(`Invalid package name ${mvrName}`);
 		}
-		if (!isValidSuiObjectId(packageId) || !isValidSuiAddress(address)) {
+		if (!isValidHaneulObjectId(packageId) || !isValidHaneulAddress(address)) {
 			throw new UserError(`Invalid package ID ${packageId} or address ${address}`);
 		}
 		if (ttlMin > 30 || ttlMin < 1) {
 			throw new UserError(`Invalid TTL ${ttlMin}, must be between 1 and 30`);
 		}
-		if (signer && signer.getPublicKey().toSuiAddress() !== address) {
+		if (signer && signer.getPublicKey().toHaneulAddress() !== address) {
 			throw new UserError('Signer address does not match session key address');
 		}
 
@@ -87,7 +87,7 @@ export class SessionKey {
 		this.#ttlMin = ttlMin;
 		this.#sessionKey = Ed25519Keypair.generate();
 		this.#signer = signer;
-		this.#suiClient = suiClient;
+		this.#haneulClient = haneulClient;
 	}
 
 	/**
@@ -97,7 +97,7 @@ export class SessionKey {
 	 * @param mvrName - Optional. The name of the MVR, if there is one.
 	 * @param ttlMin - The TTL in minutes.
 	 * @param signer - Optional. The signer instance, e.g. EnokiSigner.
-	 * @param suiClient - The Sui client.
+	 * @param haneulClient - The Haneul client.
 	 * @returns A new SessionKey instance.
 	 */
 	static async create({
@@ -106,16 +106,16 @@ export class SessionKey {
 		mvrName,
 		ttlMin,
 		signer,
-		suiClient,
+		haneulClient,
 	}: {
 		address: string;
 		packageId: string;
 		mvrName?: string;
 		ttlMin: number;
 		signer?: Signer;
-		suiClient: SealCompatibleClient;
+		haneulClient: SealCompatibleClient;
 	}): Promise<SessionKey> {
-		const packageObj = await suiClient.core.getObject({ objectId: packageId });
+		const packageObj = await haneulClient.core.getObject({ objectId: packageId });
 		if (String(packageObj.object.version) !== '1') {
 			throw new InvalidPackageError(`Package ${packageId} is not the first version`);
 		}
@@ -126,7 +126,7 @@ export class SessionKey {
 			mvrName,
 			ttlMin,
 			signer,
-			suiClient,
+			haneulClient,
 		});
 	}
 	isExpired(): boolean {
@@ -161,7 +161,7 @@ export class SessionKey {
 			try {
 				await verifyPersonalMessageSignature(this.getPersonalMessage(), personalMessageSignature, {
 					address: this.#address,
-					client: this.#suiClient,
+					client: this.#haneulClient,
 				});
 				this.#personalMessageSignature = personalMessageSignature;
 			} catch {
@@ -250,7 +250,7 @@ export class SessionKey {
 	 */
 	static import(
 		data: ExportedSessionKey,
-		suiClient: SealCompatibleClient,
+		haneulClient: SealCompatibleClient,
 		signer?: Signer,
 	): SessionKey {
 		const instance = new SessionKey({
@@ -259,7 +259,7 @@ export class SessionKey {
 			mvrName: data.mvrName,
 			ttlMin: data.ttlMin,
 			signer,
-			suiClient,
+			haneulClient,
 		});
 
 		instance.#creationTimeMs = data.creationTimeMs;

@@ -31,7 +31,7 @@ export default config;
 ```
 
 The `package` field should be the MVR name for your move package. If you have not registered your
-package on MVR yet, you can use the `@local-pkg` scope, and set up an override in your `SuiClient`
+package on MVR yet, you can use the `@local-pkg` scope, and set up an override in your `HaneulClient`
 to resolve it to the correct address.
 
 ## Generating code
@@ -65,14 +65,14 @@ or by adding something the following script to your package.json and running `pn
 }
 ```
 
-## Setting up SuiClient
+## Setting up HaneulClient
 
 If your package is registered on MVR, the generated code should work without additional
-configuration. If you are using a `@local-pkg` name, you will need to configure your `SuiClient` to
+configuration. If you are using a `@local-pkg` name, you will need to configure your `HaneulClient` to
 resolver the package name correctly:
 
 ```ts
-const client = new SuiClient({
+const client = new HaneulClient({
 	network: 'testnet',
 	url: testnetRpcUrl,
 	mvr: {
@@ -85,7 +85,7 @@ const client = new SuiClient({
 });
 ```
 
-If you are using `dapp-kit`, you may need to set up your network config and `SuiClientProvider`:
+If you are using `dapp-kit`, you may need to set up your network config and `HaneulClientProvider`:
 
 ```ts
 const { networkConfig, useNetworkVariable, useNetworkVariables } = createNetworkConfig({
@@ -99,11 +99,11 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } = createNetwork
 ```
 
 ```tsx
-<SuiClientProvider
+<HaneulClientProvider
 	networks={networkConfig}
 	defaultNetwork="testnet"
 	createClient={(network, config) => {
-		return new SuiClient({
+		return new HaneulClient({
 			network,
 			url: config.url,
 			mvr: {
@@ -117,7 +117,7 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } = createNetwork
 	}}
 >
 	<App />
-</SuiClientProvider>
+</HaneulClientProvider>
 ```
 
 ## Calling Move Functions

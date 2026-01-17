@@ -256,7 +256,7 @@
 
 ### Patch Changes
 
-- ec519fc: Deprecate schema on `ParsedKeypair` returned by `decodeSuiPrivateKey` which should have
+- ec519fc: Deprecate schema on `ParsedKeypair` returned by `decodeHaneulPrivateKey` which should have
   always been called `scheme`
 
 ## 1.30.0
@@ -287,7 +287,7 @@
 
 - 7d66a32: Add support for async thunks inn tx.add
 - eb91fba: memoize tx.add calls to avoid accidental duplicate inputs and commands in transactions
-- 19a8045: Add verifyZkLoginSignature to core API and support SuiClient in verifySignature methods
+- 19a8045: Add verifyZkLoginSignature to core API and support HaneulClient in verifySignature methods
 
 ## 1.28.2
 
@@ -318,7 +318,7 @@
 
 ### Minor Changes
 
-- 4d13ef8: Add abort signals to all SuiClient methods
+- 4d13ef8: Add abort signals to all HaneulClient methods
 - 4d13ef8: Add effects parsing and dynamic field queries to experimental core client
 
 ## 1.26.1
@@ -727,7 +727,7 @@
 
 - a92b03de42: The Typescript SDK has been renamed to `@haneullabs/sui` and includes many new features
   and breaking changes. See the
-  [full migration guide](https://sdk.haneullabs.com/typescript/migrations/sui-1.0) for details on
+  [full migration guide](https://sdk.haneullabs.com/typescript/migrations/haneul-1.0) for details on
   how to upgrade.
 
 ### Patch Changes
@@ -763,7 +763,7 @@
 ### Minor Changes
 
 - 929db4976a: Add normalizeSuiNSName and isValidSuiNSName utils, and add a format option to
-  SuiClient.resolveNameServiceNames
+  HaneulClient.resolveNameServiceNames
 
 ## 0.51.2
 
@@ -804,7 +804,7 @@
 - c08e3569ef: Export all keypair utilities
 - 9a14e61db4: Allow signer in signAndExecuteTransactionBlock to be a Signer rather than a Keypair
 - 13e922d9b1: Fix multiple shared objects not respecting mutable correctly
-- 220a766d86: Fix WebSocket constructor not being properly assigned in SuiClient HTTP transport
+- 220a766d86: Fix WebSocket constructor not being properly assigned in HaneulClient HTTP transport
 - Updated dependencies [bae8802fe3]
   - @haneullabs/bcs@0.11.0
 
@@ -855,16 +855,16 @@
 
   If you are using the `subscribeEvent` or `subscribeTransaction` in environments that do not
   support the `WebSocket` api natively (This will be true for most versions of Node.js) you will
-  need to provide a WebSocket implementation when creating your SuiClient. You can either use a
+  need to provide a WebSocket implementation when creating your HaneulClient. You can either use a
   global polyfill for the WebSocket class, or pass a compatible WebSocket implementation into
-  SuiHTTPTransport (eg, using the `ws` package)
+  HaneulHTTPTransport (eg, using the `ws` package)
 
   ```typescript
-  import { getFullnodeUrl, SuiClient, SuiHTTPTransport } from '@haneullabs/sui.js/client';
+  import { getFullnodeUrl, HaneulClient, HaneulHTTPTransport } from '@haneullabs/sui.js/client';
   import { WebSocket } from 'ws';
 
-  new SuiClient({
-  	transport: new SuiHTTPTransport({
+  new HaneulClient({
+  	transport: new HaneulHTTPTransport({
   		url: getFullnodeUrl('mainnet'),
   		// The typescript definitions may not match perfectly, casting to never avoids these minor incompatibilities
   		WebSocketConstructor: WebSocket as never,
@@ -996,7 +996,7 @@
 
 ### Minor Changes
 
-- ba8e3b857: Rename TransactionBlock generated type in @haneullabs/sui.js/client to SuiTransactionBlock
+- ba8e3b857: Rename TransactionBlock generated type in @haneullabs/sui.js/client to HaneulTransactionBlock
   to avoid conflicting names in exports
 
 ### Patch Changes
@@ -1026,7 +1026,7 @@
 ### Minor Changes
 
 - 67e581a5a: Added FromOrToAddress Transaction Filter
-- cce6ffbcc: Add toSuiPublicKey method for retrieving the Sui representation of a raw public key
+- cce6ffbcc: Add toHaneulPublicKey method for retrieving the Haneul representation of a raw public key
 - 0f06d593a: Added a MultiSigPublicKey class for verifying multisig signatures
 - 09f4ed3fc: update signMessage to correctly wrap PersonalMessages before signing
 - 6d41059c7: Deprecate imports from the root path which can be imported from a modular export
@@ -1043,10 +1043,10 @@
   - `@haneullabs/sui.js/faucet`- Methods for requesting sui from a faucet.
 
   As part of this refactor we are deprecating a number of existing APIs:
-  - `JsonRPCProvider` - This Provider pattern is being replaced by a new `SuiClient`
+  - `JsonRPCProvider` - This Provider pattern is being replaced by a new `HaneulClient`
   - `SignerWithProver` and `RawSigner` - The Concept of Signers is being removed from the SDK.
     Signing in verifying has been moved to the KeyPair classes, and the
-    `signAndExecuteTransactionBlock` method has been moved to the new `SuiClient`.
+    `signAndExecuteTransactionBlock` method has been moved to the new `HaneulClient`.
   - The `superstruct` type definitions for types used by JsonRPCProvider are being replaced with
     generated types exported from `@haneullabs/sui.js/client`. The new type definitions are pure
     typescript types and can't be used for runtime validation. By generating these as types, it will
@@ -1073,16 +1073,16 @@
 
   #### Migrating JsonRpcProvider
 
-  The new SuiClient should mostly work as a drop in replacement for the `JsonRpcProvider` provider.
-  Setting up a `SuiClient` is slightly different, but once constructed should work just like a
+  The new HaneulClient should mostly work as a drop in replacement for the `JsonRpcProvider` provider.
+  Setting up a `HaneulClient` is slightly different, but once constructed should work just like a
   provider.
 
   ```diff
   - import { JsonRpcProvider, devnetConnection } from '@haneullabs/sui.js';
-  + import { SuiClient, getFullnodeUrl } from '@haneullabs/sui.js/client';
+  + import { HaneulClient, getFullnodeUrl } from '@haneullabs/sui.js/client';
 
   - const provider = new JsonRpcProvider(localnetConnection);
-  + const client = new SuiClient({ url: getFullnodeUrl('localnet')});
+  + const client = new HaneulClient({ url: getFullnodeUrl('localnet')});
   ```
 
   #### Signing TransactionBlocks
@@ -1099,13 +1099,13 @@
   -    localnetConnection,
   - } from '@haneullabs/sui.js';
   + import { Ed25519Keypair } from '@haneullabs/sui.js/keypairs/ed25519';
-  + import { SuiClient, getFullnodeUrl } from '@haneullabs/sui.js/client';
+  + import { HaneulClient, getFullnodeUrl } from '@haneullabs/sui.js/client';
   + import { TransactionBlock } from '@haneullabs/sui.js/transactions';
 
     const keypair = new Ed25519Keypair()
   - const provider = new JsonRpcProvider(localnetConnection);
   - const signer = new RawSigner(keyPair, provider);
-  + const client = new SuiClient({ url: getFullnodeUrl('localnet')});
+  + const client = new HaneulClient({ url: getFullnodeUrl('localnet')});
 
   - const result = await signer.signAndExecuteTransactionBlock({
   + const result = await client.signAndExecuteTransactionBlock({
@@ -1117,7 +1117,7 @@
 
   #### Migrating faucet requests
 
-  The ability to request Sui from a faucet was not added to `SuiClient`, instead you will need to
+  The ability to request Sui from a faucet was not added to `HaneulClient`, instead you will need to
   use a method `@haneullabs/sui.js/faucet` to make these requests
 
   ```diff
@@ -1164,7 +1164,7 @@
 - 36f2edff3: Use splitGenericParamaters util from bcs
 - 75d1a190d: Fix bug that prevented deserializing transaction blocks with a set expiration
 - c3a4ec57c: Add explicit dependency on events package
-- 2f37537d5: Update `SuiEventFilter` structure for `TimeRange` query.
+- 2f37537d5: Update `HaneulEventFilter` structure for `TimeRange` query.
 - 00484bcc3: add method to create Ed25519Keypair from a mnemonic seed
 - Updated dependencies [36f2edff3]
   - @haneullabs/bcs@0.7.3
@@ -1336,19 +1336,19 @@
   sui-types.
 - 6bd88570c: Rework all coin APIs to take objects as arguments instead of positional arguments.
 - f1e42f792: Consolidate get_object and get_raw_object into a single get_object endpoint which now
-  takes an additional config parameter with type `SuiObjectDataOptions` and has a new return type
-  `SuiObjectResponse`. By default, only object_id, version, and digest are fetched.
+  takes an additional config parameter with type `HaneulObjectDataOptions` and has a new return type
+  `HaneulObjectResponse`. By default, only object_id, version, and digest are fetched.
 - 272389c20: Support for new versioned TransactionData format
 - 3de8de361: Remove `getSuiSystemState` method. Use `getLatestSuiSystemState` method instead.
-- be3c4f51e: Add `display` field in `SuiObjectResponse` for frontend rendering. See more details in
+- be3c4f51e: Add `display` field in `HaneulObjectResponse` for frontend rendering. See more details in
   https://forums.sui.io/t/nft-object-display-proposal/4872
 - dbe73d5a4: Update `executeTransaction` and `signAndExecuteTransaction` to take in an additional
-  parameter `SuiTransactionBlockResponseOptions` which is used to specify which fields to include in
-  `SuiTransactionBlockResponse` (e.g., transaction, effects, events, etc). By default, only the
+  parameter `HaneulTransactionBlockResponseOptions` which is used to specify which fields to include in
+  `HaneulTransactionBlockResponse` (e.g., transaction, effects, events, etc). By default, only the
   transaction digest will be included.
 - c82e4b454: Introduce BigInt struct to sui-json-rpc-types to serialize and deserialize amounts
   to/from string. Change ts-sdk to serialize amounts of PaySui and Pay as string.
-- 7a2eaf4a3: Changing the SuiObjectResponse struct to use data/error fields instead of
+- 7a2eaf4a3: Changing the HaneulObjectResponse struct to use data/error fields instead of
   details/status
 - 2ef2bb59e: Deprecate getTransactionDigestsInRange. This method will be removed before April 2023,
   please use `getTransactions` instead
@@ -1373,7 +1373,7 @@
 - dd348cf03: Refactor `getTransactions` to `queryTransactions`
 - 57c17e02a: Removed `JsonRpcProviderWithCache`, use `JsonRpcProvider` instead.
 - 65f1372dd: Rename `provider.getTransactionWithEffects` to `provider.getTransaction`. The new
-  method takes in an additional parameter `SuiTransactionBlockResponseOptions` to configure which
+  method takes in an additional parameter `HaneulTransactionBlockResponseOptions` to configure which
   fields to fetch(transaction, effects, events, etc). By default, only the transaction digest will
   be returned.
 - a09239308: [testing only] an intent scope can be passed in to verifyMessage
@@ -1384,8 +1384,8 @@
 - d3170ba41: All JSON-RPC APIs now accept objects instead of positional arugments.
 - a6ffb8088: Removed events from transaction effects, TransactionEvents will now be provided in the
   TransactionResponse, along side TransactionEffects.
-- 3304eb83b: Refactor Rust SuiTransactionBlockKind to be internally tagged for Json serialization
-  with tag="type" and SuiEvent to be adjacently tagged with tag="type" and content="content"
+- 3304eb83b: Refactor Rust HaneulTransactionBlockKind to be internally tagged for Json serialization
+  with tag="type" and HaneulEvent to be adjacently tagged with tag="type" and content="content"
 - 4189171ef: Adds support for validator candidate.
 - 77bdf907f: When parsing u64, u128, and u256 values with bcs, they are now string encoded.
 - a74df16ec: Minor change to the system transaction format
@@ -1393,7 +1393,7 @@
   and also moving filtering to FN
 - 9b60bf700: Change all snake_case fields in checkpoint.ts and faucet.ts to camelCase
 - 64fb649eb: Remove old `SuiExecuteTransactionResponse` interface, and `CertifiedTransaction`
-  interface in favor of the new unified `SuiTransactionBlockResponse` interfaces.
+  interface in favor of the new unified `HaneulTransactionBlockResponse` interfaces.
 - a6b0c4e5f: Changed the getOwnerObjectsForAddress api to getOwnedObjects, and added options/
   pagination to the parameters
 
@@ -1559,11 +1559,11 @@
     public method and without the need of signer so a dapp can use it
   - fixes edge cases with pay txs
 - bb14ffdc5: Remove ImmediateReturn and WaitForTxCert from ExecuteTransactionRequestType
-- d2015f815: Rebuilt type-narrowing utilties (e.g. `isSuiObject`) on top of Superstruct, which
+- d2015f815: Rebuilt type-narrowing utilties (e.g. `isHaneulObject`) on top of Superstruct, which
   should make them more reliable. The type-narrowing functions are no longer exported, instead a
   Superstruct schema is exported, in addition to an `is` and `assert` function, both of which can be
-  used to replace the previous narrowing functions. For example, `isSuiObject(data)` becomes
-  `is(data, SuiObject)`.
+  used to replace the previous narrowing functions. For example, `isHaneulObject(data)` becomes
+  `is(data, HaneulObject)`.
 - 7d0f25b61: Add devInspectTransaction, which is similar to dryRunTransaction, but lets you call any
   Move function(including non-entry function) with arbitrary values.
 

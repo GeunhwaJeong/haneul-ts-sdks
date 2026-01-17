@@ -28,7 +28,7 @@ Payment Kit provides a default registry that's ready to use:
 // Use the default registry
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	sender: senderAddress,
@@ -196,7 +196,7 @@ const registryId = getRegistryIdFromName('my-app-payments', namespaceId);
 
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver: registryId, // Must be the registry itself
 	sender: senderAddress,
@@ -252,7 +252,7 @@ If you've enabled registry-managed funds, you can withdraw accumulated coins:
 ```ts
 // Withdraw all SUI from the registry
 const tx = client.paymentKit.tx.withdrawFromRegistry({
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	registryName: 'my-app-payments',
 	adminCapId: adminCapId,
 });
@@ -285,7 +285,7 @@ const tx = new Transaction();
 // Withdraw SUI
 tx.add(
 	client.paymentKit.calls.withdrawFromRegistry({
-		coinType: '0x2::sui::SUI',
+		coinType: '0x2::haneul::HANEUL',
 		registryName: 'my-app-payments',
 		adminCapId: adminCapId,
 	}),
@@ -314,7 +314,7 @@ After the expiration period, payment records can be deleted to reclaim storage f
 // Delete an expired payment record
 const tx = client.paymentKit.tx.deletePaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	registryName: 'my-app-payments',
@@ -341,7 +341,7 @@ console.log('Record deleted, storage rebate received');
 // Get the payment record
 const record = await client.paymentKit.getPaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	registryName: 'my-app-payments',
@@ -370,7 +370,7 @@ const registryId = '0x123abc...';
 // Process payment using registry ID
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	sender: senderAddress,
@@ -380,7 +380,7 @@ const tx = client.paymentKit.tx.processRegistryPayment({
 // Query using registry ID
 const record = await client.paymentKit.getPaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	registryId: registryId,
@@ -392,11 +392,11 @@ const record = await client.paymentKit.getPaymentRecord({
 Here's a complete workflow for setting up a custom registry:
 
 ```ts
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { paymentKit } from '@haneullabs/payment-kit';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 	network: 'testnet',
 }).$extend(paymentKit());
@@ -464,10 +464,10 @@ const registryId = getRegistryIdFromName(registryName, namespaceId);
 
 const paymentTx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver: registryId, // Funds go to registry
-	sender: keypair.getPublicKey().toSuiAddress(),
+	sender: keypair.getPublicKey().toHaneulAddress(),
 	registryName: registryName,
 });
 

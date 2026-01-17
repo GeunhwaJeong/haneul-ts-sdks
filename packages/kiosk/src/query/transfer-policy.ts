@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiClient } from '@haneullabs/sui/client';
-import { fromBase64, isValidSuiAddress } from '@haneullabs/sui/utils';
+import type { HaneulClient } from '@haneullabs/sui/client';
+import { fromBase64, isValidHaneulAddress } from '@haneullabs/sui/utils';
 
 import '../bcs.js';
 
@@ -25,7 +25,7 @@ import { getAllOwnedObjects, parseTransferPolicyCapObject } from '../utils.js';
  * @param type
  */
 export async function queryTransferPolicy(
-	client: SuiClient,
+	client: HaneulClient,
 	type: string,
 ): Promise<TransferPolicy[]> {
 	// console.log('event type: %s', `${TRANSFER_POLICY_CREATED_EVENT}<${type}>`);
@@ -70,11 +70,11 @@ export async function queryTransferPolicy(
  * @returns TransferPolicyCap Object ID | undefined if not found.
  */
 export async function queryTransferPolicyCapsByType(
-	client: SuiClient,
+	client: HaneulClient,
 	address: string,
 	type: string,
 ): Promise<TransferPolicyCap[]> {
-	if (!isValidSuiAddress(address)) return [];
+	if (!isValidHaneulAddress(address)) return [];
 
 	const filter = {
 		MatchAll: [
@@ -104,10 +104,10 @@ export async function queryTransferPolicyCapsByType(
  * @returns TransferPolicyCap Object ID | undefined if not found.
  */
 export async function queryOwnedTransferPolicies(
-	client: SuiClient,
+	client: HaneulClient,
 	address: string,
 ): Promise<TransferPolicyCap[] | undefined> {
-	if (!isValidSuiAddress(address)) return;
+	if (!isValidHaneulAddress(address)) return;
 
 	const filter = {
 		MatchAll: [

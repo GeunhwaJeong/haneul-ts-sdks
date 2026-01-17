@@ -6,7 +6,7 @@ import type { WalletAccount } from '@haneullabs/wallet-standard';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import clsx from 'clsx';
 
-import { useResolveSuiNSName } from '../hooks/useResolveSuiNSNames.js';
+import { useResolveHaneulNSName } from '../hooks/useResolveHaneulNSNames.js';
 import { useAccounts } from '../hooks/wallet/useAccounts.js';
 import { useDisconnectWallet } from '../hooks/wallet/useDisconnectWallet.js';
 import { useSwitchAccount } from '../hooks/wallet/useSwitchAccount.js';
@@ -24,7 +24,7 @@ type AccountDropdownMenuProps = {
 export function AccountDropdownMenu({ currentAccount }: AccountDropdownMenuProps) {
 	const { mutate: disconnectWallet } = useDisconnectWallet();
 
-	const { data: domain } = useResolveSuiNSName(
+	const { data: domain } = useResolveHaneulNSName(
 		currentAccount.label ? null : currentAccount.address,
 	);
 	const accounts = useAccounts();
@@ -73,7 +73,7 @@ export function AccountDropdownMenuItem({
 	active?: boolean;
 }) {
 	const { mutate: switchAccount } = useSwitchAccount();
-	const { data: domain } = useResolveSuiNSName(account.label ? null : account.address);
+	const { data: domain } = useResolveHaneulNSName(account.label ? null : account.address);
 
 	return (
 		<DropdownMenu.Item

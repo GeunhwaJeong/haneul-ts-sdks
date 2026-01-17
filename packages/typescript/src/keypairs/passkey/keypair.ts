@@ -67,7 +67,7 @@ export class BrowserPasskeyProvider implements PasskeyProvider {
 					...this.#options.user,
 					id: randomBytes(10) as BufferSource,
 				},
-				challenge: new TextEncoder().encode('Create passkey wallet on Sui'),
+				challenge: new TextEncoder().encode('Create passkey wallet on Haneul'),
 				pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
 				authenticatorSelection: {
 					authenticatorAttachment: 'cross-platform',

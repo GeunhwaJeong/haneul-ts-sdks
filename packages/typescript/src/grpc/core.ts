@@ -3,7 +3,7 @@
 
 import type {
 	Experimental_CoreClientOptions,
-	Experimental_SuiClientTypes,
+	Experimental_HaneulClientTypes,
 } from '../experimental/index.js';
 import { Experimental_CoreClient } from '../experimental/index.js';
 import type { SuiGrpcClient } from './client.js';
@@ -39,10 +39,10 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 	}
 
 	async getObjects(
-		options: Experimental_SuiClientTypes.GetObjectsOptions,
-	): Promise<Experimental_SuiClientTypes.GetObjectsResponse> {
+		options: Experimental_HaneulClientTypes.GetObjectsOptions,
+	): Promise<Experimental_HaneulClientTypes.GetObjectsResponse> {
 		const batches = chunk(options.objectIds, 50);
-		const results: Experimental_SuiClientTypes.GetObjectsResponse['objects'] = [];
+		const results: Experimental_HaneulClientTypes.GetObjectsResponse['objects'] = [];
 
 		for (const batch of batches) {
 			const response = await this.#client.ledgerService.batchGetObjects({
@@ -62,7 +62,7 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 
 			results.push(
 				...response.response.objects.map(
-					(object): Experimental_SuiClientTypes.ObjectResponse | Error => {
+					(object): Experimental_HaneulClientTypes.ObjectResponse | Error => {
 						if (object.result.oneofKind === 'error') {
 							// TODO: improve error handling
 							return new Error(object.result.error.message);
@@ -92,8 +92,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 		};
 	}
 	async getOwnedObjects(
-		options: Experimental_SuiClientTypes.GetOwnedObjectsOptions,
-	): Promise<Experimental_SuiClientTypes.GetOwnedObjectsResponse> {
+		options: Experimental_HaneulClientTypes.GetOwnedObjectsOptions,
+	): Promise<Experimental_HaneulClientTypes.GetOwnedObjectsResponse> {
 		const response = await this.#client.stateService.listOwnedObjects({
 			owner: options.address,
 			objectType: options.type
@@ -114,7 +114,7 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 		});
 
 		const objects = response.response.objects.map(
-			(object): Experimental_SuiClientTypes.ObjectResponse => ({
+			(object): Experimental_HaneulClientTypes.ObjectResponse => ({
 				id: object.objectId!,
 				version: object.version?.toString()!,
 				digest: object.digest!,
@@ -139,8 +139,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 		};
 	}
 	async getCoins(
-		options: Experimental_SuiClientTypes.GetCoinsOptions,
-	): Promise<Experimental_SuiClientTypes.GetCoinsResponse> {
+		options: Experimental_HaneulClientTypes.GetCoinsOptions,
+	): Promise<Experimental_HaneulClientTypes.GetCoinsResponse> {
 		const response = await this.#client.stateService.listOwnedObjects({
 			owner: options.address,
 			objectType: `0x2::coin::Coin<${(await this.mvr.resolveType({ type: options.coinType })).type}>`,
@@ -161,7 +161,7 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 
 		return {
 			objects: response.response.objects.map(
-				(object): Experimental_SuiClientTypes.CoinResponse => ({
+				(object): Experimental_HaneulClientTypes.CoinResponse => ({
 					id: object.objectId!,
 					version: object.version?.toString()!,
 					digest: object.digest!,
@@ -185,8 +185,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 	}
 
 	async getBalance(
-		options: Experimental_SuiClientTypes.GetBalanceOptions,
-	): Promise<Experimental_SuiClientTypes.GetBalanceResponse> {
+		options: Experimental_HaneulClientTypes.GetBalanceOptions,
+	): Promise<Experimental_HaneulClientTypes.GetBalanceResponse> {
 		const result = await this.#client.stateService.getBalance({
 			owner: options.address,
 			coinType: (await this.mvr.resolveType({ type: options.coinType })).type,
@@ -201,8 +201,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 	}
 
 	async getAllBalances(
-		options: Experimental_SuiClientTypes.GetAllBalancesOptions,
-	): Promise<Experimental_SuiClientTypes.GetAllBalancesResponse> {
+		options: Experimental_HaneulClientTypes.GetAllBalancesOptions,
+	): Promise<Experimental_HaneulClientTypes.GetAllBalancesResponse> {
 		const result = await this.#client.stateService.listBalances({
 			owner: options.address,
 			pageToken: options.cursor ? fromBase64(options.cursor) : undefined,
@@ -219,8 +219,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 		};
 	}
 	async getTransaction(
-		options: Experimental_SuiClientTypes.GetTransactionOptions,
-	): Promise<Experimental_SuiClientTypes.GetTransactionResponse> {
+		options: Experimental_HaneulClientTypes.GetTransactionOptions,
+	): Promise<Experimental_HaneulClientTypes.GetTransactionResponse> {
 		const { response } = await this.#client.ledgerService.getTransaction({
 			digest: options.digest,
 			readMask: {
@@ -233,8 +233,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 		};
 	}
 	async executeTransaction(
-		options: Experimental_SuiClientTypes.ExecuteTransactionOptions,
-	): Promise<Experimental_SuiClientTypes.ExecuteTransactionResponse> {
+		options: Experimental_HaneulClientTypes.ExecuteTransactionOptions,
+	): Promise<Experimental_HaneulClientTypes.ExecuteTransactionResponse> {
 		const { response } = await this.#client.transactionExecutionService.executeTransaction({
 			transaction: {
 				bcs: {
@@ -264,8 +264,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 		};
 	}
 	async dryRunTransaction(
-		options: Experimental_SuiClientTypes.DryRunTransactionOptions,
-	): Promise<Experimental_SuiClientTypes.DryRunTransactionResponse> {
+		options: Experimental_HaneulClientTypes.DryRunTransactionOptions,
+	): Promise<Experimental_HaneulClientTypes.DryRunTransactionResponse> {
 		const { response } = await this.#client.transactionExecutionService.simulateTransaction({
 			transaction: {
 				bcs: {
@@ -287,7 +287,7 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 			transaction: parseTransaction(response.transaction!),
 		};
 	}
-	async getReferenceGasPrice(): Promise<Experimental_SuiClientTypes.GetReferenceGasPriceResponse> {
+	async getReferenceGasPrice(): Promise<Experimental_HaneulClientTypes.GetReferenceGasPriceResponse> {
 		const response = await this.#client.ledgerService.getEpoch({});
 
 		return {
@@ -296,8 +296,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 	}
 
 	async getDynamicFields(
-		options: Experimental_SuiClientTypes.GetDynamicFieldsOptions,
-	): Promise<Experimental_SuiClientTypes.GetDynamicFieldsResponse> {
+		options: Experimental_HaneulClientTypes.GetDynamicFieldsOptions,
+	): Promise<Experimental_HaneulClientTypes.GetDynamicFieldsResponse> {
 		const response = await this.#client.stateService.listDynamicFields({
 			parent: options.parentId,
 			pageToken: options.cursor ? fromBase64(options.cursor) : undefined,
@@ -320,8 +320,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 	}
 
 	async verifyZkLoginSignature(
-		options: Experimental_SuiClientTypes.VerifyZkLoginSignatureOptions,
-	): Promise<Experimental_SuiClientTypes.ZkLoginVerifyResponse> {
+		options: Experimental_HaneulClientTypes.VerifyZkLoginSignatureOptions,
+	): Promise<Experimental_HaneulClientTypes.ZkLoginVerifyResponse> {
 		const { response } = await this.#client.signatureVerificationService.verifySignature({
 			message: {
 				name: options.intentScope,
@@ -345,8 +345,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 	}
 
 	async defaultNameServiceName(
-		options: Experimental_SuiClientTypes.DefaultNameServiceNameOptions,
-	): Promise<Experimental_SuiClientTypes.DefaultNameServiceNameResponse> {
+		options: Experimental_HaneulClientTypes.DefaultNameServiceNameOptions,
+	): Promise<Experimental_HaneulClientTypes.DefaultNameServiceNameResponse> {
 		const name =
 			(
 				await this.#client.nameService.reverseLookupName({
@@ -361,8 +361,8 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 	}
 
 	async getMoveFunction(
-		options: Experimental_SuiClientTypes.GetMoveFunctionOptions,
-	): Promise<Experimental_SuiClientTypes.GetMoveFunctionResponse> {
+		options: Experimental_HaneulClientTypes.GetMoveFunctionOptions,
+	): Promise<Experimental_HaneulClientTypes.GetMoveFunctionResponse> {
 		const { response } = await this.#client.movePackageService.getFunction({
 			packageId: (await this.mvr.resolvePackage({ package: options.packageId })).package,
 			moduleName: options.moduleName,
@@ -436,7 +436,7 @@ export class GrpcCoreClient extends Experimental_CoreClient {
 	}
 }
 
-function mapOwner(owner: Owner | null | undefined): Experimental_SuiClientTypes.ObjectOwner | null {
+function mapOwner(owner: Owner | null | undefined): Experimental_HaneulClientTypes.ObjectOwner | null {
 	if (!owner) {
 		return null;
 	}
@@ -542,7 +542,7 @@ function mapOutputObjectState(
 
 function mapUnchangedConsensusObjectKind(
 	kind: UnchangedConsensusObject_UnchangedConsensusObjectKind | undefined,
-): null | Experimental_SuiClientTypes.UnchangedConsensusObject['kind'] {
+): null | Experimental_HaneulClientTypes.UnchangedConsensusObject['kind'] {
 	if (kind == null) {
 		return null;
 	}
@@ -569,13 +569,13 @@ export function parseTransactionEffects({
 	effects,
 }: {
 	effects: TransactionEffects | undefined;
-}): Experimental_SuiClientTypes.TransactionEffects | null {
+}): Experimental_HaneulClientTypes.TransactionEffects | null {
 	if (!effects) {
 		return null;
 	}
 
 	const changedObjects = effects.changedObjects.map(
-		(change): Experimental_SuiClientTypes.ChangedObject => {
+		(change): Experimental_HaneulClientTypes.ChangedObject => {
 			return {
 				id: change.objectId!,
 				inputState: mapInputObjectState(change.inputState)!,
@@ -629,7 +629,7 @@ export function parseTransactionEffects({
 		lamportVersion: effects.lamportVersion?.toString() ?? null,
 		changedObjects,
 		unchangedConsensusObjects: effects.unchangedConsensusObjects.map(
-			(object): Experimental_SuiClientTypes.UnchangedConsensusObject => {
+			(object): Experimental_HaneulClientTypes.UnchangedConsensusObject => {
 				return {
 					kind: mapUnchangedConsensusObjectKind(object.kind)!,
 					// TODO: we are inconsistent about id vs objectId
@@ -645,7 +645,7 @@ export function parseTransactionEffects({
 
 function parseTransaction(
 	transaction: ExecutedTransaction,
-): Experimental_SuiClientTypes.TransactionResponse {
+): Experimental_HaneulClientTypes.TransactionResponse {
 	const parsedTx = bcs.SenderSignedData.parse(transaction.transaction?.bcs?.value!)[0];
 	const bytes = bcs.TransactionData.serialize(parsedTx.intentMessage.value).toBytes();
 	const data = TransactionDataBuilder.restore({
@@ -694,7 +694,7 @@ function parseTransaction(
 
 function parseNormalizedSuiMoveType(
 	type: OpenSignature,
-): Experimental_SuiClientTypes.OpenSignature {
+): Experimental_HaneulClientTypes.OpenSignature {
 	let reference: 'mutable' | 'immutable' | null = null;
 
 	if (type.reference === OpenSignature_Reference.IMMUTABLE) {
@@ -711,7 +711,7 @@ function parseNormalizedSuiMoveType(
 
 function parseNormalizedSuiMoveTypeBody(
 	type: OpenSignatureBody,
-): Experimental_SuiClientTypes.OpenSignatureBody {
+): Experimental_HaneulClientTypes.OpenSignatureBody {
 	switch (type.type) {
 		case OpenSignatureBody_Type.TYPE_UNKNOWN:
 			return { $kind: 'unknown' };

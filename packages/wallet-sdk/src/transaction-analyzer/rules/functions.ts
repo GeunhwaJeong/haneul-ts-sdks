@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi, Experimental_SuiClientTypes } from '@haneullabs/sui/experimental';
+import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
 import type { TransactionAnalysisIssue } from '../analyzer.js';
 import { createAnalyzer } from '../analyzer.js';
 import { data } from './core.js';
@@ -41,7 +41,7 @@ export const moveFunctions = createAnalyzer({
 
 			return {
 				result: results.filter(
-					(fn): fn is Experimental_SuiClientTypes.FunctionResponse => fn !== null,
+					(fn): fn is Experimental_HaneulClientTypes.FunctionResponse => fn !== null,
 				),
 			};
 		},

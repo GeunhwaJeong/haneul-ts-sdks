@@ -15,7 +15,7 @@ import { Package } from './move_package.js';
 import { Owner } from './owner.js';
 import { Bcs } from './bcs.js';
 /**
- * An object on the Sui blockchain.
+ * An object on the Haneul blockchain.
  *
  * @generated from protobuf message sui.rpc.v2.Object
  */

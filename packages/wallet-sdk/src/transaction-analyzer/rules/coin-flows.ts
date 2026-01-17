@@ -104,7 +104,7 @@ export const coinFlows = createAnalyzer({
 			trackedCoins.set(
 				'gas',
 				new TrackedCoin(
-					normalizeStructTag('0x2::sui::SUI'),
+					normalizeStructTag('0x2::haneul::HANEUL'),
 					gasCoins.reduce((a, c) => a + c.balance, 0n),
 					true,
 				),

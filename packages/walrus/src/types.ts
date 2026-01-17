@@ -31,14 +31,14 @@ export interface WalrusPackageConfig {
 	exchangeIds?: string[];
 }
 
-type SuiClientOrRpcUrl =
+type HaneulClientOrRpcUrl =
 	| {
-			suiClient: ClientWithCoreApi;
+			haneulClient: ClientWithCoreApi;
 			suiRpcUrl?: never;
 	  }
 	| {
 			suiRpcUrl: string;
-			suiClient?: never;
+			haneulClient?: never;
 	  };
 
 type WalrusNetworkOrPackageConfig =
@@ -86,11 +86,11 @@ interface BaseWalrusClientConfig {
 /**
  * Configuration for the Walrus client.
  *
- * This is used to configure the Walrus client to use a specific storage node client options, network, and Sui client or RPC URL.
+ * This is used to configure the Walrus client to use a specific storage node client options, network, and Haneul client or RPC URL.
  */
 export type WalrusClientConfig = BaseWalrusClientConfig &
 	WalrusNetworkOrPackageConfig &
-	SuiClientOrRpcUrl;
+	HaneulClientOrRpcUrl;
 
 export type WalrusOptions<Name = 'walrus'> = BaseWalrusClientConfig & {
 	packageConfig?: WalrusPackageConfig;

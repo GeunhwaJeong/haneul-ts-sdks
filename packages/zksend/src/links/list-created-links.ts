@@ -2,17 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { bcs } from '@haneullabs/sui/bcs';
-import type { SuiClient } from '@haneullabs/sui/client';
-import { SuiGraphQLClient } from '@haneullabs/sui/graphql';
+import type { HaneulClient } from '@haneullabs/sui/client';
+import { HaneulGraphQLClient } from '@haneullabs/sui/graphql';
 import { graphql } from '@haneullabs/sui/graphql/schemas/latest';
-import { fromBase64, normalizeSuiAddress } from '@haneullabs/sui/utils';
+import { fromBase64, normalizeHaneulAddress } from '@haneullabs/sui/utils';
 
 import { ZkSendLink } from './claim.js';
 import type { ZkBagContractOptions } from './zk-bag.js';
 import { getContractIds } from './zk-bag.js';
 
 const ListCreatedLinksQuery = graphql(`
-	query listCreatedLinks($address: SuiAddress!, $function: String!, $cursor: String) {
+	query listCreatedLinks($address: HaneulAddress!, $function: String!, $cursor: String) {
 		transactions(
 			last: 10
 			before: $cursor
@@ -50,10 +50,10 @@ export async function listCreatedLinks({
 	host?: string;
 	path?: string;
 	claimApi?: string;
-	client?: SuiClient;
+	client?: HaneulClient;
 	fetch?: typeof fetch;
 }) {
-	const gqlClient = new SuiGraphQLClient({
+	const gqlClient = new HaneulGraphQLClient({
 		url:
 			network === 'testnet'
 				? 'https://graphql.testnet.sui.io/graphql'
@@ -61,7 +61,7 @@ export async function listCreatedLinks({
 		fetch: fetchFn,
 	});
 
-	const packageId = normalizeSuiAddress(contract.packageId);
+	const packageId = normalizeHaneulAddress(contract.packageId);
 
 	const page = await gqlClient.query({
 		query: ListCreatedLinksQuery,

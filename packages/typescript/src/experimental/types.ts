@@ -6,7 +6,7 @@ import type { SerializedTransactionDataV2, TransactionPlugin } from '../transact
 import type { ClientCache } from './cache.js';
 import type { Experimental_BaseClient } from './client.js';
 
-export type SuiClientRegistration<
+export type HaneulClientRegistration<
 	T extends Experimental_BaseClient = Experimental_BaseClient,
 	Name extends string = string,
 	Extension = unknown,
@@ -20,10 +20,10 @@ export type ClientWithExtensions<
 	Base extends Experimental_BaseClient = Experimental_BaseClient,
 > = Base & T;
 
-export namespace Experimental_SuiClientTypes {
+export namespace Experimental_HaneulClientTypes {
 	export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet' | (string & {});
 
-	export interface SuiClientOptions {
+	export interface HaneulClientOptions {
 		network: Network;
 		base?: Experimental_BaseClient;
 		cache?: ClientCache;

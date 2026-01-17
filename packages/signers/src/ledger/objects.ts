@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { Transaction } from '@haneullabs/sui/transactions';
-import type { SuiClient } from '@haneullabs/sui/client';
-import { SuiMoveObject } from './bcs.js';
+import type { HaneulClient } from '@haneullabs/sui/client';
+import { HaneulMoveObject } from './bcs.js';
 
-export const getInputObjects = async (transaction: Transaction, client: SuiClient) => {
+export const getInputObjects = async (transaction: Transaction, client: HaneulClient) => {
 	const data = transaction.getData();
 
 	const gasObjectIds = data.gasData.payment?.map((object) => object.objectId) ?? [];
@@ -29,14 +29,14 @@ export const getInputObjects = async (transaction: Transaction, client: SuiClien
 
 	// NOTE: We should probably get rid of this manual serialization logic in favor of using the
 	// already serialized object bytes from the GraphQL API once there is more mainstream support
-	// for it + we can enforce the transport type on the Sui client.
+	// for it + we can enforce the transport type on the Haneul client.
 	const bcsObjects = objects
 		.map((object) => {
 			if (object.error || !object.data || object.data.bcs?.dataType !== 'moveObject') {
 				return null;
 			}
 
-			return SuiMoveObject.serialize({
+			return HaneulMoveObject.serialize({
 				data: {
 					MoveObject: {
 						type: object.data.bcs.type,

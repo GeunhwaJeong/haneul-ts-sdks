@@ -3,7 +3,7 @@
 
 import { parse } from 'valibot';
 
-import { normalizeSuiAddress, normalizeSuiObjectId, SUI_TYPE_ARG } from '../utils/index.js';
+import { normalizeHaneulAddress, normalizeHaneulObjectId, SUI_TYPE_ARG } from '../utils/index.js';
 import { ObjectRefSchema } from '../transactions/data/internal.js';
 import type { CallArg, Command, OpenMoveTypeSignature } from '../transactions/data/internal.js';
 import { Inputs } from '../transactions/Inputs.js';
@@ -15,7 +15,7 @@ import {
 import type { TransactionDataBuilder } from '../transactions/TransactionData.js';
 import { chunk } from '@haneullabs/utils';
 import type { BuildTransactionOptions } from '../transactions/index.js';
-import type { SuiJsonRpcClient } from './client.js';
+import type { HaneulJsonRpcClient } from './client.js';
 
 // The maximum objects that can be fetched at once using multiGetObjects.
 const MAX_OBJECTS_PER_FETCH = 50;
@@ -24,7 +24,7 @@ const MAX_OBJECTS_PER_FETCH = 50;
 const GAS_SAFE_OVERHEAD = 1000n;
 const MAX_GAS = 50_000_000_000;
 
-export function jsonRpcClientResolveTransactionPlugin(client: SuiJsonRpcClient) {
+export function jsonRpcClientResolveTransactionPlugin(client: HaneulJsonRpcClient) {
 	return async function resolveTransactionData(
 		transactionData: TransactionDataBuilder,
 		options: BuildTransactionOptions,
@@ -43,13 +43,13 @@ export function jsonRpcClientResolveTransactionPlugin(client: SuiJsonRpcClient) 
 	};
 }
 
-async function setGasPrice(transactionData: TransactionDataBuilder, client: SuiJsonRpcClient) {
+async function setGasPrice(transactionData: TransactionDataBuilder, client: HaneulJsonRpcClient) {
 	if (!transactionData.gasConfig.price) {
 		transactionData.gasConfig.price = String(await client.getReferenceGasPrice());
 	}
 }
 
-async function setGasBudget(transactionData: TransactionDataBuilder, client: SuiJsonRpcClient) {
+async function setGasBudget(transactionData: TransactionDataBuilder, client: HaneulJsonRpcClient) {
 	if (transactionData.gasConfig.budget) {
 		return;
 	}
@@ -88,7 +88,7 @@ async function setGasBudget(transactionData: TransactionDataBuilder, client: Sui
 }
 
 // The current default is just picking _all_ coins we can which may not be ideal.
-async function setGasPayment(transactionData: TransactionDataBuilder, client: SuiJsonRpcClient) {
+async function setGasPayment(transactionData: TransactionDataBuilder, client: HaneulJsonRpcClient) {
 	if (!transactionData.gasConfig.payment) {
 		const coins = await client.getCoins({
 			owner: transactionData.gasConfig.owner || transactionData.sender!,
@@ -126,7 +126,7 @@ async function setGasPayment(transactionData: TransactionDataBuilder, client: Su
 
 async function resolveObjectReferences(
 	transactionData: TransactionDataBuilder,
-	client: SuiJsonRpcClient,
+	client: HaneulJsonRpcClient,
 ) {
 	// Keep track of the object references that will need to be resolved at the end of the transaction.
 	// We keep the input by-reference to avoid needing to re-resolve it:
@@ -139,7 +139,7 @@ async function resolveObjectReferences(
 
 	const dedupedIds = [
 		...new Set(
-			objectsToResolve.map((input) => normalizeSuiObjectId(input.UnresolvedObject.objectId)),
+			objectsToResolve.map((input) => normalizeHaneulObjectId(input.UnresolvedObject.objectId)),
 		),
 	];
 
@@ -203,7 +203,7 @@ async function resolveObjectReferences(
 		}
 
 		let updated: CallArg | undefined;
-		const id = normalizeSuiAddress(input.UnresolvedObject.objectId);
+		const id = normalizeHaneulAddress(input.UnresolvedObject.objectId);
 		const object = objectsById.get(id);
 
 		if (input.UnresolvedObject.initialSharedVersion ?? object?.initialSharedVersion) {
@@ -233,7 +233,7 @@ async function resolveObjectReferences(
 	}
 }
 
-async function normalizeInputs(transactionData: TransactionDataBuilder, client: SuiJsonRpcClient) {
+async function normalizeInputs(transactionData: TransactionDataBuilder, client: HaneulJsonRpcClient) {
 	const { inputs, commands } = transactionData;
 	const moveCallsToResolve: Extract<Command, { MoveCall: unknown }>['MoveCall'][] = [];
 	const moveFunctionsToResolve = new Set<string>();

@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { DeepBookClient } from '../src/client.js';
-import { SuiClient, getFullnodeUrl } from '@haneullabs/sui/client';
+import { HaneulClient, getFullnodeUrl } from '@haneullabs/sui/client';
 
 (async () => {
 	const dbClient = new DeepBookClient({
-		client: new SuiClient({
+		client: new HaneulClient({
 			url: getFullnodeUrl('testnet'),
 		}),
 		address: '0x0',
@@ -14,7 +14,7 @@ import { SuiClient, getFullnodeUrl } from '@haneullabs/sui/client';
 
 	console.log('=== Testing Margin Registry Functions ===\n');
 
-	const poolKey = 'SUI_DBUSDC'; // Test pool key
+	const poolKey = 'HANEUL_DBUSDC'; // Test pool key
 	const testOwner = '0x0000000000000000000000000000000000000000000000000000000000000000'; // Test owner address
 
 	try {

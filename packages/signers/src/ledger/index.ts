@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type SuiLedgerClient from '@haneullabs/ledgerjs-hw-app-sui';
-import type { SuiClient } from '@haneullabs/sui/client';
+import type HaneulLedgerClient from '@haneullabs/ledgerjs-hw-app-sui';
+import type { HaneulClient } from '@haneullabs/sui/client';
 import type { SignatureWithBytes } from '@haneullabs/sui/cryptography';
 import { messageWithIntent, Signer, toSerializedSignature } from '@haneullabs/sui/cryptography';
 import { Ed25519PublicKey } from '@haneullabs/sui/keypairs/ed25519';
@@ -13,7 +13,7 @@ import { bcs } from '@haneullabs/sui/bcs';
 import { getInputObjects } from './objects.js';
 import type { Resolution } from '@haneullabs/ledgerjs-hw-app-sui';
 
-export { SuiMoveObject } from './bcs.js';
+export { HaneulMoveObject } from './bcs.js';
 export { getInputObjects } from './objects.js';
 
 /**
@@ -22,18 +22,18 @@ export { getInputObjects } from './objects.js';
 export interface LedgerSignerOptions {
 	publicKey: Ed25519PublicKey;
 	derivationPath: string;
-	ledgerClient: SuiLedgerClient;
-	suiClient: SuiClient;
+	ledgerClient: HaneulLedgerClient;
+	haneulClient: HaneulClient;
 }
 
 /**
- * Ledger integrates with the Sui blockchain to provide signing capabilities using Ledger devices.
+ * Ledger integrates with the Haneul blockchain to provide signing capabilities using Ledger devices.
  */
 export class LedgerSigner extends Signer {
 	#derivationPath: string;
 	#publicKey: Ed25519PublicKey;
-	#ledgerClient: SuiLedgerClient;
-	#suiClient: SuiClient;
+	#ledgerClient: HaneulLedgerClient;
+	#haneulClient: HaneulClient;
 
 	/**
 	 * Creates an instance of LedgerSigner. It's expected to call the static `fromDerivationPath` method to create an instance.
@@ -42,12 +42,12 @@ export class LedgerSigner extends Signer {
 	 * const signer = await LedgerSigner.fromDerivationPath(derivationPath, options);
 	 * ```
 	 */
-	constructor({ publicKey, derivationPath, ledgerClient, suiClient }: LedgerSignerOptions) {
+	constructor({ publicKey, derivationPath, ledgerClient, haneulClient }: LedgerSignerOptions) {
 		super();
 		this.#publicKey = publicKey;
 		this.#derivationPath = derivationPath;
 		this.#ledgerClient = ledgerClient;
-		this.#suiClient = suiClient;
+		this.#haneulClient = haneulClient;
 	}
 
 	/**
@@ -76,7 +76,7 @@ export class LedgerSigner extends Signer {
 	): Promise<SignatureWithBytes> {
 		const transactionOptions = bcsObjects
 			? { bcsObjects }
-			: await getInputObjects(Transaction.from(bytes), this.#suiClient).catch(() => ({
+			: await getInputObjects(Transaction.from(bytes), this.#haneulClient).catch(() => ({
 					// Fail gracefully so network errors or serialization issues don't break transaction signing:
 					bcsObjects: [],
 				}));
@@ -130,8 +130,8 @@ export class LedgerSigner extends Signer {
 	 */
 	static async fromDerivationPath(
 		derivationPath: string,
-		ledgerClient: SuiLedgerClient,
-		suiClient: SuiClient,
+		ledgerClient: HaneulLedgerClient,
+		haneulClient: HaneulClient,
 	) {
 		const { publicKey } = await ledgerClient.getPublicKey(derivationPath);
 		if (!publicKey) {
@@ -142,7 +142,7 @@ export class LedgerSigner extends Signer {
 			derivationPath,
 			publicKey: new Ed25519PublicKey(publicKey),
 			ledgerClient,
-			suiClient,
+			haneulClient,
 		});
 	}
 

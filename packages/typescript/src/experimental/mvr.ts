@@ -3,17 +3,17 @@
 
 import { chunk, DataLoader } from '@haneullabs/utils';
 import { isValidNamedPackage, isValidNamedType } from '../utils/move-registry.js';
-import type { StructTag } from '../utils/sui-types.js';
+import type { StructTag } from '../utils/haneul-types.js';
 import {
-	isValidSuiAddress,
+	isValidHaneulAddress,
 	normalizeStructTag,
-	normalizeSuiAddress,
+	normalizeHaneulAddress,
 	parseStructTag,
-} from '../utils/sui-types.js';
+} from '../utils/haneul-types.js';
 import type { ClientCache } from './cache.js';
 import type { TransactionDataBuilder } from '../transactions/TransactionData.js';
 import { PACKAGE_VERSION } from '../version.js';
-import type { Experimental_SuiClientTypes } from './types.js';
+import type { Experimental_HaneulClientTypes } from './types.js';
 
 const NAME_SEPARATOR = '/';
 const MVR_API_HEADER = {
@@ -30,7 +30,7 @@ export interface MvrClientOptions {
 	};
 }
 
-export class MvrClient implements Experimental_SuiClientTypes.MvrMethods {
+export class MvrClient implements Experimental_HaneulClientTypes.MvrMethods {
 	#cache: ClientCache;
 	#url?: string;
 	#pageSize: number;
@@ -185,7 +185,7 @@ export class MvrClient implements Experimental_SuiClientTypes.MvrMethods {
 
 	async resolvePackage({
 		package: name,
-	}: Experimental_SuiClientTypes.MvrResolvePackageOptions): Promise<Experimental_SuiClientTypes.MvrResolvePackageResponse> {
+	}: Experimental_HaneulClientTypes.MvrResolvePackageOptions): Promise<Experimental_HaneulClientTypes.MvrResolvePackageResponse> {
 		if (!hasMvrName(name)) {
 			return {
 				package: name,
@@ -199,7 +199,7 @@ export class MvrClient implements Experimental_SuiClientTypes.MvrMethods {
 
 	async resolveType({
 		type,
-	}: Experimental_SuiClientTypes.MvrResolveTypeOptions): Promise<Experimental_SuiClientTypes.MvrResolveTypeResponse> {
+	}: Experimental_HaneulClientTypes.MvrResolveTypeOptions): Promise<Experimental_HaneulClientTypes.MvrResolveTypeResponse> {
 		if (!hasMvrName(type)) {
 			return {
 				type,
@@ -227,7 +227,7 @@ export class MvrClient implements Experimental_SuiClientTypes.MvrMethods {
 	async resolve({
 		types = [],
 		packages = [],
-	}: Experimental_SuiClientTypes.MvrResolveOptions): Promise<Experimental_SuiClientTypes.MvrResolveResponse> {
+	}: Experimental_HaneulClientTypes.MvrResolveOptions): Promise<Experimental_HaneulClientTypes.MvrResolveResponse> {
 		const mvrTypes = new Set<string>();
 
 		for (const type of types ?? []) {
@@ -302,7 +302,7 @@ function validateOverrides(overrides?: {
 			if (!isValidNamedPackage(pkg)) {
 				throw new Error(`Invalid package name: ${pkg}`);
 			}
-			if (!isValidSuiAddress(normalizeSuiAddress(id))) {
+			if (!isValidHaneulAddress(normalizeHaneulAddress(id))) {
 				throw new Error(`Invalid package ID: ${id}`);
 			}
 		}
@@ -319,7 +319,7 @@ function validateOverrides(overrides?: {
 
 			const parsedValue = parseStructTag(val);
 
-			if (!isValidSuiAddress(parsedValue.address)) {
+			if (!isValidHaneulAddress(parsedValue.address)) {
 				throw new Error(`Invalid type: ${val}`);
 			}
 		}
@@ -432,7 +432,7 @@ export function findNamesInTransaction(builder: TransactionDataBuilder): {
  */
 export function replaceNames(
 	builder: TransactionDataBuilder,
-	resolved: Experimental_SuiClientTypes.MvrResolveResponse,
+	resolved: Experimental_HaneulClientTypes.MvrResolveResponse,
 ) {
 	for (const command of builder.commands) {
 		// Replacements for `MakeMoveVec` commands (that can include types)

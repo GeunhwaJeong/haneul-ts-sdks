@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeSuiAddress } from '@haneullabs/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import {
@@ -28,7 +28,7 @@ import {
 	mintVillain,
 	publishExtensionsPackage,
 	publishHeroPackage,
-	setupSuiClient,
+	setupHaneulClient,
 	TestToolbox,
 } from './setup';
 
@@ -47,7 +47,7 @@ describe('Testing Kiosk SDK transaction building & querying e2e', () => {
 	let villainType: string;
 
 	beforeAll(async () => {
-		toolbox = await setupSuiClient();
+		toolbox = await setupHaneulClient();
 		extensionsPackageId = await publishExtensionsPackage(toolbox);
 		heroPackageId = await publishHeroPackage(toolbox);
 		heroType = `${heroPackageId}::hero::Hero`;
@@ -367,8 +367,8 @@ describe('Testing Kiosk SDK transaction building & querying e2e', () => {
 		});
 
 		expect(kiosk).toHaveProperty('kiosk');
-		expect(normalizeSuiAddress(kiosk.kiosk?.owner || '')).toBe(
-			normalizeSuiAddress(toolbox.address()),
+		expect(normalizeHaneulAddress(kiosk.kiosk?.owner || '')).toBe(
+			normalizeHaneulAddress(toolbox.address()),
 		);
 	});
 

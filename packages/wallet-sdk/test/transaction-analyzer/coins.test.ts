@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest';
 import { Transaction } from '@haneullabs/sui/transactions';
 import { analyze } from '../../src/transaction-analyzer/analyzer';
 import { coins, gasCoins } from '../../src/transaction-analyzer/rules/coins';
-import { MockSuiClient } from '../mocks/MockSuiClient';
+import { MockHaneulClient } from '../mocks/MockHaneulClient';
 import {
 	DEFAULT_SENDER,
 	createAddressOwner,
@@ -16,7 +16,7 @@ import {
 
 describe('TransactionAnalyzer - Coins Rule', () => {
 	it('should analyze all coin-related functionality in a single transaction', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 
 		// Add additional coins to exercise various features
 		client.addCoin({
@@ -28,7 +28,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 
 		client.addCoin({
 			objectId: '0xdef456',
-			coinType: '0x2::sui::SUI',
+			coinType: '0x2::haneul::HANEUL',
 			balance: 100000000n,
 			owner: { $kind: 'ObjectOwner', ObjectOwner: '0x00parent' },
 		});
@@ -90,7 +90,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			{
 			  "0x0000000000000000000000000000000000000000000000000000000000a5c000": {
 			    "balance": 5000000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			    "content": Promise {},
 			    "digest": "11111111111111111111111111111111",
 			    "id": "0x0000000000000000000000000000000000000000000000000000000000a5c000",
@@ -100,12 +100,12 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": null,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "100",
 			  },
 			  "0x0000000000000000000000000000000000000000000000000000000000a5c001": {
 			    "balance": 2500000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			    "content": Promise {},
 			    "digest": "11111111111111111111111111111111",
 			    "id": "0x0000000000000000000000000000000000000000000000000000000000a5c001",
@@ -115,7 +115,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": null,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "101",
 			  },
 			  "0x0000000000000000000000000000000000000000000000000000000000abc123": {
@@ -135,7 +135,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			  },
 			  "0x0000000000000000000000000000000000000000000000000000000000def456": {
 			    "balance": 100000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			    "content": Promise {},
 			    "digest": "11111111111111111111111111111111",
 			    "id": "0x0000000000000000000000000000000000000000000000000000000000def456",
@@ -145,7 +145,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			    },
 			    "ownerAddress": "0x00parent",
 			    "previousTransaction": null,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "100",
 			  },
 			}
@@ -155,7 +155,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			[
 			  {
 			    "balance": 5000000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			    "content": Promise {},
 			    "digest": "11111111111111111111111111111111",
 			    "id": "0x0000000000000000000000000000000000000000000000000000000000a5c000",
@@ -165,7 +165,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": null,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "100",
 			  },
 			]

@@ -21,7 +21,7 @@ import {
 	unknown,
 } from 'valibot';
 
-import { BCSBytes, JsonU64, ObjectID, ObjectRefSchema, SuiAddress } from './internal.js';
+import { BCSBytes, JsonU64, ObjectID, ObjectRefSchema, HaneulAddress } from './internal.js';
 import type { Simplify } from '@haneullabs/utils';
 
 function enumUnion<T extends Record<string, GenericSchema<any>>>(options: T) {
@@ -36,7 +36,7 @@ function enumUnion<T extends Record<string, GenericSchema<any>>>(options: T) {
 	>;
 }
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L690-L702
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L690-L702
 const Argument = enumUnion({
 	GasCoin: literal(true),
 	Input: pipe(number(), integer()),
@@ -44,15 +44,15 @@ const Argument = enumUnion({
 	NestedResult: tuple([pipe(number(), integer()), pipe(number(), integer())]),
 });
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L1387-L1392
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L1387-L1392
 const GasData = object({
 	budget: nullable(JsonU64),
 	price: nullable(JsonU64),
-	owner: nullable(SuiAddress),
+	owner: nullable(HaneulAddress),
 	payment: nullable(array(ObjectRefSchema)),
 });
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L707-L718
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L707-L718
 const ProgrammableMoveCall = object({
 	package: ObjectID,
 	module: string(),
@@ -68,7 +68,7 @@ const $Intent = object({
 	data: record(string(), unknown()),
 });
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L657-L685
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L657-L685
 const Command = enumUnion({
 	MoveCall: ProgrammableMoveCall,
 	TransferObjects: object({
@@ -100,7 +100,7 @@ const Command = enumUnion({
 	$Intent,
 });
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L102-L114
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L102-L114
 const ObjectArg = enumUnion({
 	ImmOrOwnedObject: ObjectRefSchema,
 	SharedObject: object({
@@ -112,7 +112,7 @@ const ObjectArg = enumUnion({
 	Receiving: ObjectRefSchema,
 });
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crates/sui-types/src/transaction.rs#L75-L80
+// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L75-L80
 const CallArg = enumUnion({
 	Object: ObjectArg,
 	Pure: object({
@@ -137,7 +137,7 @@ const TransactionExpiration = enumUnion({
 
 export const SerializedTransactionDataV2Schema = object({
 	version: literal(2),
-	sender: nullish(SuiAddress),
+	sender: nullish(HaneulAddress),
 	expiration: nullish(TransactionExpiration),
 	gasData: GasData,
 	inputs: array(CallArg),

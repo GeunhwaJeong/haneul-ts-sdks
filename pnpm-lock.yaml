@@ -564,12 +564,6 @@ importers:
       '@floating-ui/dom':
         specifier: ^1.7.4
         version: 1.7.4
-      '@lit-labs/scoped-registry-mixin':
-        specifier: ^1.0.4
-        version: 1.0.4
-      '@lit/task':
-        specifier: ^1.0.3
-        version: 1.0.3
       '@haneullabs/slush-wallet':
         specifier: workspace:*
         version: link:../../../slush-wallet
@@ -582,6 +576,12 @@ importers:
       '@haneullabs/wallet-standard':
         specifier: workspace:*
         version: link:../../../wallet-standard
+      '@lit-labs/scoped-registry-mixin':
+        specifier: ^1.0.4
+        version: 1.0.4
+      '@lit/task':
+        specifier: ^1.0.3
+        version: 1.0.3
       '@nanostores/lit':
         specifier: ^0.2.3
         version: 0.2.3(lit@3.3.1)(nanostores@1.1.0)
@@ -628,12 +628,12 @@ importers:
 
   packages/dapp-kit-next/packages/dapp-kit-react:
     dependencies:
-      '@lit/react':
-        specifier: ^1.0.8
-        version: 1.0.8(@types/react@19.2.7)
       '@haneullabs/dapp-kit-core':
         specifier: workspace:*
         version: link:../dapp-kit-core
+      '@lit/react':
+        specifier: ^1.0.8
+        version: 1.0.8(@types/react@19.2.7)
       '@nanostores/react':
         specifier: ^1.0.0
         version: 1.0.0(nanostores@1.1.0)(react@19.2.1)
@@ -706,15 +706,15 @@ importers:
         specifier: ^4.5.0
         version: 4.5.0(axios@1.13.2)
     devDependencies:
-      '@iarna/toml':
-        specifier: ^2.2.5
-        version: 2.2.5
       '@haneullabs/build-scripts':
         specifier: workspace:*
         version: link:../build-scripts
       '@haneullabs/codegen':
         specifier: workspace:*
         version: link:../codegen
+      '@iarna/toml':
+        specifier: ^2.2.5
+        version: 2.2.5
       '@types/node':
         specifier: ^24.10.1
         version: 24.10.1
@@ -766,6 +766,9 @@ importers:
       '@haneullabs/enoki-connect':
         specifier: workspace:*
         version: link:../enoki-connect
+      '@haneullabs/haneulns':
+        specifier: workspace:*
+        version: link:../haneulns
       '@haneullabs/kiosk':
         specifier: workspace:*
         version: link:../kiosk
@@ -784,9 +787,6 @@ importers:
       '@haneullabs/sui':
         specifier: workspace:*
         version: link:../typescript
-      '@haneullabs/suins':
-        specifier: workspace:*
-        version: link:../suins
       '@haneullabs/utils':
         specifier: workspace:*
         version: link:../utils
@@ -1038,6 +1038,65 @@ importers:
         specifier: ^7.2.6
         version: 7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.1)
 
+  packages/haneulns:
+    dependencies:
+      '@haneullabs/sui':
+        specifier: workspace:*
+        version: link:../typescript
+      axios:
+        specifier: ^1.13.2
+        version: 1.13.2
+      axios-retry:
+        specifier: ^4.5.0
+        version: 4.5.0(axios@1.13.2)
+    devDependencies:
+      '@haneullabs/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@types/tmp':
+        specifier: ^0.2.6
+        version: 0.2.6
+      ts-retry-promise:
+        specifier: ^0.8.1
+        version: 0.8.1
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^7.2.6
+        version: 7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.1)
+      vitest:
+        specifier: ^4.0.15
+        version: 4.0.15(@types/node@24.10.1)(happy-dom@20.0.11)(jiti@2.6.1)(jsdom@27.2.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.2)(msw@2.12.3(@types/node@24.10.1)(typescript@5.9.3))(tsx@4.21.0)(yaml@2.8.1)
+
+  packages/haneulns-v2:
+    dependencies:
+      '@haneullabs/bcs':
+        specifier: workspace:*
+        version: link:../bcs
+      '@haneullabs/sui':
+        specifier: workspace:*
+        version: link:../typescript
+    devDependencies:
+      '@haneullabs/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@haneullabs/codegen':
+        specifier: workspace:*
+        version: link:../codegen
+      '@types/tmp':
+        specifier: ^0.2.6
+        version: 0.2.6
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^7.2.6
+        version: 7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.1)
+      vitest:
+        specifier: ^4.0.15
+        version: 4.0.15(@types/node@24.10.1)(happy-dom@20.0.11)(jiti@2.6.1)(jsdom@27.2.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.2)(msw@2.12.3(@types/node@24.10.1)(typescript@5.9.3))(tsx@4.21.0)(yaml@2.8.1)
+
   packages/kiosk:
     dependencies:
       '@haneullabs/sui':
@@ -1099,12 +1158,12 @@ importers:
         specifier: '>=7.5.2'
         version: 7.7.3
     devDependencies:
-      '@ledgerhq/hw-transport-mocker':
-        specifier: ^6.29.13
-        version: 6.29.13
       '@haneullabs/build-scripts':
         specifier: workspace:*
         version: link:../build-scripts
+      '@ledgerhq/hw-transport-mocker':
+        specifier: ^6.29.13
+        version: 6.29.13
       '@size-limit/preset-small-lib':
         specifier: ^12.0.0
         version: 12.0.0(size-limit@12.0.0(jiti@2.6.1))
@@ -1201,12 +1260,12 @@ importers:
         specifier: ^1.8.0
         version: 1.8.0
     devDependencies:
-      '@hey-api/openapi-ts':
-        specifier: ^0.88.0
-        version: 0.88.0(typescript@5.9.3)
       '@haneullabs/build-scripts':
         specifier: workspace:*
         version: link:../build-scripts
+      '@hey-api/openapi-ts':
+        specifier: ^0.88.0
+        version: 0.88.0(typescript@5.9.3)
       '@types/node':
         specifier: ^24.10.1
         version: 24.10.1
@@ -1288,65 +1347,6 @@ importers:
         specifier: ^4.0.15
         version: 4.0.15(@types/node@24.10.1)(happy-dom@20.0.11)(jiti@2.6.1)(jsdom@27.2.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.2)(msw@2.12.3(@types/node@24.10.1)(typescript@5.9.3))(tsx@4.21.0)(yaml@2.8.1)
 
-  packages/suins:
-    dependencies:
-      '@haneullabs/sui':
-        specifier: workspace:*
-        version: link:../typescript
-      axios:
-        specifier: ^1.13.2
-        version: 1.13.2
-      axios-retry:
-        specifier: ^4.5.0
-        version: 4.5.0(axios@1.13.2)
-    devDependencies:
-      '@haneullabs/build-scripts':
-        specifier: workspace:*
-        version: link:../build-scripts
-      '@types/tmp':
-        specifier: ^0.2.6
-        version: 0.2.6
-      ts-retry-promise:
-        specifier: ^0.8.1
-        version: 0.8.1
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-      vite:
-        specifier: ^7.2.6
-        version: 7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.1)
-      vitest:
-        specifier: ^4.0.15
-        version: 4.0.15(@types/node@24.10.1)(happy-dom@20.0.11)(jiti@2.6.1)(jsdom@27.2.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.2)(msw@2.12.3(@types/node@24.10.1)(typescript@5.9.3))(tsx@4.21.0)(yaml@2.8.1)
-
-  packages/suins-v2:
-    dependencies:
-      '@haneullabs/bcs':
-        specifier: workspace:*
-        version: link:../bcs
-      '@haneullabs/sui':
-        specifier: workspace:*
-        version: link:../typescript
-    devDependencies:
-      '@haneullabs/build-scripts':
-        specifier: workspace:*
-        version: link:../build-scripts
-      '@haneullabs/codegen':
-        specifier: workspace:*
-        version: link:../codegen
-      '@types/tmp':
-        specifier: ^0.2.6
-        version: 0.2.6
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-      vite:
-        specifier: ^7.2.6
-        version: 7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.1)
-      vitest:
-        specifier: ^4.0.15
-        version: 4.0.15(@types/node@24.10.1)(happy-dom@20.0.11)(jiti@2.6.1)(jsdom@27.2.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(lightningcss@1.30.2)(msw@2.12.3(@types/node@24.10.1)(typescript@5.9.3))(tsx@4.21.0)(yaml@2.8.1)
-
   packages/typescript:
     dependencies:
       '@graphql-typed-document-node/core':
@@ -1416,12 +1416,12 @@ importers:
       '@graphql-codegen/typescript-operations':
         specifier: ^5.0.6
         version: 5.0.6(graphql@16.12.0)
-      '@iarna/toml':
-        specifier: ^2.2.5
-        version: 2.2.5
       '@haneullabs/build-scripts':
         specifier: workspace:^
         version: link:../build-scripts
+      '@iarna/toml':
+        specifier: ^2.2.5
+        version: 2.2.5
       '@parcel/watcher':
         specifier: ^2.5.1
         version: 2.5.1
@@ -1656,9 +1656,6 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
     devDependencies:
-      '@hono/node-server':
-        specifier: ^1.19.6
-        version: 1.19.6(hono@4.10.7)
       '@haneullabs/build-scripts':
         specifier: workspace:*
         version: link:../build-scripts
@@ -1671,6 +1668,9 @@ importers:
       '@haneullabs/dapp-kit-react':
         specifier: workspace:*
         version: link:../dapp-kit-next/packages/dapp-kit-react
+      '@hono/node-server':
+        specifier: ^1.19.6
+        version: 1.19.6(hono@4.10.7)
       '@tanstack/react-query':
         specifier: ^5.90.11
         version: 5.90.11(react@19.2.1)

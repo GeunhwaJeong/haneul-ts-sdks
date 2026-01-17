@@ -30,18 +30,18 @@
 		"src"
 	],
 	"type": "commonjs",
-	"main": "./dist/cjs/Sui.js",
-	"module": "./dist/esm/Sui.js",
-	"types": "./dist/cjs/Sui.d.ts",
+	"main": "./dist/cjs/Haneul.js",
+	"module": "./dist/esm/Haneul.js",
+	"types": "./dist/cjs/Haneul.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/esm/Sui.js",
-			"require": "./dist/cjs/Sui.js"
+			"import": "./dist/esm/Haneul.js",
+			"require": "./dist/cjs/Haneul.js"
 		}
 	},
 	"size-limit": [
 		{
-			"path": "dist/Sui.js",
+			"path": "dist/Haneul.js",
 			"limit": "10 kB"
 		}
 	],

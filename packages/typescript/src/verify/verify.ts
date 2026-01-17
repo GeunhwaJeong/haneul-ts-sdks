@@ -130,7 +130,7 @@ export function publicKeyFromRawBytes(
 			throw new Error(`Unsupported signature scheme ${signatureScheme}`);
 	}
 
-	if (options.address && publicKey.toSuiAddress() !== options.address) {
+	if (options.address && publicKey.toHaneulAddress() !== options.address) {
 		throw new Error(`Public key bytes do not match the provided address`);
 	}
 

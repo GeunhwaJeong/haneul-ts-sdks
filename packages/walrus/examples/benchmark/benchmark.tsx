@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCurrentAccount, useSuiClient } from '@haneullabs/dapp-kit-react';
+import { useCurrentAccount, useHaneulClient } from '@haneullabs/dapp-kit-react';
 import { useState, useEffect } from 'react';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { ErrorDisplay } from './components/ErrorDisplay.js';
@@ -22,7 +22,7 @@ export function BenchmarkPage() {
 	const [error, setError] = useState<string>('');
 	const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-	const suiClient = useSuiClient();
+	const haneulClient = useHaneulClient();
 
 	const { isRunning, results, currentStatus, runBenchmark, removeResult, clearResults } =
 		useBenchmark();
@@ -66,7 +66,7 @@ export function BenchmarkPage() {
 	};
 
 	async function handleTransaction(digest: string) {
-		await suiClient.core.waitForTransaction({
+		await haneulClient.core.waitForTransaction({
 			digest,
 		});
 		setRefreshTrigger((prev) => prev + 1);

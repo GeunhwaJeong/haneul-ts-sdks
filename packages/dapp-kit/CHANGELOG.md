@@ -756,8 +756,8 @@
 
 ### Patch Changes
 
-- 640b757: Add `getSuiClientQuery` to get the `queryOptions` config for usage with the `QueryClient`
-  outside of React hooks. Added `useSuiClientSuspenseQuery` to support suspense-based data fetching.
+- 640b757: Add `getHaneulClientQuery` to get the `queryOptions` config for usage with the `QueryClient`
+  outside of React hooks. Added `useHaneulClientSuspenseQuery` to support suspense-based data fetching.
 
 ## 0.14.22
 
@@ -976,7 +976,7 @@
 
 - a92b03de42: The Typescript SDK has been renamed to `@haneullabs/sui` and includes many new features
   and breaking changes. See the
-  [full migration guide](https://sdk.haneullabs.com/typescript/migrations/sui-1.0) for details on
+  [full migration guide](https://sdk.haneullabs.com/typescript/migrations/haneul-1.0) for details on
   how to upgrade.
 
 ### Patch Changes
@@ -1229,7 +1229,7 @@
 ### Patch Changes
 
 - 2ae1a6a108: Early return on `useAutoConnectWallet` to improve account switching performance
-- b30fecbbca: Fix missing export of useSuiClientQueries
+- b30fecbbca: Fix missing export of useHaneulClientQueries
 - Updated dependencies [cdcfa76c43]
   - @haneullabs/sui.js@0.48.0
   - @haneullabs/wallet-standard@0.8.11
@@ -1244,7 +1244,7 @@
 
 ### Minor Changes
 
-- 47b137d03: Add new useSuiClientQueries hook to support variable client queries
+- 47b137d03: Add new useHaneulClientQueries hook to support variable client queries
 
 ## 0.9.1
 
@@ -1312,8 +1312,8 @@
 
 ### Patch Changes
 
-- 09c103002: fix pagination in useSuiClientInfiniteQuery
-- e0578094b: Fix typing of data for useSuiClientInfiniteQuery
+- 09c103002: fix pagination in useHaneulClientInfiniteQuery
+- e0578094b: Fix typing of data for useHaneulClientInfiniteQuery
 - Updated dependencies [b9afb5567]
   - @haneullabs/sui.js@0.45.0
   - @haneullabs/wallet-standard@0.8.6
@@ -1391,7 +1391,7 @@
 
 ### Minor Changes
 
-- c51db090a: update useSuiClientQuery hooks and remove generated RPC hooks
+- c51db090a: update useHaneulClientQuery hooks and remove generated RPC hooks
 - ccfc810c0: Require wallets to have some default characteristics in order to be recognized
 
 ### Patch Changes

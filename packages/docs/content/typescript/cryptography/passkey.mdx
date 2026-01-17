@@ -2,7 +2,7 @@
 title: Passkey
 ---
 
-Similar to other Keypair classes, the Sui TypeScript SDK provides the `PasskeyKeypair` that handles
+Similar to other Keypair classes, the Haneul TypeScript SDK provides the `PasskeyKeypair` that handles
 communication with the passkey device and signing with it. This SDK defines the address and
 signatures according to [SIP-9](https://github.com/sui-foundation/sips/blob/main/sips/sip-9.md).
 
@@ -61,7 +61,7 @@ created.
 
 One can recover the unique public key with exactly two passkey signatures on two messages. This
 means that if the user is asked to sign two messages, the developer can recover an unique public key
-and its Sui address.
+and its Haneul address.
 
 ```typescript
 let provider = new BrowserPasskeyProvider('Sui Passkey Example', {
@@ -93,7 +93,7 @@ derive the address, sign personal messages, sign transactions and verify signatu
 
 ```typescript
 const publicKey = keypair.getPublicKey();
-const address = publicKey.toSuiAddress();
+const address = publicKey.toHaneulAddress();
 
 const message = new TextEncoder().encode('hello world');
 const { signature } = await keypair.signPersonalMessage(message);

@@ -20,7 +20,7 @@ import {
 	MultiSigStruct,
 	parsePartialSignatures,
 } from '../../../src/multisig/publickey';
-import { normalizeSuiAddress } from '../../../src/utils/sui-types.js';
+import { normalizeHaneulAddress } from '../../../s../utils/haneul-types.js';
 
 describe('Publickey', () => {
 	let k1: Ed25519Keypair,
@@ -236,7 +236,7 @@ describe('Publickey', () => {
 		]);
 	});
 
-	it('`toSuiAddress()` should return correct sui address associated with multisig publickey', async () => {
+	it('`toHaneulAddress()` should return correct sui address associated with multisig publickey', async () => {
 		const multiSigPublicKey = MultiSigPublicKey.fromPublicKeys({
 			threshold: 3,
 			publicKeys: [
@@ -257,12 +257,12 @@ describe('Publickey', () => {
 			i += bytes.length;
 			tmp.set([weight], i++);
 		}
-		const multisigSuiAddress = normalizeSuiAddress(
+		const multisigHaneulAddress = normalizeHaneulAddress(
 			bytesToHex(blake2b(tmp.slice(0, i), { dkLen: 32 })),
 		);
 
-		expect(multiSigPublicKey.toSuiAddress()).toEqual(multisigSuiAddress);
-		expect(multiSigPublicKey.toSuiAddress()).toEqual(
+		expect(multiSigPublicKey.toHaneulAddress()).toEqual(multisigHaneulAddress);
+		expect(multiSigPublicKey.toHaneulAddress()).toEqual(
 			'0x8ee027fe556a3f6c0a23df64f090d2429fec0bb21f55594783476e81de2dec27',
 		);
 	});

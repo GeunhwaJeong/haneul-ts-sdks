@@ -694,7 +694,7 @@
 
 - a92b03de42: The Typescript SDK has been renamed to `@haneullabs/sui` and includes many new features
   and breaking changes. See the
-  [full migration guide](https://sdk.haneullabs.com/typescript/migrations/sui-1.0) for details on
+  [full migration guide](https://sdk.haneullabs.com/typescript/migrations/haneul-1.0) for details on
   how to upgrade.
 
 ### Patch Changes
@@ -1126,7 +1126,7 @@
   adapter
 - 68e60b02c: Changed where the options and requestType for signAndExecuteTransaction are.
 - dbe73d5a4: Add an optional `contentOptions` field to `SuiSignAndExecuteTransactionOptions` to
-  specify which fields to include in `SuiTransactionBlockResponse` (e.g., transaction, effects,
+  specify which fields to include in `HaneulTransactionBlockResponse` (e.g., transaction, effects,
   events, etc). By default, only the transaction digest will be included.
 
 ### Patch Changes

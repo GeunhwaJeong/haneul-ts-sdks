@@ -12,7 +12,7 @@
  */
 
 import { execSync } from 'child_process';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Transaction } from '@haneullabs/sui/transactions';
 
 import { DeepBookClient, OrderType, SelfMatchingOptions } from '../src/index.js';
@@ -35,14 +35,14 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	const marginManagers = {
 		MARGIN_MANAGER_1: {
 			address: '0x20f689b98e9afe22b5f4ec2e7e39a1b5fbbbb09e4f1f580a387dcc2015a9abda',
-			poolKey: 'SUI_DBUSDC',
+			poolKey: 'HANEUL_DBUSDC',
 		},
 	};
 
 	const dbClient = new DeepBookClient({
 		address: getActiveAddress(),
 		env: env,
-		client: new SuiClient({
+		client: new HaneulClient({
 			url: getFullnodeUrl(env),
 		}),
 		marginManagers,
@@ -227,13 +227,13 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 
 	// 3.1 Create a condition manually
 	const condition = dbClient.marginTPSL.newCondition(
-		'SUI_DBUSDC', // Pool key for price calculation
+		'HANEUL_DBUSDC', // Pool key for price calculation
 		true, // triggerBelowPrice
 		4.0, // triggerPrice
 	)(tx2);
 
 	// 3.2 Create a pending limit order manually
-	const pendingLimitOrder = dbClient.marginTPSL.newPendingLimitOrder('SUI_DBUSDC', {
+	const pendingLimitOrder = dbClient.marginTPSL.newPendingLimitOrder('HANEUL_DBUSDC', {
 		clientOrderId: '3001',
 		orderType: OrderType.IMMEDIATE_OR_CANCEL,
 		selfMatchingOption: SelfMatchingOptions.SELF_MATCHING_ALLOWED,
@@ -245,7 +245,7 @@ export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 	})(tx2);
 
 	// 3.3 Create a pending market order manually
-	const pendingMarketOrder = dbClient.marginTPSL.newPendingMarketOrder('SUI_DBUSDC', {
+	const pendingMarketOrder = dbClient.marginTPSL.newPendingMarketOrder('HANEUL_DBUSDC', {
 		clientOrderId: '3002',
 		selfMatchingOption: SelfMatchingOptions.SELF_MATCHING_ALLOWED,
 		quantity: 2,

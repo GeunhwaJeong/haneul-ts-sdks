@@ -4,16 +4,16 @@
 import type {
 	DynamicFieldInfo,
 	PaginationArguments,
-	SuiClient,
-	SuiObjectData,
-	SuiObjectDataFilter,
-	SuiObjectDataOptions,
-	SuiObjectResponse,
+	HaneulClient,
+	HaneulObjectData,
+	HaneulObjectDataFilter,
+	HaneulObjectDataOptions,
+	HaneulObjectResponse,
 } from '@haneullabs/sui/client';
 import {
 	fromBase64,
 	normalizeStructTag,
-	normalizeSuiAddress,
+	normalizeHaneulAddress,
 	parseStructTag,
 } from '@haneullabs/sui/utils';
 
@@ -24,7 +24,7 @@ import { chunk } from '@haneullabs/utils';
 
 const DEFAULT_QUERY_LIMIT = 50;
 
-export async function getKioskObject(client: SuiClient, id: string): Promise<Kiosk> {
+export async function getKioskObject(client: HaneulClient, id: string): Promise<Kiosk> {
 	const queryRes = await client.getObject({ id, options: { showBcs: true } });
 
 	if (!queryRes || queryRes.error || !queryRes.data) {
@@ -89,7 +89,7 @@ export function extractKioskData(
 export function attachListingsAndPrices(
 	kioskData: KioskData,
 	listings: KioskListing[],
-	listingObjects: SuiObjectResponse[],
+	listingObjects: HaneulObjectResponse[],
 ) {
 	// map item listings as {item_id: KioskListing}
 	// for easier mapping on the nex
@@ -120,9 +120,9 @@ export function attachListingsAndPrices(
 /**
  * A helper that attaches the listing prices to kiosk listings.
  */
-export function attachObjects(kioskData: KioskData, objects: SuiObjectData[]) {
-	const mapping = objects.reduce<Record<string, SuiObjectData>>(
-		(acc: Record<string, SuiObjectData>, obj) => {
+export function attachObjects(kioskData: KioskData, objects: HaneulObjectData[]) {
+	const mapping = objects.reduce<Record<string, HaneulObjectData>>(
+		(acc: Record<string, HaneulObjectData>, obj) => {
 			acc[obj.objectId] = obj;
 			return acc;
 		},
@@ -159,7 +159,7 @@ export function attachLockedItems(kioskData: KioskData, lockedItemIds: string[])
  * RPC calls that allow filtering of Type / batch fetching of spec
  */
 export async function getAllDynamicFields(
-	client: SuiClient,
+	client: HaneulClient,
 	parentId: string,
 	pagination: PaginationArguments<string>,
 ) {
@@ -187,9 +187,9 @@ export async function getAllDynamicFields(
  * Requests are sent using `Promise.all`.
  */
 export async function getAllObjects(
-	client: SuiClient,
+	client: HaneulClient,
 	ids: string[],
-	options: SuiObjectDataOptions,
+	options: HaneulObjectDataOptions,
 	limit: number = DEFAULT_QUERY_LIMIT,
 ) {
 	const chunks = chunk(ids, limit);
@@ -217,15 +217,15 @@ export async function getAllOwnedObjects({
 	limit = DEFAULT_QUERY_LIMIT,
 	options = { showType: true, showContent: true },
 }: {
-	client: SuiClient;
+	client: HaneulClient;
 	owner: string;
-	filter?: SuiObjectDataFilter;
-	options?: SuiObjectDataOptions;
+	filter?: HaneulObjectDataFilter;
+	options?: HaneulObjectDataOptions;
 	limit?: number;
 }) {
 	let hasNextPage = true;
 	let cursor = undefined;
-	const data: SuiObjectResponse[] = [];
+	const data: HaneulObjectResponse[] = [];
 
 	while (hasNextPage) {
 		const result = await client.getOwnedObjects({
@@ -259,7 +259,7 @@ export function percentageToBasisPoints(percentage: number) {
  * A helper to parse a transfer policy Cap into a usable object.
  */
 export function parseTransferPolicyCapObject(
-	item: SuiObjectResponse,
+	item: HaneulObjectResponse,
 ): TransferPolicyCap | undefined {
 	const type = (item?.data?.content as { type: string })?.type;
 
@@ -281,6 +281,6 @@ export function parseTransferPolicyCapObject(
 // Normalizes the packageId part of a rule's type.
 export function getNormalizedRuleType(rule: string) {
 	const normalizedRuleAddress = rule.split('::');
-	normalizedRuleAddress[0] = normalizeSuiAddress(normalizedRuleAddress[0]);
+	normalizedRuleAddress[0] = normalizeHaneulAddress(normalizedRuleAddress[0]);
 	return normalizedRuleAddress.join('::');
 }

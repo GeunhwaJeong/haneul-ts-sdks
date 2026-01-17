@@ -1,13 +1,13 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { normalizeSuiAddress } from '@haneullabs/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
 
 import type { Datatype, ModuleSummary, Type, TypeParameter } from './types/summary.js';
 
-export const MOVE_STDLIB_ADDRESS = normalizeSuiAddress('0x1');
-export const SUI_FRAMEWORK_ADDRESS = normalizeSuiAddress('0x2');
-export const SUI_SYSTEM_ADDRESS = normalizeSuiAddress('0x3');
+export const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress('0x1');
+export const SUI_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
+export const SUI_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
 
 type TypeSignatureFormat = 'typescriptArg' | 'bcs' | 'typeTag';
 interface RenderTypeSignatureOptions {

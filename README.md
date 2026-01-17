@@ -1,6 +1,6 @@
 # Haneullabs Typescript SDKs
 
-A collection of TypeScript SDKs for interacting with the Sui blockchain ecosystem.
+A collection of TypeScript SDKs for interacting with the Haneul blockchain ecosystem.
 
 ## Documentation
 

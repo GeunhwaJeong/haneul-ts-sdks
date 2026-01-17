@@ -40,7 +40,7 @@ export class PaymentKitClient {
 		if (options.client) {
 			this.#client = options.client;
 		} else {
-			throw new PaymentKitClientError('suiClient must be provided');
+			throw new PaymentKitClientError('haneulClient must be provided');
 		}
 
 		const network = options.client.network;

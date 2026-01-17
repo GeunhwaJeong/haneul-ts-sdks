@@ -6,8 +6,8 @@ import type {
 	DynamicFieldInfo,
 	SuiCallArg,
 	SuiMoveNormalizedModule,
-	SuiParsedData,
-	SuiTransaction,
+	HaneulParsedData,
+	HaneulTransaction,
 	SuiValidatorSummary,
 } from './generated.js';
 
@@ -113,10 +113,10 @@ export type DynamicFieldPage = {
 
 export type SuiMoveNormalizedModules = Record<string, SuiMoveNormalizedModule>;
 
-export type SuiMoveObject = Extract<SuiParsedData, { dataType: 'moveObject' }>;
-export type SuiMovePackage = Extract<SuiParsedData, { dataType: 'package' }>;
+export type HaneulMoveObject = Extract<HaneulParsedData, { dataType: 'moveObject' }>;
+export type SuiMovePackage = Extract<HaneulParsedData, { dataType: 'package' }>;
 
 export type ProgrammableTransaction = {
-	transactions: SuiTransaction[];
+	transactions: HaneulTransaction[];
 	inputs: SuiCallArg[];
 };

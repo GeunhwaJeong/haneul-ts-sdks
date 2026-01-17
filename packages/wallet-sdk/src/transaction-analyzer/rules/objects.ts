@@ -1,13 +1,13 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi, Experimental_SuiClientTypes } from '@haneullabs/sui/experimental';
+import type { ClientWithCoreApi, Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
 import { createAnalyzer } from '../analyzer.js';
 import type { TransactionAnalysisIssue } from '../analyzer.js';
 
 import { data } from './core.js';
 
-export type AnalyzedObject = Experimental_SuiClientTypes.ObjectResponse & {
+export type AnalyzedObject = Experimental_HaneulClientTypes.ObjectResponse & {
 	ownerAddress: string | null;
 };
 
@@ -72,7 +72,7 @@ export const objects = createAnalyzer({
 			const issues: TransactionAnalysisIssue[] = [];
 
 			const foundObjects = objects.filter(
-				(obj): obj is Experimental_SuiClientTypes.ObjectResponse => {
+				(obj): obj is Experimental_HaneulClientTypes.ObjectResponse => {
 					if (obj instanceof Error) {
 						issues.push({ message: `Failed to fetch object: ${obj.message}`, error: obj });
 						return false;

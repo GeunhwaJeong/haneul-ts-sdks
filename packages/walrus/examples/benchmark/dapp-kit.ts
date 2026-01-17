@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createDAppKit } from '@haneullabs/dapp-kit-react';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { walrus } from '../../src/index.js';
 
 export const dAppKit = createDAppKit({
@@ -10,7 +10,7 @@ export const dAppKit = createDAppKit({
 	defaultNetwork: 'testnet',
 	autoConnect: true,
 	createClient(network) {
-		return new SuiClient({ network, url: getFullnodeUrl(network) }).$extend(
+		return new HaneulClient({ network, url: getFullnodeUrl(network) }).$extend(
 			walrus({
 				name: 'walrusWithRelay',
 

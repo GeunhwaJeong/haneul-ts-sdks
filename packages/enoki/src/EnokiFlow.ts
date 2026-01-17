@@ -3,7 +3,7 @@
 
 import type { ExportedWebCryptoKeypair } from '@haneullabs/signers/webcrypto';
 import { WebCryptoSigner } from '@haneullabs/signers/webcrypto';
-import { decodeSuiPrivateKey } from '@haneullabs/sui/cryptography';
+import { decodeHaneulPrivateKey } from '@haneullabs/sui/cryptography';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { fromBase64, toBase64 } from '@haneullabs/sui/utils';
 import { decodeJwt } from '@haneullabs/sui/zklogin';
@@ -204,7 +204,7 @@ export class EnokiFlow {
 			ephemeralKeyPair: this.#useNativeCryptoSigner
 				? '@@native'
 				: toBase64(
-						decodeSuiPrivateKey((ephemeralKeyPair as Ed25519Keypair).getSecretKey()).secretKey,
+						decodeHaneulPrivateKey((ephemeralKeyPair as Ed25519Keypair).getSecretKey()).secretKey,
 					),
 		});
 

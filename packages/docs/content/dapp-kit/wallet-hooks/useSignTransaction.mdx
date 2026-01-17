@@ -12,7 +12,7 @@ import {
 	ConnectButton,
 	useCurrentAccount,
 	useSignTransaction,
-	useSuiClient,
+	useHaneulClient,
 } from '@haneullabs/dapp-kit';
 import { toBase64 } from '@haneullabs/sui/utils';
 import { useState } from 'react';
@@ -20,7 +20,7 @@ import { useState } from 'react';
 function MyComponent() {
 	const { mutateAsync: signTransaction } = useSignTransaction();
 	const [signature, setSignature] = useState('');
-	const client = useSuiClient();
+	const client = useHaneulClient();
 	const currentAccount = useCurrentAccount();
 
 	return (
@@ -33,7 +33,7 @@ function MyComponent() {
 							onClick={async () => {
 								const { bytes, signature, reportTransactionEffects } = await signTransaction({
 									transaction: new Transaction(),
-									chain: 'sui:devnet',
+									chain: 'haneul:devnet',
 								});
 
 								const executeResult = await client.executeTransactionBlock({

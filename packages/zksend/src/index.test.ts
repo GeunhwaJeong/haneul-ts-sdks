@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getFullnodeUrl, SuiClient, SuiObjectChange } from '@haneullabs/sui/client';
-import { decodeSuiPrivateKey, Keypair } from '@haneullabs/sui/cryptography';
+import { getFullnodeUrl, HaneulClient, HaneulObjectChange } from '@haneullabs/sui/client';
+import { decodeHaneulPrivateKey, Keypair } from '@haneullabs/sui/cryptography';
 import { getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/sui/faucet';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { Transaction } from '@haneullabs/sui/transactions';
@@ -21,7 +21,7 @@ export const DEMO_BEAR_CONFIG = {
 	type: '0xab8ed19f16874f9b8b66b0b6e325ee064848b1a7fdcb1c2f0478b17ad8574e65::demo_bear::DemoBear',
 };
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 
@@ -34,7 +34,7 @@ const keypair = Ed25519Keypair.fromSecretKey(
 // or uncomment the beforeAll and gas function below
 beforeAll(async () => {
 	const balance = await client.getBalance({
-		owner: keypair.toSuiAddress(),
+		owner: keypair.toHaneulAddress(),
 	});
 
 	if (Number(balance.totalBalance) < Number(MIST_PER_SUI) * 0.02) {
@@ -46,7 +46,7 @@ async function getSuiFromFaucet(keypair: Keypair) {
 	const faucetHost = getFaucetHost('testnet');
 	await requestSuiFromFaucetV2({
 		host: faucetHost,
-		recipient: keypair.toSuiAddress(),
+		recipient: keypair.toHaneulAddress(),
 	});
 }
 
@@ -55,7 +55,7 @@ describe('Contract links', () => {
 		const link = new ZkSendLinkBuilder({
 			client,
 			network: 'testnet',
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 		});
 
 		const bears = await createBears(3);
@@ -87,12 +87,12 @@ describe('Contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);
 
-		const claim = await claimLink.claimAssets(keypair.toSuiAddress());
+		const claim = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 		const res = await client.waitForTransaction({
 			digest: claim.digest,
@@ -126,7 +126,7 @@ describe('Contract links', () => {
 			keypair: linkKp,
 			client,
 			network: 'testnet',
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 		});
 
 		const bears = await createBears(3);
@@ -151,11 +151,11 @@ describe('Contract links', () => {
 				},
 			],
 		} = await getSentTransactionsWithLinks({
-			address: keypair.toSuiAddress(),
+			address: keypair.toHaneulAddress(),
 			network: 'testnet',
 		});
 
-		const { url, transaction } = await lostLink.createRegenerateTransaction(keypair.toSuiAddress());
+		const { url, transaction } = await lostLink.createRegenerateTransaction(keypair.toHaneulAddress());
 
 		const result = await client.signAndExecuteTransaction({
 			transaction,
@@ -178,12 +178,12 @@ describe('Contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);
 
-		const claim = await claimLink.claimAssets(keypair.toSuiAddress());
+		const claim = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 		const res = await client.waitForTransaction({
 			digest: claim.digest,
@@ -216,7 +216,7 @@ describe('Contract links', () => {
 			keypair: linkKp,
 			client,
 			network: 'testnet',
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 		});
 
 		const bears = await createBears(3);
@@ -241,11 +241,11 @@ describe('Contract links', () => {
 				},
 			],
 		} = await getSentTransactionsWithLinks({
-			address: keypair.toSuiAddress(),
+			address: keypair.toHaneulAddress(),
 			network: 'testnet',
 		});
 
-		const { digest: claimDigest } = await lostLink.claimAssets(keypair.toSuiAddress(), {
+		const { digest: claimDigest } = await lostLink.claimAssets(keypair.toHaneulAddress(), {
 			reclaim: true,
 			sign: async (tx) => (await keypair.signTransaction(tx)).signature,
 		});
@@ -271,7 +271,7 @@ describe('Contract links', () => {
 			const link = new ZkSendLinkBuilder({
 				client,
 				network: 'testnet',
-				sender: keypair.toSuiAddress(),
+				sender: keypair.toHaneulAddress(),
 			});
 
 			link.addClaimableMist(100n);
@@ -309,12 +309,12 @@ describe('Contract links', () => {
 					[
 					  {
 					    "amount": 100n,
-					    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+					    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 					  },
 					]
 				`);
 
-			const claim = await claimLink.claimAssets(keypair.toSuiAddress());
+			const claim = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 			const res = await client.waitForTransaction({
 				digest: claim.digest,
@@ -337,7 +337,7 @@ describe('Non contract links', () => {
 	test('Links with separate gas coin', async () => {
 		const link = new ZkSendLinkBuilder({
 			client,
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 			network: 'testnet',
 			contract: null,
 		});
@@ -370,12 +370,12 @@ describe('Non contract links', () => {
 					[
 					  {
 					    "amount": 100n,
-					    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+					    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 					  },
 					]
 				`);
 
-		const claimTx = await claimLink.claimAssets(new Ed25519Keypair().toSuiAddress());
+		const claimTx = await claimLink.claimAssets(new Ed25519Keypair().toHaneulAddress());
 
 		const res = await client.waitForTransaction({
 			digest: claimTx.digest,
@@ -407,7 +407,7 @@ describe('Non contract links', () => {
 		const tx = new Transaction();
 
 		const [coin] = tx.splitCoins(tx.gas, [5_000_000]);
-		tx.transferObjects([coin], linkKp.toSuiAddress());
+		tx.transferObjects([coin], linkKp.toHaneulAddress());
 
 		const { digest } = await client.signAndExecuteTransaction({
 			signer: keypair,
@@ -427,10 +427,10 @@ describe('Non contract links', () => {
 		expect(claimLink.assets?.nfts.length).toEqual(0);
 		expect(claimLink.assets?.balances.length).toEqual(1);
 		expect(claimLink.assets?.balances[0].coinType).toEqual(
-			'0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+			'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 		);
 
-		const claimTx = await claimLink.claimAssets(keypair.toSuiAddress());
+		const claimTx = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 		const res = await client.waitForTransaction({
 			digest: claimTx.digest,
@@ -441,7 +441,7 @@ describe('Non contract links', () => {
 
 		expect(res.balanceChanges?.length).toEqual(2);
 		const link2 = await ZkSendLink.fromUrl(
-			`https://zksend.con/claim#${toBase64(decodeSuiPrivateKey(linkKp.getSecretKey()).secretKey)}`,
+			`https://zksend.con/claim#${toBase64(decodeHaneulPrivateKey(linkKp.getSecretKey()).secretKey)}`,
 			{
 				network: 'testnet',
 				claimApi: `https://api.slush.app/api`,
@@ -457,7 +457,7 @@ describe('Non contract links', () => {
 	test('Send to address', async () => {
 		const link = new ZkSendLinkBuilder({
 			client,
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 			network: 'testnet',
 			contract: null,
 		});
@@ -473,7 +473,7 @@ describe('Non contract links', () => {
 		const receiver = new Ed25519Keypair();
 
 		const tx = await link.createSendToAddressTransaction({
-			address: receiver.toSuiAddress(),
+			address: receiver.toHaneulAddress(),
 		});
 
 		const { digest } = await client.signAndExecuteTransaction({
@@ -486,7 +486,7 @@ describe('Non contract links', () => {
 		});
 
 		const objects = await client.getOwnedObjects({
-			owner: receiver.toSuiAddress(),
+			owner: receiver.toHaneulAddress(),
 		});
 
 		expect(objects.data.length).toEqual(4);
@@ -496,7 +496,7 @@ describe('Non contract links', () => {
 		const link = new ZkSendLinkBuilder({
 			client,
 			network: 'testnet',
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 		});
 
 		const tx = new Transaction();
@@ -533,12 +533,12 @@ describe('Non contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);
 
-		const claim = await claimLink.claimAssets(keypair.toSuiAddress());
+		const claim = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 		const res = await client.waitForTransaction({
 			digest: claim.digest,
@@ -569,7 +569,7 @@ describe('Non contract links', () => {
 		const link = new ZkSendLinkBuilder({
 			client,
 			network: 'testnet',
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 		});
 
 		const bears = await createBears(3);
@@ -592,16 +592,16 @@ describe('Non contract links', () => {
 
 		const createdLinks = await listCreatedLinks({
 			network: 'testnet',
-			address: keypair.toSuiAddress(),
+			address: keypair.toHaneulAddress(),
 		});
 
-		expect(createdLinks.links[0]?.link.address).toEqual(link.keypair.toSuiAddress());
+		expect(createdLinks.links[0]?.link.address).toEqual(link.keypair.toHaneulAddress());
 
 		expect(createdLinks.links[0].claimed).toEqual(false);
 		expect(createdLinks.links[0].assets).toMatchObject({
 			balances: [
 				{
-					coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+					coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 					amount: 100n,
 				},
 			],
@@ -622,12 +622,12 @@ describe('Non contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);
 
-		const claim = await claimLink.claimAssets(keypair.toSuiAddress());
+		const claim = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 		const res = await client.waitForTransaction({
 			digest: claim.digest,
@@ -668,7 +668,7 @@ async function createBears(totalBears: number) {
 		bears.push(bear);
 	}
 
-	tx.transferObjects(bears, tx.pure.address(keypair.toSuiAddress()));
+	tx.transferObjects(bears, tx.pure.address(keypair.toHaneulAddress()));
 
 	const res = await client.signAndExecuteTransaction({
 		transaction: tx,
@@ -684,9 +684,9 @@ async function createBears(totalBears: number) {
 
 	const bearList = res
 		.objectChanges!.filter(
-			(x: SuiObjectChange) => x.type === 'created' && x.objectType.includes(DEMO_BEAR_CONFIG.type),
+			(x: HaneulObjectChange) => x.type === 'created' && x.objectType.includes(DEMO_BEAR_CONFIG.type),
 		)
-		.map((x: SuiObjectChange) => {
+		.map((x: HaneulObjectChange) => {
 			if (!('objectId' in x)) throw new Error('invalid data');
 			return {
 				objectId: x.objectId,

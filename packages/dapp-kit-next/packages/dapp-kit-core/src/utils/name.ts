@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { normalizeSuiNSName } from '@haneullabs/sui/utils';
+import { normalizeHaneulNSName } from '@haneullabs/sui/utils';
 import type { DAppKitCompatibleClient } from '../core/types.js';
 
 const cache = new Map<string, string | null>();
@@ -17,7 +17,7 @@ export async function resolveNameServiceName(client: DAppKitCompatibleClient, ad
 		});
 
 		const name = result?.data.name;
-		cache.set(address, name ? normalizeSuiNSName(name, 'at') : null);
+		cache.set(address, name ? normalizeHaneulNSName(name, 'at') : null);
 		return name;
 	} catch {
 		cache.set(address, null);

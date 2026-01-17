@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { isValidNamedPackage, isValidSuiObjectId } from '@haneullabs/sui/utils';
+import { isValidNamedPackage, isValidHaneulObjectId } from '@haneullabs/sui/utils';
 import { cosmiconfig } from 'cosmiconfig';
 import * as z from 'zod/v4';
 
 export const onChainPackageSchema = z.object({
-	package: z.string().refine((name) => isValidNamedPackage(name) || isValidSuiObjectId(name), {
+	package: z.string().refine((name) => isValidNamedPackage(name) || isValidHaneulObjectId(name), {
 		message: 'Invalid package name or package ID',
 	}),
 	packageName: z.string(),
@@ -34,10 +34,10 @@ export const configSchema = z.object({
 });
 
 export type PackageConfig = z.infer<typeof packageConfigSchema>;
-export type SuiCodegenConfig = z.input<typeof configSchema>;
-export type ParsedSuiCodegenConfig = z.infer<typeof configSchema>;
+export type HaneulCodegenConfig = z.input<typeof configSchema>;
+export type ParsedHaneulCodegenConfig = z.infer<typeof configSchema>;
 
-export async function loadConfig(): Promise<ParsedSuiCodegenConfig> {
+export async function loadConfig(): Promise<ParsedHaneulCodegenConfig> {
 	const config = await cosmiconfig('sui-codegen').search();
 
 	if (!config) {

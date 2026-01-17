@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { bcs } from '@haneullabs/sui/bcs';
-import type { SuiClient } from '@haneullabs/sui/client';
+import type { HaneulClient } from '@haneullabs/sui/client';
 import type { Transaction } from '@haneullabs/sui/transactions';
 import { coinWithBalance } from '@haneullabs/sui/transactions';
 import { fromBase64, fromHex, parseStructTag } from '@haneullabs/sui/utils';
@@ -13,7 +13,7 @@ import { extractVaaBytesFromAccumulatorMessage } from './pyth-helpers.js';
 
 const MAX_ARGUMENT_SIZE = 16 * 1024;
 export type ObjectId = string;
-export class SuiPriceServiceConnection extends PriceServiceConnection {
+export class HaneulPriceServiceConnection extends PriceServiceConnection {
 	/**
 	 * Fetch price feed update data.
 	 *
@@ -25,17 +25,17 @@ export class SuiPriceServiceConnection extends PriceServiceConnection {
 		return latestVaas.map((vaa) => fromBase64(vaa));
 	}
 }
-export class SuiPythClient {
+export class HaneulPythClient {
 	#pythPackageId?: Promise<ObjectId>;
 	#wormholePackageId?: Promise<ObjectId>;
 	#priceFeedObjectIdCache: Map<HexString, Promise<ObjectId>> = new Map();
 	#priceTableInfo?: Promise<{ id: ObjectId; fieldType: ObjectId }>;
 	#baseUpdateFee?: Promise<number>;
-	provider: SuiClient;
+	provider: HaneulClient;
 	pythStateId: ObjectId;
 	wormholeStateId: ObjectId;
 
-	constructor(provider: SuiClient, pythStateId: ObjectId, wormholeStateId: ObjectId) {
+	constructor(provider: HaneulClient, pythStateId: ObjectId, wormholeStateId: ObjectId) {
 		this.provider = provider;
 		this.pythStateId = pythStateId;
 		this.wormholeStateId = wormholeStateId;

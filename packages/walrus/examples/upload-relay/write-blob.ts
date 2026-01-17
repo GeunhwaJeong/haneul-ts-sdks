@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
 import { walrus } from '../../src/client.js';
 import { getFundedKeypair } from '../funded-keypair.js';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 	network: 'testnet',
 }).$extend(

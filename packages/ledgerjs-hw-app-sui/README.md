@@ -74,7 +74,7 @@ const sui = new Sui(transport);
 
 ### getPublicKey
 
-Gets the Sui address for a given BIP-32 path.
+Gets the Haneul address for a given BIP-32 path.
 
 #### Parameters
 

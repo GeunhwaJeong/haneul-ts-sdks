@@ -701,7 +701,7 @@
 
 - a92b03de42: The Typescript SDK has been renamed to `@haneullabs/sui` and includes many new features
   and breaking changes. See the
-  [full migration guide](https://sdk.haneullabs.com/typescript/migrations/sui-1.0) for details on
+  [full migration guide](https://sdk.haneullabs.com/typescript/migrations/haneul-1.0) for details on
   how to upgrade.
 
 ### Patch Changes
@@ -978,7 +978,7 @@
 - cc6441f46: Updated types and imports to use new modular exports from the `@haneullabs/sui.js` refactor
 - 6d41059c7: Update to use modular imports from @haneullabs/sui.js
 
-  Some methods now accept a `SuiClient` imported from `@haneullabs/sui.js/client` rather than a
+  Some methods now accept a `HaneulClient` imported from `@haneullabs/sui.js/client` rather than a
   `JsonRpcProvider`
 
 ### Patch Changes

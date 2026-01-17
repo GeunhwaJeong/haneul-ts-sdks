@@ -20,11 +20,11 @@ export class MultiSigSigner extends Signer {
 
 		const weights = pubkey.getPublicKeys().map(({ weight, publicKey }) => ({
 			weight,
-			address: publicKey.toSuiAddress(),
+			address: publicKey.toHaneulAddress(),
 		}));
 
 		for (const signer of signers) {
-			const address = signer.toSuiAddress();
+			const address = signer.toHaneulAddress();
 			if (uniqueKeys.has(address)) {
 				throw new Error(`Can't create MultiSigSigner with duplicate signers`);
 			}

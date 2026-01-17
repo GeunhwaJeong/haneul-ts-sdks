@@ -32,7 +32,7 @@ export type DAppKitConnectModalOptions = {
 };
 
 /**
- * A modal component for connecting to a Sui wallet, meant to be opened via a trigger button.
+ * A modal component for connecting to a Haneul wallet, meant to be opened via a trigger button.
  *
  * Opens a modal to let the user select and connect to a wallet.
  *

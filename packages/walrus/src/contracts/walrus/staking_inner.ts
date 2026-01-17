@@ -37,7 +37,7 @@ export const StakingInnerV1 = new MoveStruct({
 		 */
 		pools: object_table.ObjectTable,
 		/**
-		 * The current epoch of the Walrus system. The epochs are not the same as the Sui
+		 * The current epoch of the Walrus system. The epochs are not the same as the Haneul
 		 * epochs, not to be mistaken with `ctx.epoch()`.
 		 */
 		epoch: bcs.u32(),

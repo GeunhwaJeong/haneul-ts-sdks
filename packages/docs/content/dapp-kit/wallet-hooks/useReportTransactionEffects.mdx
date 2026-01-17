@@ -14,7 +14,7 @@ import {
 	ConnectButton,
 	useCurrentAccount,
 	useReportTransactionEffects,
-	useSuiClient,
+	useHaneulClient,
 } from '@haneullabs/dapp-kit';
 import { toBase64 } from '@haneullabs/sui/utils';
 import { useState } from 'react';
@@ -22,7 +22,7 @@ import { useState } from 'react';
 function MyComponent() {
 	const { mutateAsync: reportTransactionEffects } = useReportTransactionEffects();
 	const [signature, setSignature] = useState('');
-	const client = useSuiClient();
+	const client = useHaneulClient();
 	const currentAccount = useCurrentAccount();
 
 	return (

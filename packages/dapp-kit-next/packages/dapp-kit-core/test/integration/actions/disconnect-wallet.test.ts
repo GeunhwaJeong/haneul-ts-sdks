@@ -5,7 +5,7 @@ import { describe, expect, test, beforeEach, vi, MockInstance } from 'vitest';
 import { TEST_DEFAULT_NETWORK, TEST_NETWORKS, TestWalletInitializeResult } from '../../test-utils';
 import { createMockWallets, MockWallet } from '../../mocks/mock-wallet';
 import { createDAppKit, DAppKit } from '../../../src';
-import { SuiClient, getFullnodeUrl } from '@haneullabs/sui/client';
+import { HaneulClient, getFullnodeUrl } from '@haneullabs/sui/client';
 import { getWallets } from '@haneullabs/wallet-standard';
 import { createMockAccount } from '../../mocks/mock-account';
 import { UiWallet } from '@wallet-standard/ui';
@@ -24,7 +24,7 @@ describe('[Integration] disconnectWallet action', () => {
 			networks: TEST_NETWORKS,
 			defaultNetwork: TEST_DEFAULT_NETWORK,
 			createClient(network) {
-				return new SuiClient({ network, url: getFullnodeUrl(network) });
+				return new HaneulClient({ network, url: getFullnodeUrl(network) });
 			},
 			walletInitializers: [
 				{

@@ -73,7 +73,7 @@ const paymentParams = {
 	nonce: 'b5e88aec-d88e-4961-9204-6c84e0e1de4e',
 	amount: 1000000000,
 	receiver,
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 };
 
 // If you try to process the same payment twice, it will fail
@@ -105,7 +105,7 @@ const payment1 = {
 	nonce: originalNonce,
 	amount: 1000000000,
 	receiver,
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 };
 
 // Different nonce = different payment
@@ -113,7 +113,7 @@ const payment2 = {
 	nonce: crypto.randomUUID(), // Changed
 	amount: 1000000000,
 	receiver,
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 };
 
 // Different amount = different payment
@@ -121,7 +121,7 @@ const payment3 = {
 	nonce: originalNonce,
 	amount: 2000000000, // Changed
 	receiver,
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 };
 
 // All three are unique payments that can be processed separately
@@ -137,7 +137,7 @@ Let's walk through a complete registry payment workflow:
 // Define your payment parameters
 const paymentParams = {
 	nonce: crypto.randomUUID(), // Your unique payment ID
-	coinType: '0x2::sui::SUI', // SUI token
+	coinType: '0x2::haneul::HANEUL', // SUI token
 	amount: 1000000000, // 1 SUI (in MIST)
 	receiver,
 	sender: senderAddress, // Must match signer
@@ -187,7 +187,7 @@ if (receiptEvent) {
 	console.log('  Nonce:', receipt.nonce); // 'crypto.randomUUID()'
 	console.log('  Amount:', receipt.amount); // 1n * MIST_PER_SUI
 	console.log('  Receiver:', receipt.receiver); //
-	console.log('  Coin Type:', receipt.coin_type); // '0x2::sui::SUI'
+	console.log('  Coin Type:', receipt.coin_type); // '0x2::haneul::HANEUL'
 	console.log('  Timestamp:', receipt.timestamp_ms); // Unix timestamp
 }
 ```
@@ -198,7 +198,7 @@ if (receiptEvent) {
 // Query the payment record to confirm it exists
 const record = await client.paymentKit.getPaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 });
@@ -221,7 +221,7 @@ Ephemeral payments follow a simpler flow without creating persistent records:
 // No registry needed for ephemeral payments
 const tx = client.paymentKit.tx.processEphemeralPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 500000000, // 0.5 SUI
 	receiver,
 	sender: senderAddress,
@@ -272,7 +272,7 @@ const tx = new Transaction();
 tx.add(
 	client.paymentKit.calls.processRegistryPayment({
 		nonce: crypto.randomUUID(),
-		coinType: '0x2::sui::SUI',
+		coinType: '0x2::haneul::HANEUL',
 		amount: 1000000000,
 		receiver,
 		sender: senderAddress,
@@ -282,7 +282,7 @@ tx.add(
 tx.add(
 	client.paymentKit.calls.processRegistryPayment({
 		nonce: crypto.randomUUID(),
-		coinType: '0x2::sui::SUI',
+		coinType: '0x2::haneul::HANEUL',
 		amount: 2000000000,
 		receiver,
 		sender: senderAddress,

@@ -6,7 +6,7 @@ import type { TadaDocumentNode } from 'gql.tada';
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
 import { Experimental_BaseClient } from '../experimental/index.js';
-import type { Experimental_SuiClientTypes } from '../experimental/index.js';
+import type { Experimental_HaneulClientTypes } from '../experimental/index.js';
 import { GraphQLCoreClient } from './core.js';
 import type { TypedDocumentString } from './generated/queries.js';
 
@@ -46,18 +46,18 @@ export type GraphQLResponseErrors = Array<{
 	path?: (string | number)[];
 }>;
 
-export interface SuiGraphQLClientOptions<Queries extends Record<string, GraphQLDocument>> {
+export interface HaneulGraphQLClientOptions<Queries extends Record<string, GraphQLDocument>> {
 	url: string;
 	fetch?: typeof fetch;
 	headers?: Record<string, string>;
 	queries?: Queries;
-	network?: Experimental_SuiClientTypes.Network;
-	mvr?: Experimental_SuiClientTypes.MvrOptions;
+	network?: Experimental_HaneulClientTypes.Network;
+	mvr?: Experimental_HaneulClientTypes.MvrOptions;
 }
 
-export class SuiGraphQLRequestError extends Error {}
+export class HaneulGraphQLRequestError extends Error {}
 
-export class SuiGraphQLClient<
+export class HaneulGraphQLClient<
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	Queries extends Record<string, GraphQLDocument> = {},
 > extends Experimental_BaseClient {
@@ -74,7 +74,7 @@ export class SuiGraphQLClient<
 		queries = {} as Queries,
 		network = 'unknown',
 		mvr,
-	}: SuiGraphQLClientOptions<Queries>) {
+	}: HaneulGraphQLClientOptions<Queries>) {
 		super({
 			network,
 		});
@@ -110,7 +110,7 @@ export class SuiGraphQLClient<
 		});
 
 		if (!res.ok) {
-			throw new SuiGraphQLRequestError(`GraphQL request failed: ${res.statusText} (${res.status})`);
+			throw new HaneulGraphQLRequestError(`GraphQL request failed: ${res.statusText} (${res.status})`);
 		}
 
 		return await res.json();

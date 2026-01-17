@@ -4,10 +4,10 @@
 import path from 'path';
 import type {
 	DevInspectResults,
-	SuiObjectChangePublished,
-	SuiTransactionBlockResponse,
+	HaneulObjectChangePublished,
+	HaneulTransactionBlockResponse,
 } from '@haneullabs/sui/client';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { FaucetRateLimitError, getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/sui/faucet';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { Transaction } from '@haneullabs/sui/transactions';
@@ -24,34 +24,34 @@ const DEFAULT_FULLNODE_URL = process.env.FULLNODE_URL ?? getFullnodeUrl('localne
 
 export class TestToolbox {
 	keypair: Ed25519Keypair;
-	client: SuiClient;
+	client: HaneulClient;
 	configPath: string;
 
-	constructor(keypair: Ed25519Keypair, client: SuiClient, configPath: string) {
+	constructor(keypair: Ed25519Keypair, client: HaneulClient, configPath: string) {
 		this.keypair = keypair;
 		this.client = client;
 		this.configPath = configPath;
 	}
 
 	address() {
-		return this.keypair.getPublicKey().toSuiAddress();
+		return this.keypair.getPublicKey().toHaneulAddress();
 	}
 
 	public async getActiveValidators() {
-		return (await this.client.getLatestSuiSystemState()).activeValidators;
+		return (await this.client.getLatestHaneulSystemState()).activeValidators;
 	}
 }
 
-export function getClient(): SuiClient {
-	return new SuiClient({
+export function getClient(): HaneulClient {
+	return new HaneulClient({
 		url: DEFAULT_FULLNODE_URL,
 	});
 }
 
 // TODO: expose these testing utils from @haneullabs/sui
-export async function setupSuiClient() {
+export async function setupHaneulClient() {
 	const keypair = Ed25519Keypair.generate();
-	const address = keypair.getPublicKey().toSuiAddress();
+	const address = keypair.getPublicKey().toHaneulAddress();
 	const client = getClient();
 	await retry(() => requestSuiFromFaucetV2({ host: DEFAULT_FAUCET_URL, recipient: address }), {
 		backoff: 'EXPONENTIAL',
@@ -72,7 +72,7 @@ export async function setupSuiClient() {
 export async function publishPackage(packageName: string, toolbox?: TestToolbox) {
 	// TODO: We create a unique publish address per publish, but we really could share one for all publishes.
 	if (!toolbox) {
-		toolbox = await setupSuiClient();
+		toolbox = await setupHaneulClient();
 	}
 
 	const result = await execSuiTools([
@@ -118,7 +118,7 @@ export async function publishPackage(packageName: string, toolbox?: TestToolbox)
 
 	const packageId = ((publishTxn.objectChanges?.filter(
 		(a) => a.type === 'published',
-	) as SuiObjectChangePublished[]) ?? [])[0]?.packageId.replace(/^(0x)(0+)/, '0x') as string;
+	) as HaneulObjectChangePublished[]) ?? [])[0]?.packageId.replace(/^(0x)(0+)/, '0x') as string;
 
 	expect(packageId).toBeTypeOf('string');
 
@@ -182,7 +182,7 @@ export async function createPersonalKiosk(toolbox: TestToolbox, kioskClient: Kio
 	await executeTransaction(toolbox, tx);
 }
 
-function getCreatedObjectIdByType(res: SuiTransactionBlockResponse, type: string): string {
+function getCreatedObjectIdByType(res: HaneulTransactionBlockResponse, type: string): string {
 	return res.objectChanges?.filter(
 		(x) => x.type === 'created' && x.objectType.endsWith(type),
 		//@ts-ignore-next-line
@@ -206,7 +206,7 @@ export async function getPublisherObject(toolbox: TestToolbox): Promise<string> 
 export async function executeTransaction(
 	toolbox: TestToolbox,
 	tx: Transaction,
-): Promise<SuiTransactionBlockResponse> {
+): Promise<HaneulTransactionBlockResponse> {
 	const resp = await toolbox.client.signAndExecuteTransaction({
 		signer: toolbox.keypair,
 		transaction: tx,

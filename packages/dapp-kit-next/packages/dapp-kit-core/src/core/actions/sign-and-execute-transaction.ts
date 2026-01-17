@@ -3,13 +3,13 @@
 
 import type { DAppKitStores } from '../store.js';
 import {
-	SuiSignAndExecuteTransaction,
-	SuiSignAndExecuteTransactionBlock,
+	HaneulSignAndExecuteTransaction,
+	HaneulSignAndExecuteTransactionBlock,
 } from '@haneullabs/wallet-standard';
 import type {
-	SuiSignAndExecuteTransactionBlockFeature,
-	SuiSignAndExecuteTransactionFeature,
-	SuiSignAndExecuteTransactionInput,
+	HaneulSignAndExecuteTransactionBlockFeature,
+	HaneulSignAndExecuteTransactionFeature,
+	HaneulSignAndExecuteTransactionInput,
 } from '@haneullabs/wallet-standard';
 import { getWalletAccountForUiWalletAccount_DO_NOT_USE_OR_YOU_WILL_BE_FIRED as getWalletAccountForUiWalletAccount } from '@wallet-standard/ui-registry';
 import { FeatureNotSupportedError, WalletNotConnectedError } from '../../utils/errors.js';
@@ -21,7 +21,7 @@ import { fromBase64, toBase64 } from '@haneullabs/utils';
 
 export type SignAndExecuteTransactionArgs = {
 	transaction: Transaction | string;
-} & Omit<SuiSignAndExecuteTransactionInput, 'account' | 'chain' | 'transaction'>;
+} & Omit<HaneulSignAndExecuteTransactionInput, 'account' | 'chain' | 'transaction'>;
 
 export function signAndExecuteTransactionCreator({ $connection, $currentClient }: DAppKitStores) {
 	/**
@@ -37,8 +37,8 @@ export function signAndExecuteTransactionCreator({ $connection, $currentClient }
 		}
 
 		const underlyingAccount = getWalletAccountForUiWalletAccount(account);
-		const suiClient = $currentClient.get();
-		const chain = getChain(suiClient.network);
+		const haneulClient = $currentClient.get();
+		const chain = getChain(haneulClient.network);
 
 		const transactionWrapper = {
 			toJSON: async () => {
@@ -47,15 +47,15 @@ export function signAndExecuteTransactionCreator({ $connection, $currentClient }
 				}
 
 				transaction.setSenderIfNotSet(account.address);
-				return await transaction.toJSON({ client: suiClient, supportedIntents });
+				return await transaction.toJSON({ client: haneulClient, supportedIntents });
 			},
 		};
 
 		const signAndExecuteTransactionFeature = tryGetAccountFeature({
 			account,
 			chain,
-			featureName: SuiSignAndExecuteTransaction,
-		}) as SuiSignAndExecuteTransactionFeature[typeof SuiSignAndExecuteTransaction];
+			featureName: HaneulSignAndExecuteTransaction,
+		}) as HaneulSignAndExecuteTransactionFeature[typeof HaneulSignAndExecuteTransaction];
 
 		if (signAndExecuteTransactionFeature) {
 			return await signAndExecuteTransactionFeature.signAndExecuteTransaction({
@@ -69,8 +69,8 @@ export function signAndExecuteTransactionCreator({ $connection, $currentClient }
 		const signAndExecuteTransactionBlockFeature = tryGetAccountFeature({
 			account,
 			chain,
-			featureName: SuiSignAndExecuteTransactionBlock,
-		}) as SuiSignAndExecuteTransactionBlockFeature[typeof SuiSignAndExecuteTransactionBlock];
+			featureName: HaneulSignAndExecuteTransactionBlock,
+		}) as HaneulSignAndExecuteTransactionBlockFeature[typeof HaneulSignAndExecuteTransactionBlock];
 
 		if (signAndExecuteTransactionBlockFeature) {
 			const transactionBlock = Transaction.from(await transactionWrapper.toJSON());

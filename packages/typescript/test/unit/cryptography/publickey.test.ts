@@ -11,7 +11,7 @@ import { bytesEqual, PublicKey } from '../../../src/cryptography/publickey';
 import { Ed25519Keypair, Ed25519PublicKey } from '../../../src/keypairs/ed25519';
 import { Secp256k1Keypair } from '../../../src/keypairs/secp256k1';
 import { Secp256r1Keypair } from '../../../src/keypairs/secp256r1';
-import { normalizeSuiAddress, SUI_ADDRESS_LENGTH } from '../../../src/utils/sui-types.js';
+import { normalizeHaneulAddress, SUI_ADDRESS_LENGTH } from '../../../s../utils/haneul-types.js';
 
 describe('Publickey', () => {
 	let k1: Ed25519Keypair,
@@ -60,9 +60,9 @@ describe('Publickey', () => {
 		expect(pk2.toBase64()).toEqual('Ah0VIwfGtysO0EGLDnDNgOf1KVuNhvVyLT9SE/vSOU82');
 	});
 
-	it('`toSuiPublicKey()` should return a valid sui representation', async () => {
-		expect(pk2.toSuiPublicKey()).toEqual(toBase64(pk2.toSuiBytes()));
-		expect(pk2.toSuiPublicKey()).toEqual('AQIdFSMHxrcrDtBBiw5wzYDn9SlbjYb1ci0/UhP70jlPNg==');
+	it('`toHaneulPublicKey()` should return a valid sui representation', async () => {
+		expect(pk2.toHaneulPublicKey()).toEqual(toBase64(pk2.toSuiBytes()));
+		expect(pk2.toHaneulPublicKey()).toEqual('AQIdFSMHxrcrDtBBiw5wzYDn9SlbjYb1ci0/UhP70jlPNg==');
 	});
 
 	it('`verifyWithIntent()` should correctly verify a signed message', async () => {
@@ -141,28 +141,28 @@ describe('Publickey', () => {
 		);
 	});
 
-	it('`toSuiAddress()` should correctly return sui address associated with Ed25519 publickey', async () => {
-		const pk1SuiAddress = normalizeSuiAddress(
+	it('`toHaneulAddress()` should correctly return sui address associated with Ed25519 publickey', async () => {
+		const pk1HaneulAddress = normalizeHaneulAddress(
 			bytesToHex(blake2b(pk1.toSuiBytes(), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
 		);
-		const pk2SuiAddress = normalizeSuiAddress(
+		const pk2HaneulAddress = normalizeHaneulAddress(
 			bytesToHex(blake2b(pk2.toSuiBytes(), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
 		);
-		const pk3SuiAddress = normalizeSuiAddress(
+		const pk3HaneulAddress = normalizeHaneulAddress(
 			bytesToHex(blake2b(pk3.toSuiBytes(), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
 		);
-		expect(k1.toSuiAddress()).toEqual(pk1SuiAddress);
-		expect(k1.toSuiAddress()).toEqual(
+		expect(k1.toHaneulAddress()).toEqual(pk1HaneulAddress);
+		expect(k1.toHaneulAddress()).toEqual(
 			'0xafedf3bc60bd296aa6830d7c48ca44e0f7a32478ae4bd7b9a6ac1dc81ff7b29b',
 		);
 
-		expect(k2.toSuiAddress()).toEqual(pk2SuiAddress);
-		expect(k2.toSuiAddress()).toEqual(
+		expect(k2.toHaneulAddress()).toEqual(pk2HaneulAddress);
+		expect(k2.toHaneulAddress()).toEqual(
 			'0x7e4f9a35bf3b5383802d990956d6f3c93e6184ebbbcf0820c124ab3a59ef77ac',
 		);
 
-		expect(k3.toSuiAddress()).toEqual(pk3SuiAddress);
-		expect(k3.toSuiAddress()).toEqual(
+		expect(k3.toHaneulAddress()).toEqual(pk3HaneulAddress);
+		expect(k3.toHaneulAddress()).toEqual(
 			'0x318f591092f10b67a81963954fb9539ea3919444417726be4e1b95ce44fe2fc0',
 		);
 	});

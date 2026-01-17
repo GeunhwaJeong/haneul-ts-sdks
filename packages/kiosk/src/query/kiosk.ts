@@ -4,11 +4,11 @@
 import type {
 	PaginatedObjectsResponse,
 	PaginationArguments,
-	SuiClient,
-	SuiObjectData,
-	SuiObjectResponse,
+	HaneulClient,
+	HaneulObjectData,
+	HaneulObjectResponse,
 } from '@haneullabs/sui/client';
-import { isValidSuiAddress } from '@haneullabs/sui/utils';
+import { isValidHaneulAddress } from '@haneullabs/sui/utils';
 
 import type {
 	FetchKioskOptions,
@@ -29,7 +29,7 @@ import {
 } from '../utils.js';
 
 export async function fetchKiosk(
-	client: SuiClient,
+	client: HaneulClient,
 	kioskId: string,
 	pagination: PaginationArguments<string>,
 	options: FetchKioskOptions,
@@ -91,7 +91,7 @@ const DEFAULT_PAGE_SIZE = 50;
 const PERSON_KIOSK_CURSOR = 'personal';
 const OWNED_KIOSKS_CURSOR = 'owned';
 export async function getOwnedKiosks(
-	client: SuiClient,
+	client: HaneulClient,
 	address: string,
 	options?: {
 		pagination?: PaginationArguments<string>;
@@ -99,7 +99,7 @@ export async function getOwnedKiosks(
 	},
 ): Promise<OwnedKiosks> {
 	// TODO: this should throw an error, but I am not going to change it right now incase it breaks existing code.
-	if (!isValidSuiAddress(address)) {
+	if (!isValidHaneulAddress(address)) {
 		return {
 			nextCursor: null,
 			hasNextPage: false,
@@ -198,7 +198,7 @@ function formatOwnedKioskResponse(
 ): OwnedKiosks {
 	const { data, hasNextPage, nextCursor } = response;
 	// get kioskIds from the OwnerCaps.
-	const kioskIdList = data?.map((x: SuiObjectResponse) => {
+	const kioskIdList = data?.map((x: HaneulObjectResponse) => {
 		const fields =
 			x.data?.content?.dataType === 'moveObject'
 				? (x.data.content.fields as unknown as
@@ -216,7 +216,7 @@ function formatOwnedKioskResponse(
 
 	// clean up data that might have an error in them.
 	// only return valid objects.
-	const filteredData = data.filter((x) => 'data' in x).map((x) => x.data) as SuiObjectData[];
+	const filteredData = data.filter((x) => 'data' in x).map((x) => x.data) as HaneulObjectData[];
 
 	return {
 		nextCursor: nextCursor ? `${cursorType}:${nextCursor}` : nextCursor,
@@ -234,7 +234,7 @@ function formatOwnedKioskResponse(
 
 // Get a kiosk extension data for a given kioskId and extensionType.
 export async function fetchKioskExtension(
-	client: SuiClient,
+	client: HaneulClient,
 	kioskId: string,
 	extensionType: string,
 ): Promise<KioskExtension | null> {

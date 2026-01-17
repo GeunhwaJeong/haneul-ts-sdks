@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ObjectOwner, SuiObjectChange, SuiTransactionBlockResponse } from '@haneullabs/sui/client';
+import type { ObjectOwner, HaneulObjectChange, HaneulTransactionBlockResponse } from '@haneullabs/sui/client';
 import type { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeStructTag, normalizeSuiAddress, parseStructTag } from '@haneullabs/sui/utils';
+import { normalizeStructTag, normalizeHaneulAddress, parseStructTag } from '@haneullabs/sui/utils';
 
 export interface LinkAssets {
 	balances: {
@@ -73,11 +73,11 @@ export function getAssetsFromTransaction({
 	address,
 	isSent,
 }: {
-	transaction: SuiTransactionBlockResponse;
+	transaction: HaneulTransactionBlockResponse;
 	address: string;
 	isSent: boolean;
 }): LinkAssets {
-	const normalizedAddress = normalizeSuiAddress(address);
+	const normalizedAddress = normalizeHaneulAddress(address);
 	const balances: {
 		coinType: string;
 		amount: bigint;
@@ -116,7 +116,7 @@ export function getAssetsFromTransaction({
 			const type = parseStructTag(change.objectType);
 
 			if (
-				type.address === normalizeSuiAddress('0x2') &&
+				type.address === normalizeHaneulAddress('0x2') &&
 				type.module === 'coin' &&
 				type.name === 'Coin'
 			) {
@@ -154,7 +154,7 @@ export function getAssetsFromTransaction({
 	};
 }
 
-function getObjectOwnerFromObjectChange(objectChange: SuiObjectChange, isSent: boolean) {
+function getObjectOwnerFromObjectChange(objectChange: HaneulObjectChange, isSent: boolean) {
 	if (isSent) {
 		return 'owner' in objectChange ? objectChange.owner : null;
 	}
@@ -162,7 +162,7 @@ function getObjectOwnerFromObjectChange(objectChange: SuiObjectChange, isSent: b
 	return 'recipient' in objectChange ? objectChange.recipient : null;
 }
 
-function isObjectOwner(objectChange: SuiObjectChange, address: string, isSent: boolean) {
+function isObjectOwner(objectChange: HaneulObjectChange, address: string, isSent: boolean) {
 	const owner = getObjectOwnerFromObjectChange(objectChange, isSent);
 
 	if (isSent) {
@@ -173,9 +173,9 @@ function isObjectOwner(objectChange: SuiObjectChange, address: string, isSent: b
 }
 
 export function ownedAfterChange(
-	objectChange: SuiObjectChange,
+	objectChange: HaneulObjectChange,
 	address: string,
-): objectChange is Extract<SuiObjectChange, { type: 'created' | 'transferred' | 'mutated' }> {
+): objectChange is Extract<HaneulObjectChange, { type: 'created' | 'transferred' | 'mutated' }> {
 	if (objectChange.type === 'transferred' && isOwner(objectChange.recipient, address)) {
 		return true;
 	}
@@ -195,6 +195,6 @@ export function isOwner(owner: ObjectOwner, address: string): owner is { Address
 		owner &&
 		typeof owner === 'object' &&
 		'AddressOwner' in owner &&
-		normalizeSuiAddress(owner.AddressOwner) === address
+		normalizeHaneulAddress(owner.AddressOwner) === address
 	);
 }

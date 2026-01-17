@@ -131,9 +131,9 @@ const signer = await GcpKmsSigner.fromOptions({
 	cryptoKeyVersion: 'your-google-key-name-version',
 });
 
-// Retrieve the public key and get the Sui address
+// Retrieve the public key and get the Haneul address
 const publicKey = signer.getPublicKey();
-console.log(publicKey.toSuiAddress());
+console.log(publicKey.toHaneulAddress());
 
 // Define a test message
 const testMessage = 'Hello, GCP KMS Signer!';
@@ -174,12 +174,12 @@ cryptographic operations.
 import Transport from '@ledgerhq/hw-transport-node-hid';
 import SuiLedgerClient from '@haneullabs/ledgerjs-hw-app-sui';
 import { LedgerSigner } from '@haneullabs/signers/ledger';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Transaction } from '@haneullabs/sui/transactions';
 
 const transport = await Transport.open(undefined);
 const ledgerClient = new SuiLedgerClient(transport);
-const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
+const suiClient = new HaneulClient({ url: getFullnodeUrl('testnet') });
 
 const signer = await LedgerSigner.fromDerivationPath(
 	"m/44'/784'/0'/0'/0'",
@@ -187,8 +187,8 @@ const signer = await LedgerSigner.fromDerivationPath(
 	suiClient,
 );
 
-// Log the Sui address:
-console.log(signer.toSuiAddress());
+// Log the Haneul address:
+console.log(signer.toHaneulAddress());
 
 // Define a test transaction:
 const testTransaction = new Transaction();

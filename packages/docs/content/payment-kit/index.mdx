@@ -9,7 +9,7 @@ title: Payment Kit
 </Callout>
 
 The Sui Payment Kit SDK is a TypeScript library that provides a simple and secure way to process
-blockchain payments on the Sui network. It offers flexible payment processing with built-in
+blockchain payments on the Haneul network. It offers flexible payment processing with built-in
 duplicate prevention, configurable payment registries, and comprehensive receipt management.
 
 ## Overview
@@ -43,11 +43,11 @@ npm install --save @haneullabs/payment-kit @haneullabs/sui
 ## Quick Start
 
 ```ts
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { paymentKit } from '@haneullabs/payment-kit';
 
-// Create a Sui client with a Payment Kit extension
-const client = new SuiClient({
+// Create a Haneul client with a Payment Kit extension
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 	network: 'testnet',
 }).$extend(paymentKit());
@@ -55,7 +55,7 @@ const client = new SuiClient({
 // Process a registry-based payment
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1n * MIST_PER_SUI, // 1 SUI in MIST
 	receiver: '0x123...abc',
 	sender: '0x456...def',
@@ -70,13 +70,13 @@ const result = await client.signAndExecuteTransaction({
 
 ## Network Support
 
-Payment Kit supports the following Sui networks:
+Payment Kit supports the following Haneul networks:
 
 - **Mainnet**: Production environment
 - **Testnet**: Testing environment
 
 The SDK automatically configures the correct package and object IDs based on the network specified
-in your `SuiClient` configuration.
+in your `HaneulClient` configuration.
 
 ## Core Concepts
 

@@ -13,7 +13,7 @@ and you call the same methods to verify signatures for `PersonalMessages` and `T
 
 To create a `MultiSigPublicKey`, you provide a `threshold`(u16) value and an array of objects that
 contain `publicKey` and `weight`(u8) values. If the combined weight of valid signatures for a
-transaction is equal to or greater than the threshold value, then the Sui network considers the
+transaction is equal to or greater than the threshold value, then the Haneul network considers the
 transdaction valid.
 
 ```typescript
@@ -42,7 +42,7 @@ const multiSigPublicKey = MultiSigPublicKey.fromPublicKeys({
 	],
 });
 
-const multisigAddress = multiSigPublicKey.toSuiAddress();
+const multisigAddress = multiSigPublicKey.toHaneulAddress();
 ```
 
 The `multiSigPublicKey` in the preceding code enables you to verify that signatures have a combined
@@ -137,7 +137,7 @@ const multiSigPublicKey = MultiSigPublicKey.fromPublicKeys({
 });
 
 // this is the sender of any transactions from this multisig account.
-const multisigAddress = multiSigPublicKey.toSuiAddress();
+const multisigAddress = multiSigPublicKey.toHaneulAddress();
 
 // create a regular zklogin signature from the zkproof and ephemeral signature for zkLogin.
 // see zklogin-integration.mdx for more details.

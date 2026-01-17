@@ -8,7 +8,7 @@ import { existsSync, statSync } from 'node:fs';
 import { utilsContent } from './generate-utils.js';
 import { parse } from 'toml';
 import type { PackageConfig } from './config.js';
-export { type SuiCodegenConfig } from './config.js';
+export { type HaneulCodegenConfig } from './config.js';
 
 export async function generateFromPackageSummary({
 	package: pkg,

@@ -4,7 +4,7 @@
 import { bcs } from '@haneullabs/sui/bcs';
 import type { TransactionArgument } from '@haneullabs/sui/transactions';
 import { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeSuiAddress } from '@haneullabs/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
 
 import type { RuleResolvingParams } from '../../types/index.js';
 import { lock } from '../kiosk.js';
@@ -38,7 +38,7 @@ export async function resolveRoyaltyRule(params: RuleResolvingParams) {
 	const policyObj = tx.object(policyId);
 
 	const { results } = await kioskClient.client.devInspectTransactionBlock({
-		sender: tx.getData().sender || normalizeSuiAddress('0x0'),
+		sender: tx.getData().sender || normalizeHaneulAddress('0x0'),
 		transactionBlock: feeTx,
 	});
 

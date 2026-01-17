@@ -550,6 +550,6 @@
 
 ### Patch Changes
 
-- b3f3925: Introduces @haneullabs/kms which initially exposes a Sui AWS KMS signer
+- b3f3925: Introduces @haneullabs/kms which initially exposes a Haneul AWS KMS signer
 - Updated dependencies [c24814b]
   - @haneullabs/sui@1.14.0

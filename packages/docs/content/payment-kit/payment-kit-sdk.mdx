@@ -18,21 +18,21 @@ The main client class that provides access to Payment Kit functionality.
 
 #### `paymentKit()`
 
-Function to create a Payment Kit client extension for `SuiClient`.
+Function to create a Payment Kit client extension for `HaneulClient`.
 
 ```ts
 paymentKit<Name extends string = 'paymentKit'>({
 	name = 'paymentKit' as Name,
-}): SuiClientRegistration<PaymentKitCompatibleClient, Name, PaymentKitClient>
+}): HaneulClientRegistration<PaymentKitCompatibleClient, Name, PaymentKitClient>
 ```
 
 **Example:**
 
 ```ts
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { paymentKit } from '@haneullabs/payment-kit';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 	network: 'testnet',
 }).$extend(paymentKit());
@@ -69,7 +69,7 @@ processRegistryPayment(
 ```ts
 type ProcessRegistryPaymentOptions = {
 	nonce: string; // Unique payment identifier
-	coinType: string; // Coin type (e.g., '0x2::sui::SUI')
+	coinType: string; // Coin type (e.g., '0x2::haneul::HANEUL')
 	amount: number | bigint; // Amount in smallest unit
 	receiver: string; // Recipient address
 	sender: string; // Sender address (must match signer)
@@ -85,7 +85,7 @@ type ProcessRegistryPaymentOptions = {
 ```ts
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	sender: senderAddress,
@@ -139,7 +139,7 @@ type ProcessEphemeralPaymentOptions = {
 ```ts
 const tx = client.paymentKit.tx.processEphemeralPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 500000000,
 	receiver,
 	sender: senderAddress,
@@ -326,7 +326,7 @@ type WithdrawFromRegistryOptions = {
 
 ```ts
 const tx = client.paymentKit.tx.withdrawFromRegistry({
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	registryName: 'my-registry',
 	adminCapId: adminCapId,
 });
@@ -376,7 +376,7 @@ type DeletePaymentRecordOptions = {
 ```ts
 const tx = client.paymentKit.tx.deletePaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	registryName: 'my-registry',
@@ -436,7 +436,7 @@ type GetPaymentRecordResponse = {
 ```ts
 const record = await client.paymentKit.getPaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 });
@@ -490,7 +490,7 @@ tx.moveCall({
 tx.add(
 	client.paymentKit.calls.processRegistryPayment({
 		nonce: crypto.randomUUID(),
-		coinType: '0x2::sui::SUI',
+		coinType: '0x2::haneul::HANEUL',
 		amount: 1000000000,
 		receiver,
 		sender: senderAddress,

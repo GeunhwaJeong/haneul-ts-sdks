@@ -3,13 +3,13 @@
 
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { SuiTransactionBlockResponse } from '../../src/client';
+import { HaneulTransactionBlockResponse } from '../../src/client';
 import { Transaction } from '../../src/transactions';
 import { executePaySuiNTimes, setup, TestToolbox } from './utils/setup';
 
 describe('Transaction Reading API', () => {
 	let toolbox: TestToolbox;
-	let transactions: SuiTransactionBlockResponse[];
+	let transactions: HaneulTransactionBlockResponse[];
 	const NUM_TRANSACTIONS = 10;
 
 	beforeAll(async () => {

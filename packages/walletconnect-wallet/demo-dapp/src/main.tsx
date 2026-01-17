@@ -5,20 +5,20 @@ import ReactDOM from "react-dom/client";
 import "@haneullabs/dapp-kit/dist/index.css";
 import "@radix-ui/themes/styles.css";
 
-import { SuiClientProvider, WalletProvider } from "@haneullabs/dapp-kit";
+import { HaneulClientProvider, WalletProvider } from "@haneullabs/dapp-kit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Theme } from "@radix-ui/themes";
 import App from "./App.tsx";
 import { networkConfig } from "./networkConfig.ts";
 import { registerWalletConnectWallet } from "@haneullabs/walletconnect-wallet";
-import { SuiClient, getFullnodeUrl } from "@haneullabs/sui/client";
+import { HaneulClient, getFullnodeUrl } from "@haneullabs/sui/client";
 
 const queryClient = new QueryClient();
 
 registerWalletConnectWallet({
   projectId: "your_project_id",
   getClient: (chain) =>
-    new SuiClient({ network: chain, url: getFullnodeUrl(chain) }),
+    new HaneulClient({ network: chain, url: getFullnodeUrl(chain) }),
   metadata: {
     walletName: "Wallet Connect",
     icon: "https://walletconnect.org/walletconnect-logo.png",
@@ -31,11 +31,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Theme appearance="dark">
       <QueryClientProvider client={queryClient}>
-        <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+        <HaneulClientProvider networks={networkConfig} defaultNetwork="testnet">
           <WalletProvider autoConnect>
             <App />
           </WalletProvider>
-        </SuiClientProvider>
+        </HaneulClientProvider>
       </QueryClientProvider>
     </Theme>
   </React.StrictMode>,

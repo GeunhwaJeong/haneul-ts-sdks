@@ -7,9 +7,9 @@ import { fromBase64, toBase64 } from '@haneullabs/sui/utils';
 import type { WalletWithFeatures } from '@wallet-standard/core';
 
 import type {
-	SuiSignAndExecuteTransactionInput,
-	SuiSignTransactionInput,
-	SuiWalletFeatures,
+	HaneulSignAndExecuteTransactionInput,
+	HaneulSignTransactionInput,
+	HaneulWalletFeatures,
 } from './features/index.js';
 
 declare module '@wallet-standard/core' {
@@ -30,8 +30,8 @@ declare module '@wallet-standard/core' {
 export type { Wallet } from '@wallet-standard/core';
 
 export async function signAndExecuteTransaction(
-	wallet: WalletWithFeatures<Partial<SuiWalletFeatures>>,
-	input: SuiSignAndExecuteTransactionInput,
+	wallet: WalletWithFeatures<Partial<HaneulWalletFeatures>>,
+	input: HaneulSignAndExecuteTransactionInput,
 ) {
 	if (wallet.features['sui:signAndExecuteTransaction']) {
 		return wallet.features['sui:signAndExecuteTransaction'].signAndExecuteTransaction(input);
@@ -74,8 +74,8 @@ export async function signAndExecuteTransaction(
 }
 
 export async function signTransaction(
-	wallet: WalletWithFeatures<Partial<SuiWalletFeatures>>,
-	input: SuiSignTransactionInput,
+	wallet: WalletWithFeatures<Partial<HaneulWalletFeatures>>,
+	input: HaneulSignTransactionInput,
 ) {
 	if (wallet.features['sui:signTransaction']) {
 		return wallet.features['sui:signTransaction'].signTransaction(input);

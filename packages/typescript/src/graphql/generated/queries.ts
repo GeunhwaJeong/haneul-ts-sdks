@@ -94,8 +94,8 @@ export type Scalars = {
    *   | { typeParameter: number }
    */
   OpenMoveTypeSignature: { input: OpenMoveTypeSignature; output: OpenMoveTypeSignature; }
-  /** String containing 32 byte hex-encoded address, with a leading '0x'. Leading zeroes can be omitted on input but will always appear in outputs (SuiAddress in output is guaranteed to be 66 characters long). */
-  SuiAddress: { input: string; output: string; }
+  /** String containing 32 byte hex-encoded address, with a leading '0x'. Leading zeroes can be omitted on input but will always appear in outputs (HaneulAddress in output is guaranteed to be 66 characters long). */
+  HaneulAddress: { input: string; output: string; }
   /** An unsigned integer that can hold values up to 2^53 - 1. This can be treated similarly to `Int`, but it is guaranteed to be non-negative, and it may be larger than 2^32 - 1. */
   UInt53: { input: number; output: number; }
 };
@@ -147,11 +147,11 @@ export type ActiveJwkEdge = {
 export type Address = IAddressable & {
   __typename?: 'Address';
   /** The Address' identifier, a 32-byte number represented as a 64-character hex string, with a lead "0x". */
-  address: Scalars['SuiAddress']['output'];
+  address: Scalars['HaneulAddress']['output'];
   /** Attempts to fetch the object at this address. */
   asObject?: Maybe<Object>;
   /**
-   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::sui::SUI`), owned by this address.
+   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
    *
    * Returns `None` when no checkpoint is set in scope (e.g. execution scope).
    * If the address does not own any coins of that type, a balance of zero is returned.
@@ -159,7 +159,7 @@ export type Address = IAddressable & {
   balance?: Maybe<Balance>;
   /** Total balance across coins owned by this address, grouped by coin type. */
   balances?: Maybe<BalanceConnection>;
-  /** The domain explicitly configured as the default SuiNS name for this address. */
+  /** The domain explicitly configured as the default HaneulNS name for this address. */
   defaultSuinsName?: Maybe<Scalars['String']['output']>;
   /**
    * Access a dynamic field on an object using its type and BCS-encoded name.
@@ -180,7 +180,7 @@ export type Address = IAddressable & {
    */
   dynamicObjectField?: Maybe<DynamicField>;
   /**
-   * Fetch the total balances keyed by coin types (e.g. `0x2::sui::SUI`) owned by this address.
+   * Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
    *
    * Returns `None` when no checkpoint is set in scope (e.g. execution scope).
    * If the address does not own any coins of a given type, a balance of zero is returned for that type.
@@ -336,7 +336,7 @@ export type AvailableRange = {
 /** The total balance for a particular coin type. */
 export type Balance = {
   __typename?: 'Balance';
-  /** Coin type for the balance, such as `0x2::sui::SUI`. */
+  /** Coin type for the balance, such as `0x2::haneul::HANEUL`. */
   coinType?: Maybe<MoveType>;
   /** The total balance across all coin objects of this coin type. */
   totalBalance?: Maybe<Scalars['BigInt']['output']>;
@@ -347,7 +347,7 @@ export type BalanceChange = {
   __typename?: 'BalanceChange';
   /** The signed balance change. */
   amount?: Maybe<Scalars['BigInt']['output']>;
-  /** The inner type of the coin whose balance has changed (e.g. `0x2::sui::SUI`). */
+  /** The inner type of the coin whose balance has changed (e.g. `0x2::haneul::HANEUL`). */
   coinType?: Maybe<MoveType>;
   /** The address or object whose balance has changed. */
   owner?: Maybe<Address>;
@@ -529,11 +529,11 @@ export type CoinDenyListStateCreateTransaction = {
 export type CoinMetadata = IAddressable & IMoveObject & IObject & {
   __typename?: 'CoinMetadata';
   /** The CoinMetadata's ID. */
-  address: Scalars['SuiAddress']['output'];
+  address: Scalars['HaneulAddress']['output'];
   /** Whether the `DenyCap` can be used to enable a global pause that behaves as if all addresses were added to the deny list. `null` indicates that it is not known whether the currency can be paused or not. This field is only populated on currencies held in the Coin Registry. To determine whether a legacy currency can be paused, check the contents of its `DenyCap`, if it can be found. */
   allowGlobalPause?: Maybe<Scalars['Boolean']['output']>;
   /**
-   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::sui::SUI`), owned by this address.
+   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
    *
    * If the address does not own any coins of that type, a balance of zero is returned.
    */
@@ -544,7 +544,7 @@ export type CoinMetadata = IAddressable & IMoveObject & IObject & {
   contents?: Maybe<MoveValue>;
   /** Number of decimal places the coin uses. */
   decimals?: Maybe<Scalars['Int']['output']>;
-  /** The domain explicitly configured as the default SuiNS name for this address. */
+  /** The domain explicitly configured as the default HaneulNS name for this address. */
   defaultSuinsName?: Maybe<Scalars['String']['output']>;
   /** If the currency is regulated, this object represents the capability to modify the deny list. If a capability is known but wrapped, its address can be fetched but other fields will not be accessible. */
   denyCap?: Maybe<MoveObject>;
@@ -581,7 +581,7 @@ export type CoinMetadata = IAddressable & IMoveObject & IObject & {
   /** The Base64-encoded BCS serialize of this object, as a `MoveObject`. */
   moveObjectBcs?: Maybe<Scalars['Base64']['output']>;
   /**
-   * Fetch the total balances keyed by coin types (e.g. `0x2::sui::SUI`) owned by this address.
+   * Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
    *
    * If the address does not own any coins of a given type, a balance of zero is returned for that type.
    */
@@ -851,7 +851,7 @@ export enum ConsensusObjectCancellationReason {
 export type ConsensusObjectCancelled = {
   __typename?: 'ConsensusObjectCancelled';
   /** The ID of the consensus-managed object that the transaction intended to access. */
-  address?: Maybe<Scalars['SuiAddress']['output']>;
+  address?: Maybe<Scalars['HaneulAddress']['output']>;
   /** Reason why the transaction was cancelled. */
   cancellationReason?: Maybe<ConsensusObjectCancellationReason>;
 };
@@ -889,9 +889,9 @@ export type DisplayRegistryCreateTransaction = {
 export type DynamicField = IAddressable & IMoveObject & IObject & {
   __typename?: 'DynamicField';
   /** The DynamicField's ID. */
-  address: Scalars['SuiAddress']['output'];
+  address: Scalars['HaneulAddress']['output'];
   /**
-   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::sui::SUI`), owned by this address.
+   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
    *
    * If the address does not own any coins of that type, a balance of zero is returned.
    */
@@ -900,7 +900,7 @@ export type DynamicField = IAddressable & IMoveObject & IObject & {
   balances?: Maybe<BalanceConnection>;
   /** The structured representation of the object's contents. */
   contents?: Maybe<MoveValue>;
-  /** The domain explicitly configured as the default SuiNS name for this address. */
+  /** The domain explicitly configured as the default HaneulNS name for this address. */
   defaultSuinsName?: Maybe<Scalars['String']['output']>;
   /** 32-byte hash that identifies the object's contents, encoded in Base58. */
   digest?: Maybe<Scalars['String']['output']>;
@@ -931,7 +931,7 @@ export type DynamicField = IAddressable & IMoveObject & IObject & {
   /** The Base64-encoded BCS serialize of this object, as a `MoveObject`. */
   moveObjectBcs?: Maybe<Scalars['Base64']['output']>;
   /**
-   * Fetch the total balances keyed by coin types (e.g. `0x2::sui::SUI`) owned by this address.
+   * Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
    *
    * If the address does not own any coins of a given type, a balance of zero is returned for that type.
    */
@@ -1235,7 +1235,7 @@ export type EndOfEpochTransactionKindEdge = {
 };
 
 /**
- * Activity on Sui is partitioned in time, into epochs.
+ * Activity on Haneul is partitioned in time, into epochs.
  *
  * Epoch changes are opportunities for the network to reconfigure itself (perform protocol or system package upgrades, or change the committee) and distribute staking rewards. The network aims to keep epochs roughly the same duration as each other.
  *
@@ -1296,7 +1296,7 @@ export type Epoch = {
   /** Parameters related to the subsidy that supplements staking rewards */
   systemStakeSubsidy?: Maybe<StakeSubsidy>;
   /**
-   * The value of the `version` field of `0x5`, the `0x3::sui::SuiSystemState` object.
+   * The value of the `version` field of `0x5`, the `0x3::sui::HaneulSystemState` object.
    * This version changes whenever the fields contained in the system state object (held in a dynamic field attached to `0x5`) change.
    */
   systemStateVersion?: Maybe<Scalars['UInt53']['output']>;
@@ -1326,7 +1326,7 @@ export type Epoch = {
 
 
 /**
- * Activity on Sui is partitioned in time, into epochs.
+ * Activity on Haneul is partitioned in time, into epochs.
  *
  * Epoch changes are opportunities for the network to reconfigure itself (perform protocol or system package upgrades, or change the committee) and distribute staking rewards. The network aims to keep epochs roughly the same duration as each other.
  *
@@ -1347,7 +1347,7 @@ export type EpochCheckpointsArgs = {
 
 
 /**
- * Activity on Sui is partitioned in time, into epochs.
+ * Activity on Haneul is partitioned in time, into epochs.
  *
  * Epoch changes are opportunities for the network to reconfigure itself (perform protocol or system package upgrades, or change the committee) and distribute staking rewards. The network aims to keep epochs roughly the same duration as each other.
  *
@@ -1367,7 +1367,7 @@ export type EpochSystemPackagesArgs = {
 
 
 /**
- * Activity on Sui is partitioned in time, into epochs.
+ * Activity on Haneul is partitioned in time, into epochs.
  *
  * Epoch changes are opportunities for the network to reconfigure itself (perform protocol or system package upgrades, or change the committee) and distribute staking rewards. The network aims to keep epochs roughly the same duration as each other.
  *
@@ -1462,13 +1462,13 @@ export type EventFilter = {
    */
   module?: InputMaybe<Scalars['String']['input']>;
   /** Filter on events by transaction sender address. */
-  sender?: InputMaybe<Scalars['SuiAddress']['input']>;
+  sender?: InputMaybe<Scalars['HaneulAddress']['input']>;
   /**
    * This field is used to specify the type of event emitted.
    *
    * Events can be filtered by their type's package, package::module, or their fully qualified type name.
    *
-   * Generic types can be queried by either the generic type name, e.g. `0x2::coin::Coin`, or by the full type name, such as `0x2::coin::Coin<0x2::sui::SUI>`.
+   * Generic types can be queried by either the generic type name, e.g. `0x2::coin::Coin`, or by the full type name, such as `0x2::coin::Coin<0x2::haneul::HANEUL>`.
    */
   type?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1612,19 +1612,19 @@ export type GenesisTransactionObjectsArgs = {
  * An address uniquely represents either the public key of an account, or an object's ID, but never both. It is not possible to determine which type an address represents up-front. If an object is wrapped, its contents will not be accessible via its address, but it will still be possible to access other objects it owns.
  */
 export type IAddressable = {
-  address: Scalars['SuiAddress']['output'];
+  address: Scalars['HaneulAddress']['output'];
   /**
-   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::sui::SUI`), owned by this address.
+   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
    *
    * If the address does not own any coins of that type, a balance of zero is returned.
    */
   balance?: Maybe<Balance>;
   /** Total balance across coins owned by this address, grouped by coin type. */
   balances?: Maybe<BalanceConnection>;
-  /** The domain explicitly configured as the default SuiNS name for this address. */
+  /** The domain explicitly configured as the default HaneulNS name for this address. */
   defaultSuinsName?: Maybe<Scalars['String']['output']>;
   /**
-   * Fetch the total balances keyed by coin types (e.g. `0x2::sui::SUI`) owned by this address.
+   * Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
    *
    * Returns `null` when no checkpoint is set in scope (e.g. execution scope). If the address does not own any coins of a given type, a balance of zero is returned for that type.
    */
@@ -1855,9 +1855,9 @@ export type Input = {
 export type Linkage = {
   __typename?: 'Linkage';
   /** The ID on-chain of the first version of the dependency. */
-  originalId?: Maybe<Scalars['SuiAddress']['output']>;
+  originalId?: Maybe<Scalars['HaneulAddress']['output']>;
   /** The ID on-chain of the version of the dependency that this package depends on. */
-  upgradedId?: Maybe<Scalars['SuiAddress']['output']>;
+  upgradedId?: Maybe<Scalars['HaneulAddress']['output']>;
   /** The version of the dependency that this package depends on. */
   version?: Maybe<Scalars['UInt53']['output']>;
 };
@@ -2233,13 +2233,13 @@ export type MoveModuleEdge = {
 export type MoveObject = IAddressable & IMoveObject & IObject & {
   __typename?: 'MoveObject';
   /** The MoveObject's ID. */
-  address: Scalars['SuiAddress']['output'];
+  address: Scalars['HaneulAddress']['output'];
   /** Attempts to convert the object into a CoinMetadata. */
   asCoinMetadata?: Maybe<CoinMetadata>;
   /** Attempts to convert the object into a DynamicField. */
   asDynamicField?: Maybe<DynamicField>;
   /**
-   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::sui::SUI`), owned by this address.
+   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
    *
    * If the address does not own any coins of that type, a balance of zero is returned.
    */
@@ -2248,7 +2248,7 @@ export type MoveObject = IAddressable & IMoveObject & IObject & {
   balances?: Maybe<BalanceConnection>;
   /** The structured representation of the object's contents. */
   contents?: Maybe<MoveValue>;
-  /** The domain explicitly configured as the default SuiNS name for this address. */
+  /** The domain explicitly configured as the default HaneulNS name for this address. */
   defaultSuinsName?: Maybe<Scalars['String']['output']>;
   /** 32-byte hash that identifies the object's contents, encoded in Base58. */
   digest?: Maybe<Scalars['String']['output']>;
@@ -2279,7 +2279,7 @@ export type MoveObject = IAddressable & IMoveObject & IObject & {
   /** The Base64-encoded BCS serialize of this object, as a `MoveObject`. */
   moveObjectBcs?: Maybe<Scalars['Base64']['output']>;
   /**
-   * Fetch the total balances keyed by coin types (e.g. `0x2::sui::SUI`) owned by this address.
+   * Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
    *
    * If the address does not own any coins of a given type, a balance of zero is returned for that type.
    */
@@ -2447,16 +2447,16 @@ export type MoveObjectEdge = {
 export type MovePackage = IAddressable & IObject & {
   __typename?: 'MovePackage';
   /** The MovePackage's ID. */
-  address: Scalars['SuiAddress']['output'];
+  address: Scalars['HaneulAddress']['output'];
   /**
-   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::sui::SUI`), owned by this address.
+   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
    *
    * If the address does not own any coins of that type, a balance of zero is returned.
    */
   balance?: Maybe<Balance>;
   /** Total balance across coins owned by this address, grouped by coin type. */
   balances?: Maybe<BalanceConnection>;
-  /** The domain explicitly configured as the default SuiNS name for this address. */
+  /** The domain explicitly configured as the default HaneulNS name for this address. */
   defaultSuinsName?: Maybe<Scalars['String']['output']>;
   /** 32-byte hash that identifies the package's contents, encoded in Base58. */
   digest?: Maybe<Scalars['String']['output']>;
@@ -2469,7 +2469,7 @@ export type MovePackage = IAddressable & IObject & {
   /** Paginate through this package's modules. */
   modules?: Maybe<MoveModuleConnection>;
   /**
-   * Fetch the total balances keyed by coin types (e.g. `0x2::sui::SUI`) owned by this address.
+   * Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
    *
    * If the address does not own any coins of a given type, a balance of zero is returned for that type.
    */
@@ -2748,12 +2748,12 @@ export enum MoveVisibility {
 export type MutateConsensusStreamEnded = {
   __typename?: 'MutateConsensusStreamEnded';
   /** The ID of the consensus-managed object. */
-  address?: Maybe<Scalars['SuiAddress']['output']>;
+  address?: Maybe<Scalars['HaneulAddress']['output']>;
   /** The sequence number associated with the consensus stream ending. */
   sequenceNumber?: Maybe<Scalars['UInt53']['output']>;
 };
 
-/** Mutations are used to write to the Sui network. */
+/** Mutations are used to write to the Haneul network. */
 export type Mutation = {
   __typename?: 'Mutation';
   /**
@@ -2770,34 +2770,34 @@ export type Mutation = {
 };
 
 
-/** Mutations are used to write to the Sui network. */
+/** Mutations are used to write to the Haneul network. */
 export type MutationExecuteTransactionArgs = {
   signatures: Array<Scalars['Base64']['input']>;
   transactionDataBcs: Scalars['Base64']['input'];
 };
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type Object = IAddressable & IObject & {
   __typename?: 'Object';
   /** The Object's ID. */
-  address: Scalars['SuiAddress']['output'];
+  address: Scalars['HaneulAddress']['output'];
   /** Attempts to convert the object into a MoveObject. */
   asMoveObject?: Maybe<MoveObject>;
   /** Attempts to convert the object into a MovePackage. */
   asMovePackage?: Maybe<MovePackage>;
   /**
-   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::sui::SUI`), owned by this address.
+   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
    *
    * If the address does not own any coins of that type, a balance of zero is returned.
    */
   balance?: Maybe<Balance>;
   /** Total balance across coins owned by this address, grouped by coin type. */
   balances?: Maybe<BalanceConnection>;
-  /** The domain explicitly configured as the default SuiNS name for this address. */
+  /** The domain explicitly configured as the default HaneulNS name for this address. */
   defaultSuinsName?: Maybe<Scalars['String']['output']>;
   /** 32-byte hash that identifies the object's contents, encoded in Base58. */
   digest?: Maybe<Scalars['String']['output']>;
@@ -2816,7 +2816,7 @@ export type Object = IAddressable & IObject & {
    */
   dynamicObjectField?: Maybe<DynamicField>;
   /**
-   * Fetch the total balances keyed by coin types (e.g. `0x2::sui::SUI`) owned by this address.
+   * Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
    *
    * Returns `None` when no checkpoint is set in scope (e.g. execution scope).
    * If the address does not own any coins of a given type, a balance of zero is returned for that type.
@@ -2862,9 +2862,9 @@ export type Object = IAddressable & IObject & {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectBalanceArgs = {
   coinType: Scalars['String']['input'];
@@ -2872,9 +2872,9 @@ export type ObjectBalanceArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectBalancesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -2885,9 +2885,9 @@ export type ObjectBalancesArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectDynamicFieldArgs = {
   name: DynamicFieldName;
@@ -2895,9 +2895,9 @@ export type ObjectDynamicFieldArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectDynamicFieldsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -2908,9 +2908,9 @@ export type ObjectDynamicFieldsArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectDynamicObjectFieldArgs = {
   name: DynamicFieldName;
@@ -2918,9 +2918,9 @@ export type ObjectDynamicObjectFieldArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectMultiGetBalancesArgs = {
   keys: Array<Scalars['String']['input']>;
@@ -2928,9 +2928,9 @@ export type ObjectMultiGetBalancesArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectMultiGetDynamicFieldsArgs = {
   keys: Array<DynamicFieldName>;
@@ -2938,9 +2938,9 @@ export type ObjectMultiGetDynamicFieldsArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectMultiGetDynamicObjectFieldsArgs = {
   keys: Array<DynamicFieldName>;
@@ -2948,9 +2948,9 @@ export type ObjectMultiGetDynamicObjectFieldsArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectObjectAtArgs = {
   checkpoint?: InputMaybe<Scalars['UInt53']['input']>;
@@ -2960,9 +2960,9 @@ export type ObjectObjectAtArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectObjectVersionsAfterArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -2974,9 +2974,9 @@ export type ObjectObjectVersionsAfterArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectObjectVersionsBeforeArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -2988,9 +2988,9 @@ export type ObjectObjectVersionsBeforeArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectObjectsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -3002,9 +3002,9 @@ export type ObjectObjectsArgs = {
 
 
 /**
- * An Object on Sui is either a typed value (a Move Object) or a Package (modules containing functions and types).
+ * An Object on Haneul is either a typed value (a Move Object) or a Package (modules containing functions and types).
  *
- * Every object on Sui is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
+ * Every object on Haneul is identified by a unique address, and has a version number that increases with every modification. Objects also hold metadata detailing their current owner (who can sign for access to the object and whether that access can modify and/or delete the object), and the digest of the last transaction that modified the object.
  */
 export type ObjectReceivedTransactionsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -3017,7 +3017,7 @@ export type ObjectReceivedTransactionsArgs = {
 export type ObjectChange = {
   __typename?: 'ObjectChange';
   /** The address of the object that has changed. */
-  address: Scalars['SuiAddress']['output'];
+  address: Scalars['HaneulAddress']['output'];
   /** Whether the ID was created in this transaction. */
   idCreated?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the ID was deleted in this transaction. */
@@ -3079,7 +3079,7 @@ export type ObjectFilter = {
    *
    * This field is required if `ownerKind` is "ADDRESS" or "OBJECT". If provided without `ownerKind`, `ownerKind` defaults to "ADDRESS".
    */
-  owner?: InputMaybe<Scalars['SuiAddress']['input']>;
+  owner?: InputMaybe<Scalars['HaneulAddress']['input']>;
   /**
    * Filter on whether the object is address-owned, object-owned, shared, or immutable.
    *
@@ -3095,7 +3095,7 @@ export type ObjectFilter = {
    * - A package address: `0x2`,
    * - A module: `0x2::coin`,
    * - A fully-qualified name: `0x2::coin::Coin`,
-   * - A type instantiation: `0x2::coin::Coin<0x2::sui::SUI>`.
+   * - A type instantiation: `0x2::coin::Coin<0x2::haneul::HANEUL>`.
    */
   type?: InputMaybe<Scalars['String']['input']>;
 };
@@ -3111,7 +3111,7 @@ export type ObjectFilter = {
  */
 export type ObjectKey = {
   /** The object's ID. */
-  address: Scalars['SuiAddress']['input'];
+  address: Scalars['HaneulAddress']['input'];
   /** If specified, tries to fetch the latest version as of this checkpoint. Fails if the checkpoint is later than the RPC's latest checkpoint. */
   atCheckpoint?: InputMaybe<Scalars['UInt53']['input']>;
   /**
@@ -3192,7 +3192,7 @@ export type PackageCheckpointFilter = {
  */
 export type PackageKey = {
   /** The object's ID. */
-  address: Scalars['SuiAddress']['input'];
+  address: Scalars['HaneulAddress']['input'];
   /** If specified, tries to fetch the latest version as of this checkpoint. */
   atCheckpoint?: InputMaybe<Scalars['UInt53']['input']>;
   /** If specified, tries to fetch the package at this exact version. */
@@ -3320,7 +3320,7 @@ export type ProtocolConfigsFeatureFlagArgs = {
 export type PublishCommand = {
   __typename?: 'PublishCommand';
   /** IDs of the transitive dependencies of the package to be published. */
-  dependencies?: Maybe<Array<Scalars['SuiAddress']['output']>>;
+  dependencies?: Maybe<Array<Scalars['HaneulAddress']['output']>>;
   /** Bytecode for the modules to be published, BCS serialized and Base64 encoded. */
   modules?: Maybe<Array<Scalars['Base64']['output']>>;
 };
@@ -3335,7 +3335,7 @@ export type Pure = {
 export type Query = {
   __typename?: 'Query';
   /**
-   * Look-up an account by its SuiAddress.
+   * Look-up an account by its HaneulAddress.
    *
    * If `rootVersion` is specified, nested dynamic field accesses will be fetched at or before this version. This can be used to fetch a child or ancestor object bounded by its root object's version, when its immediate parent is wrapped, or a value in a dynamic object field. For any wrapped or child (object-owned) object, its root object can be defined recursively as:
    *
@@ -3486,7 +3486,7 @@ export type Query = {
    * Unlike `executeTransaction`, this does not require signatures since the transaction is not committed to the blockchain. This allows for previewing transaction effects, estimating gas costs, and testing transaction logic without spending gas or requiring valid signatures.
    */
   simulateTransaction: SimulationResult;
-  /** Look-up an account by its SuiNS name, assuming it has a valid, unexpired name registration. */
+  /** Look-up an account by its HaneulNS name, assuming it has a valid, unexpired name registration. */
   suinsName?: Maybe<Address>;
   /**
    * Fetch a transaction by its digest.
@@ -3525,7 +3525,7 @@ export type Query = {
 
 
 export type QueryAddressArgs = {
-  address: Scalars['SuiAddress']['input'];
+  address: Scalars['HaneulAddress']['input'];
   rootVersion?: InputMaybe<Scalars['UInt53']['input']>;
 };
 
@@ -3607,7 +3607,7 @@ export type QueryMultiGetTypesArgs = {
 
 
 export type QueryObjectArgs = {
-  address: Scalars['SuiAddress']['input'];
+  address: Scalars['HaneulAddress']['input'];
   atCheckpoint?: InputMaybe<Scalars['UInt53']['input']>;
   rootVersion?: InputMaybe<Scalars['UInt53']['input']>;
   version?: InputMaybe<Scalars['UInt53']['input']>;
@@ -3615,7 +3615,7 @@ export type QueryObjectArgs = {
 
 
 export type QueryObjectVersionsArgs = {
-  address: Scalars['SuiAddress']['input'];
+  address: Scalars['HaneulAddress']['input'];
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   filter?: InputMaybe<VersionFilter>;
@@ -3634,14 +3634,14 @@ export type QueryObjectsArgs = {
 
 
 export type QueryPackageArgs = {
-  address: Scalars['SuiAddress']['input'];
+  address: Scalars['HaneulAddress']['input'];
   atCheckpoint?: InputMaybe<Scalars['UInt53']['input']>;
   version?: InputMaybe<Scalars['UInt53']['input']>;
 };
 
 
 export type QueryPackageVersionsArgs = {
-  address: Scalars['SuiAddress']['input'];
+  address: Scalars['HaneulAddress']['input'];
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   filter?: InputMaybe<VersionFilter>;
@@ -3700,7 +3700,7 @@ export type QueryTypeArgs = {
 
 
 export type QueryVerifyZkLoginSignatureArgs = {
-  author: Scalars['SuiAddress']['input'];
+  author: Scalars['HaneulAddress']['input'];
   bytes: Scalars['Base64']['input'];
   intentScope: ZkLoginIntentScope;
   signature: Scalars['Base64']['input'];
@@ -3730,7 +3730,7 @@ export type RandomnessStateUpdateTransaction = {
 export type ReadConsensusStreamEnded = {
   __typename?: 'ReadConsensusStreamEnded';
   /** The ID of the consensus-managed object. */
-  address?: Maybe<Scalars['SuiAddress']['output']>;
+  address?: Maybe<Scalars['HaneulAddress']['output']>;
   /** The sequence number associated with the consensus stream ending. */
   sequenceNumber?: Maybe<Scalars['UInt53']['output']>;
 };
@@ -3882,7 +3882,7 @@ export type Shared = {
 export type SharedInput = {
   __typename?: 'SharedInput';
   /** The address of the shared object. */
-  address?: Maybe<Scalars['SuiAddress']['output']>;
+  address?: Maybe<Scalars['HaneulAddress']['output']>;
   /** The version that this object was shared at. */
   initialSharedVersion?: Maybe<Scalars['UInt53']['output']>;
   /**
@@ -3993,7 +3993,7 @@ export type SystemParameters = {
   validatorVeryLowStakeThreshold?: Maybe<Scalars['BigInt']['output']>;
 };
 
-/** Description of a transaction, the unit of activity on Sui. */
+/** Description of a transaction, the unit of activity on Haneul. */
 export type Transaction = {
   __typename?: 'Transaction';
   /** A 32-byte hash that uniquely identifies the transaction contents, encoded in Base58. */
@@ -4127,13 +4127,13 @@ export type TransactionFilter = {
    * Limit to transactions that interacted with the given address.
    * The address could be a sender, sponsor, or recipient of the transaction.
    */
-  affectedAddress?: InputMaybe<Scalars['SuiAddress']['input']>;
+  affectedAddress?: InputMaybe<Scalars['HaneulAddress']['input']>;
   /**
    * Limit to transactions that interacted with the given object.
    * The object could have been created, read, modified, deleted, wrapped, or unwrapped by the transaction.
    * Objects that were passed as a `Receiving` input are not considered to have been affected by a transaction unless they were actually received.
    */
-  affectedObject?: InputMaybe<Scalars['SuiAddress']['input']>;
+  affectedObject?: InputMaybe<Scalars['HaneulAddress']['input']>;
   /** Filter to transactions that occurred strictly after the given checkpoint. */
   afterCheckpoint?: InputMaybe<Scalars['UInt53']['input']>;
   /** Filter to transactions in the given checkpoint. */
@@ -4145,7 +4145,7 @@ export type TransactionFilter = {
   /** An input filter selecting for either system or programmable transactions. */
   kind?: InputMaybe<TransactionKindInput>;
   /** Limit to transactions that were sent by the given address. */
-  sentAddress?: InputMaybe<Scalars['SuiAddress']['input']>;
+  sentAddress?: InputMaybe<Scalars['HaneulAddress']['input']>;
 };
 
 /** Input argument to a Programmable Transaction Block (PTB) command. */
@@ -4170,7 +4170,7 @@ export type TransactionInputEdge = {
   node: TransactionInput;
 };
 
-/** Different types of transactions that can be executed on the Sui network. */
+/** Different types of transactions that can be executed on the Haneul network. */
 export type TransactionKind = AuthenticatorStateUpdateTransaction | ChangeEpochTransaction | ConsensusCommitPrologueTransaction | EndOfEpochTransaction | GenesisTransaction | ProgrammableSystemTransaction | ProgrammableTransaction | RandomnessStateUpdateTransaction;
 
 /** An input filter selecting for either system or programmable transactions. */
@@ -4206,7 +4206,7 @@ export type TxResult = {
 export type TypeOrigin = {
   __typename?: 'TypeOrigin';
   /** The storage ID of the package that first defined this type. */
-  definingId?: Maybe<Scalars['SuiAddress']['output']>;
+  definingId?: Maybe<Scalars['HaneulAddress']['output']>;
   /** Module defining the type. */
   module?: Maybe<Scalars['String']['output']>;
   /** Name of the struct. */
@@ -4239,9 +4239,9 @@ export type UnchangedConsensusObjectEdge = {
 export type UpgradeCommand = {
   __typename?: 'UpgradeCommand';
   /** ID of the package being upgraded. */
-  currentPackage?: Maybe<Scalars['SuiAddress']['output']>;
+  currentPackage?: Maybe<Scalars['HaneulAddress']['output']>;
   /** IDs of the transitive dependencies of the package to be published. */
-  dependencies?: Maybe<Array<Scalars['SuiAddress']['output']>>;
+  dependencies?: Maybe<Array<Scalars['HaneulAddress']['output']>>;
   /** Bytecode for the modules to be published, BCS serialized and Base64 encoded. */
   modules?: Maybe<Array<Scalars['Base64']['output']>>;
   /** The `UpgradeTicket` authorizing the upgrade. */
@@ -4261,11 +4261,11 @@ export type UserSignature = {
 export type Validator = IAddressable & {
   __typename?: 'Validator';
   /** The validator's address. */
-  address: Scalars['SuiAddress']['output'];
+  address: Scalars['HaneulAddress']['output'];
   /** The number of epochs for which this validator has been below the low stake threshold. */
   atRisk?: Maybe<Scalars['UInt53']['output']>;
   /**
-   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::sui::SUI`), owned by this address.
+   * Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
    *
    * If the address does not own any coins of that type, a balance of zero is returned.
    */
@@ -4276,7 +4276,7 @@ export type Validator = IAddressable & {
   commissionRate?: Maybe<Scalars['Int']['output']>;
   /** Validator's set of credentials such as public keys, network addresses and others. */
   credentials?: Maybe<ValidatorCredentials>;
-  /** The domain explicitly configured as the default SuiNS name for this address. */
+  /** The domain explicitly configured as the default HaneulNS name for this address. */
   defaultSuinsName?: Maybe<Scalars['String']['output']>;
   /** Validator's description. */
   description?: Maybe<Scalars['String']['output']>;
@@ -4292,7 +4292,7 @@ export type Validator = IAddressable & {
   /** Validator's url containing their custom image. */
   imageUrl?: Maybe<Scalars['String']['output']>;
   /**
-   * Fetch the total balances keyed by coin types (e.g. `0x2::sui::SUI`) owned by this address.
+   * Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
    *
    * Returns `None` when no checkpoint is set in scope (e.g. execution scope).
    * If the address does not own any coins of a given type, a balance of zero is returned for that type.
@@ -4332,7 +4332,7 @@ export type Validator = IAddressable & {
   /** The epoch at which this pool became active. */
   stakingPoolActivationEpoch?: Maybe<Scalars['UInt53']['output']>;
   /** The ID of this validator's `0x3::staking_pool::StakingPool`. */
-  stakingPoolId: Scalars['SuiAddress']['output'];
+  stakingPoolId: Scalars['HaneulAddress']['output'];
   /** The total number of SUI tokens in this pool. */
   stakingPoolSuiBalance?: Maybe<Scalars['BigInt']['output']>;
   /** The voting power of this validator in basis points (e.g., 100 = 1% voting power). */
@@ -4422,11 +4422,11 @@ export type ValidatorSet = {
   /** The current list of active validators. */
   activeValidators?: Maybe<ValidatorConnection>;
   /** Object ID of the `Table` storing the inactive staking pools. */
-  inactivePoolsId?: Maybe<Scalars['SuiAddress']['output']>;
+  inactivePoolsId?: Maybe<Scalars['HaneulAddress']['output']>;
   /** Size of the inactive pools `Table`. */
   inactivePoolsSize?: Maybe<Scalars['Int']['output']>;
   /** Object ID of the wrapped object `TableVec` storing the pending active validators. */
-  pendingActiveValidatorsId?: Maybe<Scalars['SuiAddress']['output']>;
+  pendingActiveValidatorsId?: Maybe<Scalars['HaneulAddress']['output']>;
   /** Size of the pending active validators table. */
   pendingActiveValidatorsSize?: Maybe<Scalars['Int']['output']>;
   /** Validators that are pending removal from the active validator set, expressed as indices in to `activeValidators`. */
@@ -4435,13 +4435,13 @@ export type ValidatorSet = {
    * Object ID of the `Table` storing the mapping from staking pool ids to the addresses of the corresponding validators.
    * This is needed because a validator's address can potentially change but the object ID of its pool will not.
    */
-  stakingPoolMappingsId?: Maybe<Scalars['SuiAddress']['output']>;
+  stakingPoolMappingsId?: Maybe<Scalars['HaneulAddress']['output']>;
   /** Size of the stake pool mappings `Table`. */
   stakingPoolMappingsSize?: Maybe<Scalars['Int']['output']>;
   /** Total amount of stake for all active validators at the beginning of the epoch. */
   totalStake?: Maybe<Scalars['BigInt']['output']>;
   /** Object ID of the `Table` storing the validator candidates. */
-  validatorCandidatesId?: Maybe<Scalars['SuiAddress']['output']>;
+  validatorCandidatesId?: Maybe<Scalars['HaneulAddress']['output']>;
   /** Size of the validator candidates `Table`. */
   validatorCandidatesSize?: Maybe<Scalars['Int']['output']>;
 };
@@ -4481,7 +4481,7 @@ export type ZkLoginVerifyResult = {
 };
 
 export type GetAllBalancesQueryVariables = Exact<{
-  owner: Scalars['SuiAddress']['input'];
+  owner: Scalars['HaneulAddress']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   cursor?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -4490,7 +4490,7 @@ export type GetAllBalancesQueryVariables = Exact<{
 export type GetAllBalancesQuery = { __typename?: 'Query', address: { __typename?: 'Address', balances?: { __typename?: 'BalanceConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Balance', totalBalance?: string | null, coinType?: { __typename?: 'MoveType', repr: string } | null }> } | null } };
 
 export type GetBalanceQueryVariables = Exact<{
-  owner: Scalars['SuiAddress']['input'];
+  owner: Scalars['HaneulAddress']['input'];
   coinType?: Scalars['String']['input'];
 }>;
 
@@ -4498,7 +4498,7 @@ export type GetBalanceQueryVariables = Exact<{
 export type GetBalanceQuery = { __typename?: 'Query', address: { __typename?: 'Address', balance?: { __typename?: 'Balance', totalBalance?: string | null, coinType?: { __typename?: 'MoveType', repr: string } | null } | null } };
 
 export type GetCoinsQueryVariables = Exact<{
-  owner: Scalars['SuiAddress']['input'];
+  owner: Scalars['HaneulAddress']['input'];
   first?: InputMaybe<Scalars['Int']['input']>;
   cursor?: InputMaybe<Scalars['String']['input']>;
   type?: Scalars['String']['input'];
@@ -4508,7 +4508,7 @@ export type GetCoinsQueryVariables = Exact<{
 export type GetCoinsQuery = { __typename?: 'Query', address: { __typename?: 'Address', address: string, objects?: { __typename?: 'MoveObjectConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'MoveObject', address: string, version?: number | null, digest?: string | null, owner?: { __typename: 'AddressOwner', address?: { __typename?: 'Address', address: string } | null } | { __typename: 'ConsensusAddressOwner', startVersion?: number | null, address?: { __typename?: 'Address', address: string } | null } | { __typename: 'Immutable' } | { __typename: 'ObjectOwner', address?: { __typename?: 'Address', address: string } | null } | { __typename: 'Shared', initialSharedVersion?: number | null } | null, contents?: { __typename?: 'MoveValue', bcs?: string | null, json?: unknown | null, type?: { __typename?: 'MoveType', repr: string } | null } | null, previousTransaction?: { __typename?: 'Transaction', digest: string } | null }> } | null } };
 
 export type GetDynamicFieldsQueryVariables = Exact<{
-  parentId: Scalars['SuiAddress']['input'];
+  parentId: Scalars['HaneulAddress']['input'];
   first?: InputMaybe<Scalars['Int']['input']>;
   cursor?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -4517,7 +4517,7 @@ export type GetDynamicFieldsQueryVariables = Exact<{
 export type GetDynamicFieldsQuery = { __typename?: 'Query', address: { __typename?: 'Address', dynamicFields?: { __typename?: 'DynamicFieldConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'DynamicField', name?: { __typename?: 'MoveValue', bcs?: string | null, type?: { __typename?: 'MoveType', repr: string } | null } | null, value?: { __typename: 'MoveObject', contents?: { __typename?: 'MoveValue', type?: { __typename?: 'MoveType', repr: string } | null } | null } | { __typename: 'MoveValue', type?: { __typename?: 'MoveType', repr: string } | null } | null }> } | null } };
 
 export type GetMoveFunctionQueryVariables = Exact<{
-  package: Scalars['SuiAddress']['input'];
+  package: Scalars['HaneulAddress']['input'];
   module: Scalars['String']['input'];
   function: Scalars['String']['input'];
 }>;
@@ -4531,14 +4531,14 @@ export type GetReferenceGasPriceQueryVariables = Exact<{ [key: string]: never; }
 export type GetReferenceGasPriceQuery = { __typename?: 'Query', epoch?: { __typename?: 'Epoch', referenceGasPrice?: string | null } | null };
 
 export type DefaultSuinsNameQueryVariables = Exact<{
-  address: Scalars['SuiAddress']['input'];
+  address: Scalars['HaneulAddress']['input'];
 }>;
 
 
 export type DefaultSuinsNameQuery = { __typename?: 'Query', address: { __typename?: 'Address', defaultSuinsName?: string | null } };
 
 export type GetOwnedObjectsQueryVariables = Exact<{
-  owner: Scalars['SuiAddress']['input'];
+  owner: Scalars['HaneulAddress']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   cursor?: InputMaybe<Scalars['String']['input']>;
   filter?: InputMaybe<ObjectFilter>;
@@ -4598,7 +4598,7 @@ export type VerifyZkLoginSignatureQueryVariables = Exact<{
   bytes: Scalars['Base64']['input'];
   signature: Scalars['Base64']['input'];
   intentScope: ZkLoginIntentScope;
-  author: Scalars['SuiAddress']['input'];
+  author: Scalars['HaneulAddress']['input'];
 }>;
 
 
@@ -4801,7 +4801,7 @@ export const Transaction_FieldsFragmentDoc = new TypedDocumentString(`
 }
     `, {"fragmentName":"TRANSACTION_FIELDS"}) as unknown as TypedDocumentString<Transaction_FieldsFragment, unknown>;
 export const GetAllBalancesDocument = new TypedDocumentString(`
-    query getAllBalances($owner: SuiAddress!, $limit: Int, $cursor: String) {
+    query getAllBalances($owner: HaneulAddress!, $limit: Int, $cursor: String) {
   address(address: $owner) {
     balances(first: $limit, after: $cursor) {
       pageInfo {
@@ -4819,7 +4819,7 @@ export const GetAllBalancesDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetAllBalancesQuery, GetAllBalancesQueryVariables>;
 export const GetBalanceDocument = new TypedDocumentString(`
-    query getBalance($owner: SuiAddress!, $coinType: String! = "0x2::sui::SUI") {
+    query getBalance($owner: HaneulAddress!, $coinType: String! = "0x2::haneul::HANEUL") {
   address(address: $owner) {
     balance(coinType: $coinType) {
       coinType {
@@ -4831,7 +4831,7 @@ export const GetBalanceDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetBalanceQuery, GetBalanceQueryVariables>;
 export const GetCoinsDocument = new TypedDocumentString(`
-    query getCoins($owner: SuiAddress!, $first: Int, $cursor: String, $type: String! = "0x2::coin::Coin<0x2::sui::SUI>") {
+    query getCoins($owner: HaneulAddress!, $first: Int, $cursor: String, $type: String! = "0x2::coin::Coin<0x2::haneul::HANEUL>") {
   address(address: $owner) {
     address
     objects(first: $first, after: $cursor, filter: {type: $type}) {
@@ -4883,7 +4883,7 @@ export const GetCoinsDocument = new TypedDocumentString(`
   }
 }`) as unknown as TypedDocumentString<GetCoinsQuery, GetCoinsQueryVariables>;
 export const GetDynamicFieldsDocument = new TypedDocumentString(`
-    query getDynamicFields($parentId: SuiAddress!, $first: Int, $cursor: String) {
+    query getDynamicFields($parentId: HaneulAddress!, $first: Int, $cursor: String) {
   address(address: $parentId) {
     dynamicFields(first: $first, after: $cursor) {
       pageInfo {
@@ -4918,7 +4918,7 @@ export const GetDynamicFieldsDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetDynamicFieldsQuery, GetDynamicFieldsQueryVariables>;
 export const GetMoveFunctionDocument = new TypedDocumentString(`
-    query getMoveFunction($package: SuiAddress!, $module: String!, $function: String!) {
+    query getMoveFunction($package: HaneulAddress!, $module: String!, $function: String!) {
   package(address: $package) {
     module(name: $module) {
       function(name: $function) {
@@ -4947,14 +4947,14 @@ export const GetReferenceGasPriceDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<GetReferenceGasPriceQuery, GetReferenceGasPriceQueryVariables>;
 export const DefaultSuinsNameDocument = new TypedDocumentString(`
-    query defaultSuinsName($address: SuiAddress!) {
+    query defaultSuinsName($address: HaneulAddress!) {
   address(address: $address) {
     defaultSuinsName
   }
 }
     `) as unknown as TypedDocumentString<DefaultSuinsNameQuery, DefaultSuinsNameQueryVariables>;
 export const GetOwnedObjectsDocument = new TypedDocumentString(`
-    query getOwnedObjects($owner: SuiAddress!, $limit: Int, $cursor: String, $filter: ObjectFilter) {
+    query getOwnedObjects($owner: HaneulAddress!, $limit: Int, $cursor: String, $filter: ObjectFilter) {
   address(address: $owner) {
     objects(first: $limit, after: $cursor, filter: $filter) {
       pageInfo {
@@ -5295,7 +5295,7 @@ export const GetTransactionBlockDocument = new TypedDocumentString(`
   }
 }`) as unknown as TypedDocumentString<GetTransactionBlockQuery, GetTransactionBlockQueryVariables>;
 export const VerifyZkLoginSignatureDocument = new TypedDocumentString(`
-    query verifyZkLoginSignature($bytes: Base64!, $signature: Base64!, $intentScope: ZkLoginIntentScope!, $author: SuiAddress!) {
+    query verifyZkLoginSignature($bytes: Base64!, $signature: Base64!, $intentScope: ZkLoginIntentScope!, $author: HaneulAddress!) {
   verifyZkLoginSignature(
     bytes: $bytes
     signature: $signature

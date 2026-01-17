@@ -7,7 +7,7 @@ import { sha256 } from '@noble/hashes/sha256';
 import { bytesToHex } from '@noble/hashes/utils';
 import { HDKey } from '@scure/bip32';
 
-import { decodeSuiPrivateKey, encodeSuiPrivateKey, Keypair } from '../../cryptography/keypair.js';
+import { decodeHaneulPrivateKey, encodeHaneulPrivateKey, Keypair } from '../../cryptography/keypair.js';
 import { isValidBIP32Path, mnemonicToSeed } from '../../cryptography/mnemonics.js';
 import type { PublicKey } from '../../cryptography/publickey.js';
 import type { SignatureScheme } from '../../cryptography/signature-scheme.js';
@@ -79,7 +79,7 @@ export class Secp256r1Keypair extends Keypair {
 		options?: { skipValidation?: boolean },
 	): Secp256r1Keypair {
 		if (typeof secretKey === 'string') {
-			const decoded = decodeSuiPrivateKey(secretKey);
+			const decoded = decodeHaneulPrivateKey(secretKey);
 
 			if (decoded.schema !== 'Secp256r1') {
 				throw new Error(`Expected a Secp256r1 keypair, got ${decoded.schema}`);
@@ -122,7 +122,7 @@ export class Secp256r1Keypair extends Keypair {
 	 * The Bech32 secret key string for this Secp256r1 keypair
 	 */
 	getSecretKey(): string {
-		return encodeSuiPrivateKey(this.keypair.secretKey, this.getKeyScheme());
+		return encodeHaneulPrivateKey(this.keypair.secretKey, this.getKeyScheme());
 	}
 
 	/**

@@ -11,12 +11,12 @@ import type {
 	StandardDisconnectMethod,
 	StandardEventsFeature,
 	StandardEventsOnMethod,
-	SuiSignAndExecuteTransactionFeature,
-	SuiSignAndExecuteTransactionMethod,
-	SuiSignPersonalMessageFeature,
-	SuiSignPersonalMessageMethod,
-	SuiSignTransactionFeature,
-	SuiSignTransactionMethod,
+	HaneulSignAndExecuteTransactionFeature,
+	HaneulSignAndExecuteTransactionMethod,
+	HaneulSignPersonalMessageFeature,
+	HaneulSignPersonalMessageMethod,
+	HaneulSignTransactionFeature,
+	HaneulSignTransactionMethod,
 	Wallet,
 } from '@haneullabs/wallet-standard';
 import {
@@ -24,9 +24,9 @@ import {
 	StandardConnect,
 	StandardDisconnect,
 	StandardEvents,
-	SuiSignAndExecuteTransaction,
-	SuiSignPersonalMessage,
-	SuiSignTransaction,
+	HaneulSignAndExecuteTransaction,
+	HaneulSignPersonalMessage,
+	HaneulSignTransaction,
 } from '@haneullabs/wallet-standard';
 import type { Emitter } from 'mitt';
 import mitt from 'mitt';
@@ -40,7 +40,7 @@ import type {
 	EnokiGetSessionMethod,
 } from './features.js';
 import { EnokiGetMetadata, EnokiGetSession } from './features.js';
-import type { Experimental_SuiClientTypes } from '@haneullabs/sui/experimental';
+import type { Experimental_HaneulClientTypes } from '@haneullabs/sui/experimental';
 import { decodeJwt } from '@haneullabs/sui/zklogin';
 import type { ExportedWebCryptoKeypair } from '@haneullabs/signers/webcrypto';
 import { WebCryptoSigner } from '@haneullabs/signers/webcrypto';
@@ -72,7 +72,7 @@ export class EnokiWallet implements Wallet {
 	#clientId: string;
 	#redirectUrl: string;
 	#extraParams: Record<string, string> | (() => Record<string, string>) | undefined;
-	#getCurrentNetwork: () => Experimental_SuiClientTypes.Network;
+	#getCurrentNetwork: () => Experimental_HaneulClientTypes.Network;
 	#windowFeatures?: string | (() => string);
 
 	get name() {
@@ -104,9 +104,9 @@ export class EnokiWallet implements Wallet {
 	get features(): StandardConnectFeature &
 		StandardDisconnectFeature &
 		StandardEventsFeature &
-		SuiSignTransactionFeature &
-		SuiSignAndExecuteTransactionFeature &
-		SuiSignPersonalMessageFeature &
+		HaneulSignTransactionFeature &
+		HaneulSignAndExecuteTransactionFeature &
+		HaneulSignPersonalMessageFeature &
 		EnokiGetMetadataFeature &
 		EnokiGetSessionFeature {
 		return {
@@ -122,15 +122,15 @@ export class EnokiWallet implements Wallet {
 				version: '1.0.0',
 				on: this.#on,
 			},
-			[SuiSignTransaction]: {
+			[HaneulSignTransaction]: {
 				version: '2.0.0',
 				signTransaction: this.#signTransaction,
 			},
-			[SuiSignAndExecuteTransaction]: {
+			[HaneulSignAndExecuteTransaction]: {
 				version: '2.0.0',
 				signAndExecuteTransaction: this.#signAndExecuteTransaction,
 			},
-			[SuiSignPersonalMessage]: {
+			[HaneulSignPersonalMessage]: {
 				version: '1.1.0',
 				signPersonalMessage: this.#signPersonalMessage,
 			},
@@ -178,12 +178,12 @@ export class EnokiWallet implements Wallet {
 		});
 	}
 
-	#signTransaction: SuiSignTransactionMethod = async ({ transaction, chain, account, signal }) => {
+	#signTransaction: HaneulSignTransactionMethod = async ({ transaction, chain, account, signal }) => {
 		signal?.throwIfAborted();
 
 		const { client, keypair } = await this.#getSignerContext(chain);
 		const parsedTransaction = Transaction.from(await transaction.toJSON());
-		const suiAddress = keypair.toSuiAddress();
+		const suiAddress = keypair.toHaneulAddress();
 
 		if (suiAddress !== account.address) {
 			throw new Error(
@@ -195,7 +195,7 @@ export class EnokiWallet implements Wallet {
 		return keypair.signTransaction(await parsedTransaction.build({ client }));
 	};
 
-	#signAndExecuteTransaction: SuiSignAndExecuteTransactionMethod = async ({
+	#signAndExecuteTransaction: HaneulSignAndExecuteTransactionMethod = async ({
 		transaction,
 		chain,
 		account,
@@ -207,7 +207,7 @@ export class EnokiWallet implements Wallet {
 		const parsedTransaction = Transaction.from(await transaction.toJSON());
 		const bytes = await parsedTransaction.build({ client });
 
-		const suiAddress = keypair.toSuiAddress();
+		const suiAddress = keypair.toHaneulAddress();
 
 		if (suiAddress !== account.address) {
 			throw new Error(
@@ -230,9 +230,9 @@ export class EnokiWallet implements Wallet {
 		};
 	};
 
-	#signPersonalMessage: SuiSignPersonalMessageMethod = async ({ message, account, chain }) => {
+	#signPersonalMessage: HaneulSignPersonalMessageMethod = async ({ message, account, chain }) => {
 		const { keypair } = await this.#getSignerContext(chain);
-		const suiAddress = keypair.toSuiAddress();
+		const suiAddress = keypair.toHaneulAddress();
 
 		if (suiAddress !== account.address) {
 			throw new Error(
@@ -292,7 +292,7 @@ export class EnokiWallet implements Wallet {
 					address: zkLoginState.address,
 					chains: this.chains,
 					icon: this.icon,
-					features: [SuiSignPersonalMessage, SuiSignTransaction, SuiSignAndExecuteTransaction],
+					features: [HaneulSignPersonalMessage, HaneulSignTransaction, HaneulSignAndExecuteTransaction],
 					publicKey: fromBase64(zkLoginState.publicKey),
 				}),
 			];
@@ -345,7 +345,7 @@ export class EnokiWallet implements Wallet {
 		const sessionContext = chain ? this.#state.getSessionContext(chain.split(':')[1]) : null;
 		if (!sessionContext) {
 			throw new Error(
-				`A valid Sui chain identifier was not provided in the request. Please report this issue to the dApp developer. Examples of valid Sui chain identifiers are 'sui:testnet' and 'sui:mainnet'. Consider using the '@haneullabs/dapp-kit' package, which provides this value automatically.`,
+				`A valid Haneul chain identifier was not provided in the request. Please report this issue to the dApp developer. Examples of valid Haneul chain identifiers are 'haneul:testnet' and 'haneul:mainnet'. Consider using the '@haneullabs/dapp-kit' package, which provides this value automatically.`,
 			);
 		}
 
@@ -353,7 +353,7 @@ export class EnokiWallet implements Wallet {
 		return { client: sessionContext.client, keypair };
 	}
 
-	async #createSession({ network }: { network: Experimental_SuiClientTypes.Network }) {
+	async #createSession({ network }: { network: Experimental_HaneulClientTypes.Network }) {
 		const popup = window.open(
 			'about:blank',
 			'_blank',

@@ -6,7 +6,7 @@
 import {
 	ConnectButton,
 	ConnectModal,
-	SuiClientProvider,
+	HaneulClientProvider,
 	useCurrentAccount,
 	WalletProvider,
 } from '@haneullabs/dapp-kit';
@@ -66,7 +66,7 @@ function withProviders(Component: React.FunctionComponent<object>) {
 
 		return (
 			<QueryClientProvider client={queryClient}>
-				<SuiClientProvider networks={networks}>
+				<HaneulClientProvider networks={networks}>
 					<WalletProvider
 						slushWallet={{
 							name: 'dApp Kit Docs',
@@ -74,7 +74,7 @@ function withProviders(Component: React.FunctionComponent<object>) {
 					>
 						<Component />
 					</WalletProvider>
-				</SuiClientProvider>
+				</HaneulClientProvider>
 			</QueryClientProvider>
 		);
 	};

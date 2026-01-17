@@ -6,12 +6,12 @@ import type { ObjectOwner } from '@haneullabs/sui/client';
 import {
 	fromBase64,
 	normalizeStructTag,
-	normalizeSuiAddress,
+	normalizeHaneulAddress,
 	parseStructTag,
 } from '@haneullabs/sui/utils';
 
-const SUI_FRAMEWORK_ADDRESS = normalizeSuiAddress('0x2');
-const SUI_SYSTEM_ADDRESS = normalizeSuiAddress('0x3');
+const SUI_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
+const SUI_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
 
 const MoveObjectType = bcs.enum('MoveObjectType', {
 	Other: bcs.StructTag,
@@ -20,7 +20,7 @@ const MoveObjectType = bcs.enum('MoveObjectType', {
 	Coin: bcs.TypeTag,
 });
 
-export const SuiMoveObject = bcs.struct('SuiMoveObject', {
+export const HaneulMoveObject = bcs.struct('HaneulMoveObject', {
 	data: bcs.enum('Data', {
 		MoveObject: bcs.struct('MoveObject', {
 			type: MoveObjectType.transform({
@@ -36,7 +36,7 @@ export const SuiMoveObject = bcs.struct('SuiMoveObject', {
 						const innerStructTag = structTag.typeParams[0];
 						if (
 							innerStructTag.address === SUI_FRAMEWORK_ADDRESS &&
-							innerStructTag.module === 'sui' &&
+							innerStructTag.module === 'haneul' &&
 							innerStructTag.name === 'SUI'
 						) {
 							return { GasCoin: true, $kind: 'GasCoin' };

@@ -14,7 +14,7 @@ import { ConnectedAccountMenu } from './internal/connected-account-menu.js';
 import type { AccountSelectedEvent } from './internal/connected-account-menu-item.js';
 
 /**
- * A button component for connecting to a Sui wallet.
+ * A button component for connecting to a Haneul wallet.
  *
  * Displays a "Connect Wallet" button when no wallet is connected or a connected account menu when a wallet is active.
  *

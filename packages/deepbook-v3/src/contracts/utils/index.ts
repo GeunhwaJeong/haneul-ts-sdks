@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { BcsType, TypeTag } from '@haneullabs/sui/bcs';
 import { bcs, TypeTagSerializer, BcsStruct, BcsEnum, BcsTuple } from '@haneullabs/sui/bcs';
-import { normalizeSuiAddress } from '@haneullabs/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
 import type { TransactionArgument } from '@haneullabs/sui/transactions';
 import { isArgument } from '@haneullabs/sui/transactions';
 import { ValidationError, ErrorMessages } from '../../utils/errors.js';
 
-const MOVE_STDLIB_ADDRESS = normalizeSuiAddress('0x1');
-const SUI_FRAMEWORK_ADDRESS = normalizeSuiAddress('0x2');
-const SUI_SYSTEM_ADDRESS = normalizeSuiAddress('0x3');
+const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress('0x1');
+const SUI_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
+const SUI_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
 
 export type RawTransactionArgument<T> = T | TransactionArgument;
 
@@ -42,7 +42,7 @@ export function getPureBcsSchema(typeTag: string | TypeTag): BcsType<any> | null
 		return type ? bcs.vector(type) : null;
 	} else if ('struct' in parsedTag) {
 		const structTag = parsedTag.struct;
-		const pkg = normalizeSuiAddress(parsedTag.struct.address);
+		const pkg = normalizeHaneulAddress(parsedTag.struct.address);
 
 		if (pkg === MOVE_STDLIB_ADDRESS) {
 			if (
@@ -103,7 +103,7 @@ export function normalizeMoveArguments(
 			continue;
 		}
 
-		if (argType === `${SUI_SYSTEM_ADDRESS}::sui_system::SuiSystemState`) {
+		if (argType === `${SUI_SYSTEM_ADDRESS}::haneul_system::HaneulSystemState`) {
 			normalizedArgs.push((tx) => tx.object.system());
 			continue;
 		}

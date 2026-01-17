@@ -11,7 +11,7 @@ import {
 	AutoApprovalPolicy,
 	operationType,
 } from '../../src';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { MIST_PER_SUI } from '@haneullabs/sui/utils';
 
 const policy: AutoApprovalPolicy = {
@@ -29,7 +29,7 @@ const policy: AutoApprovalPolicy = {
 describe('AutoApprovalManager', () => {
 	test.skip('placeholder example', async () => {
 		const keypair = new Ed25519Keypair();
-		const client = new SuiClient({ url: getFullnodeUrl('testnet') });
+		const client = new HaneulClient({ url: getFullnodeUrl('testnet') });
 
 		const tx = new Transaction();
 		tx.add(operationType('test-operation'));
@@ -64,7 +64,7 @@ describe('AutoApprovalManager', () => {
 			remainingTransactions: 10,
 			usdBudget: 10,
 			coinBudgets: {
-				'sui:0x2::sui::SUI': String(10n * MIST_PER_SUI),
+				'sui:0x2::haneul::HANEUL': String(10n * MIST_PER_SUI),
 			},
 			sharedBudget: null,
 		});

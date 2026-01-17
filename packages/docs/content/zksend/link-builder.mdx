@@ -23,7 +23,7 @@ constructor takes an object with the following options:
 - **`sender`** (required) - Required. The address of the sender / creator of the link.
 - **`client`** (optional) - The `@haneullabs/sui` client used to fetch data to construct the link. If
   not provided, a default client will be used.
-- **`network`** (optional) - The Sui network that the link will be created for. Defaults to
+- **`network`** (optional) - The Haneul network that the link will be created for. Defaults to
   `mainnet`.
 
 ```ts
@@ -46,7 +46,7 @@ params:
 You can add non-SUI coins to the link by calling `link.addClaimableBalance()`. This method takes the
 following params:
 
-- **`coinType`** (required) - The coin type of the coin to add to the link (e.g. `0x2::sui::SUI`).
+- **`coinType`** (required) - The coin type of the coin to add to the link (e.g. `0x2::haneul::HANEUL`).
 - **`amount`** (required) - The amount of the coin to add to the link. Represented in the base unit
   of the coin.
 
@@ -227,7 +227,7 @@ const links = [];
 for (let i = 0; i < 10; i++) {
 	const link = new ZkSendLinkBuilder({
 		client,
-		sender: keypair.toSuiAddress(),
+		sender: keypair.toHaneulAddress(),
 	});
 
 	link.addClaimableMist(100n);

@@ -4,11 +4,11 @@
 import { toBase64 } from '@haneullabs/bcs';
 import { promiseWithResolvers } from '@haneullabs/utils';
 import { bcs } from '../../bcs/index.js';
-import type { SuiObjectRef } from '../../bcs/types.js';
+import type { HaneulObjectRef } from '../../bcs/types.js';
 import type {
-	SuiClient,
-	SuiTransactionBlockResponse,
-	SuiTransactionBlockResponseOptions,
+	HaneulClient,
+	HaneulTransactionBlockResponse,
+	HaneulTransactionBlockResponseOptions,
 } from '../../client/index.js';
 import type { Signer } from '../../cryptography/index.js';
 import type { ObjectCacheOptions } from '../ObjectCache.js';
@@ -26,7 +26,7 @@ const PARALLEL_EXECUTOR_DEFAULTS = {
 	epochBoundaryWindow: 1_000,
 } satisfies Omit<ParallelTransactionExecutorOptions, 'signer' | 'client'>;
 export interface ParallelTransactionExecutorOptions extends Omit<ObjectCacheOptions, 'address'> {
-	client: SuiClient;
+	client: HaneulClient;
 	signer: Signer;
 	/** The number of coins to create in a batch when refilling the gas pool */
 	coinBatchSize?: number;
@@ -56,14 +56,14 @@ interface CoinWithBalance {
 }
 export class ParallelTransactionExecutor {
 	#signer: Signer;
-	#client: SuiClient;
+	#client: HaneulClient;
 	#coinBatchSize: number;
 	#initialCoinBalance: bigint;
 	#minimumCoinBalance: bigint;
 	#epochBoundaryWindow: number;
 	#defaultGasBudget: bigint;
 	#maxPoolSize: number;
-	#sourceCoins: Map<string, SuiObjectRef | null> | null;
+	#sourceCoins: Map<string, HaneulObjectRef | null> | null;
 	#coinPool: CoinWithBalance[] = [];
 	#cache: CachingTransactionExecutor;
 	#objectIdQueues = new Map<string, (() => void)[]>();
@@ -110,13 +110,13 @@ export class ParallelTransactionExecutor {
 
 	async executeTransaction(
 		transaction: Transaction,
-		options?: SuiTransactionBlockResponseOptions,
+		options?: HaneulTransactionBlockResponseOptions,
 		additionalSignatures: string[] = [],
 	) {
 		const { promise, resolve, reject } = promiseWithResolvers<{
 			digest: string;
 			effects: string;
-			data: SuiTransactionBlockResponse;
+			data: HaneulTransactionBlockResponse;
 		}>();
 		const usedObjects = await this.#getUsedObjects(transaction);
 
@@ -186,12 +186,12 @@ export class ParallelTransactionExecutor {
 	async #execute(
 		transaction: Transaction,
 		usedObjects: Set<string>,
-		options?: SuiTransactionBlockResponseOptions,
+		options?: HaneulTransactionBlockResponseOptions,
 		additionalSignatures: string[] = [],
 	) {
 		let gasCoin!: CoinWithBalance;
 		try {
-			transaction.setSenderIfNotSet(this.#signer.toSuiAddress());
+			transaction.setSenderIfNotSet(this.#signer.toHaneulAddress());
 
 			await this.#buildQueue.runTask(async () => {
 				const data = transaction.getData();
@@ -236,7 +236,7 @@ export class ParallelTransactionExecutor {
 			const gasResult = getGasCoinFromEffects(effects);
 			const gasUsed = effects.V2?.gasUsed;
 
-			if (gasCoin && gasUsed && gasResult.owner === this.#signer.toSuiAddress()) {
+			if (gasCoin && gasUsed && gasResult.owner === this.#signer.toHaneulAddress()) {
 				const totalUsed =
 					BigInt(gasUsed.computationCost) +
 					BigInt(gasUsed.storageCost) +
@@ -359,7 +359,7 @@ export class ParallelTransactionExecutor {
 			await new Promise((resolve) => setTimeout(resolve, timeToNextEpoch));
 		}
 
-		const state = await this.#client.getLatestSuiSystemState();
+		const state = await this.#client.getLatestHaneulSystemState();
 
 		this.#gasPrice = {
 			price: BigInt(state.referenceGasPrice),
@@ -382,7 +382,7 @@ export class ParallelTransactionExecutor {
 		}
 
 		const txb = new Transaction();
-		const address = this.#signer.toSuiAddress();
+		const address = this.#signer.toHaneulAddress();
 		txb.setSender(address);
 
 		if (this.#sourceCoins) {

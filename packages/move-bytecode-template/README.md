@@ -1,7 +1,7 @@
 # Move Bytecode Template
 
 Move Bytecode Template allows updating a pre-compiled bytecode, so that a standard template could be
-customized and used to publish new modules on Sui directly in the browser. Hence, removing the need
+customized and used to publish new modules on Haneul directly in the browser. Hence, removing the need
 for a backend to compile new modules.
 
 This crate builds a WASM binary for the `move-language/move-binary-format` allowing bytecode

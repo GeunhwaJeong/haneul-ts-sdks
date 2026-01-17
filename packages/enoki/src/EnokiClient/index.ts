@@ -109,7 +109,7 @@ export class EnokiClient {
 			method: 'POST',
 			body: JSON.stringify({
 				network: input.network,
-				ephemeralPublicKey: input.ephemeralPublicKey.toSuiPublicKey(),
+				ephemeralPublicKey: input.ephemeralPublicKey.toHaneulPublicKey(),
 				additionalEpochs: input.additionalEpochs ?? this.#additionalEpochs,
 			}),
 		});
@@ -123,7 +123,7 @@ export class EnokiClient {
 			},
 			body: JSON.stringify({
 				network: input.network,
-				ephemeralPublicKey: input.ephemeralPublicKey.toSuiPublicKey(),
+				ephemeralPublicKey: input.ephemeralPublicKey.toHaneulPublicKey(),
 				maxEpoch: input.maxEpoch,
 				randomness: input.randomness,
 			}),

@@ -6,7 +6,7 @@ import type { InferInput } from 'valibot';
 import { parse } from 'valibot';
 
 import { bcs } from '../bcs/index.js';
-import { normalizeSuiAddress } from '../utils/sui-types.js';
+import { normalizeHaneulAddress } from '../utils/haneul-types.js';
 import type {
 	Argument,
 	CallArg,
@@ -22,8 +22,8 @@ import type { SerializedTransactionDataV2Schema } from './data/v2.js';
 import { hashTypedData } from './hash.js';
 import { getIdFromCallArg, remapCommandArguments } from './utils.js';
 import type { TransactionResult } from './Transaction.js';
-function prepareSuiAddress(address: string) {
-	return normalizeSuiAddress(address).replace('0x', '');
+function prepareHaneulAddress(address: string) {
+	return normalizeHaneulAddress(address).replace('0x', '');
 }
 
 export class TransactionDataBuilder implements TransactionData {
@@ -175,11 +175,11 @@ export class TransactionDataBuilder implements TransactionData {
 		}
 
 		const transactionData = {
-			sender: prepareSuiAddress(sender),
+			sender: prepareHaneulAddress(sender),
 			expiration: expiration ? expiration : { None: true },
 			gasData: {
 				payment: gasData.payment,
-				owner: prepareSuiAddress(this.gasData.owner ?? sender),
+				owner: prepareHaneulAddress(this.gasData.owner ?? sender),
 				price: BigInt(gasData.price),
 				budget: BigInt(gasData.budget),
 			},
@@ -516,7 +516,7 @@ export class TransactionDataBuilder implements TransactionData {
 							resolvedInput.Object.ImmOrOwnedObject ?? resolvedInput.Object.Receiving!;
 
 						if (
-							normalizeSuiAddress(original.objectId) !== normalizeSuiAddress(resolved.objectId) ||
+							normalizeHaneulAddress(original.objectId) !== normalizeHaneulAddress(resolved.objectId) ||
 							(original.version != null && original.version !== resolved.version) ||
 							(original.digest != null && original.digest !== resolved.digest) ||
 							// Objects with shared object properties should not resolve to owned objects
@@ -532,7 +532,7 @@ export class TransactionDataBuilder implements TransactionData {
 						const resolved = resolvedInput.Object.SharedObject;
 
 						if (
-							normalizeSuiAddress(original.objectId) !== normalizeSuiAddress(resolved.objectId) ||
+							normalizeHaneulAddress(original.objectId) !== normalizeHaneulAddress(resolved.objectId) ||
 							(original.initialSharedVersion != null &&
 								original.initialSharedVersion !== resolved.initialSharedVersion) ||
 							(original.mutable != null && original.mutable !== resolved.mutable) ||

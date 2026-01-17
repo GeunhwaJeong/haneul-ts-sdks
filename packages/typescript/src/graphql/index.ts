@@ -6,7 +6,7 @@ export {
 	type GraphQLQueryOptions,
 	type GraphQLQueryResult,
 	type GraphQLResponseErrors,
-	type SuiGraphQLClientOptions,
-	SuiGraphQLClient,
-	SuiGraphQLRequestError,
+	type HaneulGraphQLClientOptions,
+	HaneulGraphQLClient,
+	HaneulGraphQLRequestError,
 } from './client.js';

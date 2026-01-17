@@ -75,7 +75,7 @@ derive the address, sign personal messages, sign transactions and verify signatu
 
 ```typescript
 const publicKey = keypair.getPublicKey();
-const address = publicKey.toSuiAddress();
+const address = publicKey.toHaneulAddress();
 
 const message = new TextEncoder().encode('hello world');
 await keypair.signPersonalMessage(message);

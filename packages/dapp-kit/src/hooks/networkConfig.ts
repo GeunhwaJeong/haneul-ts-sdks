@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiClientOptions } from '@haneullabs/sui/client';
+import type { HaneulClientOptions } from '@haneullabs/sui/client';
 
-import { useSuiClientContext } from './useSuiClient.js';
+import { useHaneulClientContext } from './useHaneulClient.js';
 
-export type NetworkConfig<T extends object = object> = SuiClientOptions & {
+export type NetworkConfig<T extends object = object> = HaneulClientOptions & {
 	variables?: T;
 };
 
@@ -15,7 +15,7 @@ export function createNetworkConfig<
 	Variables extends object = NonNullable<Config['variables']>,
 >(networkConfig: T) {
 	function useNetworkConfig(): Config {
-		const { config } = useSuiClientContext();
+		const { config } = useHaneulClientContext();
 
 		if (!config) {
 			throw new Error('No network config found');

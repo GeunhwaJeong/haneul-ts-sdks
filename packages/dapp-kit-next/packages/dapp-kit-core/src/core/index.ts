@@ -31,7 +31,7 @@ import { unsafeBurnerWalletInitializer } from '../wallets/unsafe-burner.js';
 import type {
 	SignedPersonalMessage,
 	SignedTransaction,
-	SuiSignAndExecuteTransactionOutput,
+	HaneulSignAndExecuteTransactionOutput,
 } from '@haneullabs/wallet-standard';
 import type { UiWalletAccount } from '@wallet-standard/ui';
 
@@ -44,7 +44,7 @@ export type DAppKit<
 	signTransaction: (args: SignTransactionArgs) => Promise<SignedTransaction>;
 	signAndExecuteTransaction: (
 		args: SignAndExecuteTransactionArgs,
-	) => Promise<SuiSignAndExecuteTransactionOutput>;
+	) => Promise<HaneulSignAndExecuteTransactionOutput>;
 	signPersonalMessage: (args: SignPersonalMessageArgs) => Promise<SignedPersonalMessage>;
 	connectWallet: (args: ConnectWalletArgs) => Promise<{
 		accounts: UiWalletAccount[];

@@ -3,7 +3,7 @@
 
 import { fromBase64, toBase64 } from '@haneullabs/bcs';
 import type { InferBcsType } from '@haneullabs/bcs';
-import type { SuiMoveNormalizedType } from '@haneullabs/sui/client';
+import type { HaneulMoveNormalizedType } from '@haneullabs/sui/client';
 
 import type { Committee } from '../contracts/walrus/committee.js';
 import type { EncodingType } from '../types.js';
@@ -162,7 +162,7 @@ export function nodesByShardIndex(committee: InferBcsType<typeof Committee>) {
 	return nodesByShardIndex;
 }
 
-export function toTypeString(type: SuiMoveNormalizedType): string {
+export function toTypeString(type: HaneulMoveNormalizedType): string {
 	if (typeof type === 'string') {
 		switch (type) {
 			case 'Address':

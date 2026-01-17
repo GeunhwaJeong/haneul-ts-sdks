@@ -8,17 +8,17 @@ import { bytesToHex } from '@noble/hashes/utils';
 import { PublicKey } from '../cryptography/publickey.js';
 import type { PublicKeyInitData } from '../cryptography/publickey.js';
 import { SIGNATURE_SCHEME_TO_FLAG } from '../cryptography/signature-scheme.js';
-import { SuiGraphQLClient } from '../graphql/client.js';
-import { normalizeSuiAddress, SUI_ADDRESS_LENGTH } from '../utils/sui-types.js';
+import { HaneulGraphQLClient } from '../graphql/client.js';
+import { normalizeHaneulAddress, SUI_ADDRESS_LENGTH } from '../utils/haneul-types.js';
 import type { ZkLoginSignatureInputs } from './bcs.js';
 import { extractClaimValue } from './jwt-utils.js';
 import { parseZkLoginSignature } from './signature.js';
 import { normalizeZkLoginIssuer, toBigEndianBytes, toPaddedBigEndianBytes } from './utils.js';
-import type { ClientWithExtensions, Experimental_SuiClientTypes } from '../experimental/types.js';
+import type { ClientWithExtensions, Experimental_HaneulClientTypes } from '../experimental/types.js';
 
 export interface ZkLoginCompatibleClient extends ClientWithExtensions<{
 	core: {
-		verifyZkLoginSignature: Experimental_SuiClientTypes.TransportMethods['verifyZkLoginSignature'];
+		verifyZkLoginSignature: Experimental_HaneulClientTypes.TransportMethods['verifyZkLoginSignature'];
 	};
 }> {}
 
@@ -76,7 +76,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 				client,
 			});
 
-			if (publicKey.toSuiAddress() !== address) {
+			if (publicKey.toHaneulAddress() !== address) {
 				publicKey = new ZkLoginPublicIdentifier(normalizeZkLoginPublicKeyBytes(bytes, true), {
 					client,
 				});
@@ -87,7 +87,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 			});
 		}
 
-		if (address && publicKey.toSuiAddress() !== address) {
+		if (address && publicKey.toHaneulAddress() !== address) {
 			throw new Error('Public key bytes do not match the provided address');
 		}
 
@@ -102,7 +102,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 			legacyAddress: true,
 		});
 
-		if (legacyPublicKey.toSuiAddress() === address) {
+		if (legacyPublicKey.toHaneulAddress() === address) {
 			return legacyPublicKey;
 		}
 
@@ -110,7 +110,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 			legacyAddress: false,
 		});
 
-		if (publicKey.toSuiAddress() !== address) {
+		if (publicKey.toHaneulAddress() !== address) {
 			throw new Error('Proof does not match address');
 		}
 
@@ -124,12 +124,12 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 		return super.equals(publicKey);
 	}
 
-	override toSuiAddress(): string {
+	override toHaneulAddress(): string {
 		if (this.#legacyAddress) {
 			return this.#toLegacyAddress();
 		}
 
-		return super.toSuiAddress();
+		return super.toHaneulAddress();
 	}
 
 	#toLegacyAddress() {
@@ -137,7 +137,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 		const addressBytes = new Uint8Array(legacyBytes.length + 1);
 		addressBytes[0] = this.flag();
 		addressBytes.set(legacyBytes, 1);
-		return normalizeSuiAddress(
+		return normalizeHaneulAddress(
 			bytesToHex(blake2b(addressBytes, { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
 		);
 	}
@@ -150,7 +150,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 	}
 
 	/**
-	 * Return the Sui address associated with this ZkLogin public identifier
+	 * Return the Haneul address associated with this ZkLogin public identifier
 	 */
 	flag(): number {
 		return SIGNATURE_SCHEME_TO_FLAG['ZkLogin'];
@@ -168,7 +168,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 	 */
 	verifyPersonalMessage(message: Uint8Array, signature: Uint8Array | string): Promise<boolean> {
 		const parsedSignature = parseSerializedZkLoginSignature(signature);
-		const address = new ZkLoginPublicIdentifier(parsedSignature.publicKey).toSuiAddress();
+		const address = new ZkLoginPublicIdentifier(parsedSignature.publicKey).toHaneulAddress();
 
 		return graphqlVerifyZkLoginSignature({
 			address: address,
@@ -184,7 +184,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 	 */
 	verifyTransaction(transaction: Uint8Array, signature: Uint8Array | string): Promise<boolean> {
 		const parsedSignature = parseSerializedZkLoginSignature(signature);
-		const address = new ZkLoginPublicIdentifier(parsedSignature.publicKey).toSuiAddress();
+		const address = new ZkLoginPublicIdentifier(parsedSignature.publicKey).toHaneulAddress();
 		return graphqlVerifyZkLoginSignature({
 			address: address,
 			bytes: toBase64(transaction),
@@ -198,7 +198,7 @@ export class ZkLoginPublicIdentifier extends PublicKey {
 	 * Verifies that the public key is associated with the provided address
 	 */
 	override verifyAddress(address: string): boolean {
-		return address === super.toSuiAddress() || address === this.#toLegacyAddress();
+		return address === super.toHaneulAddress() || address === this.#toLegacyAddress();
 	}
 }
 
@@ -238,7 +238,7 @@ async function graphqlVerifyZkLoginSignature({
 	bytes,
 	signature,
 	intentScope,
-	client = new SuiGraphQLClient({
+	client = new HaneulGraphQLClient({
 		url: 'https://graphql.mainnet.sui.io/graphql',
 	}),
 }: {

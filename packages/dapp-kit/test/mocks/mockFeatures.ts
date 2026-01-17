@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { IdentifierRecord, SuiFeatures, SuiSignMessageFeature } from '@haneullabs/wallet-standard';
+import type { IdentifierRecord, SuiFeatures, HaneulSignMessageFeature } from '@haneullabs/wallet-standard';
 
-export const signMessageFeature: SuiSignMessageFeature = {
+export const signMessageFeature: HaneulSignMessageFeature = {
 	'sui:signMessage': {
 		version: '1.0.0',
 		signMessage: vi.fn(),

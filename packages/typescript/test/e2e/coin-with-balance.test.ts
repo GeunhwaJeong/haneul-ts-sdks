@@ -8,7 +8,7 @@ import { bcs } from '../../src/bcs';
 import { Ed25519Keypair } from '../../src/keypairs/ed25519';
 import { Transaction } from '../../src/transactions';
 import { coinWithBalance } from '../../src/transactions/intents/CoinWithBalance';
-import { normalizeSuiAddress } from '../../src/utils';
+import { normalizeHaneulAddress } from '../../src/utils';
 import { setup, TestToolbox } from './utils/setup';
 
 describe('coinWithBalance', () => {
@@ -21,8 +21,8 @@ describe('coinWithBalance', () => {
 	beforeAll(async () => {
 		[toolbox, publishToolbox] = await Promise.all([setup(), setup()]);
 		packageId = await publishToolbox.getPackage('coin_metadata');
-		testType = normalizeSuiAddress(packageId) + '::test::TEST';
-		testTypeZero = normalizeSuiAddress(packageId) + '::test_zero::TEST_ZERO';
+		testType = normalizeHaneulAddress(packageId) + '::test::TEST';
+		testTypeZero = normalizeHaneulAddress(packageId) + '::test_zero::TEST_ZERO';
 	});
 
 	it('works with sui', async () => {
@@ -36,9 +36,9 @@ describe('coinWithBalance', () => {
 					balance: 12345n,
 				}),
 			],
-			receiver.toSuiAddress(),
+			receiver.toHaneulAddress(),
 		);
-		tx.setSender(publishToolbox.keypair.toSuiAddress());
+		tx.setSender(publishToolbox.keypair.toHaneulAddress());
 
 		expect(
 			JSON.parse(
@@ -57,11 +57,11 @@ describe('coinWithBalance', () => {
 			inputs: [
 				{
 					Pure: {
-						bytes: toBase64(fromHex(receiver.toSuiAddress())),
+						bytes: toBase64(fromHex(receiver.toHaneulAddress())),
 					},
 				},
 			],
-			sender: publishToolbox.keypair.toSuiAddress(),
+			sender: publishToolbox.keypair.toHaneulAddress(),
 			commands: [
 				{
 					$Intent: {
@@ -107,7 +107,7 @@ describe('coinWithBalance', () => {
 			inputs: [
 				{
 					Pure: {
-						bytes: toBase64(fromHex(receiver.toSuiAddress())),
+						bytes: toBase64(fromHex(receiver.toHaneulAddress())),
 					},
 				},
 				{
@@ -116,7 +116,7 @@ describe('coinWithBalance', () => {
 					},
 				},
 			],
-			sender: publishToolbox.keypair.toSuiAddress(),
+			sender: publishToolbox.keypair.toHaneulAddress(),
 			commands: [
 				{
 					SplitCoins: {
@@ -162,13 +162,13 @@ describe('coinWithBalance', () => {
 				(change) =>
 					typeof change.owner === 'object' &&
 					'AddressOwner' in change.owner &&
-					change.owner.AddressOwner === receiver.toSuiAddress(),
+					change.owner.AddressOwner === receiver.toHaneulAddress(),
 			),
 		).toEqual({
 			amount: '12345',
-			coinType: '0x2::sui::SUI',
+			coinType: '0x2::haneul::HANEUL',
 			owner: {
-				AddressOwner: receiver.toSuiAddress(),
+				AddressOwner: receiver.toHaneulAddress(),
 			},
 		});
 	});
@@ -184,9 +184,9 @@ describe('coinWithBalance', () => {
 					balance: 1n,
 				}),
 			],
-			receiver.toSuiAddress(),
+			receiver.toHaneulAddress(),
 		);
-		tx.setSender(publishToolbox.keypair.toSuiAddress());
+		tx.setSender(publishToolbox.keypair.toHaneulAddress());
 
 		expect(
 			JSON.parse(
@@ -205,11 +205,11 @@ describe('coinWithBalance', () => {
 			inputs: [
 				{
 					Pure: {
-						bytes: toBase64(fromHex(receiver.toSuiAddress())),
+						bytes: toBase64(fromHex(receiver.toHaneulAddress())),
 					},
 				},
 			],
-			sender: publishToolbox.keypair.toSuiAddress(),
+			sender: publishToolbox.keypair.toHaneulAddress(),
 			commands: [
 				{
 					$Intent: {
@@ -255,7 +255,7 @@ describe('coinWithBalance', () => {
 			inputs: [
 				{
 					Pure: {
-						bytes: toBase64(fromHex(receiver.toSuiAddress())),
+						bytes: toBase64(fromHex(receiver.toHaneulAddress())),
 					},
 				},
 				{
@@ -269,7 +269,7 @@ describe('coinWithBalance', () => {
 					},
 				},
 			],
-			sender: publishToolbox.keypair.toSuiAddress(),
+			sender: publishToolbox.keypair.toHaneulAddress(),
 			commands: [
 				{
 					SplitCoins: {
@@ -311,13 +311,13 @@ describe('coinWithBalance', () => {
 				(change) =>
 					typeof change.owner === 'object' &&
 					'AddressOwner' in change.owner &&
-					change.owner.AddressOwner === receiver.toSuiAddress(),
+					change.owner.AddressOwner === receiver.toHaneulAddress(),
 			),
 		).toEqual({
 			amount: '1',
 			coinType: testType,
 			owner: {
-				AddressOwner: receiver.toSuiAddress(),
+				AddressOwner: receiver.toHaneulAddress(),
 			},
 		});
 	});
@@ -336,9 +336,9 @@ describe('coinWithBalance', () => {
 					balance: 0n,
 				}),
 			],
-			receiver.toSuiAddress(),
+			receiver.toHaneulAddress(),
 		);
-		tx.setSender(publishToolbox.keypair.toSuiAddress());
+		tx.setSender(publishToolbox.keypair.toHaneulAddress());
 
 		expect(
 			JSON.parse(
@@ -357,11 +357,11 @@ describe('coinWithBalance', () => {
 			inputs: [
 				{
 					Pure: {
-						bytes: toBase64(fromHex(receiver.toSuiAddress())),
+						bytes: toBase64(fromHex(receiver.toHaneulAddress())),
 					},
 				},
 			],
-			sender: publishToolbox.keypair.toSuiAddress(),
+			sender: publishToolbox.keypair.toHaneulAddress(),
 			commands: [
 				{
 					$Intent: {
@@ -420,7 +420,7 @@ describe('coinWithBalance', () => {
 			inputs: [
 				{
 					Pure: {
-						bytes: toBase64(fromHex(receiver.toSuiAddress())),
+						bytes: toBase64(fromHex(receiver.toHaneulAddress())),
 					},
 				},
 				{
@@ -429,7 +429,7 @@ describe('coinWithBalance', () => {
 					},
 				},
 			],
-			sender: publishToolbox.keypair.toSuiAddress(),
+			sender: publishToolbox.keypair.toHaneulAddress(),
 			commands: [
 				{
 					MoveCall: {
@@ -482,7 +482,7 @@ describe('coinWithBalance', () => {
 
 				return (
 					change.objectType === `0x2::coin::Coin<${testTypeZero}>` &&
-					change.owner.AddressOwner === receiver.toSuiAddress()
+					change.owner.AddressOwner === receiver.toHaneulAddress()
 				);
 			}).length,
 		).toEqual(1);
@@ -500,10 +500,10 @@ describe('coinWithBalance', () => {
 				coinWithBalance({ type: 'gas', balance: 4n }),
 				coinWithBalance({ type: testTypeZero, balance: 0n }),
 			],
-			receiver.toSuiAddress(),
+			receiver.toHaneulAddress(),
 		);
 
-		tx.setSender(publishToolbox.keypair.toSuiAddress());
+		tx.setSender(publishToolbox.keypair.toHaneulAddress());
 
 		expect(
 			JSON.parse(
@@ -522,11 +522,11 @@ describe('coinWithBalance', () => {
 			inputs: [
 				{
 					Pure: {
-						bytes: toBase64(fromHex(receiver.toSuiAddress())),
+						bytes: toBase64(fromHex(receiver.toHaneulAddress())),
 					},
 				},
 			],
-			sender: publishToolbox.keypair.toSuiAddress(),
+			sender: publishToolbox.keypair.toHaneulAddress(),
 			commands: [
 				{
 					$Intent: {
@@ -624,7 +624,7 @@ describe('coinWithBalance', () => {
 			inputs: [
 				{
 					Pure: {
-						bytes: toBase64(fromHex(receiver.toSuiAddress())),
+						bytes: toBase64(fromHex(receiver.toHaneulAddress())),
 					},
 				},
 				{
@@ -653,7 +653,7 @@ describe('coinWithBalance', () => {
 					},
 				},
 			],
-			sender: publishToolbox.keypair.toSuiAddress(),
+			sender: publishToolbox.keypair.toHaneulAddress(),
 			commands: [
 				{
 					SplitCoins: {
@@ -746,21 +746,21 @@ describe('coinWithBalance', () => {
 				(change) =>
 					typeof change.owner === 'object' &&
 					'AddressOwner' in change.owner &&
-					change.owner.AddressOwner === receiver.toSuiAddress(),
+					change.owner.AddressOwner === receiver.toHaneulAddress(),
 			),
 		).toEqual([
 			{
 				amount: '7',
-				coinType: '0x2::sui::SUI',
+				coinType: '0x2::haneul::HANEUL',
 				owner: {
-					AddressOwner: receiver.toSuiAddress(),
+					AddressOwner: receiver.toHaneulAddress(),
 				},
 			},
 			{
 				amount: '3',
 				coinType: testType,
 				owner: {
-					AddressOwner: receiver.toSuiAddress(),
+					AddressOwner: receiver.toHaneulAddress(),
 				},
 			},
 		]);
@@ -771,7 +771,7 @@ describe('coinWithBalance', () => {
 
 				return (
 					change.objectType === `0x2::coin::Coin<${testTypeZero}>` &&
-					change.owner.AddressOwner === receiver.toSuiAddress()
+					change.owner.AddressOwner === receiver.toHaneulAddress()
 				);
 			}).length,
 		).toEqual(1);

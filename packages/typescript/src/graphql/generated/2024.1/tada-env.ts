@@ -216,7 +216,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -1436,7 +1436,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -2058,7 +2058,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -3719,7 +3719,7 @@ const introspection = {
             "name": "sender",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             }
           },
           {
@@ -4341,7 +4341,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -4686,7 +4686,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -4698,7 +4698,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -4873,7 +4873,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -5451,7 +5451,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -6084,7 +6084,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -7044,7 +7044,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -7548,7 +7548,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -7780,7 +7780,7 @@ const introspection = {
             "name": "owner",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             }
           },
           {
@@ -7791,7 +7791,7 @@ const introspection = {
                 "kind": "NON_NULL",
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "SuiAddress"
+                  "name": "HaneulAddress"
                 }
               }
             }
@@ -7822,7 +7822,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             }
           },
@@ -7893,7 +7893,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             }
           },
@@ -7965,7 +7965,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -8017,7 +8017,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -8817,7 +8817,7 @@ const introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "SuiAddress"
+                    "name": "HaneulAddress"
                   }
                 }
               }
@@ -8882,7 +8882,7 @@ const introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "SuiAddress"
+                    "name": "HaneulAddress"
                   }
                 }
               }
@@ -9154,7 +9154,7 @@ const introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "SuiAddress"
+                    "name": "HaneulAddress"
                   }
                 }
               },
@@ -9229,7 +9229,7 @@ const introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "SuiAddress"
+                    "name": "HaneulAddress"
                   }
                 }
               }
@@ -9395,7 +9395,7 @@ const introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "SuiAddress"
+                    "name": "HaneulAddress"
                   }
                 }
               },
@@ -9513,7 +9513,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -9859,7 +9859,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -9902,7 +9902,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -9945,7 +9945,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -10113,7 +10113,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -10439,7 +10439,7 @@ const introspection = {
             "name": "poolId",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             },
             "args": [],
             "isDeprecated": false
@@ -10779,7 +10779,7 @@ const introspection = {
       },
       {
         "kind": "SCALAR",
-        "name": "SuiAddress"
+        "name": "HaneulAddress"
       },
       {
         "kind": "OBJECT",
@@ -10791,7 +10791,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -12000,28 +12000,28 @@ const introspection = {
             "name": "signAddress",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             }
           },
           {
             "name": "recvAddress",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             }
           },
           {
             "name": "inputObject",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             }
           },
           {
             "name": "changedObject",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             }
           },
           {
@@ -12204,7 +12204,7 @@ const introspection = {
             "name": "sender",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             }
           },
           {
@@ -12238,7 +12238,7 @@ const introspection = {
             "name": "gasSponsor",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             }
           }
         ],
@@ -12291,7 +12291,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -12434,7 +12434,7 @@ const introspection = {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "SCALAR",
-                "name": "SuiAddress"
+                "name": "HaneulAddress"
               }
             },
             "args": [],
@@ -12450,7 +12450,7 @@ const introspection = {
                   "kind": "NON_NULL",
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "SuiAddress"
+                    "name": "HaneulAddress"
                   }
                 }
               }
@@ -12990,7 +12990,7 @@ const introspection = {
             "name": "inactivePoolsId",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             },
             "args": [],
             "isDeprecated": false
@@ -13008,7 +13008,7 @@ const introspection = {
             "name": "pendingActiveValidatorsId",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             },
             "args": [],
             "isDeprecated": false
@@ -13041,7 +13041,7 @@ const introspection = {
             "name": "stakingPoolMappingsId",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             },
             "args": [],
             "isDeprecated": false
@@ -13068,7 +13068,7 @@ const introspection = {
             "name": "validatorCandidatesId",
             "type": {
               "kind": "SCALAR",
-              "name": "SuiAddress"
+              "name": "HaneulAddress"
             },
             "args": [],
             "isDeprecated": false

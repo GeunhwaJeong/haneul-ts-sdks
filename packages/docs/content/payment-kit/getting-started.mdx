@@ -14,12 +14,12 @@ This guide will help you set up and start using the Payment Kit SDK in your Sui 
 
 Before you begin, ensure you have:
 
-- A Sui wallet with testnet/mainnet SUI tokens
-- Basic understanding of TypeScript and the Sui blockchain
+- A Haneul wallet with testnet/mainnet SUI tokens
+- Basic understanding of TypeScript and the Haneul blockchain
 
 ## Installation
 
-Install the Payment Kit SDK and the Sui TypeScript SDK:
+Install the Payment Kit SDK and the Haneul TypeScript SDK:
 
 ```bash npm2yarn
 npm install --save @haneullabs/payment-kit @haneullabs/sui
@@ -27,15 +27,15 @@ npm install --save @haneullabs/payment-kit @haneullabs/sui
 
 ## Setting Up the Client
 
-The Payment Kit SDK extends the standard `SuiClient` to provide payment functionality. Here's how to
+The Payment Kit SDK extends the standard `HaneulClient` to provide payment functionality. Here's how to
 set it up:
 
 ```ts
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { paymentKit } from '@haneullabs/payment-kit';
 
-// Create a Sui client with Payment Kit extension
-const client = new SuiClient({
+// Create a Haneul client with Payment Kit extension
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 	network: 'testnet',
 }).$extend(paymentKit());
@@ -53,12 +53,12 @@ import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 
 // Create or load your keypair
 const keypair = Ed25519Keypair.generate();
-const sender = keypair.getPublicKey().toSuiAddress();
+const sender = keypair.getPublicKey().toHaneulAddress();
 
 // Create the payment transaction
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(), // Unique identifier for this payment
-	coinType: '0x2::sui::SUI', // Coin type (SUI in this case)
+	coinType: '0x2::haneul::HANEUL', // Coin type (SUI in this case)
 	amount: 1n * MIST_PER_SUI, // 1 SUI (in MIST)
 	receiver,
 	sender: sender,
@@ -96,7 +96,7 @@ After processing a payment, you can query the payment record to verify it exists
 // Query the payment record
 const paymentRecord = await client.paymentKit.getPaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1n * MIST_PER_SUI,
 	receiver,
 });
@@ -117,7 +117,7 @@ If you don't need duplicate prevention or persistent storage, use ephemeral paym
 ```ts
 const tx = client.paymentKit.tx.processEphemeralPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1n * MIST_PER_SUI,
 	receiver,
 	sender: sender,

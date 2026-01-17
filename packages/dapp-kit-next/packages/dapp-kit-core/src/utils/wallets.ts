@@ -4,8 +4,8 @@
 import {
 	StandardConnect,
 	StandardEvents,
-	SuiSignTransaction,
-	SuiSignTransactionBlock,
+	HaneulSignTransaction,
+	HaneulSignTransactionBlock,
 	WALLET_STANDARD_ERROR__FEATURES__WALLET_ACCOUNT_CHAIN_UNSUPPORTED,
 	WalletStandardError,
 } from '@haneullabs/wallet-standard';
@@ -16,7 +16,7 @@ import { ChainNotSupportedError, DAppKitError, FeatureNotSupportedError } from '
 
 export const requiredWalletFeatures = [StandardConnect, StandardEvents] as const;
 
-export const signingFeatures = [SuiSignTransaction, SuiSignTransactionBlock] as const;
+export const signingFeatures = [HaneulSignTransaction, HaneulSignTransactionBlock] as const;
 
 export function getAssociatedWalletOrThrow(account: UiWalletAccount, wallets: UiWallet[]) {
 	const wallet = wallets.find((wallet) => uiWalletAccountBelongsToUiWallet(account, wallet));

@@ -4,9 +4,9 @@
 import { TypeTagSerializer } from '../bcs/type-tag-serializer.js';
 import type { TransactionPlugin } from '../transactions/index.js';
 import { deriveDynamicFieldID } from '../utils/dynamic-fields.js';
-import { normalizeStructTag, parseStructTag, SUI_ADDRESS_LENGTH } from '../utils/sui-types.js';
+import { normalizeStructTag, parseStructTag, SUI_ADDRESS_LENGTH } from '../utils/haneul-types.js';
 import { Experimental_BaseClient } from './client.js';
-import type { ClientWithExtensions, Experimental_SuiClientTypes } from './types.js';
+import type { ClientWithExtensions, Experimental_HaneulClientTypes } from './types.js';
 import { MvrClient } from './mvr.js';
 
 export type ClientWithCoreApi = ClientWithExtensions<{
@@ -14,9 +14,9 @@ export type ClientWithCoreApi = ClientWithExtensions<{
 }>;
 
 export interface Experimental_CoreClientOptions
-	extends Experimental_SuiClientTypes.SuiClientOptions {
+	extends Experimental_HaneulClientTypes.HaneulClientOptions {
 	base: Experimental_BaseClient;
-	mvr?: Experimental_SuiClientTypes.MvrOptions;
+	mvr?: Experimental_HaneulClientTypes.MvrOptions;
 }
 
 const DEFAULT_MVR_URLS: Record<string, string> = {
@@ -26,10 +26,10 @@ const DEFAULT_MVR_URLS: Record<string, string> = {
 
 export abstract class Experimental_CoreClient
 	extends Experimental_BaseClient
-	implements Experimental_SuiClientTypes.TransportMethods
+	implements Experimental_HaneulClientTypes.TransportMethods
 {
 	core = this;
-	mvr: Experimental_SuiClientTypes.MvrMethods;
+	mvr: Experimental_HaneulClientTypes.MvrMethods;
 
 	constructor(options: Experimental_CoreClientOptions) {
 		super(options);
@@ -43,12 +43,12 @@ export abstract class Experimental_CoreClient
 	}
 
 	abstract getObjects(
-		options: Experimental_SuiClientTypes.GetObjectsOptions,
-	): Promise<Experimental_SuiClientTypes.GetObjectsResponse>;
+		options: Experimental_HaneulClientTypes.GetObjectsOptions,
+	): Promise<Experimental_HaneulClientTypes.GetObjectsResponse>;
 
 	async getObject(
-		options: Experimental_SuiClientTypes.GetObjectOptions,
-	): Promise<Experimental_SuiClientTypes.GetObjectResponse> {
+		options: Experimental_HaneulClientTypes.GetObjectOptions,
+	): Promise<Experimental_HaneulClientTypes.GetObjectResponse> {
 		const { objectId } = options;
 		const {
 			objects: [result],
@@ -60,58 +60,58 @@ export abstract class Experimental_CoreClient
 	}
 
 	abstract getCoins(
-		options: Experimental_SuiClientTypes.GetCoinsOptions,
-	): Promise<Experimental_SuiClientTypes.GetCoinsResponse>;
+		options: Experimental_HaneulClientTypes.GetCoinsOptions,
+	): Promise<Experimental_HaneulClientTypes.GetCoinsResponse>;
 
 	abstract getOwnedObjects(
-		options: Experimental_SuiClientTypes.GetOwnedObjectsOptions,
-	): Promise<Experimental_SuiClientTypes.GetOwnedObjectsResponse>;
+		options: Experimental_HaneulClientTypes.GetOwnedObjectsOptions,
+	): Promise<Experimental_HaneulClientTypes.GetOwnedObjectsResponse>;
 
 	abstract getBalance(
-		options: Experimental_SuiClientTypes.GetBalanceOptions,
-	): Promise<Experimental_SuiClientTypes.GetBalanceResponse>;
+		options: Experimental_HaneulClientTypes.GetBalanceOptions,
+	): Promise<Experimental_HaneulClientTypes.GetBalanceResponse>;
 
 	abstract getAllBalances(
-		options: Experimental_SuiClientTypes.GetAllBalancesOptions,
-	): Promise<Experimental_SuiClientTypes.GetAllBalancesResponse>;
+		options: Experimental_HaneulClientTypes.GetAllBalancesOptions,
+	): Promise<Experimental_HaneulClientTypes.GetAllBalancesResponse>;
 
 	abstract getTransaction(
-		options: Experimental_SuiClientTypes.GetTransactionOptions,
-	): Promise<Experimental_SuiClientTypes.GetTransactionResponse>;
+		options: Experimental_HaneulClientTypes.GetTransactionOptions,
+	): Promise<Experimental_HaneulClientTypes.GetTransactionResponse>;
 
 	abstract executeTransaction(
-		options: Experimental_SuiClientTypes.ExecuteTransactionOptions,
-	): Promise<Experimental_SuiClientTypes.ExecuteTransactionResponse>;
+		options: Experimental_HaneulClientTypes.ExecuteTransactionOptions,
+	): Promise<Experimental_HaneulClientTypes.ExecuteTransactionResponse>;
 
 	abstract dryRunTransaction(
-		options: Experimental_SuiClientTypes.DryRunTransactionOptions,
-	): Promise<Experimental_SuiClientTypes.DryRunTransactionResponse>;
+		options: Experimental_HaneulClientTypes.DryRunTransactionOptions,
+	): Promise<Experimental_HaneulClientTypes.DryRunTransactionResponse>;
 
 	abstract getReferenceGasPrice(
-		options?: Experimental_SuiClientTypes.GetReferenceGasPriceOptions,
-	): Promise<Experimental_SuiClientTypes.GetReferenceGasPriceResponse>;
+		options?: Experimental_HaneulClientTypes.GetReferenceGasPriceOptions,
+	): Promise<Experimental_HaneulClientTypes.GetReferenceGasPriceResponse>;
 
 	abstract getDynamicFields(
-		options: Experimental_SuiClientTypes.GetDynamicFieldsOptions,
-	): Promise<Experimental_SuiClientTypes.GetDynamicFieldsResponse>;
+		options: Experimental_HaneulClientTypes.GetDynamicFieldsOptions,
+	): Promise<Experimental_HaneulClientTypes.GetDynamicFieldsResponse>;
 
 	abstract resolveTransactionPlugin(): TransactionPlugin;
 
 	abstract verifyZkLoginSignature(
-		options: Experimental_SuiClientTypes.VerifyZkLoginSignatureOptions,
-	): Promise<Experimental_SuiClientTypes.ZkLoginVerifyResponse>;
+		options: Experimental_HaneulClientTypes.VerifyZkLoginSignatureOptions,
+	): Promise<Experimental_HaneulClientTypes.ZkLoginVerifyResponse>;
 
 	abstract getMoveFunction(
-		options: Experimental_SuiClientTypes.GetMoveFunctionOptions,
-	): Promise<Experimental_SuiClientTypes.GetMoveFunctionResponse>;
+		options: Experimental_HaneulClientTypes.GetMoveFunctionOptions,
+	): Promise<Experimental_HaneulClientTypes.GetMoveFunctionResponse>;
 
 	abstract defaultNameServiceName(
-		options: Experimental_SuiClientTypes.DefaultNameServiceNameOptions,
-	): Promise<Experimental_SuiClientTypes.DefaultNameServiceNameResponse>;
+		options: Experimental_HaneulClientTypes.DefaultNameServiceNameOptions,
+	): Promise<Experimental_HaneulClientTypes.DefaultNameServiceNameResponse>;
 
 	async getDynamicField(
-		options: Experimental_SuiClientTypes.GetDynamicFieldOptions,
-	): Promise<Experimental_SuiClientTypes.GetDynamicFieldResponse> {
+		options: Experimental_HaneulClientTypes.GetDynamicFieldOptions,
+	): Promise<Experimental_HaneulClientTypes.GetDynamicFieldResponse> {
 		const normalizedNameType = TypeTagSerializer.parseFromStr(
 			(
 				await this.core.mvr.resolveType({
@@ -168,7 +168,7 @@ export abstract class Experimental_CoreClient
 		signal?: AbortSignal;
 		/** The amount of time to wait for transaction. Defaults to one minute. */
 		timeout?: number;
-	} & Experimental_SuiClientTypes.GetTransactionOptions): Promise<Experimental_SuiClientTypes.GetTransactionResponse> {
+	} & Experimental_HaneulClientTypes.GetTransactionOptions): Promise<Experimental_HaneulClientTypes.GetTransactionResponse> {
 		const abortSignal = signal
 			? AbortSignal.any([AbortSignal.timeout(timeout), signal])
 			: AbortSignal.timeout(timeout);

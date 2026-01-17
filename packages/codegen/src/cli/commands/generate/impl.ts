@@ -4,7 +4,7 @@
 import type { LocalContext } from '../../context.js';
 import { generateFromPackageSummary } from '../../../index.js';
 import { loadConfig } from '../../../config.js';
-import { isValidNamedPackage, isValidSuiObjectId } from '@haneullabs/sui/utils';
+import { isValidNamedPackage, isValidHaneulObjectId } from '@haneullabs/sui/utils';
 import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 
@@ -26,10 +26,10 @@ export default async function generate(
 		packages.length > 0
 			? packages.map((p) => {
 					const trimmed = p.trim();
-					if (isValidSuiObjectId(trimmed) || isValidNamedPackage(trimmed)) {
+					if (isValidHaneulObjectId(trimmed) || isValidNamedPackage(trimmed)) {
 						return {
 							network: flags.network ?? 'testnet',
-							packageName: isValidSuiObjectId(trimmed) ? trimmed : trimmed.split('/')[1],
+							packageName: isValidHaneulObjectId(trimmed) ? trimmed : trimmed.split('/')[1],
 							package: trimmed,
 						};
 					} else {

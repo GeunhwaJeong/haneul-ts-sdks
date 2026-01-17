@@ -4,10 +4,10 @@ For more complete docs, visit the [Sui TypeScript SDK docs](https://sdk.haneulla
 
 # Sui TypeScript SDK
 
-This is the Sui TypeScript SDK built on the Sui
+This is the Haneul TypeScript SDK built on the Haneul
 [JSON RPC API](https://github.com/HaneulLabs/sui/blob/main/docs/content/references/sui-api.mdx). It
 provides utility classes and functions for applications to sign transactions and interact with the
-Sui network.
+Haneul network.
 
 ## Building Locally
 
@@ -24,7 +24,7 @@ $ pnpm run build
 $ pnpm sdk build
 ```
 
-> All `pnpm` commands below are intended to be run in the root of the Sui repo.
+> All `pnpm` commands below are intended to be run in the root of the Haneul repo.
 
 ## Type Doc
 
@@ -73,17 +73,17 @@ VITE_FAUCET_URL='https://faucet.devnet.sui.io:443/v2/gas' VITE_FULLNODE_URL='htt
 
 ## Connecting to Sui Network
 
-The `SuiClient` class provides a connection to the JSON-RPC Server and should be used for all
+The `HaneulClient` class provides a connection to the JSON-RPC Server and should be used for all
 read-only operations. The default URLs to connect with the RPC server are:
 
 - local: http://127.0.0.1:9000
 - Devnet: https://fullnode.devnet.sui.io
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
 // create a client connected to devnet
-const client = new SuiClient({ url: getFullnodeUrl('devnet') });
+const client = new HaneulClient({ url: getFullnodeUrl('devnet') });
 
 // get coins owned by an address
 await client.getCoins({
@@ -96,10 +96,10 @@ local network with a local validator, a fullnode, and a faucet server. Refer to
 [this guide](https://docs.sui.io/build/sui-local-network) for more information.
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
 // create a client connected to devnet
-const client = new SuiClient({ url: getFullnodeUrl('localnet') });
+const client = new HaneulClient({ url: getFullnodeUrl('localnet') });
 
 // get coins owned by an address
 await client.getCoins({
@@ -110,10 +110,10 @@ await client.getCoins({
 You can also construct your own in custom connections, with the URL for your own fullnode
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
 // create a client connected to devnet
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: 'https://fullnode.devnet.sui.io',
 });
 
@@ -145,13 +145,13 @@ For a primer for building transactions, refer to
 ### Transfer Object
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { Transaction } from '@haneullabs/sui/transactions';
 
 // Generate a new Ed25519 Keypair
 const keypair = new Ed25519Keypair();
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 
@@ -172,19 +172,19 @@ console.log({ result });
 To transfer `1000` MIST to another address:
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { Transaction } from '@haneullabs/sui/transactions';
 
 // Generate a new Ed25519 Keypair
 const keypair = new Ed25519Keypair();
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 
 const tx = new Transaction();
 const [coin] = tx.splitCoins(tx.gas, [1000]);
-tx.transferObjects([coin], keypair.getPublicKey().toSuiAddress());
+tx.transferObjects([coin], keypair.getPublicKey().toHaneulAddress());
 const result = await client.signAndExecuteTransaction({
 	signer: keypair,
 	transaction: tx,
@@ -195,13 +195,13 @@ console.log({ result });
 ### Merge coins
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { Transaction } from '@haneullabs/sui/transactions';
 
 // Generate a new Ed25519 Keypair
 const keypair = new Ed25519Keypair();
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 
@@ -219,13 +219,13 @@ console.log({ result });
 ### Move Call
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { Transaction } from '@haneullabs/sui/transactions';
 
 // Generate a new Ed25519 Keypair
 const keypair = new Ed25519Keypair();
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 const packageObjectId = '0x...';
@@ -246,14 +246,14 @@ console.log({ result });
 To publish a package:
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import { Transaction } from '@haneullabs/sui/transactions';
 
 const { execSync } = require('child_process');
 // Generate a new Ed25519 Keypair
 const keypair = new Ed25519Keypair();
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 const { modules, dependencies } = JSON.parse(
@@ -266,7 +266,7 @@ const [upgradeCap] = tx.publish({
 	modules,
 	dependencies,
 });
-tx.transferObjects([upgradeCap], keypair.toSuiAddress());
+tx.transferObjects([upgradeCap], keypair.toHaneulAddress());
 const result = await client.signAndExecuteTransaction({
 	signer: keypair,
 	transaction: tx,
@@ -282,9 +282,9 @@ Fetch objects owned by the address
 `0xcc2bd176a478baea9a0de7a24cd927661cc6e860d5bacecb9a138ef20dbab231`
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 const objects = await client.getOwnedObjects({
@@ -298,9 +298,9 @@ Fetch object details for the object with id
 `0xe19739da1a701eadc21683c5b127e62b553e833e8a15a4f292f4f48b4afea3f2`
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 const txn = await client.getObject({
@@ -324,9 +324,9 @@ const txns = await client.multiGetObjects({
 Fetch transaction details from transaction digests:
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 const txn = await client.getTransactionBlock({
@@ -392,9 +392,9 @@ Fetch coins of type `0x65b0553a591d7b13376e03a408e112c706dc0909a79080c810b93b06f
 owned by an address:
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 const coins = await client.getCoins({
@@ -406,9 +406,9 @@ const coins = await client.getCoins({
 Fetch all coin objects owned by an address:
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 const allCoins = await client.getAllCoins({
@@ -419,12 +419,12 @@ const allCoins = await client.getAllCoins({
 Fetch the total coin balance for one coin type, owned by an address:
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
-// If coin type is not specified, it defaults to 0x2::sui::SUI
+// If coin type is not specified, it defaults to 0x2::haneul::HANEUL
 const coinBalance = await client.getBalance({
 	owner: '0xcc2bd176a478baea9a0de7a24cd927661cc6e860d5bacecb9a138ef20dbab231',
 	coinType: '0x65b0553a591d7b13376e03a408e112c706dc0909a79080c810b93b06f922c458::usdc::USDC',
@@ -437,9 +437,9 @@ Querying events created by transactions sent by account
 `0xcc2bd176a478baea9a0de7a24cd927661cc6e860d5bacecb9a138ef20dbab231`
 
 ```typescript
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
-const client = new SuiClient({
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 });
 const events = client.queryEvents({

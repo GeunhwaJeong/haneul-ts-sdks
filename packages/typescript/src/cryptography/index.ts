@@ -29,8 +29,8 @@ export {
 	type SignatureWithBytes,
 	Signer,
 	Keypair,
-	decodeSuiPrivateKey,
-	encodeSuiPrivateKey,
+	decodeHaneulPrivateKey,
+	encodeHaneulPrivateKey,
 } from './keypair.js';
 
 export { PublicKey } from './publickey.js';

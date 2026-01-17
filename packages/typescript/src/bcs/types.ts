@@ -12,7 +12,7 @@ export type SharedObjectRef = {
 	mutable: boolean;
 };
 
-export type SuiObjectRef = {
+export type HaneulObjectRef = {
 	/** Base64 string representing the object digest */
 	objectId: string;
 	/** Object version */
@@ -25,9 +25,9 @@ export type SuiObjectRef = {
  * An object argument.
  */
 export type ObjectArg =
-	| { ImmOrOwnedObject: SuiObjectRef }
+	| { ImmOrOwnedObject: HaneulObjectRef }
 	| { SharedObject: SharedObjectRef }
-	| { Receiving: SuiObjectRef };
+	| { Receiving: HaneulObjectRef };
 
 export type ObjectCallArg = {
 	Object: ObjectArg;
@@ -99,7 +99,7 @@ export type TypeTag =
  * The GasData to be used in the transaction.
  */
 export type GasData = {
-	payment: SuiObjectRef[];
+	payment: HaneulObjectRef[];
 	owner: string; // Gas Object's owner
 	price: number;
 	budget: number;

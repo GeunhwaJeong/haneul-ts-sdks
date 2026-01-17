@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { bcs } from '@haneullabs/sui/bcs';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import type {
 	CoinStruct,
-	SuiObjectData,
-	SuiTransaction,
-	SuiTransactionBlockResponse,
+	HaneulObjectData,
+	HaneulTransaction,
+	HaneulTransactionBlockResponse,
 } from '@haneullabs/sui/client';
 import type { Keypair } from '@haneullabs/sui/cryptography';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
@@ -16,8 +16,8 @@ import { Transaction } from '@haneullabs/sui/transactions';
 import {
 	fromBase64,
 	normalizeStructTag,
-	normalizeSuiAddress,
-	normalizeSuiObjectId,
+	normalizeHaneulAddress,
+	normalizeHaneulObjectId,
 	parseStructTag,
 	SUI_TYPE_ARG,
 	toBase64,
@@ -37,12 +37,12 @@ const DEFAULT_ZK_SEND_LINK_OPTIONS = {
 };
 
 const SUI_COIN_TYPE = normalizeStructTag(SUI_TYPE_ARG);
-const SUI_COIN_OBJECT_TYPE = normalizeStructTag('0x2::coin::Coin<0x2::sui::SUI>');
+const SUI_COIN_OBJECT_TYPE = normalizeStructTag('0x2::coin::Coin<0x2::haneul::HANEUL>');
 
 export type ZkSendLinkOptions = {
 	claimApi?: string;
 	keypair?: Keypair;
-	client?: SuiClient;
+	client?: HaneulClient;
 	network?: 'mainnet' | 'testnet';
 	host?: string;
 	path?: string;
@@ -67,9 +67,9 @@ export class ZkSendLink {
 	assets?: LinkAssets;
 	claimed?: boolean;
 	claimedBy?: string;
-	bagObject?: SuiObjectData | null;
+	bagObject?: HaneulObjectData | null;
 
-	#client: SuiClient;
+	#client: HaneulClient;
 	#contract?: ZkBag<ZkBagContractOptions>;
 	#network: 'mainnet' | 'testnet';
 	#host: string;
@@ -88,7 +88,7 @@ export class ZkSendLink {
 
 	constructor({
 		network = DEFAULT_ZK_SEND_LINK_OPTIONS.network,
-		client = new SuiClient({ url: getFullnodeUrl(network) }),
+		client = new HaneulClient({ url: getFullnodeUrl(network) }),
 		keypair,
 		contract = getContractIds(network),
 		address,
@@ -103,7 +103,7 @@ export class ZkSendLink {
 
 		this.#client = client;
 		this.keypair = keypair;
-		this.address = address ?? keypair!.toSuiAddress();
+		this.address = address ?? keypair!.toHaneulAddress();
 		this.#claimApi = claimApi;
 		this.#network = network;
 		this.#host = host;
@@ -178,7 +178,7 @@ export class ZkSendLink {
 
 	async loadAssets(
 		options: {
-			transaction?: SuiTransactionBlockResponse;
+			transaction?: HaneulTransactionBlockResponse;
 			loadAssets?: boolean;
 			loadClaimedAssets?: boolean;
 		} = {},
@@ -239,7 +239,7 @@ export class ZkSendLink {
 		const sponsored = await this.#createSponsoredTransaction(
 			tx,
 			address,
-			reclaim ? address : this.keypair!.toSuiAddress(),
+			reclaim ? address : this.keypair!.toHaneulAddress(),
 		);
 
 		const bytes = fromBase64(sponsored.bytes);
@@ -280,7 +280,7 @@ export class ZkSendLink {
 		}
 
 		const tx = new Transaction();
-		const sender = reclaim ? address : this.keypair!.toSuiAddress();
+		const sender = reclaim ? address : this.keypair!.toHaneulAddress();
 		tx.setSender(sender);
 
 		const store = tx.object(this.#contract.ids.bagStoreId);
@@ -353,7 +353,7 @@ export class ZkSendLink {
 			keypair: newLinkKp,
 		});
 
-		const to = tx.pure.address(newLinkKp.toSuiAddress());
+		const to = tx.pure.address(newLinkKp.toHaneulAddress());
 
 		tx.add(this.#contract.update_receiver({ arguments: [store, this.address, to] }));
 
@@ -387,7 +387,7 @@ export class ZkSendLink {
 		loadAssets = true,
 		loadClaimedAssets = loadAssets,
 	}: {
-		transaction?: SuiTransactionBlockResponse;
+		transaction?: HaneulTransactionBlockResponse;
 		loadAssets?: boolean;
 		loadClaimedAssets?: boolean;
 	} = {}) {
@@ -461,7 +461,7 @@ export class ZkSendLink {
 			const type = parseStructTag(normalizeStructTag(object.data.type));
 
 			if (
-				type.address === normalizeSuiAddress('0x2') &&
+				type.address === normalizeHaneulAddress('0x2') &&
 				type.module === 'coin' &&
 				type.name === 'Coin'
 			) {
@@ -520,7 +520,7 @@ export class ZkSendLink {
 		}
 
 		const transfer = tx.transaction.data.transaction.transactions.findLast(
-			(tx): tx is Extract<SuiTransaction, { TransferObjects: unknown }> => 'TransferObjects' in tx,
+			(tx): tx is Extract<HaneulTransaction, { TransferObjects: unknown }> => 'TransferObjects' in tx,
 		);
 
 		if (!transfer) {
@@ -626,8 +626,8 @@ export class ZkSendLink {
 			};
 		}
 
-		const address = new Ed25519Keypair().toSuiAddress();
-		const normalizedAddress = normalizeSuiAddress(address);
+		const address = new Ed25519Keypair().toHaneulAddress();
+		const normalizedAddress = normalizeHaneulAddress(address);
 
 		const tx = this.createClaimTransaction(normalizedAddress);
 
@@ -653,7 +653,7 @@ export class ZkSendLink {
 				const type = parseStructTag(objectChange.objectType);
 
 				if (
-					type.address === normalizeSuiAddress('0x2') &&
+					type.address === normalizeHaneulAddress('0x2') &&
 					type.module === 'coin' &&
 					type.name === 'Coin'
 				) {
@@ -682,7 +682,7 @@ export class ZkSendLink {
 		}
 
 		const tx = new Transaction();
-		tx.setSender(this.keypair.toSuiAddress());
+		tx.setSender(this.keypair.toHaneulAddress());
 
 		const objectsToTransfer: TransactionObjectArgument[] = this.#ownedObjects
 			.filter((object) => {
@@ -738,7 +738,7 @@ export class ZkSendLink {
 			for (const object of ownedObjects.data) {
 				if (object.data) {
 					this.#ownedObjects.push({
-						objectId: normalizeSuiObjectId(object.data.objectId),
+						objectId: normalizeHaneulObjectId(object.data.objectId),
 						version: object.data.version,
 						digest: object.data.digest,
 						type: normalizeStructTag(object.data.type!),

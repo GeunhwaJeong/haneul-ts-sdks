@@ -19,7 +19,7 @@ For a full guide on how to build this dApp from scratch, visit this
 
 ### Install Sui cli
 
-Before deploying your move code, ensure that you have installed the Sui CLI. You
+Before deploying your move code, ensure that you have installed the Haneul CLI. You
 can follow the [Sui installation instruction](https://docs.sui.io/build/install)
 to get everything set up.
 
@@ -52,7 +52,7 @@ faucet `https://faucet.sui.io`.
 ### Publishing the move package
 
 The move code for this template is located in the `move` directory. To publish
-it, you can enter the `move` directory, and publish it with the Sui CLI:
+it, you can enter the `move` directory, and publish it with the Haneul CLI:
 
 ```bash
 cd move

@@ -73,14 +73,14 @@ describe('Secp256k1PublicKey', () => {
 	});
 
 	TEST_CASES.forEach(({ rawPublicKey, suiPublicKey, suiAddress }) => {
-		it(`toSuiAddress from base64 public key ${suiAddress}`, () => {
+		it(`toHaneulAddress from base64 public key ${suiAddress}`, () => {
 			const key = new Secp256k1PublicKey(rawPublicKey);
-			expect(key.toSuiAddress()).toEqual(suiAddress);
+			expect(key.toHaneulAddress()).toEqual(suiAddress);
 		});
 
-		it(`toSuiPublicKey from base64 public key ${suiAddress}`, () => {
+		it(`toHaneulPublicKey from base64 public key ${suiAddress}`, () => {
 			const key = new Secp256k1PublicKey(rawPublicKey);
-			expect(key.toSuiPublicKey()).toEqual(suiPublicKey);
+			expect(key.toHaneulPublicKey()).toEqual(suiPublicKey);
 		});
 	});
 });

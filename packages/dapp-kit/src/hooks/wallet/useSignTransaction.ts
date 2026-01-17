@@ -3,7 +3,7 @@
 
 import type { Transaction } from '@haneullabs/sui/transactions';
 import { signTransaction } from '@haneullabs/wallet-standard';
-import type { SignedTransaction, SuiSignTransactionInput } from '@haneullabs/wallet-standard';
+import type { SignedTransaction, HaneulSignTransactionInput } from '@haneullabs/wallet-standard';
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 
@@ -14,13 +14,13 @@ import {
 	WalletNotConnectedError,
 } from '../../errors/walletErrors.js';
 import type { PartialBy } from '../../types/utilityTypes.js';
-import { useSuiClientContext } from '../useSuiClient.js';
+import { useHaneulClientContext } from '../useHaneulClient.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useCurrentWallet } from './useCurrentWallet.js';
 import { useReportTransactionEffects } from './useReportTransactionEffects.js';
 
 type UseSignTransactionArgs = PartialBy<
-	Omit<SuiSignTransactionInput, 'transaction'>,
+	Omit<HaneulSignTransactionInput, 'transaction'>,
 	'account' | 'chain'
 > & {
 	transaction: Transaction | string;
@@ -59,7 +59,7 @@ export function useSignTransaction({
 > {
 	const { currentWallet } = useCurrentWallet();
 	const currentAccount = useCurrentAccount();
-	const { client, network } = useSuiClientContext();
+	const { client, network } = useHaneulClientContext();
 
 	const { mutate: reportTransactionEffects } = useReportTransactionEffects();
 

@@ -42,9 +42,9 @@ export const testnetCoins: CoinMap = {
 		currencyId: '0xbf1b77e244f649c736a44898585cc8ac939fbb0bbdf1d8d2a183978cc312e613',
 		priceInfoObjectId: '0x3d52fffa2cd9e54b39bb36d282bdda560b15b8b4fdf4766a3c58499ef172bafc',
 	},
-	SUI: {
+	HANEUL: {
 		address: `0x0000000000000000000000000000000000000000000000000000000000000002`,
-		type: `0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI`,
+		type: `0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL`,
 		scalar: 1000000000,
 		feed: '0x50c67b3fd225db8912a424dd4baed60ffdde625ed2feaaf283724f9608fea266',
 		currencyId: '0xf256d3fb6a50eaa748d94335b34f2982fbc3b63ceec78cafaa29ebc9ebaf2bbc',
@@ -87,9 +87,9 @@ export const mainnetCoins: CoinMap = {
 		currencyId: '0x3f2afb7c5f245870a8b8a3808e6dd7042446a0e7504e9d2795372da053858cd9',
 		priceInfoObjectId: '0x8c7f3a322b94cc69db2a2ac575cbd94bf5766113324c3a3eceac91e3e88a51ed',
 	},
-	SUI: {
+	HANEUL: {
 		address: `0x0000000000000000000000000000000000000000000000000000000000000002`,
-		type: `0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI`,
+		type: `0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL`,
 		scalar: 1000000000,
 		feed: '0x23d7315113f5b1d3ba7a83604c44b94d79f4fd69af77f804fc7f920a6dc65744',
 		currencyId: '0xf256d3fb6a50eaa748d94335b34f2982fbc3b63ceec78cafaa29ebc9ebaf2bbc',
@@ -190,14 +190,14 @@ export const mainnetCoins: CoinMap = {
 };
 
 export const testnetPools: PoolMap = {
-	DEEP_SUI: {
+	DEEP_HANEUL: {
 		address: `0x48c95963e9eac37a316b7ae04a0deb761bcdcc2b67912374d6036e7f0e9bae9f`,
 		baseCoin: 'DEEP',
-		quoteCoin: 'SUI',
+		quoteCoin: 'HANEUL',
 	},
-	SUI_DBUSDC: {
+	HANEUL_DBUSDC: {
 		address: `0x1c19362ca52b8ffd7a33cee805a67d40f31e6ba303753fd3a4cfdfacea7163a5`,
-		baseCoin: 'SUI',
+		baseCoin: 'HANEUL',
 		quoteCoin: 'DBUSDC',
 	},
 	DEEP_DBUSDC: {
@@ -215,10 +215,10 @@ export const testnetPools: PoolMap = {
 		baseCoin: 'WAL',
 		quoteCoin: 'DBUSDC',
 	},
-	WAL_SUI: {
+	WAL_HANEUL: {
 		address: `0x8c1c1b186c4fddab1ebd53e0895a36c1d1b3b9a77cd34e607bef49a38af0150a`,
 		baseCoin: 'WAL',
-		quoteCoin: 'SUI',
+		quoteCoin: 'HANEUL',
 	},
 	DBTC_DBUSDC: {
 		address: `0x0dce0aa771074eb83d1f4a29d48be8248d4d2190976a5241f66b43ec18fa34de`,
@@ -228,14 +228,14 @@ export const testnetPools: PoolMap = {
 };
 
 export const mainnetPools: PoolMap = {
-	DEEP_SUI: {
+	DEEP_HANEUL: {
 		address: `0xb663828d6217467c8a1838a03793da896cbe745b150ebd57d82f814ca579fc22`,
 		baseCoin: 'DEEP',
-		quoteCoin: 'SUI',
+		quoteCoin: 'HANEUL',
 	},
-	SUI_USDC: {
+	HANEUL_USDC: {
 		address: `0xe05dafb5133bcffb8d59f4e12465dc0e9faeaa05e3e342a08fe135800e3e4407`,
-		baseCoin: 'SUI',
+		baseCoin: 'HANEUL',
 		quoteCoin: 'USDC',
 	},
 	DEEP_USDC: {
@@ -263,19 +263,19 @@ export const mainnetPools: PoolMap = {
 		baseCoin: 'NS',
 		quoteCoin: 'USDC',
 	},
-	NS_SUI: {
+	NS_HANEUL: {
 		address: `0x27c4fdb3b846aa3ae4a65ef5127a309aa3c1f466671471a806d8912a18b253e8`,
 		baseCoin: 'NS',
-		quoteCoin: 'SUI',
+		quoteCoin: 'HANEUL',
 	},
-	TYPUS_SUI: {
+	TYPUS_HANEUL: {
 		address: `0xe8e56f377ab5a261449b92ac42c8ddaacd5671e9fec2179d7933dd1a91200eec`,
 		baseCoin: 'TYPUS',
-		quoteCoin: 'SUI',
+		quoteCoin: 'HANEUL',
 	},
-	SUI_AUSD: {
+	HANEUL_AUSD: {
 		address: `0x183df694ebc852a5f90a959f0f563b82ac9691e42357e9a9fe961d71a1b809c8`,
-		baseCoin: 'SUI',
+		baseCoin: 'HANEUL',
 		quoteCoin: 'AUSD',
 	},
 	AUSD_USDC: {
@@ -283,10 +283,10 @@ export const mainnetPools: PoolMap = {
 		baseCoin: 'AUSD',
 		quoteCoin: 'USDC',
 	},
-	DRF_SUI: {
+	DRF_HANEUL: {
 		address: `0x126865a0197d6ab44bfd15fd052da6db92fd2eb831ff9663451bbfa1219e2af2`,
 		baseCoin: 'DRF',
-		quoteCoin: 'SUI',
+		quoteCoin: 'HANEUL',
 	},
 	SEND_USDC: {
 		address: `0x1fe7b99c28ded39774f37327b509d58e2be7fff94899c06d22b407496a6fa990`,
@@ -298,10 +298,10 @@ export const mainnetPools: PoolMap = {
 		baseCoin: 'WAL',
 		quoteCoin: 'USDC',
 	},
-	WAL_SUI: {
+	WAL_HANEUL: {
 		address: `0x81f5339934c83ea19dd6bcc75c52e83509629a5f71d3257428c2ce47cc94d08b`,
 		baseCoin: 'WAL',
-		quoteCoin: 'SUI',
+		quoteCoin: 'HANEUL',
 	},
 	XBTC_USDC: {
 		address: `0x20b9a3ec7a02d4f344aa1ebc5774b7b0ccafa9a5d76230662fdc0300bb215307`,
@@ -313,10 +313,10 @@ export const mainnetPools: PoolMap = {
 		baseCoin: 'IKA',
 		quoteCoin: 'USDC',
 	},
-	ALKIMI_SUI: {
+	ALKIMI_HANEUL: {
 		address: `0x84752993c6dc6fce70e25ddeb4daddb6592d6b9b0912a0a91c07cfff5a721d89`,
 		baseCoin: 'ALKIMI',
-		quoteCoin: 'SUI',
+		quoteCoin: 'HANEUL',
 	},
 	LZWBTC_USDC: {
 		address: `0xf5142aafa24866107df628bf92d0358c7da6acc46c2f10951690fd2b8570f117`,
@@ -326,9 +326,9 @@ export const mainnetPools: PoolMap = {
 };
 
 export const testnetMarginPools = {
-	SUI: {
+	HANEUL: {
 		address: '0xcdbbe6a72e639b647296788e2e4b1cac5cea4246028ba388ba1332ff9a382eea',
-		type: '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+		type: '0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 	},
 	DBUSDC: {
 		address: '0xf08568da93834e1ee04f09902ac7b1e78d3fdf113ab4d2106c7265e95318b14d',
@@ -345,9 +345,9 @@ export const testnetMarginPools = {
 };
 
 export const mainnetMarginPools = {
-	SUI: {
+	HANEUL: {
 		address: '0x53041c6f86c4782aabbfc1d4fe234a6d37160310c7ee740c915f0a01b7127344',
-		type: '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+		type: '0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 	},
 	USDC: {
 		address: '0xba473d9ae278f10af75c50a8fa341e9c6a1c087dc91a3f23e8048baf67d0754f',

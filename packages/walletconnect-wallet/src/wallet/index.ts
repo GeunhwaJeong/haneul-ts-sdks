@@ -11,12 +11,12 @@ import type {
 	StandardEventsFeature,
 	StandardEventsListeners,
 	StandardEventsOnMethod,
-	SuiSignAndExecuteTransactionFeature,
-	SuiSignAndExecuteTransactionMethod,
-	SuiSignPersonalMessageFeature,
-	SuiSignPersonalMessageMethod,
-	SuiSignTransactionFeature,
-	SuiSignTransactionMethod,
+	HaneulSignAndExecuteTransactionFeature,
+	HaneulSignAndExecuteTransactionMethod,
+	HaneulSignPersonalMessageFeature,
+	HaneulSignPersonalMessageMethod,
+	HaneulSignTransactionFeature,
+	HaneulSignTransactionMethod,
 	Wallet,
 	WalletIcon,
 } from '@haneullabs/wallet-standard';
@@ -26,10 +26,10 @@ import {
 	StandardConnect,
 	StandardDisconnect,
 	StandardEvents,
-	SUI_CHAINS,
-	SuiSignAndExecuteTransaction,
-	SuiSignPersonalMessage,
-	SuiSignTransaction,
+	HANEUL_CHAINS,
+	HaneulSignAndExecuteTransaction,
+	HaneulSignPersonalMessage,
+	HaneulSignTransaction,
 } from '@haneullabs/wallet-standard';
 import type { Emitter } from 'mitt';
 import mitt from 'mitt';
@@ -60,15 +60,19 @@ const walletAccountFeatures = [
 	'sui:signPersonalMessage',
 ] as const;
 
-const SUICaipNetworks: CustomCaipNetwork<'sui'>[] = SUI_CHAINS.map((chain) => {
+// WalletConnect uses CAIP-2 standard which requires 'sui:' namespace for external protocol compatibility
+// TODO: Register 'haneul' namespace with CASA (Chain Agnostic Standards Alliance) before mainnet launch
+const SUI_CAIP_CHAIN_IDS = ['sui:devnet', 'sui:testnet', 'sui:localnet', 'sui:mainnet'] as const;
+
+const SUICaipNetworks: CustomCaipNetwork<'sui'>[] = SUI_CAIP_CHAIN_IDS.map((chain) => {
 	const [_, chainId] = chain.split(':');
 	return {
 		id: chainId,
 		chainNamespace: 'sui',
 		caipNetworkId: chain,
-		name: `Sui ${chainId}`,
-		nativeCurrency: { name: 'SUI', symbol: 'SUI', decimals: 9 },
-		rpcUrls: { default: { http: [`https://sui-${chainId}.gateway.tatum.io`] } },
+		name: `Haneul ${chainId}`,
+		nativeCurrency: { name: 'HANEUL', symbol: 'HANEUL', decimals: 9 },
+		rpcUrls: { default: { http: [`https://haneul-${chainId}.gateway.tatum.io`] } },
 	};
 });
 
@@ -121,7 +125,7 @@ export class WalletConnectWallet implements Wallet {
 	}
 
 	get chains() {
-		return SUI_CHAINS;
+		return HANEUL_CHAINS;
 	}
 
 	get accounts() {
@@ -131,9 +135,9 @@ export class WalletConnectWallet implements Wallet {
 	get features(): StandardConnectFeature &
 		StandardDisconnectFeature &
 		StandardEventsFeature &
-		SuiSignTransactionFeature &
-		SuiSignPersonalMessageFeature &
-		SuiSignAndExecuteTransactionFeature {
+		HaneulSignTransactionFeature &
+		HaneulSignPersonalMessageFeature &
+		HaneulSignAndExecuteTransactionFeature {
 		return {
 			[StandardConnect]: {
 				version: '1.0.0',
@@ -147,15 +151,15 @@ export class WalletConnectWallet implements Wallet {
 				version: '1.0.0',
 				on: this.#on,
 			},
-			[SuiSignTransaction]: {
+			[HaneulSignTransaction]: {
 				version: '2.0.0',
 				signTransaction: this.#signTransaction,
 			},
-			[SuiSignPersonalMessage]: {
+			[HaneulSignPersonalMessage]: {
 				version: '1.1.0',
 				signPersonalMessage: this.#signPersonalMessage,
 			},
-			[SuiSignAndExecuteTransaction]: {
+			[HaneulSignAndExecuteTransaction]: {
 				version: '2.0.0',
 				signAndExecuteTransaction: this.#signAndExecuteTransaction,
 			},
@@ -213,7 +217,7 @@ export class WalletConnectWallet implements Wallet {
 		this.#accounts = await this.#getPreviouslyAuthorizedAccounts();
 	}
 
-	#signTransaction: SuiSignTransactionMethod = async ({ transaction, account, chain }) => {
+	#signTransaction: HaneulSignTransactionMethod = async ({ transaction, account, chain }) => {
 		const tx = await transaction.toJSON();
 
 		const response = (await this.#connector?.request(
@@ -233,7 +237,7 @@ export class WalletConnectWallet implements Wallet {
 		};
 	};
 
-	#signAndExecuteTransaction: SuiSignAndExecuteTransactionMethod = async ({
+	#signAndExecuteTransaction: HaneulSignAndExecuteTransactionMethod = async ({
 		transaction,
 		account,
 		chain,
@@ -266,7 +270,7 @@ export class WalletConnectWallet implements Wallet {
 		};
 	};
 
-	#signPersonalMessage: SuiSignPersonalMessageMethod = async ({ message, account, chain }) => {
+	#signPersonalMessage: HaneulSignPersonalMessageMethod = async ({ message, account, chain }) => {
 		const messageString = new TextDecoder().decode(message);
 		const response = (await this.#connector?.request(
 			{
@@ -276,7 +280,7 @@ export class WalletConnectWallet implements Wallet {
 					address: account.address,
 				},
 			},
-			chain ?? 'sui:mainnet',
+			chain ?? 'haneul:mainnet',
 		)) as { signature: string };
 
 		return {
@@ -301,7 +305,7 @@ export class WalletConnectWallet implements Wallet {
 		);
 
 		if (!accounts?.length) {
-			accounts = (await this.#connector?.request({ method: 'sui_getAccounts' }, 'sui:mainnet')) as {
+			accounts = (await this.#connector?.request({ method: 'sui_getAccounts' }, 'haneul:mainnet')) as {
 				address: string;
 				pubkey: string;
 			}[];
@@ -340,7 +344,7 @@ export class WalletConnectWallet implements Wallet {
 			pubkey: string;
 		}[];
 
-		return toStandardAccounts(accounts, SUI_CHAINS);
+		return toStandardAccounts(accounts, HANEUL_CHAINS);
 	};
 
 	#disconnect: StandardDisconnectMethod = async () => {

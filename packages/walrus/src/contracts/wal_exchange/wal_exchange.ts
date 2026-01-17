@@ -154,7 +154,7 @@ export function addSui(options: AddSuiOptions) {
 	const packageAddress = options.package ?? '@local-pkg/wal_exchange';
 	const argumentsTypes = [
 		`${packageAddress}::wal_exchange::Exchange`,
-		'0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>',
+		'0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>',
 		'u64',
 	] satisfies string[];
 	const parameterNames = ['self', 'sui', 'amount'];
@@ -207,7 +207,7 @@ export function addAllSui(options: AddAllSuiOptions) {
 	const packageAddress = options.package ?? '@local-pkg/wal_exchange';
 	const argumentsTypes = [
 		`${packageAddress}::wal_exchange::Exchange`,
-		'0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>',
+		'0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>',
 	] satisfies string[];
 	const parameterNames = ['self', 'sui'];
 	return (tx: Transaction) =>
@@ -332,7 +332,7 @@ export function exchangeAllForWal(options: ExchangeAllForWalOptions) {
 	const packageAddress = options.package ?? '@local-pkg/wal_exchange';
 	const argumentsTypes = [
 		`${packageAddress}::wal_exchange::Exchange`,
-		'0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>',
+		'0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>',
 	] satisfies string[];
 	const parameterNames = ['self', 'sui'];
 	return (tx: Transaction) =>
@@ -366,7 +366,7 @@ export function exchangeForWal(options: ExchangeForWalOptions) {
 	const packageAddress = options.package ?? '@local-pkg/wal_exchange';
 	const argumentsTypes = [
 		`${packageAddress}::wal_exchange::Exchange`,
-		'0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>',
+		'0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>',
 		'u64',
 	] satisfies string[];
 	const parameterNames = ['self', 'sui', 'amountSui'];

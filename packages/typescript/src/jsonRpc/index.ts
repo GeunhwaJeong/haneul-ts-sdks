@@ -11,10 +11,10 @@ export {
 } from './http-transport.js';
 export type * from './types/index.js';
 export {
-	type SuiJsonRpcClientOptions,
+	type HaneulJsonRpcClientOptions,
 	type PaginationArguments,
 	type OrderArguments,
-	isSuiJsonRpcClient,
-	SuiJsonRpcClient,
+	isHaneulJsonRpcClient,
+	HaneulJsonRpcClient,
 } from './client.js';
-export { SuiHTTPStatusError, SuiHTTPTransportError, JsonRpcError } from './errors.js';
+export { HaneulHTTPStatusError, HaneulHTTPTransportError, JsonRpcError } from './errors.js';

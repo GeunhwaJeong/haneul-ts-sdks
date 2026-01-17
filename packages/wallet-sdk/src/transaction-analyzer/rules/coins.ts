@@ -14,7 +14,7 @@ export const Coin = bcs.struct('Coin', {
 	id: bcs.Address,
 	balance: bcs.U64,
 });
-const parsedCoinStruct = parseStructTag('0x2::coin::Coin<0x2::sui::SUI>');
+const parsedCoinStruct = parseStructTag('0x2::coin::Coin<0x2::haneul::HANEUL>');
 
 export const coins = createAnalyzer({
 	dependencies: { objects },

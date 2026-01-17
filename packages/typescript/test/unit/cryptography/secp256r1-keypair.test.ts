@@ -6,7 +6,7 @@ import { secp256r1 } from '@noble/curves/p256';
 import { sha256 } from '@noble/hashes/sha256';
 import { describe, expect, it } from 'vitest';
 
-import { decodeSuiPrivateKey } from '../../../src/cryptography/keypair';
+import { decodeHaneulPrivateKey } from '../../../src/cryptography/keypair';
 import {
 	DEFAULT_SECP256R1_DERIVATION_PATH,
 	Secp256r1Keypair,
@@ -129,12 +129,12 @@ describe('secp256r1-keypair', () => {
 		for (const t of TEST_CASES) {
 			// Keypair derived from mnemonic
 			const keypair = Secp256r1Keypair.deriveKeypair(t[0]);
-			expect(keypair.getPublicKey().toSuiAddress()).toEqual(t[2]);
+			expect(keypair.getPublicKey().toHaneulAddress()).toEqual(t[2]);
 
 			// Keypair derived from Bech32 string.
-			const parsed = decodeSuiPrivateKey(t[1]);
+			const parsed = decodeHaneulPrivateKey(t[1]);
 			const kp = Secp256r1Keypair.fromSecretKey(parsed.secretKey);
-			expect(kp.getPublicKey().toSuiAddress()).toEqual(t[2]);
+			expect(kp.getPublicKey().toHaneulAddress()).toEqual(t[2]);
 
 			// Exported keypair matches the Bech32 encoded secret key.
 			const exported = kp.getSecretKey();
@@ -157,7 +157,7 @@ describe('secp256r1-keypair', () => {
 	it('signs Transactions', async () => {
 		const keypair = new Secp256r1Keypair();
 		const tx = new Transaction();
-		tx.setSender(keypair.getPublicKey().toSuiAddress());
+		tx.setSender(keypair.getPublicKey().toHaneulAddress());
 		tx.setGasPrice(5);
 		tx.setGasBudget(100);
 		tx.setGasPayment([

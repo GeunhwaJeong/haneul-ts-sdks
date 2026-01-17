@@ -3,11 +3,11 @@
 
 import { describe, it, expect } from 'vitest';
 import { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeSuiAddress } from '@haneullabs/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
 import { analyze } from '../../src/transaction-analyzer/analyzer';
 import { inputs } from '../../src/transaction-analyzer/rules/inputs';
 import { bcs } from '@haneullabs/sui/bcs';
-import { MockSuiClient } from '../mocks/MockSuiClient';
+import { MockHaneulClient } from '../mocks/MockHaneulClient';
 import {
 	DEFAULT_SENDER,
 	TEST_COIN_1_ID,
@@ -17,7 +17,7 @@ import {
 
 describe('TransactionAnalyzer - Inputs Rule', () => {
 	it('should analyze all input types in a single transaction', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -29,7 +29,7 @@ describe('TransactionAnalyzer - Inputs Rule', () => {
 
 		// 2. Complex pure inputs
 		const vectorValue = tx.pure.vector('u64', [100n, 200n, 300n]);
-		const optionValue = tx.pure(bcs.option(bcs.Address).serialize(normalizeSuiAddress('0x123')));
+		const optionValue = tx.pure(bcs.option(bcs.Address).serialize(normalizeHaneulAddress('0x123')));
 
 		// 3. Object inputs - different types
 		const ownedObject = tx.object(TEST_COIN_1_ID); // Uses UnresolvedObject resolution
@@ -125,7 +125,7 @@ describe('TransactionAnalyzer - Inputs Rule', () => {
 			      },
 			      "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			      "previousTransaction": null,
-			      "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			      "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			      "version": "100",
 			    },
 			  },
@@ -184,7 +184,7 @@ describe('TransactionAnalyzer - Inputs Rule', () => {
 
 		const addressInput = results.inputs.result?.[1];
 		if (addressInput?.$kind === 'Pure') {
-			expect(bcs.Address.fromBase64(addressInput.bytes)).toBe(normalizeSuiAddress('0x456'));
+			expect(bcs.Address.fromBase64(addressInput.bytes)).toBe(normalizeHaneulAddress('0x456'));
 		}
 
 		const boolInput = results.inputs.result?.[2];
@@ -206,19 +206,19 @@ describe('TransactionAnalyzer - Inputs Rule', () => {
 		// Object inputs
 		const ownedObjectInput = results.inputs.result?.[6];
 		if (ownedObjectInput?.$kind === 'Object') {
-			expect(ownedObjectInput.object.id).toBe(normalizeSuiAddress(TEST_COIN_1_ID));
+			expect(ownedObjectInput.object.id).toBe(normalizeHaneulAddress(TEST_COIN_1_ID));
 			expect(ownedObjectInput.object.owner.$kind).toBe('AddressOwner');
 		}
 
 		const sharedObjectInput = results.inputs.result?.[7];
 		if (sharedObjectInput?.$kind === 'Object') {
-			expect(sharedObjectInput.object.id).toBe(normalizeSuiAddress(TEST_SHARED_OBJECT_ID));
+			expect(sharedObjectInput.object.id).toBe(normalizeHaneulAddress(TEST_SHARED_OBJECT_ID));
 			expect(sharedObjectInput.object.owner.$kind).toBe('Shared');
 		}
 
 		const receivingObjectInput = results.inputs.result?.[8];
 		if (receivingObjectInput?.$kind === 'Object') {
-			expect(receivingObjectInput.object.id).toBe(normalizeSuiAddress(TEST_NFT_ID));
+			expect(receivingObjectInput.object.id).toBe(normalizeHaneulAddress(TEST_NFT_ID));
 			expect(receivingObjectInput.object.type).toBe(
 				'0x0000000000000000000000000000000000000000000000000000000000000999::nft::NFT',
 			);

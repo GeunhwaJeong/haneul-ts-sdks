@@ -11,18 +11,18 @@ import type {
 	StandardEventsFeature,
 	StandardEventsOnMethod,
 	SuiFeatures,
-	SuiSignAndExecuteTransactionMethod,
-	SuiSignPersonalMessageMethod,
-	SuiSignTransactionMethod,
+	HaneulSignAndExecuteTransactionMethod,
+	HaneulSignPersonalMessageMethod,
+	HaneulSignTransactionMethod,
 } from '@haneullabs/wallet-standard';
 import {
 	getWallets,
 	ReadonlyWalletAccount,
 	StandardConnect,
 	StandardEvents,
-	SuiSignAndExecuteTransaction,
-	SuiSignPersonalMessage,
-	SuiSignTransaction,
+	HaneulSignAndExecuteTransaction,
+	HaneulSignPersonalMessage,
+	HaneulSignTransaction,
 } from '@haneullabs/wallet-standard';
 import type { Wallet } from '@haneullabs/wallet-standard';
 import { toBase64 } from '@haneullabs/utils';
@@ -57,10 +57,10 @@ export class UnsafeBurnerWallet implements Wallet {
 		);
 
 		this.#account = new ReadonlyWalletAccount({
-			address: this.#keypair.getPublicKey().toSuiAddress(),
+			address: this.#keypair.getPublicKey().toHaneulAddress(),
 			publicKey: this.#keypair.getPublicKey().toSuiBytes(),
 			chains: this.chains,
-			features: [SuiSignTransaction, SuiSignAndExecuteTransaction, SuiSignPersonalMessage],
+			features: [HaneulSignTransaction, HaneulSignAndExecuteTransaction, HaneulSignPersonalMessage],
 		});
 
 		console.warn(
@@ -98,15 +98,15 @@ export class UnsafeBurnerWallet implements Wallet {
 				version: '1.0.0',
 				on: this.#on,
 			},
-			[SuiSignPersonalMessage]: {
+			[HaneulSignPersonalMessage]: {
 				version: '1.1.0',
 				signPersonalMessage: this.#signPersonalMessage,
 			},
-			[SuiSignTransaction]: {
+			[HaneulSignTransaction]: {
 				version: '2.0.0',
 				signTransaction: this.#signTransaction,
 			},
-			[SuiSignAndExecuteTransaction]: {
+			[HaneulSignAndExecuteTransaction]: {
 				version: '2.0.0',
 				signAndExecuteTransaction: this.#signAndExecuteTransaction,
 			},
@@ -121,11 +121,11 @@ export class UnsafeBurnerWallet implements Wallet {
 		return { accounts: this.accounts };
 	};
 
-	#signPersonalMessage: SuiSignPersonalMessageMethod = async (messageInput) => {
+	#signPersonalMessage: HaneulSignPersonalMessageMethod = async (messageInput) => {
 		return await this.#keypair.signPersonalMessage(messageInput.message);
 	};
 
-	#signTransaction: SuiSignTransactionMethod = async ({ transaction, signal, chain }) => {
+	#signTransaction: HaneulSignTransactionMethod = async ({ transaction, signal, chain }) => {
 		signal?.throwIfAborted();
 
 		const client = this.#chainConfig[chain];
@@ -136,7 +136,7 @@ export class UnsafeBurnerWallet implements Wallet {
 		return await this.#keypair.signTransaction(builtTransaction);
 	};
 
-	#signAndExecuteTransaction: SuiSignAndExecuteTransactionMethod = async ({
+	#signAndExecuteTransaction: HaneulSignAndExecuteTransactionMethod = async ({
 		transaction,
 		signal,
 		chain,

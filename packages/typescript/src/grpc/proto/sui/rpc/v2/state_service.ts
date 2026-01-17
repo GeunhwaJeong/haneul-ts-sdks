@@ -285,13 +285,13 @@ export enum RegulatedCoinMetadata_CoinRegulatedState {
  */
 export interface GetBalanceRequest {
 	/**
-	 * Required. The owner's Sui address.
+	 * Required. The owner's Haneul address.
 	 *
 	 * @generated from protobuf field: optional string owner = 1;
 	 */
 	owner?: string;
 	/**
-	 * Required. The type names for the coin (e.g., 0x2::sui::SUI).
+	 * Required. The type names for the coin (e.g., 0x2::haneul::HANEUL).
 	 *
 	 * @generated from protobuf field: optional string coin_type = 2;
 	 */
@@ -318,7 +318,7 @@ export interface GetBalanceResponse {
  */
 export interface ListBalancesRequest {
 	/**
-	 * Required. The owner's Sui address.
+	 * Required. The owner's Haneul address.
 	 *
 	 * @generated from protobuf field: optional string owner = 1;
 	 */
@@ -370,7 +370,7 @@ export interface ListBalancesResponse {
  */
 export interface Balance {
 	/**
-	 * The type of the coin (e.g., 0x2::sui::SUI).
+	 * The type of the coin (e.g., 0x2::haneul::HANEUL).
 	 *
 	 * @generated from protobuf field: optional string coin_type = 1;
 	 */
@@ -565,7 +565,7 @@ export interface ListOwnedObjectsRequest {
 	 * `Coin<T>` objects regardless of the type parameter `T`. Providing a type
 	 * with a type param will restrict the returned objects to only those objects
 	 * that match the provided type parameters, e.g.
-	 * `0x2::coin::Coin<0x2::sui::SUI>` will only return `Coin<SUI>` objects.
+	 * `0x2::coin::Coin<0x2::haneul::HANEUL>` will only return `Coin<SUI>` objects.
 	 *
 	 * @generated from protobuf field: optional string object_type = 5;
 	 */

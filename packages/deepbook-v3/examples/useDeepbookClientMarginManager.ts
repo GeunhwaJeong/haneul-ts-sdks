@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { DeepBookClient } from '../src/client.js';
-import { SuiClient, getFullnodeUrl } from '@haneullabs/sui/client';
+import { HaneulClient, getFullnodeUrl } from '@haneullabs/sui/client';
 
 (async () => {
 	const dbClient = new DeepBookClient({
-		client: new SuiClient({
+		client: new HaneulClient({
 			url: getFullnodeUrl('testnet'),
 		}),
 		address: '0x0',
@@ -16,7 +16,7 @@ import { SuiClient, getFullnodeUrl } from '@haneullabs/sui/client';
 
 	// Test margin manager ID
 	const marginManagerId = '0x3611a2d9db8b6f37d95e24925601a2e7330a481aa81aa2cfc771314468a467c1';
-	const poolKey = 'SUI_DBUSDC'; // Required for type inference
+	const poolKey = 'HANEUL_DBUSDC'; // Required for type inference
 	const decimals = 9; // Use 9 decimals for precision
 
 	try {

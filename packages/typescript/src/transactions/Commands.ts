@@ -5,7 +5,7 @@ import { toBase64 } from '@haneullabs/bcs';
 import type { InferInput } from 'valibot';
 import { parse } from 'valibot';
 
-import { normalizeSuiObjectId } from '../utils/sui-types.js';
+import { normalizeHaneulObjectId } from '../utils/haneul-types.js';
 import type { Argument, CallArg, Command } from './data/internal.js';
 import { ArgumentSchema } from './data/internal.js';
 import type { AsyncTransactionThunk, Transaction } from './Transaction.js';
@@ -111,7 +111,7 @@ export const Commands = {
 				modules: modules.map((module) =>
 					typeof module === 'string' ? module : toBase64(new Uint8Array(module)),
 				),
-				dependencies: dependencies.map((dep) => normalizeSuiObjectId(dep)),
+				dependencies: dependencies.map((dep) => normalizeHaneulObjectId(dep)),
 			},
 		};
 	},
@@ -132,7 +132,7 @@ export const Commands = {
 				modules: modules.map((module) =>
 					typeof module === 'string' ? module : toBase64(new Uint8Array(module)),
 				),
-				dependencies: dependencies.map((dep) => normalizeSuiObjectId(dep)),
+				dependencies: dependencies.map((dep) => normalizeHaneulObjectId(dep)),
 				package: packageId,
 				ticket: parse(ArgumentSchema, ticket),
 			},

@@ -8,8 +8,8 @@ import { retry } from 'ts-retry-promise';
 import { expect, inject } from 'vitest';
 import { WebSocket } from 'ws';
 
-import type { SuiObjectChangePublished } from '../../../src/client/index.js';
-import { getFullnodeUrl, SuiClient, SuiHTTPTransport } from '../../../src/client/index.js';
+import type { HaneulObjectChangePublished } from '../../../src/client/index.js';
+import { getFullnodeUrl, HaneulClient, HaneulHTTPTransport } from '../../../src/client/index.js';
 import type { Keypair } from '../../../src/cryptography/index.js';
 import {
 	FaucetRateLimitError,
@@ -80,14 +80,14 @@ class TestPackageRegistry {
 
 export class TestToolbox {
 	keypair: Ed25519Keypair;
-	client: SuiClient;
+	client: HaneulClient;
 	registry: TestPackageRegistry;
 	configPath: string;
 
 	constructor(keypair: Ed25519Keypair, url: string = DEFAULT_FULLNODE_URL, configPath: string) {
 		this.keypair = keypair;
-		this.client = new SuiClient({
-			transport: new SuiHTTPTransport({
+		this.client = new HaneulClient({
+			transport: new HaneulHTTPTransport({
 				url,
 				WebSocketConstructor: WebSocket as never,
 			}),
@@ -97,7 +97,7 @@ export class TestToolbox {
 	}
 
 	address() {
-		return this.keypair.getPublicKey().toSuiAddress();
+		return this.keypair.getPublicKey().toHaneulAddress();
 	}
 
 	async getGasObjectsOwnedByAddress() {
@@ -108,7 +108,7 @@ export class TestToolbox {
 	}
 
 	public async getActiveValidators() {
-		return (await this.client.getLatestSuiSystemState()).activeValidators;
+		return (await this.client.getLatestHaneulSystemState()).activeValidators;
 	}
 
 	public async getPackage(path: string) {
@@ -126,9 +126,9 @@ export class TestToolbox {
 	}
 }
 
-export function getClient(url = DEFAULT_FULLNODE_URL): SuiClient {
-	return new SuiClient({
-		transport: new SuiHTTPTransport({
+export function getClient(url = DEFAULT_FULLNODE_URL): HaneulClient {
+	return new HaneulClient({
+		transport: new HaneulHTTPTransport({
 			url,
 			WebSocketConstructor: WebSocket as never,
 		}),
@@ -137,7 +137,7 @@ export function getClient(url = DEFAULT_FULLNODE_URL): SuiClient {
 
 export async function setup(options: { graphQLURL?: string; rpcURL?: string } = {}) {
 	const keypair = Ed25519Keypair.generate();
-	const address = keypair.getPublicKey().toSuiAddress();
+	const address = keypair.getPublicKey().toHaneulAddress();
 
 	const configDir = path.join('/test-data', `${Math.random().toString(36).substring(2, 15)}`);
 	await execSuiTools(['mkdir', '-p', configDir]);
@@ -265,7 +265,7 @@ export async function publishPackage(packageName: string, toolbox?: TestToolbox)
 
 	const packageId = ((publishTxn.objectChanges?.filter(
 		(a) => a.type === 'published',
-	) as SuiObjectChangePublished[]) ?? [])[0]?.packageId.replace(/^(0x)(0+)/, '0x') as string;
+	) as HaneulObjectChangePublished[]) ?? [])[0]?.packageId.replace(/^(0x)(0+)/, '0x') as string;
 
 	expect(packageId).toBeTypeOf('string');
 
@@ -338,12 +338,12 @@ export function getRandomAddresses(n: number): string[] {
 		.fill(null)
 		.map(() => {
 			const keypair = Ed25519Keypair.generate();
-			return keypair.getPublicKey().toSuiAddress();
+			return keypair.getPublicKey().toHaneulAddress();
 		});
 }
 
 export async function paySui(
-	client: SuiClient,
+	client: HaneulClient,
 	signer: Keypair,
 	numRecipients: number = 1,
 	recipients?: string[],
@@ -361,8 +361,8 @@ export async function paySui(
 		coinId ??
 		(
 			await client.getCoins({
-				owner: signer.getPublicKey().toSuiAddress(),
-				coinType: '0x2::sui::SUI',
+				owner: signer.getPublicKey().toHaneulAddress(),
+				coinType: '0x2::haneul::HANEUL',
 			})
 		).data[0].coinObjectId;
 
@@ -388,7 +388,7 @@ export async function paySui(
 }
 
 export async function executePaySuiNTimes(
-	client: SuiClient,
+	client: HaneulClient,
 	signer: Keypair,
 	nTimes: number,
 	numRecipientsPerTxn: number = 1,

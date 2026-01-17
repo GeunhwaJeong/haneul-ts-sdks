@@ -22,7 +22,7 @@ export interface GcpKmsSignerOptions {
 }
 
 /**
- * GCP KMS Signer integrates GCP Key Management Service (KMS) with the Sui blockchain
+ * GCP KMS Signer integrates GCP Key Management Service (KMS) with the Haneul blockchain
  * to provide signing capabilities using GCP-managed cryptographic keys.
  */
 export class GcpKmsSigner extends Signer {

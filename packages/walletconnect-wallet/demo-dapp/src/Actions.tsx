@@ -6,7 +6,7 @@ import {
   useSignAndExecuteTransaction,
   useSignPersonalMessage,
   useSignTransaction,
-  useSuiClientContext,
+  useHaneulClientContext,
 } from "@haneullabs/dapp-kit";
 import { Transaction } from "@haneullabs/sui/transactions";
 import {
@@ -16,7 +16,7 @@ import {
 import { Button, Container } from "@radix-ui/themes";
 import { fromBase64 } from "@haneullabs/sui/utils";
 import type {
-  SuiChain,
+  HaneulChain,
   WalletAccount,
   WalletWithRequiredFeatures,
 } from "@haneullabs/wallet-standard";
@@ -28,7 +28,7 @@ export function Actions() {
   const signMessage = useSignPersonalMessage();
   const signTransaction = useSignTransaction();
   const signAndExecuteTransaction = useSignAndExecuteTransaction();
-  const { network, client } = useSuiClientContext();
+  const { network, client } = useHaneulClientContext();
   const { currentWallet } = useCurrentWallet();
   const signAndExecuteTransactionForceInWallet = useMutation({
     mutationFn: ({
@@ -39,7 +39,7 @@ export function Actions() {
     }: {
       transaction: Transaction;
       account: WalletAccount;
-      chain: SuiChain;
+      chain: HaneulChain;
       wallet: WalletWithRequiredFeatures;
     }) => {
       return signAndExecuteTransactionWalletStandard(wallet, {
@@ -139,7 +139,7 @@ export function Actions() {
             await signAndExecuteTransactionForceInWallet.mutateAsync({
               transaction,
               account,
-              chain: `sui:${network}` as SuiChain,
+              chain: `sui:${network}` as HaneulChain,
               wallet: currentWallet,
             });
           console.log("Transaction digest:", digest);

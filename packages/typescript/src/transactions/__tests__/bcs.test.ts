@@ -5,7 +5,7 @@ import { toBase58 } from '@haneullabs/bcs';
 import { expect, it } from 'vitest';
 
 import { bcs } from '../../bcs/index.js';
-import { normalizeStructTag, normalizeSuiAddress } from '../../utils/sui-types.js';
+import { normalizeStructTag, normalizeHaneulAddress } from '../../utils/haneul-types.js';
 
 // Oooh-weeee we nailed it!
 it('can serialize simplified programmable call struct', () => {
@@ -43,13 +43,13 @@ it('can serialize simplified programmable call struct', () => {
 	expect(result.arguments).toEqual(moveCall.arguments);
 	expect(result.function).toEqual(moveCall.function);
 	expect(result.module).toEqual(moveCall.module);
-	expect(normalizeSuiAddress(result.package)).toEqual(normalizeSuiAddress(moveCall.package));
+	expect(normalizeHaneulAddress(result.package)).toEqual(normalizeHaneulAddress(moveCall.package));
 	expect(result.typeArguments[0]).toEqual(moveCall.typeArguments[0]);
 });
 
 function ref(): { objectId: string; version: string; digest: string } {
 	return {
-		objectId: normalizeSuiAddress((Math.random() * 100000).toFixed(0).padEnd(64, '0')),
+		objectId: normalizeHaneulAddress((Math.random() * 100000).toFixed(0).padEnd(64, '0')),
 		version: String((Math.random() * 10000).toFixed(0)),
 		digest: toBase58(
 			new Uint8Array([
@@ -61,11 +61,11 @@ function ref(): { objectId: string; version: string; digest: string } {
 }
 
 it('can serialize transaction data with a programmable transaction', () => {
-	const sui = normalizeSuiAddress('0x2');
+	const sui = normalizeHaneulAddress('0x2');
 	const txData = {
 		$kind: 'V1',
 		V1: {
-			sender: normalizeSuiAddress('0xBAD'),
+			sender: normalizeHaneulAddress('0xBAD'),
 			expiration: { $kind: 'None', None: true },
 			gasData: {
 				payment: [ref()],

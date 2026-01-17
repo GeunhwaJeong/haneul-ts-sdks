@@ -39,7 +39,7 @@ export interface KeyServerConfig {
 }
 
 export interface SealClientOptions extends SealClientExtensionOptions {
-	suiClient: SealCompatibleClient;
+	haneulClient: SealCompatibleClient;
 }
 
 export interface EncryptOptions {

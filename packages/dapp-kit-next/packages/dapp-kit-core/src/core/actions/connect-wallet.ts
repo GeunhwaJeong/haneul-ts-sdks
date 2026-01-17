@@ -4,7 +4,7 @@
 import type { DAppKitStores } from '../store.js';
 import { task } from 'nanostores';
 import type { UiWallet, UiWalletAccount } from '@wallet-standard/ui';
-import type { StandardConnectInput, SuiWalletFeatures } from '@haneullabs/wallet-standard';
+import type { StandardConnectInput, HaneulWalletFeatures } from '@haneullabs/wallet-standard';
 import type { StandardConnectFeature } from '@haneullabs/wallet-standard';
 import { StandardConnect } from '@haneullabs/wallet-standard';
 import { getWalletFeature, uiWalletAccountBelongsToUiWallet } from '@wallet-standard/ui';
@@ -111,7 +111,7 @@ export async function getSupportedIntentsFromFeature(wallet: UiWallet) {
 	const getCapabilitiesFeature = getWalletFeature(
 		wallet,
 		'sui:getCapabilities',
-	) as SuiWalletFeatures['sui:getCapabilities'];
+	) as HaneulWalletFeatures['sui:getCapabilities'];
 
 	return (await getCapabilitiesFeature?.getCapabilities())?.supportedIntents ?? [];
 }

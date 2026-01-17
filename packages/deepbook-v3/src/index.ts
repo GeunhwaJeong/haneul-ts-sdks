@@ -21,7 +21,7 @@ export { PoolProxyContract } from './transactions/poolProxy.js';
 export { MarginTPSLContract } from './transactions/marginTPSL.js';
 
 // Pyth price feed integration
-export { SuiPythClient, SuiPriceServiceConnection } from './pyth/pyth.js';
+export { HaneulPythClient, HaneulPriceServiceConnection } from './pyth/pyth.js';
 
 // BCS types for parsing on-chain data
 export { Account, Balances, Order, OrderDeepPrice, VecSet } from './types/bcs.js';

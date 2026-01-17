@@ -11,23 +11,23 @@ import type {
 	StandardEventsFeature,
 	StandardEventsListeners,
 	StandardEventsOnMethod,
-	SuiSignAndExecuteTransactionFeature,
-	SuiSignAndExecuteTransactionMethod,
-	SuiSignPersonalMessageFeature,
-	SuiSignPersonalMessageMethod,
-	SuiSignTransactionBlockFeature,
-	SuiSignTransactionBlockMethod,
-	SuiSignTransactionFeature,
-	SuiSignTransactionMethod,
+	HaneulSignAndExecuteTransactionFeature,
+	HaneulSignAndExecuteTransactionMethod,
+	HaneulSignPersonalMessageFeature,
+	HaneulSignPersonalMessageMethod,
+	HaneulSignTransactionBlockFeature,
+	HaneulSignTransactionBlockMethod,
+	HaneulSignTransactionFeature,
+	HaneulSignTransactionMethod,
 	Wallet,
 	WalletIcon,
 } from '@haneullabs/wallet-standard';
 import {
 	getWallets,
 	ReadonlyWalletAccount,
-	SUI_DEVNET_CHAIN,
-	SUI_MAINNET_CHAIN,
-	SUI_TESTNET_CHAIN,
+	HANEUL_DEVNET_CHAIN,
+	HANEUL_MAINNET_CHAIN,
+	HANEUL_TESTNET_CHAIN,
 } from '@haneullabs/wallet-standard';
 import type { Emitter } from 'mitt';
 import mitt from 'mitt';
@@ -42,7 +42,7 @@ type WalletEventsMap = {
 	[E in keyof StandardEventsListeners]: Parameters<StandardEventsListeners[E]>[0];
 };
 
-const SUPPORTED_CHAINS = [SUI_MAINNET_CHAIN, SUI_TESTNET_CHAIN, SUI_DEVNET_CHAIN] as const;
+const SUPPORTED_CHAINS = [HANEUL_MAINNET_CHAIN, HANEUL_TESTNET_CHAIN, HANEUL_DEVNET_CHAIN] as const;
 const ACCOUNT_FEATURES = [
 	'sui:signTransaction',
 	'sui:signAndExecuteTransaction',
@@ -85,10 +85,10 @@ export class EnokiConnectWallet implements Wallet {
 	get features(): StandardConnectFeature &
 		StandardDisconnectFeature &
 		StandardEventsFeature &
-		SuiSignTransactionBlockFeature &
-		SuiSignTransactionFeature &
-		SuiSignPersonalMessageFeature &
-		SuiSignAndExecuteTransactionFeature {
+		HaneulSignTransactionBlockFeature &
+		HaneulSignTransactionFeature &
+		HaneulSignPersonalMessageFeature &
+		HaneulSignAndExecuteTransactionFeature {
 		return {
 			'standard:connect': {
 				version: '1.0.0',
@@ -147,7 +147,7 @@ export class EnokiConnectWallet implements Wallet {
 		this.id = `enoki-connect-${publicAppSlug}`;
 	}
 
-	#signTransactionBlock: SuiSignTransactionBlockMethod = async ({
+	#signTransactionBlock: HaneulSignTransactionBlockMethod = async ({
 		transactionBlock,
 		account,
 		chain,
@@ -167,7 +167,7 @@ export class EnokiConnectWallet implements Wallet {
 		};
 	};
 
-	#signTransaction: SuiSignTransactionMethod = async ({ transaction, account, chain }) => {
+	#signTransaction: HaneulSignTransactionMethod = async ({ transaction, account, chain }) => {
 		const popup = await this.#getNewPopupChannel();
 		const response = await popup.send({
 			type: 'sign-transaction',
@@ -183,7 +183,7 @@ export class EnokiConnectWallet implements Wallet {
 		};
 	};
 
-	#signAndExecuteTransaction: SuiSignAndExecuteTransactionMethod = async ({
+	#signAndExecuteTransaction: HaneulSignAndExecuteTransactionMethod = async ({
 		transaction,
 		account,
 		chain,
@@ -205,7 +205,7 @@ export class EnokiConnectWallet implements Wallet {
 		};
 	};
 
-	#signPersonalMessage: SuiSignPersonalMessageMethod = async ({ message, account, chain }) => {
+	#signPersonalMessage: HaneulSignPersonalMessageMethod = async ({ message, account, chain }) => {
 		const popup = await this.#getNewPopupChannel();
 		const response = await popup.send({
 			type: 'sign-personal-message',
@@ -401,7 +401,7 @@ async function getEnokiConnectMetadata(publicAppSlugs: string[], enokiApiUrl: st
  *
  * @param publicAppSlugs - An array of public app slugs to register. You can obtain these slugs from the wallet developer.
  * @param dappName - The display name of your dApp. This will be shown to users in wallet UIs.
- * @param network - (Optional) The default Sui network to use for wallet operations (when chain is not specified in the wallet method). Accepts 'mainnet', 'testnet', or 'devnet'. Defaults to 'mainnet' if not specified.
+ * @param network - (Optional) The default Haneul network to use for wallet operations (when chain is not specified in the wallet method). Accepts 'mainnet', 'testnet', or 'devnet'. Defaults to 'mainnet' if not specified.
  * @param enokiApiUrl - (Optional) The Enoki API endpoint to use for fetching wallet metadata. Defaults to the public Enoki API at 'https://api.enoki.haneullabs.com'. (Override this if you are running a local or custom Enoki API instance.)
  *
  * @returns An object containing:

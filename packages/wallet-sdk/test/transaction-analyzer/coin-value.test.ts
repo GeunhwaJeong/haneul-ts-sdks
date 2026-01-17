@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest';
 import { Transaction } from '@haneullabs/sui/transactions';
 import { analyze } from '../../src/transaction-analyzer/analyzer';
 import { coinValues } from '../../src/transaction-analyzer/rules/coin-value.js';
-import { MockSuiClient } from '../mocks/MockSuiClient';
+import { MockHaneulClient } from '../mocks/MockHaneulClient';
 import {
 	DEFAULT_SENDER,
 	createAddressOwner,
@@ -18,7 +18,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	// Mock price provider function
 	const mockGetCoinPrices = async (coinTypes: string[]) => {
 		const priceMap: Record<string, { decimals: number; price: number | null }> = {
-			'0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI': {
+			'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL': {
 				decimals: 9,
 				price: 2.5, // $2.50 per SUI
 			},
@@ -45,7 +45,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	};
 
 	it('should calculate coin values for transactions with known prices', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -76,7 +76,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 			  "coinTypes": [
 			    {
 			      "amount": 1010000000n,
-			      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			      "convertedAmount": 2.525,
 			      "decimals": 9,
 			      "price": 2.5,
@@ -103,7 +103,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should handle transactions with no coin flows', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -121,7 +121,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 		expect(results.coinValues.result).toEqual({
 			coinTypes: [
 				{
-					coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+					coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 					decimals: 9,
 					price: 2.5,
 					amount: 10000000n,
@@ -134,7 +134,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should handle coins without known prices', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 
 		// Add an unknown token
 		client.addCoin({
@@ -170,7 +170,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should calculate correct USD values with proper decimals', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -196,7 +196,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 			  "coinTypes": [
 			    {
 			      "amount": 2510000000n,
-			      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			      "convertedAmount": 6.2749999999999995,
 			      "decimals": 9,
 			      "price": 2.5,
@@ -209,7 +209,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should handle mixed scenarios with some priced and some unpriced coins', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 
 		// Add coins with and without prices
 		client.addCoin({
@@ -248,7 +248,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should handle price provider errors gracefully', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -283,7 +283,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should only calculate values for outflow coins (spent coins)', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 

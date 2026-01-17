@@ -12,15 +12,15 @@ npm install --save @haneullabs/payment-kit @haneullabs/sui
 
 ## Setup
 
-In order to use the Payment Kit SDK you will first need to create an instance of SuiClient from the
+In order to use the Payment Kit SDK you will first need to create an instance of HaneulClient from the
 Typescript SDK, and a client instance of the Payment Kit SDK.
 
 ```ts
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { paymentKit } from '@haneullabs/payment-kit';
 
-// Create a Sui client with a Payment Kit extension
-const client = new SuiClient({
+// Create a Haneul client with a Payment Kit extension
+const client = new HaneulClient({
 	url: getFullnodeUrl('testnet'),
 	network: 'testnet',
 }).$extend(paymentKit());

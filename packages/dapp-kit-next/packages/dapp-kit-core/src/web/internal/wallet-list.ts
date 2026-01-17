@@ -27,7 +27,7 @@ export class WalletList extends ScopedRegistryHost(LitElement) {
 			? html`<div class="no-wallets-container">
 					<div class="no-wallets-content">
 						${downloadIcon}
-						<h2 class="title">Install a wallet to get started on Sui</h2>
+						<h2 class="title">Install a wallet to get started on Haneul</h2>
 					</div>
 					<internal-button class="wallet-cta" href="https://sui.io/get-started">
 						Select a wallet to install ${arrowRightUpIcon}

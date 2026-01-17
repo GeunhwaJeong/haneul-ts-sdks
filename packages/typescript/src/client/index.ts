@@ -2,20 +2,20 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export {
-	type JsonRpcTransport as SuiTransport,
-	type JsonRpcTransportRequestOptions as SuiTransportRequestOptions,
-	type JsonRpcTransportSubscribeOptions as SuiTransportSubscribeOptions,
+	type JsonRpcTransport as HaneulTransport,
+	type JsonRpcTransportRequestOptions as HaneulTransportRequestOptions,
+	type JsonRpcTransportSubscribeOptions as HaneulTransportSubscribeOptions,
 	type HttpHeaders,
-	type JsonRpcHTTPTransportOptions as SuiHTTPTransportOptions,
-	JsonRpcHTTPTransport as SuiHTTPTransport,
+	type JsonRpcHTTPTransportOptions as HaneulHTTPTransportOptions,
+	JsonRpcHTTPTransport as HaneulHTTPTransport,
 } from '../jsonRpc/http-transport.js';
 export { getFullnodeUrl } from './network.js';
 export type * from '../jsonRpc/types/index.js';
 export {
-	type SuiJsonRpcClientOptions as SuiClientOptions,
+	type HaneulJsonRpcClientOptions as HaneulClientOptions,
 	type PaginationArguments,
 	type OrderArguments,
-	isSuiJsonRpcClient as isSuiClient,
-	SuiJsonRpcClient as SuiClient,
+	isHaneulJsonRpcClient as isHaneulClient,
+	HaneulJsonRpcClient as HaneulClient,
 } from '../jsonRpc/client.js';
-export { SuiHTTPStatusError, SuiHTTPTransportError, JsonRpcError } from '../jsonRpc/errors.js';
+export { HaneulHTTPStatusError, HaneulHTTPTransportError, JsonRpcError } from '../jsonRpc/errors.js';

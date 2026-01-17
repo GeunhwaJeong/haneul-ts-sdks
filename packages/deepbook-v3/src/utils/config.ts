@@ -1,6 +1,6 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { normalizeSuiAddress } from '@haneullabs/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
 
 import { BalanceManagerContract } from '../transactions/balanceManager.js';
 import type {
@@ -87,7 +87,7 @@ export class DeepBookConfig {
 		marginPools?: MarginPoolMap;
 	}) {
 		this.env = env;
-		this.address = normalizeSuiAddress(address);
+		this.address = normalizeHaneulAddress(address);
 		this.adminCap = adminCap;
 		this.marginAdminCap = marginAdminCap;
 		this.marginMaintainerCap = marginMaintainerCap;

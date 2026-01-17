@@ -5,12 +5,12 @@ import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import type { DAppKitConnectModal } from './dapp-kit-connect-modal.js';
 import { createDAppKit } from '../core/index.js';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 
 const dAppKit = createDAppKit({
 	networks: ['testnet'],
 	createClient(network) {
-		return new SuiClient({ network, url: getFullnodeUrl(network) });
+		return new HaneulClient({ network, url: getFullnodeUrl(network) });
 	},
 });
 

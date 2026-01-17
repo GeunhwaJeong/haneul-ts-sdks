@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { normalizeSuiAddress } from '@haneullabs/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/sui/utils';
 import type { DeserializedModule, TypeSignature } from './types/deserialized.js';
 import type {
 	EnumSummary,
@@ -17,11 +17,11 @@ export function summaryFromDeserializedModule(mod: DeserializedModule) {
 	const moduleHandle = mod.module_handles[mod.self_module_handle_idx];
 	const summary: ModuleSummary = {
 		id: {
-			address: normalizeSuiAddress(mod.address_identifiers[moduleHandle.address]),
+			address: normalizeHaneulAddress(mod.address_identifiers[moduleHandle.address]),
 			name: mod.identifiers[moduleHandle.name],
 		},
 		immediate_dependencies: mod.module_handles.map((m) => ({
-			address: normalizeSuiAddress(mod.address_identifiers[m.address]),
+			address: normalizeHaneulAddress(mod.address_identifiers[m.address]),
 			name: mod.identifiers[m.name],
 		})),
 		functions: Object.fromEntries(
@@ -185,7 +185,7 @@ function typeFromTypeSignature(mod: DeserializedModule, type: TypeSignature): Ty
 		return {
 			Datatype: {
 				module: {
-					address: normalizeSuiAddress(mod.address_identifiers[module.address]),
+					address: normalizeHaneulAddress(mod.address_identifiers[module.address]),
 					name: mod.identifiers[module.name],
 				},
 				name: mod.identifiers[handle.name],
@@ -200,7 +200,7 @@ function typeFromTypeSignature(mod: DeserializedModule, type: TypeSignature): Ty
 		return {
 			Datatype: {
 				module: {
-					address: normalizeSuiAddress(mod.address_identifiers[module.address]),
+					address: normalizeHaneulAddress(mod.address_identifiers[module.address]),
 					name: mod.identifiers[module.name],
 				},
 				name: mod.identifiers[handle.name],

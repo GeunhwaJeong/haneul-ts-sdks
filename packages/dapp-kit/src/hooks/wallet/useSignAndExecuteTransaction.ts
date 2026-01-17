@@ -4,8 +4,8 @@
 import type { Transaction } from '@haneullabs/sui/transactions';
 import { toBase64 } from '@haneullabs/sui/utils';
 import type {
-	SuiSignAndExecuteTransactionInput,
-	SuiSignAndExecuteTransactionOutput,
+	HaneulSignAndExecuteTransactionInput,
+	HaneulSignAndExecuteTransactionOutput,
 } from '@haneullabs/wallet-standard';
 import { signTransaction } from '@haneullabs/wallet-standard';
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
@@ -18,19 +18,19 @@ import {
 	WalletNotConnectedError,
 } from '../../errors/walletErrors.js';
 import type { PartialBy } from '../../types/utilityTypes.js';
-import { useSuiClientContext } from '../useSuiClient.js';
+import { useHaneulClientContext } from '../useHaneulClient.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useCurrentWallet } from './useCurrentWallet.js';
 import { useReportTransactionEffects } from './useReportTransactionEffects.js';
 
 type UseSignAndExecuteTransactionArgs = PartialBy<
-	Omit<SuiSignAndExecuteTransactionInput, 'transaction'>,
+	Omit<HaneulSignAndExecuteTransactionInput, 'transaction'>,
 	'account' | 'chain'
 > & {
 	transaction: Transaction | string;
 };
 
-type UseSignAndExecuteTransactionResult = SuiSignAndExecuteTransactionOutput;
+type UseSignAndExecuteTransactionResult = HaneulSignAndExecuteTransactionOutput;
 
 type UseSignAndExecuteTransactionError =
 	| WalletFeatureNotSupportedError
@@ -77,7 +77,7 @@ export function useSignAndExecuteTransaction<
 > {
 	const { currentWallet, supportedIntents } = useCurrentWallet();
 	const currentAccount = useCurrentAccount();
-	const { client, network } = useSuiClientContext();
+	const { client, network } = useHaneulClientContext();
 	const { mutate: reportTransactionEffects } = useReportTransactionEffects();
 
 	const executeTransaction: ({

@@ -6,7 +6,7 @@ import { blake2b } from '@noble/hashes/blake2b';
 import { bytesToHex } from '@noble/hashes/utils';
 
 import { bcs } from '../bcs/index.js';
-import { normalizeSuiAddress, SUI_ADDRESS_LENGTH } from '../utils/sui-types.js';
+import { normalizeHaneulAddress, SUI_ADDRESS_LENGTH } from '../utils/haneul-types.js';
 import type { IntentScope } from './intent.js';
 import { messageWithIntent } from './intent.js';
 import { SIGNATURE_FLAG_TO_SCHEME, SIGNATURE_SCHEME_TO_SIZE } from './signature-scheme.js';
@@ -56,11 +56,11 @@ export abstract class PublicKey {
 	}
 
 	/**
-	 * Return the Sui representation of the public key encoded in
+	 * Return the Haneul representation of the public key encoded in
 	 * base-64. A Sui public key is formed by the concatenation
 	 * of the scheme flag with the raw bytes of the public key
 	 */
-	toSuiPublicKey(): string {
+	toHaneulPublicKey(): string {
 		const bytes = this.toSuiBytes();
 		return toBase64(bytes);
 	}
@@ -98,7 +98,7 @@ export abstract class PublicKey {
 	 * Verifies that the public key is associated with the provided address
 	 */
 	verifyAddress(address: string): boolean {
-		return this.toSuiAddress() === address;
+		return this.toHaneulAddress() === address;
 	}
 
 	/**
@@ -115,11 +115,11 @@ export abstract class PublicKey {
 	}
 
 	/**
-	 * Return the Sui address associated with this Ed25519 public key
+	 * Return the Haneul address associated with this Ed25519 public key
 	 */
-	toSuiAddress(): string {
+	toHaneulAddress(): string {
 		// Each hex char represents half a byte, hence hex address doubles the length
-		return normalizeSuiAddress(
+		return normalizeHaneulAddress(
 			bytesToHex(blake2b(this.toSuiBytes(), { dkLen: 32 })).slice(0, SUI_ADDRESS_LENGTH * 2),
 		);
 	}

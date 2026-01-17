@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiWalletFeatures, WalletWithRequiredFeatures } from '@haneullabs/wallet-standard';
+import type { HaneulWalletFeatures, WalletWithRequiredFeatures } from '@haneullabs/wallet-standard';
 import { SLUSH_WALLET_NAME } from '@haneullabs/slush-wallet';
 
 import { createInMemoryStore } from '../utils/stateStorage.js';
@@ -16,7 +16,7 @@ export const DEFAULT_STORAGE_KEY = 'sui-dapp-kit:wallet-connection-info';
 const SIGN_FEATURES = [
 	'sui:signTransaction',
 	'sui:signTransactionBlock',
-] satisfies (keyof SuiWalletFeatures)[];
+] satisfies (keyof HaneulWalletFeatures)[];
 
 export const DEFAULT_WALLET_FILTER = (wallet: WalletWithRequiredFeatures) =>
 	SIGN_FEATURES.some((feature) => wallet.features[feature]);

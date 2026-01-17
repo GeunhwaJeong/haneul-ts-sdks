@@ -4,8 +4,8 @@
 import { ed25519 } from '@noble/curves/ed25519';
 
 import {
-	decodeSuiPrivateKey,
-	encodeSuiPrivateKey,
+	decodeHaneulPrivateKey,
+	encodeHaneulPrivateKey,
 	Keypair,
 	PRIVATE_KEY_SIZE,
 } from '../../cryptography/keypair.js';
@@ -87,7 +87,7 @@ export class Ed25519Keypair extends Keypair {
 		options?: { skipValidation?: boolean },
 	): Ed25519Keypair {
 		if (typeof secretKey === 'string') {
-			const decoded = decodeSuiPrivateKey(secretKey);
+			const decoded = decodeHaneulPrivateKey(secretKey);
 
 			if (decoded.schema !== 'ED25519') {
 				throw new Error(`Expected a ED25519 keypair, got ${decoded.schema}`);
@@ -129,7 +129,7 @@ export class Ed25519Keypair extends Keypair {
 	 * The Bech32 secret key string for this Ed25519 keypair
 	 */
 	getSecretKey(): string {
-		return encodeSuiPrivateKey(
+		return encodeHaneulPrivateKey(
 			this.keypair.secretKey.slice(0, PRIVATE_KEY_SIZE),
 			this.getKeyScheme(),
 		);

@@ -3,15 +3,15 @@
 
 export { formatAddress, formatDigest } from './format.js';
 export {
-	isValidSuiAddress,
-	isValidSuiObjectId,
+	isValidHaneulAddress,
+	isValidHaneulObjectId,
 	isValidTransactionDigest,
 	normalizeStructTag,
-	normalizeSuiAddress,
-	normalizeSuiObjectId,
+	normalizeHaneulAddress,
+	normalizeHaneulObjectId,
 	parseStructTag,
 	SUI_ADDRESS_LENGTH,
-} from './sui-types.js';
+} from './haneul-types.js';
 
 export {
 	fromB64,
@@ -25,7 +25,7 @@ export {
 	fromBase58,
 	toBase58,
 } from '@haneullabs/bcs';
-export { isValidSuiNSName, normalizeSuiNSName } from './suins.js';
+export { isValidHaneulNSName, normalizeHaneulNSName } from './haneulns.js';
 
 export {
 	SUI_DECIMALS,

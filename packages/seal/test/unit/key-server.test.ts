@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { fromBase64 } from '@haneullabs/bcs';
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { bcs } from '@haneullabs/sui/bcs';
 
@@ -14,7 +14,7 @@ import {
 } from '../../src/key-server.js';
 import { Version } from '../../src/utils.js';
 
-// Data for mock response from SuiClient
+// Data for mock response from HaneulClient
 const pk = fromBase64(
 	'oEC1VIuwQo+6FZiVwHCAy/3HbvAbuIyiztXIWwd4LgmXCh9WhOKg3T0+Mb62y9fqAsSaN5SybG09n/3JnkmEzJgdDXLpM8KvMwkha/cBHp6Cx7aCdogvGLoOp/RadyHb',
 );
@@ -49,18 +49,18 @@ describe('key-server tests', () => {
 			};
 		});
 
-		// Mock SuiClient
-		const mockSuiClient = {
+		// Mock HaneulClient
+		const mockHaneulClient = {
 			core: {
 				getObject: mockGetObject,
 				getDynamicField: vi.fn(),
 			},
-		} as unknown as SuiClient;
+		} as unknown as HaneulClient;
 
 		await expect(
 			retrieveKeyServers({
 				objectIds: [id],
-				client: mockSuiClient,
+				client: mockHaneulClient,
 			}),
 		).rejects.toThrow(
 			'Key server 0x73d05d62c18d9374e3ea529e8e0ed6161da1a141a94d3f76ae3fe4e99356db75 supports versions between 2 and 5 (inclusive), but SDK expects version 1',
@@ -76,7 +76,7 @@ describe('key-server tests', () => {
 			// Mock fetch with exact response from the real service
 			const keyServers = await retrieveKeyServers({
 				objectIds: [id],
-				client: new SuiClient({ url: getFullnodeUrl('testnet') }),
+				client: new HaneulClient({ url: getFullnodeUrl('testnet') }),
 			});
 			vi.clearAllMocks();
 			const headers = new Headers();

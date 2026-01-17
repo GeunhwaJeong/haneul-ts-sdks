@@ -3,7 +3,7 @@
 
 import type { InferBcsType } from '@haneullabs/bcs';
 import { bcs } from '@haneullabs/bcs';
-import { SuiClient } from '@haneullabs/sui/client';
+import { HaneulClient } from '@haneullabs/sui/client';
 import type { Signer } from '@haneullabs/sui/cryptography';
 import type { ClientCache, ClientWithCoreApi } from '@haneullabs/sui/experimental';
 import type { TransactionObjectArgument, TransactionResult } from '@haneullabs/sui/transactions';
@@ -113,7 +113,7 @@ import {
 	toPairIndex,
 	toShardIndex,
 } from './utils/index.js';
-import { SuiObjectDataLoader } from './utils/object-loader.js';
+import { HaneulObjectDataLoader } from './utils/object-loader.js';
 import { shuffle, weightedShuffle } from './utils/randomness.js';
 import { getWasmBindings } from './wasm.js';
 import { chunk } from '@haneullabs/utils';
@@ -145,12 +145,12 @@ export function walrus<const Name = 'walrus'>({
 				packageConfig
 					? {
 							packageConfig,
-							suiClient: client,
+							haneulClient: client,
 							...options,
 						}
 					: {
 							network: walrusNetwork as 'mainnet' | 'testnet',
-							suiClient: client,
+							haneulClient: client,
 							...options,
 						},
 			);
@@ -163,8 +163,8 @@ export class WalrusClient {
 	#wasmUrl: string | undefined;
 
 	#packageConfig: WalrusPackageConfig;
-	#suiClient: ClientWithCoreApi;
-	#objectLoader: SuiObjectDataLoader;
+	#haneulClient: ClientWithCoreApi;
+	#objectLoader: HaneulObjectDataLoader;
 
 	#blobMetadataConcurrencyLimit = 10;
 	#readCommittee?: CommitteeInfo | Promise<CommitteeInfo> | null;
@@ -197,15 +197,15 @@ export class WalrusClient {
 			this.#uploadRelayClient = new UploadRelayClient(this.#uploadRelayConfig);
 		}
 
-		this.#suiClient =
-			config.suiClient ??
-			new SuiClient({
+		this.#haneulClient =
+			config.haneulClient ??
+			new HaneulClient({
 				url: config.suiRpcUrl,
 			});
 
 		this.#storageNodeClient = new StorageNodeClient(config.storageNodeClientOptions);
-		this.#objectLoader = new SuiObjectDataLoader(this.#suiClient);
-		this.#cache = this.#suiClient.cache.scope('@haneullabs/walrus');
+		this.#objectLoader = new HaneulObjectDataLoader(this.#haneulClient);
+		this.#cache = this.#haneulClient.cache.scope('@haneullabs/walrus');
 	}
 
 	/** @deprecated use `walrus()` instead */
@@ -227,12 +227,12 @@ export class WalrusClient {
 					packageConfig
 						? {
 								packageConfig,
-								suiClient: client,
+								haneulClient: client,
 								...options,
 							}
 						: {
 								network: walrusNetwork as 'mainnet' | 'testnet',
-								suiClient: client,
+								haneulClient: client,
 								...options,
 							},
 				);
@@ -242,7 +242,7 @@ export class WalrusClient {
 	/** The Move type for a WAL coin */
 	#walType() {
 		return this.#cache.read(['walType'], async () => {
-			const stakeWithPool = await this.#suiClient.core.getMoveFunction({
+			const stakeWithPool = await this.#haneulClient.core.getMoveFunction({
 				packageId: await this.#getPackageId(),
 				moduleName: 'staking',
 				name: 'stake_with_pool',
@@ -822,7 +822,7 @@ export class WalrusClient {
 	 *
 	 * @example
 	 * ```ts
-	 * const tx = client.createStorageTransaction({ size: 1000, epochs: 3, owner: signer.toSuiAddress() });
+	 * const tx = client.createStorageTransaction({ size: 1000, epochs: 3, owner: signer.toHaneulAddress() });
 	 * ```
 	 */
 	createStorageTransaction({
@@ -854,7 +854,7 @@ export class WalrusClient {
 	}: StorageWithSizeOptions & { transaction?: Transaction; signer: Signer }) {
 		const transaction = this.createStorageTransaction({
 			...options,
-			owner: options.transaction?.getData().sender ?? signer.toSuiAddress(),
+			owner: options.transaction?.getData().sender ?? signer.toHaneulAddress(),
 		});
 		const blobType = await this.getBlobType();
 
@@ -868,7 +868,7 @@ export class WalrusClient {
 			.filter((object) => object.idOperation === 'Created')
 			.map((object) => object.id);
 
-		const createdObjects = await this.#suiClient.core.getObjects({
+		const createdObjects = await this.#haneulClient.core.getObjects({
 			objectIds: createdObjectIds,
 		});
 
@@ -1089,7 +1089,7 @@ export class WalrusClient {
 	}> {
 		const transaction = this.registerBlobTransaction({
 			...options,
-			owner: options.owner ?? options.transaction?.getData().sender ?? signer.toSuiAddress(),
+			owner: options.owner ?? options.transaction?.getData().sender ?? signer.toHaneulAddress(),
 		});
 		const blobType = await this.getBlobType();
 		const { digest, effects } = await this.#executeTransaction(
@@ -1102,7 +1102,7 @@ export class WalrusClient {
 			.filter((object) => object.idOperation === 'Created')
 			.map((object) => object.id);
 
-		const createdObjects = await this.#suiClient.core.getObjects({
+		const createdObjects = await this.#haneulClient.core.getObjects({
 			objectIds: createdObjectIds,
 		});
 
@@ -1126,7 +1126,7 @@ export class WalrusClient {
 		const blobType = await this.getBlobType();
 		const {
 			transaction: { effects },
-		} = await this.#suiClient.core.waitForTransaction({
+		} = await this.#haneulClient.core.waitForTransaction({
 			digest,
 		});
 
@@ -1134,7 +1134,7 @@ export class WalrusClient {
 			.filter((object) => object.idOperation === 'Created')
 			.map((object) => object.id);
 
-		const createdObjects = await this.#suiClient.core.getObjects({
+		const createdObjects = await this.#haneulClient.core.getObjects({
 			objectIds: createdObjectIds,
 		});
 
@@ -1366,7 +1366,7 @@ export class WalrusClient {
 			this.deleteBlobTransaction({
 				blobObjectId,
 				transaction,
-				owner: transaction.getData().sender ?? signer.toSuiAddress(),
+				owner: transaction.getData().sender ?? signer.toHaneulAddress(),
 			}),
 			signer,
 			'delete blob',
@@ -1459,7 +1459,7 @@ export class WalrusClient {
 	}: {
 		blobObjectId: string;
 	}): Promise<Record<string, string> | null> {
-		const response = await this.#suiClient.core.getDynamicField({
+		const response = await this.#haneulClient.core.getDynamicField({
 			parentId: blobObjectId,
 			name: {
 				type: 'vector<u8>',
@@ -1908,7 +1908,7 @@ export class WalrusClient {
 				blobId,
 				rootHash,
 				deletable,
-				owner: owner ?? signer.toSuiAddress(),
+				owner: owner ?? signer.toHaneulAddress(),
 				attributes,
 			});
 
@@ -1959,11 +1959,11 @@ export class WalrusClient {
 				blobId: metadata.blobId,
 				rootHash: metadata.rootHash,
 				deletable,
-				owner: owner ?? signer.toSuiAddress(),
+				owner: owner ?? signer.toHaneulAddress(),
 				attributes,
 			});
 
-			await this.#suiClient.core.waitForTransaction({
+			await this.#haneulClient.core.waitForTransaction({
 				digest: registerResult.digest,
 			});
 
@@ -2045,18 +2045,18 @@ export class WalrusClient {
 	}
 
 	async #executeTransaction(transaction: Transaction, signer: Signer, action: string) {
-		transaction.setSenderIfNotSet(signer.toSuiAddress());
+		transaction.setSenderIfNotSet(signer.toHaneulAddress());
 
 		const { digest, effects } = await signer.signAndExecuteTransaction({
 			transaction,
-			client: this.#suiClient,
+			client: this.#haneulClient,
 		});
 
 		if (effects?.status.error) {
 			throw new WalrusClientError(`Failed to ${action} (${digest}): ${effects?.status.error}`);
 		}
 
-		await this.#suiClient.core.waitForTransaction({
+		await this.#haneulClient.core.waitForTransaction({
 			digest,
 		});
 

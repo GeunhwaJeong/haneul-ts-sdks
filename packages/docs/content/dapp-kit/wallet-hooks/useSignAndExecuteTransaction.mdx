@@ -28,7 +28,7 @@ function MyComponent() {
 								signAndExecuteTransaction(
 									{
 										transaction: new Transaction(),
-										chain: 'sui:devnet',
+										chain: 'haneul:devnet',
 									},
 									{
 										onSuccess: (result) => {
@@ -62,7 +62,7 @@ you can pass a custom `execute` function.
 ```ts
 import {
 	ConnectButton,
-	useSuiClient,
+	useHaneulClient,
 	useCurrentAccount,
 	useSignAndExecuteTransaction,
 } from '@haneullabs/dapp-kit';
@@ -70,7 +70,7 @@ import { Transaction } from '@haneullabs/sui/transactions';
 import { useState } from 'react';
 
 function MyComponent() {
-	const client = useSuiClient();
+	const client = useHaneulClient();
 	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction({
 		execute: async ({ bytes, signature }) =>
 			await client.executeTransactionBlock({
@@ -99,7 +99,7 @@ function MyComponent() {
 								signAndExecuteTransaction(
 									{
 										transaction: new Transaction(),
-										chain: 'sui:devnet',
+										chain: 'haneul:devnet',
 									},
 									{
 										onSuccess: (result) => {
@@ -129,5 +129,5 @@ function MyComponent() {
 - `execute`: (optional) A custom function to execute the transaction
 
 In addition to these options, you can also pass any options that the
-[SuiClient.signAndExecuteTransaction](/typedoc/classes/_haneullabs_sui.client.SuiClient.html#signAndExecuteTransactionBlock)
+[HaneulClient.signAndExecuteTransaction](/typedoc/classes/_haneullabs_sui.client.HaneulClient.html#signAndExecuteTransactionBlock)
 method accepts.

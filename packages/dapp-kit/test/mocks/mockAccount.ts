@@ -8,7 +8,7 @@ import { ReadonlyWalletAccount } from '@haneullabs/wallet-standard';
 export function createMockAccount(accountOverrides: Partial<WalletAccount> = {}) {
 	const keypair = new Ed25519Keypair();
 	return new ReadonlyWalletAccount({
-		address: keypair.getPublicKey().toSuiAddress(),
+		address: keypair.getPublicKey().toHaneulAddress(),
 		publicKey: keypair.getPublicKey().toSuiBytes(),
 		chains: ['sui:unknown'],
 		features: [

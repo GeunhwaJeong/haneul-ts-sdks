@@ -104,7 +104,7 @@ export class PasskeyPublicKey extends PublicKey {
 	}
 
 	/**
-	 * Return the Sui address associated with this Secp256r1 public key
+	 * Return the Haneul address associated with this Secp256r1 public key
 	 */
 	flag(): number {
 		return SIGNATURE_SCHEME_TO_FLAG['Passkey'];

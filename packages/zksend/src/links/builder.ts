@@ -1,14 +1,14 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getFullnodeUrl, SuiClient } from '@haneullabs/sui/client';
+import { getFullnodeUrl, HaneulClient } from '@haneullabs/sui/client';
 import type { CoinStruct } from '@haneullabs/sui/client';
-import { decodeSuiPrivateKey } from '@haneullabs/sui/cryptography';
+import { decodeHaneulPrivateKey } from '@haneullabs/sui/cryptography';
 import type { Keypair, Signer } from '@haneullabs/sui/cryptography';
 import { Ed25519Keypair } from '@haneullabs/sui/keypairs/ed25519';
 import type { TransactionObjectArgument, TransactionObjectInput } from '@haneullabs/sui/transactions';
 import { Transaction } from '@haneullabs/sui/transactions';
-import { normalizeStructTag, normalizeSuiAddress, SUI_TYPE_ARG, toBase64 } from '@haneullabs/sui/utils';
+import { normalizeStructTag, normalizeHaneulAddress, SUI_TYPE_ARG, toBase64 } from '@haneullabs/sui/utils';
 
 import type { ZkBagContractOptions } from './zk-bag.js';
 import { getContractIds, ZkBag } from './zk-bag.js';
@@ -18,7 +18,7 @@ export interface ZkSendLinkBuilderOptions {
 	path?: string;
 	keypair?: Keypair;
 	network?: 'mainnet' | 'testnet';
-	client?: SuiClient;
+	client?: HaneulClient;
 	sender: string;
 	contract?: ZkBagContractOptions | null;
 }
@@ -52,7 +52,7 @@ export class ZkSendLinkBuilder {
 	#host: string;
 	#path: string;
 	keypair: Keypair;
-	#client: SuiClient;
+	#client: HaneulClient;
 	#coinsByType = new Map<string, CoinStruct[]>();
 	#contract?: ZkBag<ZkBagContractOptions>;
 
@@ -61,7 +61,7 @@ export class ZkSendLinkBuilder {
 		path = DEFAULT_ZK_SEND_LINK_OPTIONS.path,
 		keypair = new Ed25519Keypair(),
 		network = DEFAULT_ZK_SEND_LINK_OPTIONS.network,
-		client = new SuiClient({ url: getFullnodeUrl(network) }),
+		client = new HaneulClient({ url: getFullnodeUrl(network) }),
 		sender,
 		contract = getContractIds(network),
 	}: ZkSendLinkBuilderOptions) {
@@ -69,7 +69,7 @@ export class ZkSendLinkBuilder {
 		this.#path = path;
 		this.keypair = keypair;
 		this.#client = client;
-		this.sender = normalizeSuiAddress(sender);
+		this.sender = normalizeHaneulAddress(sender);
 		this.network = network;
 
 		if (contract) {
@@ -98,7 +98,7 @@ export class ZkSendLinkBuilder {
 		const link = new URL(this.#host);
 		link.pathname = this.#path;
 		link.hash = `${this.#contract ? '$' : ''}${toBase64(
-			decodeSuiPrivateKey(this.keypair.getSecretKey()).secretKey,
+			decodeHaneulPrivateKey(this.keypair.getSecretKey()).secretKey,
 		)}`;
 
 		if (this.network !== 'mainnet') {
@@ -237,7 +237,7 @@ export class ZkSendLinkBuilder {
 		// Ensure that gas amount ends in 987
 		const roundedGasAmount = gasWithBuffer - (gasWithBuffer % 1000n) - 13n;
 
-		const address = this.keypair.toSuiAddress();
+		const address = this.keypair.toHaneulAddress();
 		const objectsToTransfer = (await this.#objectsToTransfer(tx)).map((obj) => obj.ref);
 		const [gas] = tx.splitCoins(tx.gas, [roundedGasAmount]);
 		objectsToTransfer.push(gas);
@@ -252,7 +252,7 @@ export class ZkSendLinkBuilder {
 		const tx = new Transaction();
 		tx.setSender(this.sender);
 		tx.setGasPayment([]);
-		tx.transferObjects([tx.gas], this.keypair.toSuiAddress());
+		tx.transferObjects([tx.gas], this.keypair.toHaneulAddress());
 
 		const idsToTransfer = [...this.objectIds];
 
@@ -269,7 +269,7 @@ export class ZkSendLinkBuilder {
 		if (idsToTransfer.length > 0) {
 			tx.transferObjects(
 				idsToTransfer.map((id) => tx.object(id)),
-				this.keypair.toSuiAddress(),
+				this.keypair.toHaneulAddress(),
 			);
 		}
 
@@ -302,12 +302,12 @@ export class ZkSendLinkBuilder {
 	static async createLinks({
 		links,
 		network = 'mainnet',
-		client = new SuiClient({ url: getFullnodeUrl(network) }),
+		client = new HaneulClient({ url: getFullnodeUrl(network) }),
 		transaction = new Transaction(),
 		contract: contractIds = getContractIds(network),
 	}: {
 		transaction?: Transaction;
-		client?: SuiClient;
+		client?: HaneulClient;
 		network?: 'mainnet' | 'testnet';
 		links: ZkSendLinkBuilder[];
 		contract?: ZkBagContractOptions;
@@ -393,7 +393,7 @@ export class ZkSendLinkBuilder {
 		}
 
 		for (const link of links) {
-			const receiver = link.keypair.toSuiAddress();
+			const receiver = link.keypair.toHaneulAddress();
 			transaction.add(contract.new({ arguments: [store, receiver] }));
 
 			link.objectRefs.forEach(({ ref, type }) => {
@@ -430,7 +430,7 @@ export class ZkSendLinkBuilder {
 			for (const [i, link] of linksWithCoin.entries()) {
 				transaction.add(
 					contract.add({
-						arguments: [store, link.keypair.toSuiAddress(), splits[i]],
+						arguments: [store, link.keypair.toHaneulAddress(), splits[i]],
 						typeArguments: [`0x2::coin::Coin<${coinType}>`],
 					}),
 				);

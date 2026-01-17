@@ -18,7 +18,7 @@ describe('useSignTransaction', () => {
 		const wrapper = createWalletProviderContextWrapper();
 		const { result } = renderHook(() => useSignTransaction(), { wrapper });
 
-		result.current.mutate({ transaction: new Transaction(), chain: 'sui:testnet' });
+		result.current.mutate({ transaction: new Transaction(), chain: 'haneul:testnet' });
 
 		await waitFor(() => expect(result.current.error).toBeInstanceOf(WalletNotConnectedError));
 	});
@@ -42,7 +42,7 @@ describe('useSignTransaction', () => {
 
 		result.current.signTransaction.mutate({
 			transaction: new Transaction(),
-			chain: 'sui:testnet',
+			chain: 'haneul:testnet',
 		});
 		await waitFor(() =>
 			expect(result.current.signTransaction.error).toBeInstanceOf(WalletFeatureNotSupportedError),
@@ -80,7 +80,7 @@ describe('useSignTransaction', () => {
 
 		result.current.signTransaction.mutate({
 			transaction: new Transaction(),
-			chain: 'sui:testnet',
+			chain: 'haneul:testnet',
 		});
 
 		await waitFor(() => expect(result.current.signTransaction.isSuccess).toBe(true));
@@ -93,7 +93,7 @@ describe('useSignTransaction', () => {
 		expect(signTransactionMock).toHaveBeenCalledWith({
 			transaction: expect.any(Object),
 			account: mockWallet.accounts[0],
-			chain: `sui:testnet`,
+			chain: `haneul:testnet`,
 		});
 
 		act(() => unregister());

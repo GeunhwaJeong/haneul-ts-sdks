@@ -6,7 +6,7 @@ import {
 	useConnectWallet,
 	useCurrentAccount,
 	useSignAndExecuteTransaction,
-	useSuiClientContext,
+	useHaneulClientContext,
 	useWallets,
 } from '@haneullabs/dapp-kit';
 import { Transaction } from '@haneullabs/sui/transactions';
@@ -23,7 +23,7 @@ export function App() {
 	const googleWallet = wallets.find(isGoogleWallet);
 
 	const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
-	const { selectNetwork, networks } = useSuiClientContext();
+	const { selectNetwork, networks } = useHaneulClientContext();
 
 	return (
 		<div>

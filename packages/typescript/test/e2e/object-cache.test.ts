@@ -6,7 +6,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import { OwnedObjectRef } from '../../src/client';
 import { Transaction } from '../../src/transactions';
 import { CachingTransactionExecutor } from '../../src/transactions/executor/caching';
-import { normalizeSuiAddress } from '../../src/utils';
+import { normalizeHaneulAddress } from '../../src/utils';
 import { setup, TestToolbox } from './utils/setup';
 
 describe('CachingTransactionExecutor', { retry: 3 }, async () => {
@@ -20,7 +20,7 @@ describe('CachingTransactionExecutor', { retry: 3 }, async () => {
 	beforeAll(async () => {
 		toolbox = await setup();
 		rawPackageId = packageId = await toolbox.getPackage('tto');
-		packageId = normalizeSuiAddress(rawPackageId);
+		packageId = normalizeHaneulAddress(rawPackageId);
 	});
 
 	beforeEach(async () => {
@@ -88,13 +88,13 @@ describe('CachingTransactionExecutor', { retry: 3 }, async () => {
 		expect(result.effects?.status.status).toBe('success');
 		expect(toolbox.client.getNormalizedMoveFunction).toHaveBeenCalledOnce();
 		expect(toolbox.client.getNormalizedMoveFunction).toHaveBeenCalledWith({
-			package: normalizeSuiAddress(packageId),
+			package: normalizeHaneulAddress(packageId),
 			module: 'tto',
 			function: 'receiver',
 		});
 
 		const receiver = await executor.cache.getMoveFunctionDefinition({
-			package: normalizeSuiAddress(packageId),
+			package: normalizeHaneulAddress(packageId),
 			module: 'tto',
 			function: 'receiver',
 		});
@@ -104,7 +104,7 @@ describe('CachingTransactionExecutor', { retry: 3 }, async () => {
 		expect(receiver).toEqual({
 			module: 'tto',
 			function: 'receiver',
-			package: normalizeSuiAddress(packageId),
+			package: normalizeHaneulAddress(packageId),
 			parameters: [
 				{
 					body: {
