@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export {
-	requestSuiFromFaucetV0,
-	requestSuiFromFaucetV1,
-	requestSuiFromFaucetV2,
+	requestHaneulFromFaucetV0,
+	requestHaneulFromFaucetV1,
+	requestHaneulFromFaucetV2,
 	getFaucetRequestStatus,
 	getFaucetHost,
 	FaucetRateLimitError,

@@ -5,7 +5,7 @@ import { mkdtemp } from 'fs/promises';
 import { tmpdir } from 'os';
 import path from 'path';
 import { getFullnodeUrl, HaneulClient } from '@haneullabs/haneul/client';
-import { FaucetRateLimitError, getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { FaucetRateLimitError, getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
 import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { retry } from 'ts-retry-promise';
 
@@ -48,7 +48,7 @@ export async function setupHaneulClient() {
 	const keypair = Ed25519Keypair.generate();
 	const address = keypair.getPublicKey().toHaneulAddress();
 	const client = getClient();
-	await retry(() => requestSuiFromFaucetV2({ host: DEFAULT_FAUCET_URL, recipient: address }), {
+	await retry(() => requestHaneulFromFaucetV2({ host: DEFAULT_FAUCET_URL, recipient: address }), {
 		backoff: 'EXPONENTIAL',
 		// overall timeout in 60 seconds
 		timeout: 1000 * 60,

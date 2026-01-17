@@ -3,7 +3,7 @@
 
 import { getFullnodeUrl, HaneulClient, HaneulObjectChange } from '@haneullabs/haneul/client';
 import { decodeHaneulPrivateKey, Keypair } from '@haneullabs/haneul/cryptography';
-import { getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
 import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { Transaction } from '@haneullabs/haneul/transactions';
 import { GEUNHWA_PER_HANEUL, toBase64 } from '@haneullabs/haneul/utils';
@@ -44,7 +44,7 @@ beforeAll(async () => {
 
 async function getSuiFromFaucet(keypair: Keypair) {
 	const faucetHost = getFaucetHost('testnet');
-	await requestSuiFromFaucetV2({
+	await requestHaneulFromFaucetV2({
 		host: faucetHost,
 		recipient: keypair.toHaneulAddress(),
 	});

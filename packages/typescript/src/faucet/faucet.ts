@@ -76,9 +76,9 @@ async function faucetRequest<T>({ host, path, body, headers, method }: FaucetReq
 }
 
 /**
- * @deprecated "Use requestSuiFromFaucetV2 instead"
+ * @deprecated "Use requestHaneulFromFaucetV2 instead"
  */
-export async function requestSuiFromFaucetV0(input: {
+export async function requestHaneulFromFaucetV0(input: {
 	host: string;
 	recipient: string;
 	headers?: HeadersInit;
@@ -103,9 +103,9 @@ export async function requestSuiFromFaucetV0(input: {
 }
 
 /**
- * @deprecated "Use requestSuiFromFaucetV2 instead"
+ * @deprecated "Use requestHaneulFromFaucetV2 instead"
  */
-export async function requestSuiFromFaucetV1(input: {
+export async function requestHaneulFromFaucetV1(input: {
 	host: string;
 	recipient: string;
 	headers?: HeadersInit;
@@ -129,7 +129,7 @@ export async function requestSuiFromFaucetV1(input: {
 	return response;
 }
 
-export async function requestSuiFromFaucetV2(input: {
+export async function requestHaneulFromFaucetV2(input: {
 	host: string;
 	recipient: string;
 	headers?: HeadersInit;
@@ -154,7 +154,7 @@ export async function requestSuiFromFaucetV2(input: {
 }
 
 /**
- * @deprecated "Use requestSuiFromFaucetV2 which returns directly a success or failure status"
+ * @deprecated "Use requestHaneulFromFaucetV2 which returns directly a success or failure status"
  */
 export async function getFaucetRequestStatus(input: {
 	host: string;
