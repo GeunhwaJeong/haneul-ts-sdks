@@ -88,7 +88,7 @@ An instance of AwsKmsSigner.
 
 ## GCP KMS Signer
 
-The GCP KMS Signer allows you to leverage Google Cloud's Key Management Service to sign Sui
+The GCP KMS Signer allows you to leverage Google Cloud's Key Management Service to sign Haneul
 transactions.
 
 ### Usage

@@ -7,27 +7,27 @@ import type {
 } from '../experimental/index.js';
 import { Experimental_CoreClient } from '../experimental/index.js';
 import type { SuiGrpcClient } from './client.js';
-import type { Owner } from './proto/sui/rpc/v2/owner.js';
-import { Owner_OwnerKind } from './proto/sui/rpc/v2/owner.js';
+import type { Owner } from './proto/haneul/rpc/v2/owner.js';
+import { Owner_OwnerKind } from './proto/haneul/rpc/v2/owner.js';
 import { chunk, fromBase64, toBase64 } from '@haneullabs/utils';
-import type { ExecutedTransaction } from './proto/sui/rpc/v2/executed_transaction.js';
-import type { TransactionEffects } from './proto/sui/rpc/v2/effects.js';
-import { UnchangedConsensusObject_UnchangedConsensusObjectKind } from './proto/sui/rpc/v2/effects.js';
+import type { ExecutedTransaction } from './proto/haneul/rpc/v2/executed_transaction.js';
+import type { TransactionEffects } from './proto/haneul/rpc/v2/effects.js';
+import { UnchangedConsensusObject_UnchangedConsensusObjectKind } from './proto/haneul/rpc/v2/effects.js';
 import {
 	ChangedObject_IdOperation,
 	ChangedObject_InputObjectState,
 	ChangedObject_OutputObjectState,
-} from './proto/sui/rpc/v2/effects.js';
+} from './proto/haneul/rpc/v2/effects.js';
 import type { BuildTransactionOptions } from '../transactions/index.js';
 import { TransactionDataBuilder } from '../transactions/index.js';
 import { bcs } from '../bcs/index.js';
-import type { OpenSignature, OpenSignatureBody } from './proto/sui/rpc/v2/move_package.js';
+import type { OpenSignature, OpenSignatureBody } from './proto/haneul/rpc/v2/move_package.js';
 import {
 	Ability,
 	FunctionDescriptor_Visibility,
 	OpenSignature_Reference,
 	OpenSignatureBody_Type,
-} from './proto/sui/rpc/v2/move_package.js';
+} from './proto/haneul/rpc/v2/move_package.js';
 export interface GrpcCoreClientOptions extends Experimental_CoreClientOptions {
 	client: SuiGrpcClient;
 }

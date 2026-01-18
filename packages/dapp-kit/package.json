@@ -1,7 +1,7 @@
 {
 	"name": "@haneullabs/dapp-kit",
 	"author": "Haneul Labs <build@haneullabs.com>",
-	"description": "A collection of React hooks and components for interacting with the Sui blockchain and wallets.",
+	"description": "A collection of React hooks and components for interacting with the Haneul blockchain and wallets.",
 	"homepage": "https://sdk.haneullabs.com/typescript",
 	"version": "0.20.0",
 	"license": "Apache-2.0",

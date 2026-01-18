@@ -1,7 +1,7 @@
 {
 	"name": "@haneullabs/codegen",
 	"version": "0.5.13",
-	"description": "typescript codegen for sui move",
+	"description": "typescript codegen for Haneul Move",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneullabs.com>",
 	"sideEffects": false,
@@ -21,8 +21,8 @@
 		"src"
 	],
 	"bin": {
-		"sui-ts-codegen": "dist/cjs/bin/cli.js",
-		"__sui-ts-codegen_bash_complete": "dist/cjs/bin/bash-complete.js"
+		"haneul-ts-codegen": "dist/cjs/bin/cli.js",
+		"__haneul-ts-codegen_bash_complete": "dist/cjs/bin/bash-complete.js"
 	},
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
@@ -45,10 +45,10 @@
 	"keywords": [
 		"move",
 		"codegen",
-		"sui"
+		"haneul"
 	],
 	"bugs": {
-		"url": "https://github.com/haneullabs/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
 	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/blob/main/packages/codegen#readme",
 	"devDependencies": {
