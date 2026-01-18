@@ -33,15 +33,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"keywords": [
 		"utils"
 	],
 	"bugs": {
-		"url": "https://github.com/HaneulLabs/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
-	"homepage": "https://github.com/HaneulLabs/ts-sdks/tree/main/packages/utils#readme",
+	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/tree/main/packages/utils#readme",
 	"devDependencies": {
 		"@haneullabs/build-scripts": "workspace:*",
 		"typescript": "^5.9.3",

@@ -9,7 +9,7 @@
   "types": "./web/walrus_wasm.d.ts",
   "repository": {
 		"type": "git",
-		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
   "scripts": {
     "build:wasm": "pnpm build:nodejs && pnpm build:web",

@@ -16,7 +16,7 @@ export const baseOptions: BaseLayoutProps = {
 	links: [
 		{
 			text: 'GitHub',
-			url: 'https://github.com/HaneulLabs/ts-sdks',
+			url: 'https://github.com/GeunhwaJeong/haneul-ts-sdks',
 		},
 		{
 			text: 'Discord',

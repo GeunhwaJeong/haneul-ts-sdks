@@ -36,12 +36,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
 		"url": "https://github.com/haneullabs/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/HaneulLabs/seal#readme",
+	"homepage": "https://github.com/MystenLabs/seal#readme",
 	"devDependencies": {
 		"@hey-api/openapi-ts": "^0.88.0",
 		"@haneullabs/build-scripts": "workspace:*",

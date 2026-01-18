@@ -5,7 +5,7 @@ For more complete docs, visit the [Sui TypeScript SDK docs](https://sdk.haneulla
 # Sui TypeScript SDK
 
 This is the Haneul TypeScript SDK built on the Haneul
-[JSON RPC API](https://github.com/HaneulLabs/sui/blob/main/docs/content/references/sui-api.mdx). It
+[JSON RPC API](https://github.com/GeunhwaJeong/haneul/blob/main/docs/content/references/sui-api.mdx). It
 provides utility classes and functions for applications to sign transactions and interact with the
 Haneul network.
 

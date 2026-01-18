@@ -36,12 +36,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
 		"url": "https://github.com/haneullabs/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/HaneulLabs/ts-sdks/packages/wallet-sdk#readme",
+	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/packages/wallet-sdk#readme",
 	"devDependencies": {
 		"@haneullabs/build-scripts": "workspace:*",
 		"@haneullabs/dapp-kit-react": "workspace:*",

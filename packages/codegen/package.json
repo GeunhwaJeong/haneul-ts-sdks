@@ -40,7 +40,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"keywords": [
 		"move",
@@ -50,7 +50,7 @@
 	"bugs": {
 		"url": "https://github.com/haneullabs/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/HaneulLabs/ts-sdks/blob/main/packages/codegen#readme",
+	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/blob/main/packages/codegen#readme",
 	"devDependencies": {
 		"@haneullabs/build-scripts": "workspace:*",
 		"vitest": "^4.0.15"

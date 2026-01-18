@@ -1,7 +1,7 @@
 # Kiosk SDK
 
 This Kiosk SDK library provides different utilities to interact/create/manage a
-[Kiosk](https://github.com/HaneulLabs/sui/tree/main/kiosk).
+[Kiosk](https://github.com/GeunhwaJeong/haneul/tree/main/kiosk).
 
 [You can read the documentation and see examples by clicking here.](https://sdk.haneullabs.com/kiosk)
 

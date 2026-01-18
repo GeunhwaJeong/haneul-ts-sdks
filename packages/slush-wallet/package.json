@@ -32,12 +32,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
 		"url": "https://github.com/haneullabs/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/HaneulLabs/ts-sdks/tree/main/packages/slush-wallet#readme",
+	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/tree/main/packages/slush-wallet#readme",
 	"devDependencies": {
 		"@haneullabs/build-scripts": "workspace:*",
 		"@types/node": "^24.10.1",

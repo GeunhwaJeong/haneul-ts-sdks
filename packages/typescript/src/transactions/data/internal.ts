@@ -78,7 +78,7 @@ export const JsonU64 = pipe(
 		}
 	}, 'Invalid u64'),
 );
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/base_types.rs#L138
+// https://github.com/GeunhwaJeong/haneul/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/base_types.rs#L138
 // Implemented as a tuple in rust
 export const ObjectRefSchema = object({
 	objectId: HaneulAddress,
@@ -87,7 +87,7 @@ export const ObjectRefSchema = object({
 });
 export type ObjectRef = InferOutput<typeof ObjectRefSchema>;
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L690-L702
+// https://github.com/GeunhwaJeong/haneul/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L690-L702
 export const ArgumentSchema = pipe(
 	union([
 		object({ GasCoin: literal(true) }),
@@ -117,7 +117,7 @@ export const ArgumentSchema = pipe(
 
 export type Argument = InferOutput<typeof ArgumentSchema>;
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L1387-L1392
+// https://github.com/GeunhwaJeong/haneul/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L1387-L1392
 export const GasDataSchema = object({
 	budget: nullable(JsonU64),
 	price: nullable(JsonU64),
@@ -126,7 +126,7 @@ export const GasDataSchema = object({
 });
 export type GasData = InferOutput<typeof GasDataSchema>;
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/external-crates/move/crates/move-core-types/src/language_storage.rs#L140-L147
+// https://github.com/GeunhwaJeong/haneul/blob/df41d5fa8127634ff4285671a01ead00e519f806/external-crates/move/crates/move-core-types/src/language_storage.rs#L140-L147
 export const StructTagSchema = object({
 	address: string(),
 	module: string(),
@@ -136,7 +136,7 @@ export const StructTagSchema = object({
 });
 export type StructTag = InferOutput<typeof StructTagSchema>;
 
-// https://github.com/HaneulLabs/sui/blob/cea8742e810142a8145fd83c4c142d61e561004a/crates/sui-graphql-rpc/schema/current_progress_schema.graphql#L1614-L1627
+// https://github.com/GeunhwaJeong/haneul/blob/cea8742e810142a8145fd83c4c142d61e561004a/crates/sui-graphql-rpc/schema/current_progress_schema.graphql#L1614-L1627
 export type OpenMoveTypeSignatureBody =
 	| 'address'
 	| 'bool'
@@ -178,14 +178,14 @@ export const OpenMoveTypeSignatureBodySchema: GenericSchema<OpenMoveTypeSignatur
 	object({ typeParameter: pipe(number(), integer()) }),
 ]);
 
-// https://github.com/HaneulLabs/sui/blob/cea8742e810142a8145fd83c4c142d61e561004a/crates/sui-graphql-rpc/schema/current_progress_schema.graphql#L1609-L1612
+// https://github.com/GeunhwaJeong/haneul/blob/cea8742e810142a8145fd83c4c142d61e561004a/crates/sui-graphql-rpc/schema/current_progress_schema.graphql#L1609-L1612
 export const OpenMoveTypeSignatureSchema = object({
 	ref: nullable(union([literal('&'), literal('&mut')])),
 	body: OpenMoveTypeSignatureBodySchema,
 });
 export type OpenMoveTypeSignature = InferOutput<typeof OpenMoveTypeSignatureSchema>;
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L707-L718
+// https://github.com/GeunhwaJeong/haneul/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L707-L718
 const ProgrammableMoveCallSchema = object({
 	package: ObjectID,
 	module: string(),
@@ -203,7 +203,7 @@ export const $Intent = object({
 	data: record(string(), unknown()),
 });
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L657-L685
+// https://github.com/GeunhwaJeong/haneul/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L657-L685
 export const CommandSchema = safeEnum({
 	MoveCall: ProgrammableMoveCallSchema,
 	TransferObjects: object({
@@ -277,7 +277,7 @@ export type Command<Arg = Argument> = EnumOutputShape<{
 	};
 }>;
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L102-L114
+// https://github.com/GeunhwaJeong/haneul/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L102-L114
 export const ObjectArgSchema = safeEnum({
 	ImmOrOwnedObject: ObjectRefSchema,
 	SharedObject: object({
@@ -289,7 +289,7 @@ export const ObjectArgSchema = safeEnum({
 	Receiving: ObjectRefSchema,
 });
 
-// https://github.com/HaneulLabs/sui/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L75-L80
+// https://github.com/GeunhwaJeong/haneul/blob/df41d5fa8127634ff4285671a01ead00e519f806/crate./haneul-types/src/transaction.rs#L75-L80
 const CallArgSchema = safeEnum({
 	Object: ObjectArgSchema,
 	Pure: object({

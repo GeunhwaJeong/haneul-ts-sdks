@@ -33,7 +33,7 @@ based payments are routed through a default payment registry, but more on that l
 ## SDK Overview
 
 The Payment Kit SDK is designed to allow for direct interactions with the
-[sui-payment-kit](https://github.com/HaneulLabs/sui-payment-kit) Move Package. This includes:
+[sui-payment-kit](https://github.com/GeunhwaJeong/haneul-payment-kit) Move Package. This includes:
 
 - Processing payments
 - Creating and managing `PaymentRegistry` instances

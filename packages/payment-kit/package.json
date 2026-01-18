@@ -21,10 +21,10 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/HaneulLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/HaneulLabs/ts-sdks/issues/new"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues/new"
 	},
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
