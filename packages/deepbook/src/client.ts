@@ -11,7 +11,7 @@ import {
 	normalizeHaneulAddress,
 	normalizeHaneulObjectId,
 	parseStructTag,
-	SUI_CLOCK_OBJECT_ID,
+	HANEUL_CLOCK_OBJECT_ID,
 } from '@haneullabs/haneul/utils';
 
 import { BcsOrder } from './types/bcs.js';
@@ -28,7 +28,7 @@ import {
 	CREATION_FEE,
 	MODULE_CLOB,
 	MODULE_CUSTODIAN,
-	NORMALIZED_SUI_COIN_TYPE,
+	NORMALIZED_HANEUL_COIN_TYPE,
 	ORDER_DEFAULT_EXPIRATION_IN_MS,
 	PACKAGE_ID,
 } from './utils/index.js';
@@ -177,7 +177,7 @@ export class DeepBookClient {
 
 		const [baseAsset, quoteAsset] = await this.getPoolTypeArgs(poolId);
 		const hasSui =
-			baseAsset === NORMALIZED_SUI_COIN_TYPE || quoteAsset === NORMALIZED_SUI_COIN_TYPE;
+			baseAsset === NORMALIZED_HANEUL_COIN_TYPE || quoteAsset === NORMALIZED_HANEUL_COIN_TYPE;
 
 		if (coinId === undefined && !hasSui) {
 			throw new Error('coinId must be specified if neither baseAsset nor quoteAsset is SUI');
@@ -187,7 +187,7 @@ export class DeepBookClient {
 
 		const [coin] = quantity ? tx.splitCoins(inputCoin, [quantity]) : [inputCoin];
 
-		const coinType = coinId ? await this.getCoinType(coinId) : NORMALIZED_SUI_COIN_TYPE;
+		const coinType = coinId ? await this.getCoinType(coinId) : NORMALIZED_HANEUL_COIN_TYPE;
 		if (coinType !== baseAsset && coinType !== quoteAsset) {
 			throw new Error(
 				`coin ${coinId} of ${coinType} type is not a valid asset for pool ${poolId}, which supports ${baseAsset} and ${quoteAsset}`,
@@ -262,7 +262,7 @@ export class DeepBookClient {
 			tx.pure.bool(orderType === 'bid'),
 			tx.pure.u64(expirationTimestamp),
 			tx.pure.u8(restriction),
-			tx.object(SUI_CLOCK_OBJECT_ID),
+			tx.object(HANEUL_CLOCK_OBJECT_ID),
 			tx.object(this.#checkAccountCap()),
 		];
 		tx.moveCall({
@@ -320,7 +320,7 @@ export class DeepBookClient {
 				tx.pure.bool(orderType === 'bid'),
 				baseCoin ? tx.object(baseCoin) : emptyCoin,
 				quoteCoin ? tx.object(quoteCoin) : emptyCoin,
-				tx.object(SUI_CLOCK_OBJECT_ID),
+				tx.object(HANEUL_CLOCK_OBJECT_ID),
 			],
 		});
 		const recipient = this.#checkAddress(recipientAddress);
@@ -357,7 +357,7 @@ export class DeepBookClient {
 				tx.pure.u64(clientOrderId ?? this.#nextClientOrderId()),
 				tx.object(this.#checkAccountCap()),
 				tx.pure.u64(String(amountIn)),
-				tx.object(SUI_CLOCK_OBJECT_ID),
+				tx.object(HANEUL_CLOCK_OBJECT_ID),
 				tx.object(tokenObjectIn),
 			],
 		});
@@ -398,7 +398,7 @@ export class DeepBookClient {
 					target: `0x2::coin::zero`,
 					arguments: [],
 				}),
-				tx.object(SUI_CLOCK_OBJECT_ID),
+				tx.object(HANEUL_CLOCK_OBJECT_ID),
 			],
 		});
 		tx.transferObjects([base_coin_ret], currentAddress);
@@ -470,7 +470,7 @@ export class DeepBookClient {
 			target: `${PACKAGE_ID}::${MODULE_CLOB}::clean_up_expired_orders`,
 			arguments: [
 				tx.object(poolId),
-				tx.object(SUI_CLOCK_OBJECT_ID),
+				tx.object(HANEUL_CLOCK_OBJECT_ID),
 				bcs.vector(bcs.U64).serialize(orderIds),
 				bcs.vector(bcs.Address).serialize(orderOwners),
 			],
@@ -680,7 +680,7 @@ export class DeepBookClient {
 					tx.object(poolId),
 					tx.pure.u64(lowerPrice),
 					tx.pure.u64(higherPrice),
-					tx.object(SUI_CLOCK_OBJECT_ID),
+					tx.object(HANEUL_CLOCK_OBJECT_ID),
 				],
 			});
 			tx.moveCall({
@@ -690,7 +690,7 @@ export class DeepBookClient {
 					tx.object(poolId),
 					tx.pure.u64(lowerPrice),
 					tx.pure.u64(higherPrice),
-					tx.object(SUI_CLOCK_OBJECT_ID),
+					tx.object(HANEUL_CLOCK_OBJECT_ID),
 				],
 			});
 		} else {
@@ -701,7 +701,7 @@ export class DeepBookClient {
 					tx.object(poolId),
 					tx.pure.u64(lowerPrice),
 					tx.pure.u64(higherPrice),
-					tx.object(SUI_CLOCK_OBJECT_ID),
+					tx.object(HANEUL_CLOCK_OBJECT_ID),
 				],
 			});
 		}
@@ -764,7 +764,7 @@ export class DeepBookClient {
 
 		// Modification handle case like 0x2::coin::Coin<0xf398b9ecb31aed96c345538fb59ca5a1a2c247c5e60087411ead6c637129f1c4::fish::FISH>
 		if (
-			parsed?.address === NORMALIZED_SUI_COIN_TYPE.split('::')[0] &&
+			parsed?.address === NORMALIZED_HANEUL_COIN_TYPE.split('::')[0] &&
 			parsed.module === 'coin' &&
 			parsed.name === 'Coin' &&
 			parsed.typeParams.length > 0

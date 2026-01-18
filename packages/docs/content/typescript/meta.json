@@ -1,13 +1,13 @@
 {
 	"root": true,
-	"title": "Sui SDK",
-	"description": "TypeScript interfaces for Sui",
+	"title": "Haneul SDK",
+	"description": "TypeScript interfaces for Haneul",
 	"pages": [
 		"index",
 		"install",
-		"hello-sui",
+		"hello-haneul",
 		"faucet",
-		"sui-client",
+		"haneul-client",
 		"graphql",
 		"grpc",
 		"transaction-building",

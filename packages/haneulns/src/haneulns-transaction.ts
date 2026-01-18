@@ -7,7 +7,7 @@ import type {
 	TransactionObjectArgument,
 	TransactionObjectInput,
 } from '@haneullabs/haneul/transactions';
-import { isValidHaneulNSName, normalizeHaneulNSName, SUI_CLOCK_OBJECT_ID } from '@haneullabs/haneul/utils';
+import { isValidHaneulNSName, normalizeHaneulNSName, HANEUL_CLOCK_OBJECT_ID } from '@haneullabs/haneul/utils';
 
 import { ALLOWED_METADATA, MAX_U64 } from './constants.js';
 import { isNestedSubName, isSubName, zeroCoin } from './helpers.js';
@@ -323,7 +323,7 @@ export class HaneulnsTransaction {
 			arguments: [
 				this.transaction.object(this.haneulnsClient.config.haneulns),
 				this.transaction.object(parentNft),
-				this.transaction.object(SUI_CLOCK_OBJECT_ID),
+				this.transaction.object(HANEUL_CLOCK_OBJECT_ID),
 				this.transaction.pure.string(normalizeHaneulNSName(name, 'dot')),
 				this.transaction.pure.u64(expirationTimestampMs),
 				this.transaction.pure.bool(!!allowChildCreation),
@@ -363,7 +363,7 @@ export class HaneulnsTransaction {
 			arguments: [
 				this.transaction.object(this.haneulnsClient.config.haneulns),
 				this.transaction.object(parentNft),
-				this.transaction.object(SUI_CLOCK_OBJECT_ID),
+				this.transaction.object(HANEUL_CLOCK_OBJECT_ID),
 				this.transaction.pure.string(normalizeHaneulNSName(name, 'dot')),
 				this.transaction.pure.address(targetAddress),
 			],
@@ -390,7 +390,7 @@ export class HaneulnsTransaction {
 			arguments: [
 				this.transaction.object(this.haneulnsClient.config.haneulns),
 				this.transaction.object(parentNft),
-				this.transaction.object(SUI_CLOCK_OBJECT_ID),
+				this.transaction.object(HANEUL_CLOCK_OBJECT_ID),
 				this.transaction.pure.string(normalizeHaneulNSName(name, 'dot')),
 			],
 		});
@@ -419,7 +419,7 @@ export class HaneulnsTransaction {
 				this.transaction.object(this.haneulnsClient.config.haneulns),
 				this.transaction.object(nft),
 				this.transaction.pure(bcs.option(bcs.Address).serialize(address).toBytes()),
-				this.transaction.object(SUI_CLOCK_OBJECT_ID),
+				this.transaction.object(HANEUL_CLOCK_OBJECT_ID),
 			],
 		});
 	}
@@ -469,7 +469,7 @@ export class HaneulnsTransaction {
 			arguments: [
 				this.transaction.object(this.haneulnsClient.config.haneulns),
 				this.transaction.object(parentNft),
-				this.transaction.object(SUI_CLOCK_OBJECT_ID),
+				this.transaction.object(HANEUL_CLOCK_OBJECT_ID),
 				this.transaction.pure.string(normalizeHaneulNSName(name, 'dot')),
 				this.transaction.pure.bool(!!allowChildCreation),
 				this.transaction.pure.bool(!!allowTimeExtension),
@@ -530,7 +530,7 @@ export class HaneulnsTransaction {
 				this.transaction.object(nft),
 				this.transaction.pure.string(key),
 				this.transaction.pure.string(value),
-				this.transaction.object(SUI_CLOCK_OBJECT_ID),
+				this.transaction.object(HANEUL_CLOCK_OBJECT_ID),
 			],
 		});
 	}
@@ -548,7 +548,7 @@ export class HaneulnsTransaction {
 			arguments: [
 				this.transaction.object(this.haneulnsClient.config.haneulns),
 				this.transaction.object(nft),
-				this.transaction.object(SUI_CLOCK_OBJECT_ID),
+				this.transaction.object(HANEUL_CLOCK_OBJECT_ID),
 			],
 		});
 	}

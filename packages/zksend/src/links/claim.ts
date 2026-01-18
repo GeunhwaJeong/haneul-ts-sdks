@@ -19,7 +19,7 @@ import {
 	normalizeHaneulAddress,
 	normalizeHaneulObjectId,
 	parseStructTag,
-	SUI_TYPE_ARG,
+	HANEUL_TYPE_ARG,
 	toBase64,
 } from '@haneullabs/haneul/utils';
 
@@ -36,8 +36,8 @@ const DEFAULT_ZK_SEND_LINK_OPTIONS = {
 	network: 'mainnet' as const,
 };
 
-const SUI_COIN_TYPE = normalizeStructTag(SUI_TYPE_ARG);
-const SUI_COIN_OBJECT_TYPE = normalizeStructTag('0x2::coin::Coin<0x2::haneul::HANEUL>');
+const HANEUL_COIN_TYPE = normalizeStructTag(HANEUL_TYPE_ARG);
+const HANEUL_COIN_OBJECT_TYPE = normalizeStructTag('0x2::coin::Coin<0x2::haneul::HANEUL>');
 
 export type ZkSendLinkOptions = {
 	claimApi?: string;
@@ -690,7 +690,7 @@ export class ZkSendLink {
 					if (object.objectId === this.#gasCoin.coinObjectId) {
 						return false;
 					}
-				} else if (object.type === SUI_COIN_OBJECT_TYPE) {
+				} else if (object.type === HANEUL_COIN_OBJECT_TYPE) {
 					return false;
 				}
 
@@ -748,7 +748,7 @@ export class ZkSendLink {
 		} while (nextCursor);
 
 		const coins = await this.#client.getCoins({
-			coinType: SUI_COIN_TYPE,
+			coinType: HANEUL_COIN_TYPE,
 			owner: this.address,
 		});
 

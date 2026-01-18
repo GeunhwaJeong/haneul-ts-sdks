@@ -10,7 +10,7 @@ import type {
 	StandardConnectMethod,
 	StandardEventsFeature,
 	StandardEventsOnMethod,
-	SuiFeatures,
+	HaneulFeatures,
 	HaneulSignAndExecuteTransactionBlockMethod,
 	HaneulSignAndExecuteTransactionMethod,
 	HaneulSignPersonalMessageMethod,
@@ -87,7 +87,7 @@ function registerUnsafeBurnerWallet(haneulClient: HaneulClient) {
 			return [account];
 		}
 
-		get features(): StandardConnectFeature & StandardEventsFeature & SuiFeatures {
+		get features(): StandardConnectFeature & StandardEventsFeature & HaneulFeatures {
 			return {
 				'standard:connect': {
 					version: '1.0.0',

@@ -17,7 +17,7 @@ import {
 	upgradePackage,
 } from './utils/setup';
 
-export const SUI_CLOCK_OBJECT_ID = normalizeHaneulObjectId('0x6');
+export const HANEUL_CLOCK_OBJECT_ID = normalizeHaneulObjectId('0x6');
 
 describe('Transaction Builders', () => {
 	let toolbox: TestToolbox;

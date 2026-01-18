@@ -55,14 +55,14 @@ export function useConnectWallet({
 					supportedIntents =
 						(await wallet.features['sui:getCapabilities'].getCapabilities()).supportedIntents ?? [];
 				}
-				const connectedSuiAccounts = connectResult.accounts.filter((account) =>
+				const connectedHaneulAccounts = connectResult.accounts.filter((account) =>
 					account.chains.some((chain) => chain.split(':')[0] === 'sui'),
 				);
-				const selectedAccount = getSelectedAccount(connectedSuiAccounts, accountAddress);
+				const selectedAccount = getSelectedAccount(connectedHaneulAccounts, accountAddress);
 
-				setWalletConnected(wallet, connectedSuiAccounts, selectedAccount, supportedIntents);
+				setWalletConnected(wallet, connectedHaneulAccounts, selectedAccount, supportedIntents);
 
-				return { accounts: connectedSuiAccounts };
+				return { accounts: connectedHaneulAccounts };
 			} catch (error) {
 				setConnectionStatus('disconnected');
 				throw error;

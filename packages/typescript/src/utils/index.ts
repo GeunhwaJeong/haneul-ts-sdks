@@ -28,16 +28,16 @@ export {
 export { isValidHaneulNSName, normalizeHaneulNSName } from './haneulns.js';
 
 export {
-	SUI_DECIMALS,
+	HANEUL_DECIMALS,
 	GEUNHWA_PER_HANEUL,
 	MOVE_STDLIB_ADDRESS,
 	HANEUL_FRAMEWORK_ADDRESS,
 	HANEUL_SYSTEM_ADDRESS,
-	SUI_CLOCK_OBJECT_ID,
-	SUI_SYSTEM_MODULE_NAME,
-	SUI_TYPE_ARG,
+	HANEUL_CLOCK_OBJECT_ID,
+	HANEUL_SYSTEM_MODULE_NAME,
+	HANEUL_TYPE_ARG,
 	HANEUL_SYSTEM_STATE_OBJECT_ID,
-	SUI_RANDOM_OBJECT_ID,
+	HANEUL_RANDOM_OBJECT_ID,
 } from './constants.js';
 
 export { isValidNamedPackage, isValidNamedType } from './move-registry.js';

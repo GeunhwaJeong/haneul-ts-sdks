@@ -4,7 +4,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { Transaction } from '../../src/transactions';
-import { normalizeHaneulAddress, SUI_TYPE_ARG } from '../../src/utils';
+import { normalizeHaneulAddress, HANEUL_TYPE_ARG } from '../../src/utils';
 import { setup, TestToolbox } from './utils/setup';
 
 describe('Object Reading API', () => {
@@ -69,7 +69,7 @@ describe('Object Reading API', () => {
 	it('can read live versions', async () => {
 		const { data } = await toolbox.client.getCoins({
 			owner: toolbox.address(),
-			coinType: SUI_TYPE_ARG,
+			coinType: HANEUL_TYPE_ARG,
 		});
 
 		const res = await toolbox.client.tryGetPastObject({
@@ -83,7 +83,7 @@ describe('Object Reading API', () => {
 	it('handles trying to get a newer version than the latest version', async () => {
 		const { data } = await toolbox.client.getCoins({
 			owner: toolbox.address(),
-			coinType: SUI_TYPE_ARG,
+			coinType: HANEUL_TYPE_ARG,
 		});
 
 		const res = await toolbox.client.tryGetPastObject({
@@ -97,7 +97,7 @@ describe('Object Reading API', () => {
 	it('handles fetching versions that do not exist', async () => {
 		const { data } = await toolbox.client.getCoins({
 			owner: toolbox.address(),
-			coinType: SUI_TYPE_ARG,
+			coinType: HANEUL_TYPE_ARG,
 		});
 
 		const res = await toolbox.client.tryGetPastObject({
@@ -112,7 +112,7 @@ describe('Object Reading API', () => {
 	it('can find old versions of objects', async () => {
 		const { data } = await toolbox.client.getCoins({
 			owner: toolbox.address(),
-			coinType: SUI_TYPE_ARG,
+			coinType: HANEUL_TYPE_ARG,
 		});
 
 		const tx = new Transaction();

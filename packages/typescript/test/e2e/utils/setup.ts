@@ -18,7 +18,7 @@ import {
 } from '../../../src/faucet/index.js';
 import { Ed25519Keypair } from '../../../src/keypairs/ed25519/index.js';
 import { Transaction, UpgradePolicy } from '../../../src/transactions/index.js';
-import { SUI_TYPE_ARG } from '../../../src/utils/index.js';
+import { HANEUL_TYPE_ARG } from '../../../src/utils/index.js';
 
 const DEFAULT_FAUCET_URL = import.meta.env.FAUCET_URL ?? getFaucetHost('localnet');
 const DEFAULT_FULLNODE_URL = import.meta.env.FULLNODE_URL ?? getFullnodeUrl('localnet');
@@ -103,7 +103,7 @@ export class TestToolbox {
 	async getGasObjectsOwnedByAddress() {
 		return await this.client.getCoins({
 			owner: this.address(),
-			coinType: SUI_TYPE_ARG,
+			coinType: HANEUL_TYPE_ARG,
 		});
 	}
 

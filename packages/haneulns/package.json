@@ -1,7 +1,7 @@
 {
 	"name": "@haneullabs/haneulns",
 	"author": "Haneul Labs <build@haneullabs.com>",
-	"description": "SuiNS SDK",
+	"description": "HaneulNS SDK",
 	"version": "0.9.13",
 	"license": "Apache-2.0",
 	"private": false,
@@ -10,8 +10,8 @@
 	"module": "./dist/esm/index.js",
 	"types": "./dist/cjs/index.d.ts",
 	"keywords": [
-		"Sui",
-		"suins",
+		"Haneul",
+		"haneulns",
 		"haneullabs"
 	],
 	"exports": {
@@ -58,6 +58,6 @@
 		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/haneullabs/suins-contracts/issues"
+		"url": "https://github.com/GeunhwaJeong/haneulns-contracts/issues"
 	}
 }

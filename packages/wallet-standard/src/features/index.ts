@@ -19,9 +19,9 @@ import type { HaneulSignTransactionBlockFeature } from './haneulSignTransactionB
 import type { HaneulGetCapabilitiesFeature } from './haneulGetCapabilities.js';
 
 /**
- * Wallet Standard features that are unique to Sui, and that all Haneul wallets are expected to implement.
+ * Wallet Standard features that are unique to Haneul, and that all Haneul wallets are expected to implement.
  */
-export type SuiFeatures = Partial<HaneulSignTransactionBlockFeature> &
+export type HaneulFeatures = Partial<HaneulSignTransactionBlockFeature> &
 	Partial<HaneulSignAndExecuteTransactionBlockFeature> &
 	HaneulSignPersonalMessageFeature &
 	HaneulSignAndExecuteTransactionFeature &
@@ -33,18 +33,18 @@ export type SuiFeatures = Partial<HaneulSignTransactionBlockFeature> &
 
 export type HaneulWalletFeatures = StandardConnectFeature &
 	StandardEventsFeature &
-	SuiFeatures &
+	HaneulFeatures &
 	// Disconnect is an optional feature:
 	Partial<StandardDisconnectFeature>;
 
-export type WalletWithSuiFeatures = WalletWithFeatures<HaneulWalletFeatures>;
+export type WalletWithHaneulFeatures = WalletWithFeatures<HaneulWalletFeatures>;
 
 /**
  * Represents a wallet with the absolute minimum feature set required to function in the Haneul ecosystem.
  */
 export type WalletWithRequiredFeatures = WalletWithFeatures<
 	MinimallyRequiredFeatures &
-		Partial<SuiFeatures> &
+		Partial<HaneulFeatures> &
 		Partial<StandardDisconnectFeature> &
 		IdentifierRecord<unknown>
 >;

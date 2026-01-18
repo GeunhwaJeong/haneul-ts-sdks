@@ -19,7 +19,7 @@ import { expect, inject } from 'vitest';
 
 import { DeepBookClient } from '../../src/index.js';
 import type { PoolSummary } from '../../src/types/index.js';
-import { FLOAT_SCALING_FACTOR, NORMALIZED_SUI_COIN_TYPE } from '../../src/utils/index.js';
+import { FLOAT_SCALING_FACTOR, NORMALIZED_HANEUL_COIN_TYPE } from '../../src/utils/index.js';
 
 const DEFAULT_FAUCET_URL = process.env.FAUCET_URL ?? getFaucetHost('localnet');
 const DEFAULT_FULLNODE_URL = process.env.FULLNODE_URL ?? getFullnodeUrl('localnet');
@@ -135,7 +135,7 @@ export async function publishPackage(packageName: string, toolbox?: TestToolbox)
 export async function setupPool(toolbox: TestToolbox): Promise<PoolSummary> {
 	const { packageId } = await publishPackage('test_coin', toolbox);
 	const baseAsset = `${packageId}::test::TEST`;
-	const quoteAsset = NORMALIZED_SUI_COIN_TYPE;
+	const quoteAsset = NORMALIZED_HANEUL_COIN_TYPE;
 	const deepbook = new DeepBookClient(toolbox.client);
 	const tx = deepbook.createPool(baseAsset, quoteAsset, DEFAULT_TICK_SIZE, DEFAULT_LOT_SIZE);
 	const resp = await executeTransaction(toolbox, tx);

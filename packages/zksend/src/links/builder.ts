@@ -8,7 +8,7 @@ import type { Keypair, Signer } from '@haneullabs/haneul/cryptography';
 import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import type { TransactionObjectArgument, TransactionObjectInput } from '@haneullabs/haneul/transactions';
 import { Transaction } from '@haneullabs/haneul/transactions';
-import { normalizeStructTag, normalizeHaneulAddress, SUI_TYPE_ARG, toBase64 } from '@haneullabs/haneul/utils';
+import { normalizeStructTag, normalizeHaneulAddress, HANEUL_TYPE_ARG, toBase64 } from '@haneullabs/haneul/utils';
 
 import type { ZkBagContractOptions } from './zk-bag.js';
 import { getContractIds, ZkBag } from './zk-bag.js';
@@ -29,7 +29,7 @@ const DEFAULT_ZK_SEND_LINK_OPTIONS = {
 	network: 'mainnet' as const,
 };
 
-const SUI_COIN_TYPE = normalizeStructTag(SUI_TYPE_ARG);
+const HANEUL_COIN_TYPE = normalizeStructTag(HANEUL_TYPE_ARG);
 
 export interface CreateZkSendLinkOptions {
 	transaction?: Transaction;
@@ -78,7 +78,7 @@ export class ZkSendLinkBuilder {
 	}
 
 	addClaimableGeunhwa(amount: bigint) {
-		this.addClaimableBalance(SUI_COIN_TYPE, amount);
+		this.addClaimableBalance(HANEUL_COIN_TYPE, amount);
 	}
 
 	addClaimableBalance(coinType: string, amount: bigint) {
@@ -196,7 +196,7 @@ export class ZkSendLinkBuilder {
 		);
 
 		for (const [coinType, amount] of this.balances) {
-			if (coinType === SUI_COIN_TYPE) {
+			if (coinType === HANEUL_COIN_TYPE) {
 				const [sui] = tx.splitCoins(tx.gas, [amount]);
 				refsWithType.push({
 					ref: sui,
@@ -371,11 +371,11 @@ export class ZkSendLinkBuilder {
 		}
 
 		const mergedCoins = new Map<string, TransactionObjectArgument>([
-			[SUI_COIN_TYPE, transaction.gas],
+			[HANEUL_COIN_TYPE, transaction.gas],
 		]);
 
 		for (const [coinType, coins] of coinsByType) {
-			if (coinType === SUI_COIN_TYPE) {
+			if (coinType === HANEUL_COIN_TYPE) {
 				continue;
 			}
 

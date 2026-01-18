@@ -1,11 +1,11 @@
 {
 	"root": true,
 	"title": "Dapp Kit",
-	"description": "Build Sui dapps in React",
+	"description": "Build Haneul dapps in React",
 	"pages": [
 		"index",
 		"create-dapp",
-		"sui-client-provider",
+		"haneul-client-provider",
 		"rpc-hooks",
 		"wallet-provider",
 		"wallet-components",

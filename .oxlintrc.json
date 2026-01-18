@@ -31,7 +31,7 @@
 		"generated",
 		"vite-env.d.ts",
 		".git",
-		"packages/suins/examples",
+		"packages/haneulns/examples",
 		"packages/deepbook-v3/examples",
 		"packages/utils/src/dataloader.ts"
 	],

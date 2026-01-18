@@ -3,7 +3,7 @@
 
 import { parse } from 'valibot';
 
-import { normalizeHaneulAddress, normalizeHaneulObjectId, SUI_TYPE_ARG } from '../utils/index.js';
+import { normalizeHaneulAddress, normalizeHaneulObjectId, HANEUL_TYPE_ARG } from '../utils/index.js';
 import { ObjectRefSchema } from '../transactions/data/internal.js';
 import type { CallArg, Command, OpenMoveTypeSignature } from '../transactions/data/internal.js';
 import { Inputs } from '../transactions/Inputs.js';
@@ -92,7 +92,7 @@ async function setGasPayment(transactionData: TransactionDataBuilder, client: Ha
 	if (!transactionData.gasConfig.payment) {
 		const coins = await client.getCoins({
 			owner: transactionData.gasConfig.owner || transactionData.sender!,
-			coinType: SUI_TYPE_ARG,
+			coinType: HANEUL_TYPE_ARG,
 		});
 
 		const paymentCoins = coins.data
