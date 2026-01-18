@@ -2,7 +2,7 @@
 	"name": "@haneullabs/deepbook-v3",
 	"author": "Haneul Labs <build@haneullabs.com>",
 	"description": "Sui Deepbook SDK",
-	"version": "0.27.0",
+	"version": "0.1.0",
 	"license": "Apache-2.0",
 	"type": "commonjs",
 	"main": "./dist/cjs/index.js",
@@ -48,9 +48,9 @@
 		"axios-retry": "^4.5.0"
 	},
 	"devDependencies": {
-		"@iarna/toml": "^2.2.5",
 		"@haneullabs/build-scripts": "workspace:*",
 		"@haneullabs/codegen": "workspace:*",
+		"@iarna/toml": "^2.2.5",
 		"@types/node": "^24.10.1",
 		"tmp": "^0.2.5",
 		"ts-node": "^10.9.2",

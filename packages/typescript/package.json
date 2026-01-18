@@ -3,7 +3,7 @@
 	"author": "Haneul Labs <build@haneullabs.com>",
 	"description": "Haneul TypeScript API",
 	"homepage": "https://sdk.haneullabs.com",
-	"version": "1.45.2",
+	"version": "0.1.0",
 	"license": "Apache-2.0",
 	"sideEffects": false,
 	"files": [
@@ -158,8 +158,8 @@
 		"@graphql-codegen/typescript": "5.0.6",
 		"@graphql-codegen/typescript-document-nodes": "5.0.6",
 		"@graphql-codegen/typescript-operations": "^5.0.6",
-		"@iarna/toml": "^2.2.5",
 		"@haneullabs/build-scripts": "workspace:^",
+		"@iarna/toml": "^2.2.5",
 		"@parcel/watcher": "^2.5.1",
 		"@types/node": "^24.10.1",
 		"@types/tmp": "^0.2.6",

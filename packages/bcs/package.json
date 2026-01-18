@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/bcs",
-	"version": "1.9.2",
+	"version": "0.1.0",
 	"description": "BCS - Canonical Binary Serialization implementation for JavaScript",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneullabs.com>",

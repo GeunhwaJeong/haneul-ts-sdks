@@ -2,7 +2,7 @@
 	"name": "@haneullabs/dapp-kit-react",
 	"author": "Haneul Labs <build@haneullabs.com>",
 	"description": "React bindings for @haneullabs/dapp-kit-core",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"license": "Apache-2.0",
 	"private": true,
 	"files": [
@@ -47,8 +47,8 @@
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"@lit/react": "^1.0.8",
 		"@haneullabs/dapp-kit-core": "workspace:*",
+		"@lit/react": "^1.0.8",
 		"@nanostores/react": "^1.0.0",
 		"nanostores": "^1.1.0"
 	},

@@ -3,7 +3,7 @@
 	"author": "Haneul Labs <build@haneullabs.com>",
 	"description": "A CLI for creating new Haneul dApps",
 	"homepage": "https://sdk.haneullabs.com",
-	"version": "0.5.13",
+	"version": "0.1.0",
 	"license": "Apache-2.0",
 	"files": [
 		"CHANGELOG.md",

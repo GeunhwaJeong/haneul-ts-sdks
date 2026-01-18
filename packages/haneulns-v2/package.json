@@ -2,7 +2,7 @@
 	"name": "@haneullabs/haneulns-v2",
 	"author": "Haneul Labs <build@haneullabs.com>",
 	"description": "This will eventually be merged back into the main haneulns package",
-	"version": "0.0,0",
+	"version": "0.1.0",
 	"license": "Apache-2.0",
 	"private": true,
 	"type": "commonjs",

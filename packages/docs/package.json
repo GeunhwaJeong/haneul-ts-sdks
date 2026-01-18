@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/sdk-docs",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"private": true,
 	"scripts": {
 		"build": "typedoc && next build",
@@ -23,13 +23,13 @@
 		"@haneullabs/deepbook-v3": "workspace:*",
 		"@haneullabs/enoki": "workspace:*",
 		"@haneullabs/enoki-connect": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
+		"@haneullabs/haneulns": "workspace:*",
 		"@haneullabs/kiosk": "workspace:*",
 		"@haneullabs/payment-kit": "workspace:*",
 		"@haneullabs/seal": "workspace:*",
 		"@haneullabs/signers": "workspace:*",
 		"@haneullabs/slush-wallet": "workspace:*",
-		"@haneullabs/haneul": "workspace:*",
-		"@haneullabs/haneulns": "workspace:*",
 		"@haneullabs/utils": "workspace:*",
 		"@haneullabs/wallet-standard": "workspace:*",
 		"@haneullabs/walrus": "workspace:*",

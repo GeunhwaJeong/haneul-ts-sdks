@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/walrus",
-	"version": "0.9.0",
+	"version": "0.1.0",
 	"private": false,
 	"description": "Walrus SDK",
 	"license": "Apache-2.0",
@@ -43,11 +43,11 @@
 	},
 	"homepage": "https://sdk.haneullabs.com/walrus",
 	"devDependencies": {
-		"@hono/node-server": "^1.19.6",
 		"@haneullabs/build-scripts": "workspace:*",
 		"@haneullabs/codegen": "workspace:*",
 		"@haneullabs/dapp-kit-core": "workspace:*",
 		"@haneullabs/dapp-kit-react": "workspace:*",
+		"@hono/node-server": "^1.19.6",
 		"@tanstack/react-query": "^5.90.11",
 		"@types/node": "^24.10.1",
 		"@types/react": "^19.2.7",

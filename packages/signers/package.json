@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/signers",
-	"version": "0.6.2",
+	"version": "0.1.0",
 	"description": "A collection of signers for various providers",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneullabs.com>",
@@ -64,8 +64,8 @@
 	},
 	"dependencies": {
 		"@google-cloud/kms": "^4.5.0",
-		"@haneullabs/ledgerjs-hw-app-haneul": "workspace:*",
 		"@haneullabs/haneul": "workspace:*",
+		"@haneullabs/ledgerjs-hw-app-haneul": "workspace:*",
 		"@noble/curves": "=1.9.4",
 		"@noble/hashes": "^1.8.0",
 		"asn1-ts": "^8.0.2"

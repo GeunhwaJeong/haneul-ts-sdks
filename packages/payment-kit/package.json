@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/payment-kit",
-	"version": "0.0.20",
+	"version": "0.1.0",
 	"private": false,
 	"description": "Haneul Payment Kit",
 	"license": "Apache-2.0",
