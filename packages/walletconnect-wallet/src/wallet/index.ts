@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromBase64, toBase64 } from '@mysten/sui/utils';
+import { fromBase64, toBase64 } from '@haneullabs/haneul/utils';
 import type {
 	IdentifierArray,
 	StandardConnectFeature,
@@ -11,33 +11,33 @@ import type {
 	StandardEventsFeature,
 	StandardEventsListeners,
 	StandardEventsOnMethod,
-	SuiSignAndExecuteTransactionFeature,
-	SuiSignAndExecuteTransactionMethod,
-	SuiSignPersonalMessageFeature,
-	SuiSignPersonalMessageMethod,
-	SuiSignTransactionFeature,
-	SuiSignTransactionMethod,
+	HaneulSignAndExecuteTransactionFeature,
+	HaneulSignAndExecuteTransactionMethod,
+	HaneulSignPersonalMessageFeature,
+	HaneulSignPersonalMessageMethod,
+	HaneulSignTransactionFeature,
+	HaneulSignTransactionMethod,
 	Wallet,
 	WalletIcon,
-} from '@mysten/wallet-standard';
+} from '@haneullabs/wallet-standard';
 import {
 	getWallets,
 	ReadonlyWalletAccount,
 	StandardConnect,
 	StandardDisconnect,
 	StandardEvents,
-	SUI_CHAINS,
-	SuiSignAndExecuteTransaction,
-	SuiSignPersonalMessage,
-	SuiSignTransaction,
-} from '@mysten/wallet-standard';
-import { mitt, type Emitter } from '@mysten/utils';
+	HANEUL_CHAINS,
+	HaneulSignAndExecuteTransaction,
+	HaneulSignPersonalMessage,
+	HaneulSignTransaction,
+} from '@haneullabs/wallet-standard';
+import { mitt, type Emitter } from '@haneullabs/utils';
 import type { InferOutput } from 'valibot';
 import { boolean, object, string } from 'valibot';
 import type { CustomCaipNetwork } from '@reown/appkit-universal-connector';
 import { UniversalConnector } from '@reown/appkit-universal-connector';
-import type { ClientWithCoreApi } from '@mysten/sui/client';
-import { Transaction } from '@mysten/sui/transactions';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/client';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 // -- Types --
 type WalletEventsMap = {
@@ -54,20 +54,20 @@ const icon =
 	'data:image/svg+xml;base64,PHN2ZyBmaWxsPSJub25lIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIHdpZHRoPSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxjbGlwUGF0aCBpZD0iYSI+PHBhdGggZD0ibTAgMGg0MDB2NDAwaC00MDB6Ii8+PC9jbGlwUGF0aD48ZyBjbGlwLXBhdGg9InVybCgjYSkiPjxjaXJjbGUgY3g9IjIwMCIgY3k9IjIwMCIgZmlsbD0iIzE0MTQxNCIgcj0iMTk5LjUiIHN0cm9rZT0iIzNiNDA0MCIvPjxwYXRoIGQ9Im0xMjIuNTE5IDE0OC45NjVjNDIuNzkxLTQxLjcyOSAxMTIuMTcxLTQxLjcyOSAxNTQuOTYyIDBsNS4xNSA1LjAyMmMyLjE0IDIuMDg2IDIuMTQgNS40NjkgMCA3LjU1NWwtMTcuNjE3IDE3LjE4Yy0xLjA3IDEuMDQzLTIuODA0IDEuMDQzLTMuODc0IDBsLTcuMDg3LTYuOTExYy0yOS44NTMtMjkuMTExLTc4LjI1My0yOS4xMTEtMTA4LjEwNiAwbC03LjU5IDcuNDAxYy0xLjA3IDEuMDQzLTIuODA0IDEuMDQzLTMuODc0IDBsLTE3LjYxNy0xNy4xOGMtMi4xNC0yLjA4Ni0yLjE0LTUuNDY5IDAtNy41NTV6bTE5MS4zOTcgMzUuNTI5IDE1LjY3OSAxNS4yOWMyLjE0IDIuMDg2IDIuMTQgNS40NjkgMCA3LjU1NWwtNzAuNyA2OC45NDRjLTIuMTM5IDIuMDg3LTUuNjA4IDIuMDg3LTcuNzQ4IDBsLTUwLjE3OC00OC45MzFjLS41MzUtLjUyMi0xLjQwMi0uNTIyLTEuOTM3IDBsLTUwLjE3OCA0OC45MzFjLTIuMTM5IDIuMDg3LTUuNjA4IDIuMDg3LTcuNzQ4IDBsLTcwLjcwMTUtNjguOTQ1Yy0yLjEzOTYtMi4wODYtMi4xMzk2LTUuNDY5IDAtNy41NTVsMTUuNjc5NS0xNS4yOWMyLjEzOTYtMi4wODcgNS42MDg1LTIuMDg3IDcuNzQ4MSAwbDUwLjE3ODkgNDguOTMyYy41MzUuNTIyIDEuNDAyLjUyMiAxLjkzNyAwbDUwLjE3Ny00OC45MzJjMi4xMzktMi4wODcgNS42MDgtMi4wODcgNy43NDggMGw1MC4xNzkgNDguOTMyYy41MzUuNTIyIDEuNDAyLjUyMiAxLjkzNyAwbDUwLjE3OS00OC45MzFjMi4xMzktMi4wODcgNS42MDgtMi4wODcgNy43NDggMHoiIGZpbGw9IiNmZmYiLz48L2c+PC9zdmc+';
 export const WALLETCONNECT_WALLET_NAME = 'WalletConnect' as const;
 const walletAccountFeatures = [
-	'sui:signTransaction',
-	'sui:signAndExecuteTransaction',
-	'sui:signPersonalMessage',
+	'haneul:signTransaction',
+	'haneul:signAndExecuteTransaction',
+	'haneul:signPersonalMessage',
 ] as const;
 
-const SUICaipNetworks: CustomCaipNetwork<'sui'>[] = SUI_CHAINS.map((chain) => {
+const HaneulCaipNetworks: CustomCaipNetwork<'sui'>[] = HANEUL_CHAINS.map((chain) => {
 	const [_, chainId] = chain.split(':');
 	return {
 		id: chainId,
 		chainNamespace: 'sui',
-		caipNetworkId: chain,
-		name: `Sui ${chainId}`,
-		nativeCurrency: { name: 'SUI', symbol: 'SUI', decimals: 9 },
-		rpcUrls: { default: { http: [`https://sui-${chainId}.gateway.tatum.io`] } },
+		caipNetworkId: `sui:${chainId}`,
+		name: `Haneul ${chainId}`,
+		nativeCurrency: { name: 'HANEUL', symbol: 'HANEUL', decimals: 9 },
+		rpcUrls: { default: { http: [`https://haneul-${chainId}.gateway.tatum.io`] } },
 	};
 });
 
@@ -120,7 +120,7 @@ export class WalletConnectWallet implements Wallet {
 	}
 
 	get chains() {
-		return SUI_CHAINS;
+		return HANEUL_CHAINS;
 	}
 
 	get accounts() {
@@ -130,9 +130,9 @@ export class WalletConnectWallet implements Wallet {
 	get features(): StandardConnectFeature &
 		StandardDisconnectFeature &
 		StandardEventsFeature &
-		SuiSignTransactionFeature &
-		SuiSignPersonalMessageFeature &
-		SuiSignAndExecuteTransactionFeature {
+		HaneulSignTransactionFeature &
+		HaneulSignPersonalMessageFeature &
+		HaneulSignAndExecuteTransactionFeature {
 		return {
 			[StandardConnect]: {
 				version: '1.0.0',
@@ -146,15 +146,15 @@ export class WalletConnectWallet implements Wallet {
 				version: '1.0.0',
 				on: this.#on,
 			},
-			[SuiSignTransaction]: {
+			[HaneulSignTransaction]: {
 				version: '2.0.0',
 				signTransaction: this.#signTransaction,
 			},
-			[SuiSignPersonalMessage]: {
+			[HaneulSignPersonalMessage]: {
 				version: '1.1.0',
 				signPersonalMessage: this.#signPersonalMessage,
 			},
-			[SuiSignAndExecuteTransaction]: {
+			[HaneulSignAndExecuteTransaction]: {
 				version: '2.0.0',
 				signAndExecuteTransaction: this.#signAndExecuteTransaction,
 			},
@@ -201,7 +201,7 @@ export class WalletConnectWallet implements Wallet {
 						'sui_getAccounts',
 					],
 					events: ['chainChanged', 'accountsChanged'],
-					chains: SUICaipNetworks,
+					chains: HaneulCaipNetworks,
 				},
 			],
 			modalConfig: {
@@ -213,7 +213,7 @@ export class WalletConnectWallet implements Wallet {
 		this.#accounts = await this.#getPreviouslyAuthorizedAccounts();
 	}
 
-	#signTransaction: SuiSignTransactionMethod = async ({ transaction, account, chain }) => {
+	#signTransaction: HaneulSignTransactionMethod = async ({ transaction, account, chain }) => {
 		const tx = await transaction.toJSON();
 
 		const response = (await this.#connector?.request(
@@ -233,7 +233,7 @@ export class WalletConnectWallet implements Wallet {
 		};
 	};
 
-	#signAndExecuteTransaction: SuiSignAndExecuteTransactionMethod = async ({
+	#signAndExecuteTransaction: HaneulSignAndExecuteTransactionMethod = async ({
 		transaction,
 		account,
 		chain,
@@ -269,7 +269,7 @@ export class WalletConnectWallet implements Wallet {
 		};
 	};
 
-	#signPersonalMessage: SuiSignPersonalMessageMethod = async ({ message, account, chain }) => {
+	#signPersonalMessage: HaneulSignPersonalMessageMethod = async ({ message, account, chain }) => {
 		const messageString = new TextDecoder().decode(message);
 		const response = (await this.#connector?.request(
 			{
@@ -279,7 +279,7 @@ export class WalletConnectWallet implements Wallet {
 					address: account.address,
 				},
 			},
-			chain ?? 'sui:mainnet',
+			chain ?? 'haneul:mainnet',
 		)) as { signature: string };
 
 		return {
@@ -304,7 +304,7 @@ export class WalletConnectWallet implements Wallet {
 		);
 
 		if (!accounts?.length) {
-			accounts = (await this.#connector?.request({ method: 'sui_getAccounts' }, 'sui:mainnet')) as {
+			accounts = (await this.#connector?.request({ method: 'sui_getAccounts' }, 'haneul:mainnet')) as {
 				address: string;
 				pubkey: string;
 			}[];
@@ -343,7 +343,7 @@ export class WalletConnectWallet implements Wallet {
 			pubkey: string;
 		}[];
 
-		return toStandardAccounts(accounts, SUI_CHAINS);
+		return toStandardAccounts(accounts, HANEUL_CHAINS);
 	};
 
 	#disconnect: StandardDisconnectMethod = async () => {

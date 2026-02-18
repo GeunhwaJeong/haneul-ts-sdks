@@ -3,13 +3,13 @@ title: Sign and Execute Transaction
 ---
 
 The `signAndExecuteTransaction` action prompts the connected wallet to sign and immediately execute
-a transaction on the Sui network. This is the most common way to execute transactions in your dApp.
+a transaction on the Haneul network. This is the most common way to execute transactions in your dApp.
 
 ## Usage
 
 ```typescript
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { Transaction, coinWithBalance } from '@mysten/sui/transactions';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { Transaction, coinWithBalance } from '@haneullabs/haneul/transactions';
 
 const dAppKit = createDAppKit({
 	/* config */
@@ -83,8 +83,8 @@ When passing a Transaction instance, the action automatically:
 
 ## Wallet Compatibility
 
-- The action transparently handles both `sui:signAndExecuteTransaction` and
-  `sui:signAndExecuteTransactionBlock` wallet-standard features
+- The action transparently handles both `haneul:signAndExecuteTransaction` and
+  `haneul:signAndExecuteTransactionBlock` wallet-standard features
 - The wallet handles network submission and response
 - Some wallets (Enoki, Enoki Connect, WalletConnect) may use the dApp Kit client and execute
   transactions within the application as an implementation detail

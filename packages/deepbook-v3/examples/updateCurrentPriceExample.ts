@@ -3,14 +3,14 @@
 
 /**
  * This example demonstrates how to:
- * 1. Batch update Pyth price feeds for all 4 mainnet assets (SUI, USDC, DEEP, WAL)
+ * 1. Batch update Pyth price feeds for all 4 mainnet assets (HANEUL, USDC, DEEP, WAL)
  * 2. Update the current price for SUI_USDC, DEEP_USDC, and WAL_USDC pools
  *
  * Usage:
  *   npx tsx examples/updateCurrentPriceExample.ts
  *
  * Or with a private key:
- *   PRIVATE_KEY=suiprivkey1... npx tsx examples/updateCurrentPriceExample.ts
+ *   PRIVATE_KEY=haneulprivkey1... npx tsx examples/updateCurrentPriceExample.ts
  */
 
 import { execSync } from 'child_process';
@@ -18,31 +18,31 @@ import { readFileSync } from 'fs';
 import { homedir } from 'os';
 import path from 'path';
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { decodeSuiPrivateKey } from '@mysten/sui/cryptography';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Secp256k1Keypair } from '@mysten/sui/keypairs/secp256k1';
-import { Secp256r1Keypair } from '@mysten/sui/keypairs/secp256r1';
-import { fromBase64 } from '@mysten/sui/utils';
-import { Transaction } from '@mysten/sui/transactions';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { decodeSuiPrivateKey } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Secp256k1Keypair } from '@haneullabs/haneul/keypairs/secp256k1';
+import { Secp256r1Keypair } from '@haneullabs/haneul/keypairs/secp256r1';
+import { fromBase64 } from '@haneullabs/haneul/utils';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { deepbook } from '../src/index.js';
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.SUI_BINARY ?? `haneul`;
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 type Network = 'mainnet' | 'testnet';
 
 const getActiveAddress = () => {
-	return execSync(`${SUI} client active-address`, { encoding: 'utf8' }).trim();
+	return execSync(`${HANEUL} client active-address`, { encoding: 'utf8' }).trim();
 };
 
 const getActiveNetwork = (): Network => {
-	const env = execSync(`${SUI} client active-env`, { encoding: 'utf8' }).trim();
+	const env = execSync(`${HANEUL} client active-env`, { encoding: 'utf8' }).trim();
 	if (env !== 'mainnet' && env !== 'testnet') {
 		throw new Error(`Unsupported network: ${env}. Only 'mainnet' and 'testnet' are supported.`);
 	}
@@ -64,7 +64,7 @@ const getSigner = () => {
 	const sender = getActiveAddress();
 
 	const keystore = JSON.parse(
-		readFileSync(path.join(homedir(), '.sui', 'sui_config', 'sui.keystore'), 'utf8'),
+		readFileSync(path.join(homedir(), '.haneul', 'haneul_config', 'haneul.keystore'), 'utf8'),
 	);
 
 	for (const priv of keystore) {
@@ -90,12 +90,12 @@ const getSigner = () => {
 	console.log(`Using address: ${address}`);
 	console.log(`Network: ${network}\n`);
 
-	const client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+	const client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 		deepbook({ address }),
 	);
 
 	// All 4 mainnet assets with Pyth price feeds
-	const coinKeys = ['SUI', 'USDC', 'DEEP', 'WAL'];
+	const coinKeys = ['HANEUL', 'USDC', 'DEEP', 'WAL'];
 
 	// Pools to update current price for
 	const poolKeys = ['SUI_USDC', 'DEEP_USDC', 'WAL_USDC'];

@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useDAppKit, useCurrentClient } from '@mysten/dapp-kit-react';
+import { useDAppKit, useCurrentClient } from '@haneullabs/dapp-kit-react';
 import { useState, useEffect, useCallback } from 'react';
-import { MIST_PER_SUI, parseStructTag } from '@mysten/sui/utils';
-import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
+import { GEUNHWA_PER_HANEUL, parseStructTag } from '@haneullabs/haneul/utils';
+import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
 import { TESTNET_WALRUS_PACKAGE_CONFIG } from '../../../src/index.js';
-import type { Signer } from '@mysten/sui/cryptography';
+import type { Signer } from '@haneullabs/haneul/cryptography';
 
 interface WalletBalancesProps {
 	onError: (error: string) => void;
@@ -45,7 +45,7 @@ export function WalletBalances({
 			if (!addressToCheck) return;
 
 			const [suiBal, walBal] = await Promise.all([
-				suiClient.getBalance({ owner: addressToCheck, coinType: '0x2::sui::SUI' }),
+				suiClient.getBalance({ owner: addressToCheck, coinType: '0x2::haneul::HANEUL' }),
 				suiClient.getBalance({
 					owner: addressToCheck,
 					coinType: TESTNET_WAL_COIN_TYPE,
@@ -65,9 +65,9 @@ export function WalletBalances({
 		setIsFunding(true);
 
 		try {
-			// Create a transaction to send 1 SUI to the keypair
+			// Create a transaction to send 1 HANEUL to the keypair
 			const tx = new Transaction();
-			const [coin] = tx.splitCoins(tx.gas, [1n * MIST_PER_SUI]);
+			const [coin] = tx.splitCoins(tx.gas, [1n * GEUNHWA_PER_HANEUL]);
 			tx.transferObjects([coin], signer.toSuiAddress());
 
 			// Sign and execute the transaction
@@ -156,7 +156,7 @@ export function WalletBalances({
 				arguments: [
 					tx.object(TESTNET_WALRUS_PACKAGE_CONFIG.exchangeIds[0]),
 					coinWithBalance({
-						balance: MIST_PER_SUI / 2n,
+						balance: GEUNHWA_PER_HANEUL / 2n,
 					}),
 				],
 			});
@@ -188,7 +188,7 @@ export function WalletBalances({
 		<div style={{ marginBottom: '15px' }}>
 			<h3 style={{ margin: '0 0 10px 0' }}>Keypair Balances</h3>
 			<div style={{ marginBottom: '10px' }}>
-				<strong>SUI:</strong> {formatBalance(suiBalance)} SUI
+				<strong>HANEUL:</strong> {formatBalance(suiBalance)} HANEUL
 				<span style={{ margin: '0 15px' }}>•</span>
 				<strong>WAL:</strong> {formatBalance(walBalance)} WAL
 			</div>
@@ -207,7 +207,7 @@ export function WalletBalances({
 						fontSize: '14px',
 					}}
 				>
-					{isFunding ? 'Funding...' : 'Fund with 1 SUI'}
+					{isFunding ? 'Funding...' : 'Fund with 1 HANEUL'}
 				</button>
 
 				<button
@@ -224,7 +224,7 @@ export function WalletBalances({
 						fontSize: '14px',
 					}}
 				>
-					{isSwapping ? 'Swapping...' : 'Swap 0.5 SUI for WAL'}
+					{isSwapping ? 'Swapping...' : 'Swap 0.5 HANEUL for WAL'}
 				</button>
 
 				<button

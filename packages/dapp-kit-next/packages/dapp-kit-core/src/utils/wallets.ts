@@ -4,11 +4,11 @@
 import {
 	StandardConnect,
 	StandardEvents,
-	SuiSignTransaction,
-	SuiSignTransactionBlock,
+	HaneulSignTransaction,
+	HaneulSignTransactionBlock,
 	WALLET_STANDARD_ERROR__FEATURES__WALLET_ACCOUNT_CHAIN_UNSUPPORTED,
 	WalletStandardError,
-} from '@mysten/wallet-standard';
+} from '@haneullabs/wallet-standard';
 import type { UiWallet, UiWalletAccount, UiWalletHandle } from '@wallet-standard/ui';
 import { getWalletAccountFeature, uiWalletAccountBelongsToUiWallet } from '@wallet-standard/ui';
 import { getWalletForHandle_DO_NOT_USE_OR_YOU_WILL_BE_FIRED as getWalletForHandle } from '@wallet-standard/ui-registry';
@@ -16,7 +16,7 @@ import { ChainNotSupportedError, DAppKitError, FeatureNotSupportedError } from '
 
 export const requiredWalletFeatures = [StandardConnect, StandardEvents] as const;
 
-export const signingFeatures = [SuiSignTransaction, SuiSignTransactionBlock] as const;
+export const signingFeatures = [HaneulSignTransaction, HaneulSignTransactionBlock] as const;
 
 export function getAssociatedWalletOrThrow(account: UiWalletAccount, wallets: UiWallet[]) {
 	const wallet = wallets.find((wallet) => uiWalletAccountBelongsToUiWallet(account, wallet));

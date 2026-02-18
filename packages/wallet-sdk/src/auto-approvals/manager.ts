@@ -1,13 +1,13 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiClientTypes } from '@mysten/sui/client';
+import type { HaneulClientTypes } from '@haneullabs/haneul/client';
 import { parse, safeParse } from 'valibot';
 import type { AutoApprovalState } from './schemas/state.js';
 import { AutoApprovalStateSchema } from './schemas/state.js';
 import type { AutoApprovalSettings } from './schemas/policy.js';
 import { AutoApprovalPolicySchema, AutoApprovalSettingsSchema } from './schemas/policy.js';
-import { parseStructTag } from '@mysten/sui/utils';
+import { parseStructTag } from '@haneullabs/haneul/utils';
 import type { AutoApprovalResult } from './analyzer.js';
 
 export interface AutoApprovalManagerOptions {
@@ -326,7 +326,7 @@ export class AutoApprovalManager {
 
 	applyTransactionEffects(
 		analysis: AutoApprovalResult,
-		result: SuiClientTypes.Transaction<{ balanceChanges: true }>,
+		result: HaneulClientTypes.Transaction<{ balanceChanges: true }>,
 	): void {
 		this.#removePendingDigest(result.digest);
 

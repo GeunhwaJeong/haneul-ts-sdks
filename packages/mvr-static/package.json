@@ -1,8 +1,8 @@
 {
-	"name": "@mysten/mvr-static",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"name": "@haneullabs/mvr-static",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"description": "The static generation tool for Move Registry (mvr)",
-	"homepage": "https://sdk.mystenlabs.com",
+	"homepage": "https://sdk.haneul-labs.com",
 	"version": "0.3.1",
 	"license": "Apache-2.0",
 	"files": [
@@ -35,10 +35,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MystenLabs/mvr/issues/new"
+		"url": "https://github.com/HaneulLabs/mvr/issues/new"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -48,7 +48,7 @@
 		"vitest": "^4.0.17"
 	},
 	"dependencies": {
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@types/node": "^25.0.8",
 		"enquirer": "^2.4.1",
 		"glob": "^13.0.0",

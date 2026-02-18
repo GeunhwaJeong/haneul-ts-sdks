@@ -2,10 +2,10 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 import * as blob_1 from './blob.js';
-import * as balance from './deps/sui/balance.js';
+import * as balance from './deps/haneul/balance.js';
 const $moduleName = '@local-pkg/walrus::shared_blob';
 export const SharedBlob = new MoveStruct({
 	name: `${$moduleName}::SharedBlob`,

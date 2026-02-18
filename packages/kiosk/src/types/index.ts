@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiClientTypes } from '@mysten/sui/client';
-import type { TransactionObjectArgument } from '@mysten/sui/transactions';
+import type { HaneulClientTypes } from '@haneullabs/haneul/client';
+import type { TransactionObjectArgument } from '@haneullabs/haneul/transactions';
 
 import type { BaseRulePackageIds } from '../constants.js';
-import { SuiJsonRpcClient } from '@mysten/sui/jsonRpc';
-import { SuiGraphQLClient } from '@mysten/sui/graphql';
+import { HaneulJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
+import { HaneulGraphQLClient } from '@haneullabs/haneul/graphql';
 
 export * from './kiosk.js';
 export * from './transfer-policy.js';
@@ -21,8 +21,8 @@ export type ObjectArgument = string | TransactionObjectArgument;
  */
 export type KioskClientOptions = {
 	client: KioskCompatibleClient;
-	network: SuiClientTypes.Network;
+	network: HaneulClientTypes.Network;
 	packageIds?: BaseRulePackageIds;
 };
 
-export type KioskCompatibleClient = SuiJsonRpcClient | SuiGraphQLClient;
+export type KioskCompatibleClient = HaneulJsonRpcClient | HaneulGraphQLClient;

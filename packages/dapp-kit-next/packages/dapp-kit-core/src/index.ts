@@ -13,7 +13,7 @@ export type {
 	DefaultExpectedDppKit,
 } from './types.js';
 export type { StateStorage } from './utils/storage.js';
-export type { ClientWithCoreApi } from '@mysten/sui/client';
+export type { ClientWithCoreApi } from '@haneullabs/haneul/client';
 
 export { getWalletUniqueIdentifier } from './utils/wallets.js';
 export type { UiWallet, UiWalletAccount } from '@wallet-standard/ui';

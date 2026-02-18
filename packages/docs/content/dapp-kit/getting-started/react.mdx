@@ -9,7 +9,7 @@ This guide walks you through integrating dApp Kit into a React application.
 The fastest way to get started is using our CLI tool:
 
 ```sh npm2yarn
-npm create @mysten/dapp
+npm create @haneullabs/dapp
 ```
 
 This creates a new project with:
@@ -31,7 +31,7 @@ See the [create-dapp guide](/dapp-kit/getting-started/create-dapp) for more deta
 ## Manual Installation
 
 ```sh npm2yarn
-npm i @mysten/dapp-kit-react @mysten/sui
+npm i @haneullabs/dapp-kit-react @haneullabs/haneul
 ```
 
 ## Setup
@@ -42,11 +42,11 @@ Create a file to configure your dApp Kit instance:
 
 ```tsx
 // dapp-kit.ts
-import { createDAppKit } from '@mysten/dapp-kit-react';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-react';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 };
 
 export const dAppKit = createDAppKit({
@@ -55,7 +55,7 @@ export const dAppKit = createDAppKit({
 });
 
 // Register types for hook type inference
-declare module '@mysten/dapp-kit-react' {
+declare module '@haneullabs/dapp-kit-react' {
 	interface Register {
 		dAppKit: typeof dAppKit;
 	}
@@ -68,14 +68,14 @@ Wrap your application with `DAppKitProvider`:
 
 ```tsx
 // App.tsx
-import { DAppKitProvider, ConnectButton } from '@mysten/dapp-kit-react';
+import { DAppKitProvider, ConnectButton } from '@haneullabs/dapp-kit-react';
 import { dAppKit } from './dapp-kit';
 
 export default function App() {
 	return (
 		<DAppKitProvider dAppKit={dAppKit}>
 			<div>
-				<h1>My Sui dApp</h1>
+				<h1>My Haneul dApp</h1>
 				<ConnectButton />
 				<WalletStatus />
 			</div>
@@ -89,7 +89,7 @@ export default function App() {
 Use hooks to access wallet state:
 
 ```tsx
-import { useCurrentAccount, useCurrentWallet, useCurrentNetwork } from '@mysten/dapp-kit-react';
+import { useCurrentAccount, useCurrentWallet, useCurrentNetwork } from '@haneullabs/dapp-kit-react';
 
 function WalletStatus() {
 	const account = useCurrentAccount();
@@ -115,8 +115,8 @@ function WalletStatus() {
 Use the `useDAppKit` hook to sign and execute transactions:
 
 ```tsx
-import { useDAppKit, useCurrentAccount } from '@mysten/dapp-kit-react';
-import { Transaction, coinWithBalance } from '@mysten/sui/transactions';
+import { useDAppKit, useCurrentAccount } from '@haneullabs/dapp-kit-react';
+import { Transaction, coinWithBalance } from '@haneullabs/haneul/transactions';
 
 function TransferButton() {
 	const dAppKit = useDAppKit();
@@ -170,7 +170,7 @@ function TransferButton() {
 ## Example Application
 
 See the complete
-[React example](https://github.com/MystenLabs/ts-sdks/tree/main/packages/dapp-kit-next/examples/react/simple)
+[React example](https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/dapp-kit-next/examples/react/simple)
 on GitHub.
 
 ## Next Steps

@@ -1,9 +1,9 @@
 {
-	"name": "@mysten/seal",
+	"name": "@haneullabs/seal",
 	"version": "1.0.1",
 	"description": "Seal SDK",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"type": "module",
 	"main": "./dist/index.mjs",
 	"types": "./dist/index.d.mts",
@@ -36,25 +36,25 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
 		"url": "https://github.com/mystenlabs/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/MystenLabs/seal#readme",
+	"homepage": "https://github.com/HaneulLabs/seal#readme",
 	"devDependencies": {
 		"@hey-api/openapi-ts": "^0.90.3",
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@types/node": "^25.0.8",
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.17"
 	},
 	"dependencies": {
-		"@mysten/bcs": "workspace:^",
+		"@haneullabs/bcs": "workspace:^",
 		"@noble/curves": "^2.0.1",
 		"@noble/hashes": "^2.0.1"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "workspace:^"
+		"@haneullabs/haneul": "workspace:^"
 	}
 }

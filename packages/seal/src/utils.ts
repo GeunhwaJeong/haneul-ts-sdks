@@ -1,16 +1,16 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromHex, toHex } from '@mysten/bcs';
-import { isValidSuiObjectId } from '@mysten/sui/utils';
+import { fromHex, toHex } from '@haneullabs/bcs';
+import { isValidHaneulObjectId } from '@haneullabs/haneul/utils';
 
 import { UserError } from './error.js';
 
 /** Maximum value for a u8 (unsigned 8-bit integer). */
 export const MAX_U8 = 255;
 
-/** Length of a Sui address. */
-export const SUI_ADDRESS_LENGTH = 32;
+/** Length of a Haneul address. */
+export const HANEUL_ADDRESS_LENGTH = 32;
 
 /** Length of an encrypted share. */
 export const ENCRYPTED_SHARE_LENGTH = 32;
@@ -36,7 +36,7 @@ export function xorUnchecked(a: Uint8Array, b: Uint8Array): Uint8Array {
  * @returns The full ID.
  */
 export function createFullId(packageId: string, innerId: string): string {
-	if (!isValidSuiObjectId(packageId)) {
+	if (!isValidHaneulObjectId(packageId)) {
 		throw new UserError(`Invalid package ID ${packageId}`);
 	}
 	const fullId = flatten([fromHex(packageId), fromHex(innerId)]);

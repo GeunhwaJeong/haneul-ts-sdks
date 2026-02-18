@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { PaginationArguments } from '@mysten/sui/jsonRpc';
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
-import { isValidSuiAddress } from '@mysten/sui/utils';
+import type { PaginationArguments } from '@haneullabs/haneul/jsonRpc';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
+import { isValidHaneulAddress } from '@haneullabs/haneul/utils';
 
 import { Extension, ExtensionKey } from '../contracts/0x2/kiosk_extension.js';
 import type {
@@ -88,7 +88,7 @@ export async function getOwnedKiosks(
 	},
 ): Promise<OwnedKiosks> {
 	// TODO: this should throw an error, but I am not going to change it right now incase it breaks existing code.
-	if (!isValidSuiAddress(address)) {
+	if (!isValidHaneulAddress(address)) {
 		return {
 			nextCursor: null,
 			hasNextPage: false,
@@ -123,7 +123,7 @@ export async function getOwnedKiosks(
 				(
 					item,
 				): item is {
-					obj: SuiClientTypes.Object<{ content: true }>;
+					obj: HaneulClientTypes.Object<{ content: true }>;
 					kioskId: string;
 				} => item.kioskId !== undefined,
 			);
@@ -175,7 +175,7 @@ export async function getOwnedKiosks(
 				(
 					item,
 				): item is {
-					obj: SuiClientTypes.Object<{ content: true }>;
+					obj: HaneulClientTypes.Object<{ content: true }>;
 					kioskId: string;
 				} => item.kioskId !== undefined,
 			);
@@ -221,7 +221,7 @@ export async function getOwnedKiosks(
 			(
 				item,
 			): item is {
-				obj: SuiClientTypes.Object<{ content: true }>;
+				obj: HaneulClientTypes.Object<{ content: true }>;
 				kioskId: string;
 			} => item.kioskId !== undefined,
 		);
@@ -239,7 +239,7 @@ export async function getOwnedKiosks(
 function formatOwnedKioskResponse(
 	response: {
 		data: {
-			obj: SuiClientTypes.Object<{ content: true }>;
+			obj: HaneulClientTypes.Object<{ content: true }>;
 			kioskId: string;
 		}[];
 		hasNextPage: boolean;

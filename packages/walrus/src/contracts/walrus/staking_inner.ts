@@ -2,8 +2,8 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveEnum, MoveStruct } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import * as object_table from './deps/sui/object_table.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import * as object_table from './deps/haneul/object_table.js';
 import * as extended_field from './extended_field.js';
 import * as committee from './committee.js';
 import * as epoch_parameters from './epoch_parameters.js';
@@ -38,7 +38,7 @@ export const StakingInnerV1 = new MoveStruct({
 		 */
 		pools: object_table.ObjectTable,
 		/**
-		 * The current epoch of the Walrus system. The epochs are not the same as the Sui
+		 * The current epoch of the Walrus system. The epochs are not the same as the Haneul
 		 * epochs, not to be mistaken with `ctx.epoch()`.
 		 */
 		epoch: bcs.u32(),

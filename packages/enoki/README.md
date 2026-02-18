@@ -1,4 +1,4 @@
-# `@mysten/enoki`
+# `@haneullabs/enoki`
 
 zkLogin authentication and sponsored transactions. Enable users to sign in with Google, Twitch,
 Facebook, and other OAuth providers, and execute transactions without gas fees.
@@ -8,12 +8,12 @@ Facebook, and other OAuth providers, and execute transactions without gas fees.
 - **zkLogin**: Authenticate users with OAuth providers (Google, Twitch, Facebook)
 - **Sponsored Transactions**: Execute transactions without requiring users to hold gas
 - **Wallet Integration**: Register Enoki wallets with dApp Kit
-- **Subname Management**: Create and manage SuiNS subnames
+- **Subname Management**: Create and manage HaneulNS subnames
 
 ## Installation
 
 ```sh
-npm install @mysten/enoki
+npm install @haneullabs/enoki
 ```
 
 ## Quick Start
@@ -21,7 +21,7 @@ npm install @mysten/enoki
 ### Register Enoki wallets
 
 ```ts
-import { registerEnokiWallets } from '@mysten/enoki';
+import { registerEnokiWallets } from '@haneullabs/enoki';
 
 registerEnokiWallets({
 	apiKey: 'your-enoki-api-key',
@@ -32,8 +32,8 @@ registerEnokiWallets({
 ### Use with React and dApp Kit
 
 ```tsx
-import { registerEnokiWallets } from '@mysten/enoki';
-import { useEnokiFlow } from '@mysten/enoki/react';
+import { registerEnokiWallets } from '@haneullabs/enoki';
+import { useEnokiFlow } from '@haneullabs/enoki/react';
 
 // In your app setup
 registerEnokiWallets({
@@ -52,7 +52,7 @@ function LoginButton() {
 ### Low-level client usage
 
 ```ts
-import { EnokiClient } from '@mysten/enoki';
+import { EnokiClient } from '@haneullabs/enoki';
 
 const client = new EnokiClient({
 	apiKey: 'your-enoki-api-key',
@@ -74,4 +74,4 @@ await client.executeSponsoredTransaction({
 
 ## Documentation
 
-See the [Enoki documentation](https://docs.enoki.mystenlabs.com) for detailed setup and usage.
+See the [Enoki documentation](https://docs.enoki.haneul-labs.com) for detailed setup and usage.

@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { registerSlushWallet } from '@mysten/slush-wallet';
+import { registerSlushWallet } from '@haneullabs/slush-wallet';
 import type { SlushWalletConfig } from '../core/types.js';
 import type { WalletInitializer } from './index.js';
 

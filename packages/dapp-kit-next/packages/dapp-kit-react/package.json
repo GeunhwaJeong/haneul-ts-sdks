@@ -1,7 +1,7 @@
 {
-	"name": "@mysten/dapp-kit-react",
-	"author": "Mysten Labs <build@mystenlabs.com>",
-	"description": "React bindings for @mysten/dapp-kit-core",
+	"name": "@haneullabs/dapp-kit-react",
+	"author": "Haneul Labs <build@haneul-labs.com>",
+	"description": "React bindings for @haneullabs/dapp-kit-core",
 	"version": "1.0.2",
 	"license": "Apache-2.0",
 	"files": [
@@ -34,10 +34,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MystenLabs/ts-sdks/issues/new"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues/new"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -50,7 +50,7 @@
 	},
 	"dependencies": {
 		"@lit/react": "^1.0.8",
-		"@mysten/dapp-kit-core": "workspace:^",
+		"@haneullabs/dapp-kit-core": "workspace:^",
 		"@nanostores/react": "^1.0.0",
 		"nanostores": "^1.1.0"
 	},

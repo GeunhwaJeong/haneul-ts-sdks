@@ -1,7 +1,7 @@
 # Demo DApp
 
 This demo dApp provides a basic example of integrating WalletConnect wallet
-connector into your Sui application. It demonstrates key wallet integration
+connector into your Haneul application. It demonstrates key wallet integration
 features including:
 
 - Setting up the WalletProvider to use WalletConnect compatible wallets

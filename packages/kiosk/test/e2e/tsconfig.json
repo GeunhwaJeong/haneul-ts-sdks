@@ -1,6 +1,6 @@
 {
 	"extends": "../../tsconfig.json",
-	"include": ["./**/*", "../../src", "../../../sui"],
+	"include": ["./**/*", "../../src", "../../../haneul"],
 	"compilerOptions": {
 		"rootDir": "../../..",
 		"noEmit": true,

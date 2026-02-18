@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi, SuiClientRegistration } from '@mysten/sui/client';
-import type { Keypair } from '@mysten/sui/cryptography';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import type { Transaction } from '@mysten/sui/transactions';
-import { fromBase64 } from '@mysten/sui/utils';
+import type { ClientWithCoreApi, HaneulClientRegistration } from '@haneullabs/haneul/client';
+import type { Keypair } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import type { Transaction } from '@haneullabs/haneul/transactions';
+import { fromBase64 } from '@haneullabs/haneul/utils';
 
 import { ZkSendLink } from './links/claim.js';
 import { ZkSendLinkBuilder } from './links/builder.js';
@@ -155,7 +155,7 @@ export class ZkSendClient {
 export function zksend<Name extends string = 'zksend'>({
 	name = 'zksend' as Name,
 	...options
-}: ZkSendOptions<Name> = {}): SuiClientRegistration<ZkSendCompatibleClient, Name, ZkSendClient> {
+}: ZkSendOptions<Name> = {}): HaneulClientRegistration<ZkSendCompatibleClient, Name, ZkSendClient> {
 	return {
 		name,
 		register: (client) => {

@@ -6,15 +6,15 @@
 import {
 	ConnectButton,
 	ConnectModal,
-	SuiClientProvider,
+	HaneulClientProvider,
 	useCurrentAccount,
 	WalletProvider,
-} from '@mysten/dapp-kit';
-import { getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+} from '@haneullabs/dapp-kit';
+import { getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import '@mysten/dapp-kit/dist/index.css';
+import '@haneullabs/dapp-kit/dist/index.css';
 
 export const ConnectButtonExample = withProviders(() => {
 	return <ConnectButton />;
@@ -66,7 +66,7 @@ function withProviders(Component: React.FunctionComponent<object>) {
 
 		return (
 			<QueryClientProvider client={queryClient}>
-				<SuiClientProvider networks={networks}>
+				<HaneulClientProvider networks={networks}>
 					<WalletProvider
 						slushWallet={{
 							name: 'dApp Kit Docs',
@@ -74,7 +74,7 @@ function withProviders(Component: React.FunctionComponent<object>) {
 					>
 						<Component />
 					</WalletProvider>
-				</SuiClientProvider>
+				</HaneulClientProvider>
 			</QueryClientProvider>
 		);
 	};

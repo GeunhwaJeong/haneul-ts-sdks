@@ -8,8 +8,8 @@ export function buildCli(version: string) {
 	const routes = buildRouteMap({
 		routes: {
 			generate: generateCommand,
-			install: buildInstallCommand('sui-ts-codegen', { bash: '__sui-ts-codegen_bash_complete' }),
-			uninstall: buildUninstallCommand('sui-ts-codegen', { bash: true }),
+			install: buildInstallCommand('haneul-ts-codegen', { bash: '__haneul-ts-codegen_bash_complete' }),
+			uninstall: buildUninstallCommand('haneul-ts-codegen', { bash: true }),
 		},
 		docs: {
 			brief: 'Generate TypeScript bindings for your Move code',
@@ -21,7 +21,7 @@ export function buildCli(version: string) {
 	});
 
 	return buildApplication(routes, {
-		name: 'sui-ts-codegen',
+		name: 'haneul-ts-codegen',
 		versionInfo: {
 			currentVersion: version,
 		},

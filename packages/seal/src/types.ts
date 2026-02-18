@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithExtensions, CoreClient } from '@mysten/sui/client';
+import type { ClientWithExtensions, CoreClient } from '@haneullabs/haneul/client';
 import type { DemType, KemType } from './encrypt.js';
 import type { SessionKey } from './session-key.js';
 

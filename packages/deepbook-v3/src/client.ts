@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { bcs } from '@mysten/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import { Account, Order, OrderDeepPrice, VecSet } from './types/bcs.js';
-import type { ClientWithCoreApi, SuiClientRegistration, SuiClientTypes } from '@mysten/sui/client';
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import type { ClientWithCoreApi, HaneulClientRegistration, HaneulClientTypes } from '@haneullabs/haneul/client';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import { BalanceManagerContract } from './transactions/balanceManager.js';
 import { DeepBookContract } from './transactions/deepbook.js';
@@ -30,8 +30,8 @@ import { MarginPoolContract } from './transactions/marginPool.js';
 import { MarginManagerContract } from './transactions/marginManager.js';
 import { MarginRegistryContract } from './transactions/marginRegistry.js';
 import { MarginLiquidationsContract } from './transactions/marginLiquidations.js';
-import { SuiPriceServiceConnection } from './pyth/pyth.js';
-import { SuiPythClient } from './pyth/pyth.js';
+import { HaneulPriceServiceConnection } from './pyth/pyth.js';
+import { HaneulPythClient } from './pyth/pyth.js';
 import { PriceInfoObject } from './contracts/pyth/price_info.js';
 import { PoolProxyContract } from './transactions/poolProxy.js';
 import { MarginTPSLContract } from './transactions/marginTPSL.js';
@@ -52,13 +52,13 @@ export interface DeepBookOptions<Name = 'deepbook'> {
 
 export interface DeepBookClientOptions extends DeepBookOptions {
 	client: DeepBookCompatibleClient;
-	network: SuiClientTypes.Network;
+	network: HaneulClientTypes.Network;
 }
 
 export function deepbook<Name extends string = 'deepbook'>({
 	name = 'deepbook' as Name,
 	...options
-}: DeepBookOptions<Name>): SuiClientRegistration<DeepBookCompatibleClient, Name, DeepBookClient> {
+}: DeepBookOptions<Name>): HaneulClientRegistration<DeepBookCompatibleClient, Name, DeepBookClient> {
 	return {
 		name,
 		register: (client) => {
@@ -108,7 +108,7 @@ export class DeepBookClient {
 		marginMaintainerCap,
 	}: DeepBookClientOptions) {
 		this.#client = client;
-		this.#address = normalizeSuiAddress(address);
+		this.#address = normalizeHaneulAddress(address);
 		this.#config = new DeepBookConfig({
 			address: this.#address,
 			network,
@@ -842,7 +842,7 @@ export class DeepBookClient {
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const vecOfAddresses = bcs.vector(bcs.Address).parse(bytes);
 
-		return vecOfAddresses.map((id: string) => normalizeSuiAddress(id));
+		return vecOfAddresses.map((id: string) => normalizeHaneulAddress(id));
 	}
 
 	/**
@@ -921,7 +921,7 @@ export class DeepBookClient {
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const poolId = bcs.Address.parse(bytes);
 
-		return normalizeSuiAddress(poolId);
+		return normalizeHaneulAddress(poolId);
 	}
 
 	/**
@@ -967,7 +967,7 @@ export class DeepBookClient {
 			if (optionId === null) {
 				return null;
 			}
-			return normalizeSuiAddress(optionId);
+			return normalizeHaneulAddress(optionId);
 		} catch {
 			return null;
 		}
@@ -983,12 +983,12 @@ export class DeepBookClient {
 			return await this.#config.getCoin(coinKey).priceInfoObjectId!;
 		}
 
-		// Initialize connection to the Sui Price Service
+		// Initialize connection to the Haneul Price Service
 		const endpoint =
 			this.#config.network === 'testnet'
 				? 'https://hermes-beta.pyth.network'
 				: 'https://hermes.pyth.network';
-		const connection = new SuiPriceServiceConnection(endpoint);
+		const connection = new HaneulPriceServiceConnection(endpoint);
 
 		// List of price feed IDs
 		const priceIDs = [
@@ -998,11 +998,11 @@ export class DeepBookClient {
 		// Fetch price feed update data
 		const priceUpdateData = await connection.getPriceFeedsUpdateData(priceIDs);
 
-		// Initialize Sui Client and Pyth Client
+		// Initialize Haneul Client and Pyth Client
 		const wormholeStateId = this.#config.pyth.wormholeStateId;
 		const pythStateId = this.#config.pyth.pythStateId;
 
-		const client = new SuiPythClient(this.#client, pythStateId, wormholeStateId);
+		const client = new HaneulPythClient(this.#client, pythStateId, wormholeStateId);
 
 		return (await client.updatePriceFeeds(tx, priceUpdateData, priceIDs))[0]; // returns priceInfoObjectIds
 	}
@@ -1078,12 +1078,12 @@ export class DeepBookClient {
 			feedIdToCoinKey[feedId] = coinKey;
 		}
 
-		// Initialize connection to the Sui Price Service
+		// Initialize connection to the Haneul Price Service
 		const endpoint =
 			this.#config.network === 'testnet'
 				? 'https://hermes-beta.pyth.network'
 				: 'https://hermes.pyth.network';
-		const connection = new SuiPriceServiceConnection(endpoint);
+		const connection = new HaneulPriceServiceConnection(endpoint);
 
 		// Fetch all stale price updates from Pyth in a single API call
 		const priceUpdateData = await connection.getPriceFeedsUpdateData(staleFeedIds);
@@ -1091,7 +1091,7 @@ export class DeepBookClient {
 		// Initialize Pyth Client
 		const wormholeStateId = this.#config.pyth.wormholeStateId;
 		const pythStateId = this.#config.pyth.pythStateId;
-		const pythClient = new SuiPythClient(this.#client, pythStateId, wormholeStateId);
+		const pythClient = new HaneulPythClient(this.#client, pythStateId, wormholeStateId);
 
 		// Update all stale feeds in the transaction
 		const updatedObjectIds = await pythClient.updatePriceFeeds(tx, priceUpdateData, staleFeedIds);
@@ -1437,7 +1437,7 @@ export class DeepBookClient {
 		});
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
-		return normalizeSuiAddress(bcs.Address.parse(bytes));
+		return normalizeHaneulAddress(bcs.Address.parse(bytes));
 	}
 
 	/**
@@ -1456,7 +1456,7 @@ export class DeepBookClient {
 		});
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
-		return normalizeSuiAddress(bcs.Address.parse(bytes));
+		return normalizeHaneulAddress(bcs.Address.parse(bytes));
 	}
 
 	/**
@@ -1476,7 +1476,7 @@ export class DeepBookClient {
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const option = bcs.option(bcs.Address).parse(bytes);
-		return option ? normalizeSuiAddress(option) : null;
+		return option ? normalizeHaneulAddress(option) : null;
 	}
 
 	/**
@@ -1577,7 +1577,7 @@ export class DeepBookClient {
 		});
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
-		return normalizeSuiAddress(bcs.Address.parse(bytes));
+		return normalizeHaneulAddress(bcs.Address.parse(bytes));
 	}
 
 	/**
@@ -1738,10 +1738,10 @@ export class DeepBookClient {
 		const quoteCoin = this.#config.getCoin(pool.quoteCoin);
 
 		// Parse all 11 return values
-		const managerId = normalizeSuiAddress(
+		const managerId = normalizeHaneulAddress(
 			bcs.Address.parse(res.commandResults[0].returnValues[0].bcs),
 		);
-		const deepbookPoolId = normalizeSuiAddress(
+		const deepbookPoolId = normalizeHaneulAddress(
 			bcs.Address.parse(res.commandResults[0].returnValues[1].bcs),
 		);
 		const riskRatio =
@@ -1889,8 +1889,8 @@ export class DeepBookClient {
 			const baseCoin = this.#config.getCoin(pool.baseCoin);
 			const quoteCoin = this.#config.getCoin(pool.quoteCoin);
 
-			const managerId = normalizeSuiAddress(bcs.Address.parse(commandResult.returnValues[0].bcs));
-			const deepbookPoolId = normalizeSuiAddress(
+			const managerId = normalizeHaneulAddress(bcs.Address.parse(commandResult.returnValues[0].bcs));
+			const deepbookPoolId = normalizeHaneulAddress(
 				bcs.Address.parse(commandResult.returnValues[1].bcs),
 			);
 			const riskRatio = Number(bcs.U64.parse(commandResult.returnValues[2].bcs)) / FLOAT_SCALAR;
@@ -2143,7 +2143,7 @@ export class DeepBookClient {
 		const tx = new Transaction();
 		tx.add(this.marginManager.getMarginAccountOrderDetails(manager.poolKey, manager.address));
 
-		tx.setSenderIfNotSet(normalizeSuiAddress(this.#address));
+		tx.setSenderIfNotSet(normalizeHaneulAddress(this.#address));
 
 		const res = await this.#client.core.simulateTransaction({
 			transaction: tx,
@@ -2296,7 +2296,7 @@ export class DeepBookClient {
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const vecSet = VecSet(bcs.Address).parse(bytes);
-		return vecSet.contents.map((id) => normalizeSuiAddress(id));
+		return vecSet.contents.map((id) => normalizeHaneulAddress(id));
 	}
 
 	/**
@@ -2466,7 +2466,7 @@ export class DeepBookClient {
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const vecSet = VecSet(bcs.Address).parse(bytes);
-		return vecSet.contents.map((id) => normalizeSuiAddress(id));
+		return vecSet.contents.map((id) => normalizeHaneulAddress(id));
 	}
 
 	/**
@@ -2484,7 +2484,7 @@ export class DeepBookClient {
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const vecSet = VecSet(bcs.Address).parse(bytes);
-		return vecSet.contents.map((id) => normalizeSuiAddress(id));
+		return vecSet.contents.map((id) => normalizeHaneulAddress(id));
 	}
 
 	/**
@@ -2801,7 +2801,7 @@ export class DeepBookClient {
 		});
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
-		return normalizeSuiAddress(bcs.Address.parse(bytes));
+		return normalizeHaneulAddress(bcs.Address.parse(bytes));
 	}
 
 	/**

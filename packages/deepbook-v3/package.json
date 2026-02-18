@@ -1,7 +1,7 @@
 {
-	"name": "@mysten/deepbook-v3",
-	"author": "Mysten Labs <build@mystenlabs.com>",
-	"description": "Sui Deepbook SDK",
+	"name": "@haneullabs/deepbook-v3",
+	"author": "Haneul Labs <build@haneul-labs.com>",
+	"description": "Haneul Deepbook SDK",
 	"version": "1.0.11",
 	"license": "Apache-2.0",
 	"type": "module",
@@ -24,15 +24,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MystenLabs/ts-sdks/issues/new"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues/new"
 	},
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
 		"build": "rm -rf dist && tsc --noEmit && tsdown",
-		"codegen": "pnpm sui-ts-codegen generate && pnpm lint:fix",
+		"codegen": "pnpm haneul-ts-codegen generate && pnpm lint:fix",
 		"prettier:check": "prettier -c --ignore-unknown .",
 		"prettier:fix": "prettier -w --ignore-unknown .",
 		"oxlint:check": "oxlint  .",
@@ -41,15 +41,15 @@
 		"lint:fix": "pnpm run oxlint:fix && pnpm run prettier:fix"
 	},
 	"dependencies": {
-		"@mysten/bcs": "workspace:^",
+		"@haneullabs/bcs": "workspace:^",
 		"@noble/hashes": "^2.0.1",
 		"axios": "^1.13.5",
 		"axios-retry": "^4.5.0"
 	},
 	"devDependencies": {
 		"@iarna/toml": "^2.2.5",
-		"@mysten/codegen": "workspace:^",
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/codegen": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@types/node": "^25.0.8",
 		"dotenv": "^17.2.3",
 		"tmp": "^0.2.5",
@@ -61,6 +61,6 @@
 		"wait-on": "^9.0.3"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "workspace:^"
+		"@haneullabs/haneul": "workspace:^"
 	}
 }

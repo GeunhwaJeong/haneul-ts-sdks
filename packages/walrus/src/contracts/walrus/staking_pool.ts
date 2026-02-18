@@ -5,13 +5,13 @@
 /** Module: staking_pool */
 
 import { MoveStruct, MoveEnum } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as storage_node from './storage_node.js';
 import * as pending_values from './pending_values.js';
-import * as table from './deps/sui/table.js';
-import * as balance from './deps/sui/balance.js';
+import * as table from './deps/haneul/table.js';
+import * as balance from './deps/haneul/balance.js';
 import * as auth from './auth.js';
-import * as bag from './deps/sui/bag.js';
+import * as bag from './deps/haneul/bag.js';
 const $moduleName = '@local-pkg/walrus::staking_pool';
 export const VotingParams = new MoveStruct({
 	name: `${$moduleName}::VotingParams`,

@@ -1,25 +1,25 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import type { Keypair } from '@mysten/sui/cryptography';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import type { TransactionObjectArgument } from '@mysten/sui/transactions';
-import { Transaction } from '@mysten/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Keypair } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import type { TransactionObjectArgument } from '@haneullabs/haneul/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import {
 	fromBase64,
 	normalizeStructTag,
-	normalizeSuiAddress,
+	normalizeHaneulAddress,
 	parseStructTag,
 	toBase64,
-} from '@mysten/sui/utils';
+} from '@haneullabs/haneul/utils';
 
 import type { ZkSendLinkBuilderOptions } from './builder.js';
 import { ZkSendLinkBuilder } from './builder.js';
 import type { LinkAssets } from './utils.js';
 import type { ZkBagContractOptions } from './zk-bag.js';
 import { getContractIds, ZkBag, ZkBagStruct } from './zk-bag.js';
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
 
 export const CoinStruct = bcs.struct('Coin', {
 	id: bcs.Address,
@@ -59,7 +59,7 @@ export class ZkSendLink {
 	assets?: LinkAssets;
 	claimed?: boolean;
 	claimedBy?: string;
-	bagObject?: SuiClientTypes.GetDynamicFieldResponse['dynamicField'] | null;
+	bagObject?: HaneulClientTypes.GetDynamicFieldResponse['dynamicField'] | null;
 
 	#client: ClientWithCoreApi;
 	#contract: ZkBag<ZkBagContractOptions>;
@@ -139,7 +139,7 @@ export class ZkSendLink {
 
 	async loadAssets(
 		options: {
-			transaction?: SuiClientTypes.TransactionResult;
+			transaction?: HaneulClientTypes.TransactionResult;
 			loadAssets?: boolean;
 			loadClaimedAssets?: boolean;
 		} = {},
@@ -377,7 +377,7 @@ export class ZkSendLink {
 			const type = parseStructTag(normalizeStructTag(object.type));
 
 			if (
-				type.address === normalizeSuiAddress('0x2') &&
+				type.address === normalizeHaneulAddress('0x2') &&
 				type.module === 'coin' &&
 				type.name === 'Coin'
 			) {

@@ -9,50 +9,50 @@ import type {
 	WalletWithFeatures,
 } from '@wallet-standard/core';
 
-import type { SuiSignAndExecuteTransactionFeature } from './suiSignAndExecuteTransaction.js';
-import type { SuiSignAndExecuteTransactionBlockFeature } from './suiSignAndExecuteTransactionBlock.js';
-import type { SuiSignMessageFeature } from './suiSignMessage.js';
-import type { SuiSignPersonalMessageFeature } from './suiSignPersonalMessage.js';
-import type { SuiSignTransactionFeature } from './suiSignTransaction.js';
-import type { SuiSignTransactionBlockFeature } from './suiSignTransactionBlock.js';
-import type { SuiGetCapabilitiesFeature } from './suiGetCapabilities.js';
+import type { HaneulSignAndExecuteTransactionFeature } from './haneulSignAndExecuteTransaction.js';
+import type { HaneulSignAndExecuteTransactionBlockFeature } from './haneulSignAndExecuteTransactionBlock.js';
+import type { HaneulSignMessageFeature } from './haneulSignMessage.js';
+import type { HaneulSignPersonalMessageFeature } from './haneulSignPersonalMessage.js';
+import type { HaneulSignTransactionFeature } from './haneulSignTransaction.js';
+import type { HaneulSignTransactionBlockFeature } from './haneulSignTransactionBlock.js';
+import type { HaneulGetCapabilitiesFeature } from './haneulGetCapabilities.js';
 
 /**
- * Wallet Standard features that are unique to Sui, and that all Sui wallets are expected to implement.
+ * Wallet Standard features that are unique to Haneul, and that all Haneul wallets are expected to implement.
  */
-export type SuiFeatures = Partial<SuiSignTransactionBlockFeature> &
-	Partial<SuiSignAndExecuteTransactionBlockFeature> &
-	SuiSignPersonalMessageFeature &
-	SuiSignAndExecuteTransactionFeature &
-	SuiSignTransactionFeature &
+export type HaneulFeatures = Partial<HaneulSignTransactionBlockFeature> &
+	Partial<HaneulSignAndExecuteTransactionBlockFeature> &
+	HaneulSignPersonalMessageFeature &
+	HaneulSignAndExecuteTransactionFeature &
+	HaneulSignTransactionFeature &
 	// This deprecated feature should be removed once wallets update to the new method:
-	Partial<SuiSignMessageFeature> &
-	Partial<SuiGetCapabilitiesFeature>;
+	Partial<HaneulSignMessageFeature> &
+	Partial<HaneulGetCapabilitiesFeature>;
 
-export type SuiWalletFeatures = StandardConnectFeature &
+export type HaneulWalletFeatures = StandardConnectFeature &
 	StandardEventsFeature &
-	SuiFeatures &
+	HaneulFeatures &
 	// Disconnect is an optional feature:
 	Partial<StandardDisconnectFeature>;
 
-export type WalletWithSuiFeatures = WalletWithFeatures<SuiWalletFeatures>;
+export type WalletWithSuiFeatures = WalletWithFeatures<HaneulWalletFeatures>;
 
 /**
- * Represents a wallet with the absolute minimum feature set required to function in the Sui ecosystem.
+ * Represents a wallet with the absolute minimum feature set required to function in the Haneul ecosystem.
  */
 export type WalletWithRequiredFeatures = WalletWithFeatures<
 	MinimallyRequiredFeatures &
-		Partial<SuiFeatures> &
+		Partial<HaneulFeatures> &
 		Partial<StandardDisconnectFeature> &
 		IdentifierRecord<unknown>
 >;
 
 export type MinimallyRequiredFeatures = StandardConnectFeature & StandardEventsFeature;
 
-export * from './suiSignMessage.js';
-export * from './suiSignTransactionBlock.js';
-export * from './suiSignTransaction.js';
-export * from './suiSignAndExecuteTransactionBlock.js';
-export * from './suiSignAndExecuteTransaction.js';
-export * from './suiSignPersonalMessage.js';
-export * from './suiGetCapabilities.js';
+export * from './haneulSignMessage.js';
+export * from './haneulSignTransactionBlock.js';
+export * from './haneulSignTransaction.js';
+export * from './haneulSignAndExecuteTransactionBlock.js';
+export * from './haneulSignAndExecuteTransaction.js';
+export * from './haneulSignPersonalMessage.js';
+export * from './haneulGetCapabilities.js';

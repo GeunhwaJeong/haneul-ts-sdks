@@ -1,9 +1,9 @@
-# `@mysten/walrus`
+# `@haneullabs/walrus`
 
 ## Installation
 
 ```bash
-npm install --save @mysten/walrus @mysten/sui
+npm install --save @haneullabs/walrus @haneullabs/haneul
 ```
 
 ## Setup
@@ -12,12 +12,12 @@ To use the walrus SDK you will need to create a Client from the typescript SDK, 
 the walrus SDK.
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { walrus } from '@mysten/walrus';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { walrus } from '@haneullabs/walrus';
 
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(walrus());
 ```
 
@@ -26,12 +26,12 @@ testnet. You can also manually configure the walrus sdk to use a different set o
 to connect to a different network or updated deployment of the walrus contracts.
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { walrus } from '@mysten/walrus';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { walrus } from '@haneullabs/walrus';
 
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	walrus({
 		packageConfig: {
@@ -45,12 +45,12 @@ const client = new SuiGrpcClient({
 For some environments you may need to customize how data is fetched:
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { walrus } from '@mysten/walrus';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { walrus } from '@haneullabs/walrus';
 
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	walrus({
 		storageNodeClientOptions: {
@@ -166,7 +166,7 @@ const file3 = WalrusFile.from({
 Once you have your files you can use the `writeFiles` method to write them to walrus.
 
 Along with the files, you will also need to provide a `Signer` instance that signs and pays for the
-transaction/storage fees. The signer's address will need to have sufficient `SUI` to cover the
+transaction/storage fees. The signer's address will need to have sufficient `HANEUL` to cover the
 transactions that register the blob, and certify its availability after it's been uploaded. The
 Signer must own sufficient `WAL` to pay to store the blob for the specified number of epochs, as
 well as the write fee for writing the blob.
@@ -276,7 +276,7 @@ To use an upload relay, you can add the `uploadRelay` option when adding the wal
 ```ts
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	walrus({
 		uploadRelay: {
@@ -291,7 +291,7 @@ const client = new SuiGrpcClient({
 
 The `host` option is required, and indicates the url for your upload relay. Upload relays may
 require a tip to be included to cover the cost of writing the blob. You can configure a maximum tip
-(paid in MIST) and the `WalrusClient` will automatically determine the required tip for your upload
+(paid in GEUNHWA) and the `WalrusClient` will automatically determine the required tip for your upload
 relay, or you can manually configure the tip configuration as shown below.
 
 The tip required by an upload relay can be found using the `tip-config` endpoint: (eg.
@@ -305,7 +305,7 @@ A `const` will send a fixed amount for each blob written to the upload relay.
 ```ts
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	walrus({
 		uploadRelay: {
@@ -329,7 +329,7 @@ multiplier based on the size of the blob.
 ```ts
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	walrus({
 		uploadRelay: {
@@ -381,12 +381,12 @@ const { blobId } = await client.walrus.writeBlob({
 ## Full API
 
 For a complete overview of the available methods on the `WalrusClient` you can reference type
-[TypeDocs](http://sdk.mystenlabs.com/typedoc/classes/_mysten_walrus.WalrusClient.html)
+[TypeDocs](http://sdk.haneul-labs.com/typedoc/classes/_mysten_walrus.WalrusClient.html)
 
 ## Examples
 
 There are a number of simple
-[examples you can reference](https://github.com/MystenLabs/ts-sdks/tree/main/packages/walrus/examples)
+[examples you can reference](https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/walrus/examples)
 in the `ts-sdks` repo that show things like building simple aggregators and publishers with the
 walrus SDK
 
@@ -400,7 +400,7 @@ that result from this situation will extend the `RetryableWalrusClientError` cla
 You can check for these errors, and reset the client before retrying:
 
 ```ts
-import { RetryableWalrusClientError } from '@mysten/walrus';
+import { RetryableWalrusClientError } from '@haneullabs/walrus';
 
 if (error instanceof RetryableWalrusClientError) {
 	client.walrus.reset();
@@ -432,7 +432,7 @@ failed requests:
 ```ts
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	walrus({
 		storageNodeClientOptions: {
@@ -461,7 +461,7 @@ import { Agent, fetch, setGlobalDispatcher } from 'undici';
 
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	walrus({
 		storageNodeClientOptions: {
@@ -491,11 +491,11 @@ In vite you can get the url for the wasm bindings by importing the wasm file wit
 and then passed into the walrus client:
 
 ```ts
-import walrusWasmUrl from '@mysten/walrus-wasm/web/walrus_wasm_bg.wasm?url';
+import walrusWasmUrl from '@haneullabs/walrus-wasm/web/walrus_wasm_bg.wasm?url';
 
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	walrus({
 		wasmUrl: walrusWasmUrl,
@@ -509,10 +509,10 @@ the wasm bindings, or load them from a CDN:
 ```ts
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	walrus({
-		wasmUrl: 'https://unpkg.com/@mysten/walrus-wasm@latest/web/walrus_wasm_bg.wasm',
+		wasmUrl: 'https://unpkg.com/@haneullabs/walrus-wasm@latest/web/walrus_wasm_bg.wasm',
 	}),
 );
 ```
@@ -523,7 +523,7 @@ walrus packages:
 ```ts
 // next.config.ts
 const nextConfig: NextConfig = {
-	serverExternalPackages: ['@mysten/walrus', '@mysten/walrus-wasm'],
+	serverExternalPackages: ['@haneullabs/walrus', '@haneullabs/walrus-wasm'],
 };
 ```
 

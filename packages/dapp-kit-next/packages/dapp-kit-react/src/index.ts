@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-export * from '@mysten/dapp-kit-core';
+export * from '@haneullabs/dapp-kit-core';
 
 export { ConnectButton } from './components/ConnectButton.js';
 export type { ConnectButtonProps } from './components/ConnectButton.js';

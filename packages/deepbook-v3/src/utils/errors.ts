@@ -63,5 +63,5 @@ export const ErrorMessages = {
 		`Invalid number of arguments, expected ${expected}, got ${got}`,
 	PARAMETER_REQUIRED: (name: string) => `Parameter ${name} is required`,
 	INVALID_ARGUMENT: (arg: string, type: string) => `Invalid argument ${arg} for type ${type}`,
-	INVALID_ADDRESS: 'Address must be a valid Sui address',
+	INVALID_ADDRESS: 'Address must be a valid Haneul address',
 } as const;

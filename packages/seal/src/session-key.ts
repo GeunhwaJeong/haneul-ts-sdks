@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { toBase64 } from '@mysten/bcs';
-import { bcs } from '@mysten/sui/bcs';
-import type { Signer } from '@mysten/sui/cryptography';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { isValidNamedPackage, isValidSuiAddress, isValidSuiObjectId } from '@mysten/sui/utils';
-import { verifyPersonalMessageSignature } from '@mysten/sui/verify';
+import { toBase64 } from '@haneullabs/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Signer } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { isValidNamedPackage, isValidHaneulAddress, isValidHaneulObjectId } from '@haneullabs/haneul/utils';
+import { verifyPersonalMessageSignature } from '@haneullabs/haneul/verify';
 import { generateSecretKey, toPublicKey, toVerificationKey } from './elgamal.js';
 import {
 	ExpiredSessionKeyError,
@@ -70,7 +70,7 @@ export class SessionKey {
 		if (mvrName && !isValidNamedPackage(mvrName)) {
 			throw new UserError(`Invalid package name ${mvrName}`);
 		}
-		if (!isValidSuiObjectId(packageId) || !isValidSuiAddress(address)) {
+		if (!isValidHaneulObjectId(packageId) || !isValidHaneulAddress(address)) {
 			throw new UserError(`Invalid package ID ${packageId} or address ${address}`);
 		}
 		if (ttlMin > 30 || ttlMin < 1) {
@@ -97,7 +97,7 @@ export class SessionKey {
 	 * @param mvrName - Optional. The name of the MVR, if there is one.
 	 * @param ttlMin - The TTL in minutes.
 	 * @param signer - Optional. The signer instance, e.g. EnokiSigner.
-	 * @param suiClient - The Sui client.
+	 * @param suiClient - The Haneul client.
 	 * @returns A new SessionKey instance.
 	 */
 	static async create({

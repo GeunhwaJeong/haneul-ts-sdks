@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { join } from 'node:path';
 import { mkdir, writeFile, rm } from 'node:fs/promises';
 import { utilsContent } from '../src/generate-utils.js';
@@ -29,7 +29,7 @@ afterAll(async () => {
 const CLOCK_TYPE_ARG = '0x2::clock::Clock';
 
 describe('normalizeMoveArguments', () => {
-	it('should handle resolved sui objects for `object` args', async () => {
+	it('should handle resolved haneul objects for `object` args', async () => {
 		const tx = new Transaction();
 		tx.moveCall({
 			target: '0x0::test:test',
@@ -87,7 +87,7 @@ describe('normalizeMoveArguments', () => {
 }"`);
 	});
 
-	it('should handle resolved sui objects for `object` args with extra trailing args', async () => {
+	it('should handle resolved haneul objects for `object` args with extra trailing args', async () => {
 		const tx = new Transaction();
 		tx.moveCall({
 			target: '0x0::test:test',
@@ -153,7 +153,7 @@ describe('normalizeMoveArguments', () => {
 }"`);
 	});
 
-	it('should handle resolved sui objects for `Array` args', async () => {
+	it('should handle resolved haneul objects for `Array` args', async () => {
 		const tx = new Transaction();
 		tx.moveCall({
 			target: '0x0::test:test',
@@ -211,7 +211,7 @@ describe('normalizeMoveArguments', () => {
 }"`);
 	});
 
-	it('should handle resolved sui objects for `Array` args with extra trailing args', async () => {
+	it('should handle resolved haneul objects for `Array` args with extra trailing args', async () => {
 		const tx = new Transaction();
 
 		tx.moveCall({

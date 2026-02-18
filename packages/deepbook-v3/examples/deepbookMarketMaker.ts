@@ -1,18 +1,18 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import type { ClientWithExtensions } from '@mysten/sui/client';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { decodeSuiPrivateKey } from '@mysten/sui/cryptography';
-import type { Keypair } from '@mysten/sui/cryptography';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import type { Transaction } from '@mysten/sui/transactions';
+import type { ClientWithExtensions } from '@haneullabs/haneul/client';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { decodeSuiPrivateKey } from '@haneullabs/haneul/cryptography';
+import type { Keypair } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 
 import { deepbook, type DeepBookClient } from '../src/index.js'; // Adjust path according to new structure
 import type { BalanceManager } from '../src/types/index.js';
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 export class DeepBookMarketMaker {
@@ -36,7 +36,7 @@ export class DeepBookMarketMaker {
 		const address = resolvedKeypair.toSuiAddress();
 
 		this.keypair = resolvedKeypair;
-		this.client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+		this.client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 			deepbook({
 				address: address,
 				balanceManagers: balanceManagers,
@@ -65,8 +65,8 @@ export class DeepBookMarketMaker {
 
 	// Example of a flash loan transaction
 	// Borrow 1 DEEP from DEEP_SUI pool
-	// Swap 0.5 DBUSDC for SUI in SUI_DBUSDC pool, pay with deep borrowed
-	// Swap SUI back to DEEP
+	// Swap 0.5 DBUSDC for HANEUL in SUI_DBUSDC pool, pay with deep borrowed
+	// Swap HANEUL back to DEEP
 	// Return 1 DEEP to DEEP_SUI pool
 	flashLoanExample = async (tx: Transaction) => {
 		const borrowAmount = 1;

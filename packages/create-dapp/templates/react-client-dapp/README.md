@@ -1,6 +1,6 @@
-# Sui dApp Starter Template
+# Haneul dApp Starter Template
 
-This dApp was created using `@mysten/create-dapp` that sets up a basic React
+This dApp was created using `@haneullabs/create-dapp` that sets up a basic React
 Client dApp using the following tools:
 
 - [React](https://react.dev/) as the UI framework
@@ -8,7 +8,7 @@ Client dApp using the following tools:
 - [Vite](https://vitejs.dev/) for build tooling
 - [Tailwind CSS v4](https://tailwindcss.com/) for styling
 - [Lucide React](https://lucide.dev/) for icons
-- [`@mysten/dapp-kit-react`](https://sdk.mystenlabs.com/dapp-kit) for connecting
+- [`@haneullabs/dapp-kit-react`](https://sdk.haneul-labs.com/dapp-kit) for connecting
   to wallets and loading data
 - [pnpm](https://pnpm.io/) for package management
 

@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromHex } from '@mysten/bcs';
+import { fromHex } from '@haneullabs/bcs';
 import { sha3_256 } from '@noble/hashes/sha3.js';
 
 import { G1Element } from './bls12381.js';
@@ -11,15 +11,15 @@ import {
 	flatten,
 	KEY_LENGTH,
 	MAX_U8,
-	SUI_ADDRESS_LENGTH,
+	HANEUL_ADDRESS_LENGTH,
 } from './utils.js';
 
 /**
  * The domain separation tag for the hash-to-group function.
  */
-const DST: Uint8Array = new TextEncoder().encode('SUI-SEAL-IBE-BLS12381-00');
-const KDF_DST = new TextEncoder().encode('SUI-SEAL-IBE-BLS12381-H2-00');
-const DERIVE_KEY_DST = new TextEncoder().encode('SUI-SEAL-IBE-BLS12381-H3-00');
+const DST: Uint8Array = new TextEncoder().encode('HANEUL-SEAL-IBE-BLS12381-00');
+const KDF_DST = new TextEncoder().encode('HANEUL-SEAL-IBE-BLS12381-H2-00');
+const DERIVE_KEY_DST = new TextEncoder().encode('HANEUL-SEAL-IBE-BLS12381-H3-00');
 
 /**
  * Hash an id to a G1Element.
@@ -47,7 +47,7 @@ export function kdf(
 		throw new Error(`Invalid index ${index}`);
 	}
 	const objectIdBytes = fromHex(objectId);
-	if (objectIdBytes.length !== SUI_ADDRESS_LENGTH) {
+	if (objectIdBytes.length !== HANEUL_ADDRESS_LENGTH) {
 		throw new Error(`Invalid object id ${objectId}`);
 	}
 	const hash = sha3_256.create();
@@ -103,7 +103,7 @@ export function deriveKey(
 		);
 	}
 	const keyServerBytes = keyServers.map((keyServer) => fromHex(keyServer));
-	if (keyServerBytes.some((keyServer) => keyServer.length !== SUI_ADDRESS_LENGTH)) {
+	if (keyServerBytes.some((keyServer) => keyServer.length !== HANEUL_ADDRESS_LENGTH)) {
 		throw new Error(`Invalid key servers ${keyServers}`);
 	}
 	if (encryptedShares.some((share) => share.length !== ENCRYPTED_SHARE_LENGTH)) {

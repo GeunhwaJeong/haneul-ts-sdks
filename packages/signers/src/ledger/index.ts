@@ -1,17 +1,17 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type SuiLedgerClient from '@mysten/ledgerjs-hw-app-sui';
-import type { ClientWithCoreApi } from '@mysten/sui/client';
-import type { SignatureWithBytes } from '@mysten/sui/cryptography';
-import { messageWithIntent, Signer, toSerializedSignature } from '@mysten/sui/cryptography';
-import { Ed25519PublicKey } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
-import { toBase64 } from '@mysten/sui/utils';
+import type HaneulLedgerClient from '@haneullabs/ledgerjs-hw-app-haneul';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/client';
+import type { SignatureWithBytes } from '@haneullabs/haneul/cryptography';
+import { messageWithIntent, Signer, toSerializedSignature } from '@haneullabs/haneul/cryptography';
+import { Ed25519PublicKey } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { toBase64 } from '@haneullabs/haneul/utils';
 
-import { bcs } from '@mysten/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import { getInputObjects } from './objects.js';
-import type { Resolution } from '@mysten/ledgerjs-hw-app-sui';
+import type { Resolution } from '@haneullabs/ledgerjs-hw-app-haneul';
 
 export { getInputObjects } from './objects.js';
 
@@ -21,17 +21,17 @@ export { getInputObjects } from './objects.js';
 export interface LedgerSignerOptions {
 	publicKey: Ed25519PublicKey;
 	derivationPath: string;
-	ledgerClient: SuiLedgerClient;
+	ledgerClient: HaneulLedgerClient;
 	suiClient: ClientWithCoreApi;
 }
 
 /**
- * Ledger integrates with the Sui blockchain to provide signing capabilities using Ledger devices.
+ * Ledger integrates with the Haneul blockchain to provide signing capabilities using Ledger devices.
  */
 export class LedgerSigner extends Signer {
 	#derivationPath: string;
 	#publicKey: Ed25519PublicKey;
-	#ledgerClient: SuiLedgerClient;
+	#ledgerClient: HaneulLedgerClient;
 	#suiClient: ClientWithCoreApi;
 
 	/**
@@ -129,7 +129,7 @@ export class LedgerSigner extends Signer {
 	 */
 	static async fromDerivationPath(
 		derivationPath: string,
-		ledgerClient: SuiLedgerClient,
+		ledgerClient: HaneulLedgerClient,
 		suiClient: ClientWithCoreApi,
 	) {
 		const { publicKey } = await ledgerClient.getPublicKey(derivationPath);

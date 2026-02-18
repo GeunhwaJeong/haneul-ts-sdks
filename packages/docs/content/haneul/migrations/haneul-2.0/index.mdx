@@ -1,0 +1,161 @@
+---
+title: Migrate to 2.0
+---
+
+This guide covers the breaking changes across the latest release of all the `@haneullabs/*` packages.
+
+The primary goal of this release is to support the new GRPC and GraphQL APIs across all the Haneul Labs
+SDKs. These releases also include removals of deprecated APIs, some renaming for better consistency,
+and significant internal refactoring to improve maintainability. Starting with this release, Haneul Labs
+packages will now be published as ESM only packages.
+
+## Quick Reference
+
+| Package                                                               | Key Changes                                                                              |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| [@haneullabs/haneul](/haneul/migrations/haneul-2.0/haneul)                            | Client API stabilization, SuiClient removal, BCS schema alignment, transaction executors |
+| [@haneullabs/dapp-kit](/haneul/migrations/haneul-2.0/dapp-kit)                  | Complete rewrite with framework-agnostic core                                            |
+| [@haneullabs/kiosk](/haneul/migrations/haneul-2.0/kiosk)                        | Client extension pattern, low-level helpers removed, KioskTransaction pattern            |
+| [@haneullabs/zksend](/haneul/migrations/haneul-2.0/zksend)                      | Client extension pattern                                                                 |
+| [@haneullabs/haneulns](/haneul/migrations/haneul-2.0/haneulns)                        | Client extension pattern                                                                 |
+| [@haneullabs/deepbook-v3](/haneul/migrations/haneul-2.0/deepbook-v3)            | Client extension pattern                                                                 |
+| [@haneullabs/walrus](/haneul/migrations/haneul-2.0/walrus)                      | Client extension pattern, requires client instead of RPC URL                             |
+| [@haneullabs/seal](/haneul/migrations/haneul-2.0/seal)                          | Client extension pattern                                                                 |
+| [@haneullabs/wallet-standard](/haneul/migrations/haneul-2.0/wallet-builders)    | Removal of reportTransactionEffects, new core API response format                        |
+| [Migrating from JSON-RPC](/haneul/migrations/haneul-2.0/json-rpc-migration) | Migrate from deprecated JSON-RPC to gRPC and GraphQL                                     |
+
+## Common Migration Patterns
+
+### ESM Migration
+
+All `@haneullabs/*` packages are now ESM only. If your project does not already use ESM, you will need
+to add `"type": "module"` to your `package.json`:
+
+```json
+{
+	"type": "module"
+}
+```
+
+If you are using TypeScript with `moduleResolution` `"Node"`, `"Classic"`, or `"Node10"`, you will
+need to update your `tsconfig.json` to use `"NodeNext"`, `"Node16"`, or `"Bundler"`:
+
+```json
+{
+	"compilerOptions": {
+		"moduleResolution": "NodeNext",
+		"module": "NodeNext"
+	}
+}
+```
+
+This enables proper resolution of the SDK's subpath exports (e.g., `@haneullabs/haneul/client`,
+`@haneullabs/haneul/transactions`).
+
+If you maintain a library that depends on any of the `@haneullabs/*` packages, you may also need to
+update your library to be ESM only to ensure it works correctly everywhere.
+
+Applications using bundlers and recent Node.js versions (>=22) may still work when using `require`
+to load ESM packages, but we recommend migrating to ESM.
+
+**Why ESM only?** Many packages in the ecosystem (specifically critical cryptography dependencies)
+are now published as ESM only. Supporting CommonJS has prevented us from using the latest versions
+of these dependencies, making our SDKs harder to maintain and risking missing critical security
+updates.
+
+### Client Migration
+
+The most common change across all SDKs is migrating from `SuiClient` to `SuiJsonRpcClient`:
+
+```diff
+- import { SuiClient, getFullnodeUrl } from '@haneullabs/haneul/client';
++ import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
+
+- const client = new SuiClient({ url: getFullnodeUrl('mainnet') });
++ const client = new SuiJsonRpcClient({
++   url: getJsonRpcFullnodeUrl('mainnet'),
++   network: 'mainnet',
++ });
+```
+
+We also recommend moving from the deprecated JSON RPC Apis to the new gRPC API as soon as possible:
+
+```diff
+- import { SuiJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
++ import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+
+- const client = new SuiJsonRpcClient({ url, network: 'mainnet' });
++ const client = new SuiGrpcClient({ baseUrl, network: 'mainnet' });
+```
+
+The gRPC runs on full nodes so in most cases you should be able to use the same URLs when migrating
+to gRPC.
+
+### Network Parameter Required
+
+All client constructors now require an explicit `network` parameter:
+
+```ts
+const client = new SuiJsonRpcClient({
+	url: getJsonRpcFullnodeUrl('mainnet'),
+	network: 'mainnet', // Required
+});
+
+const graphqlClient = new SuiGraphQLClient({
+	url: 'https://haneul-mainnet.haneul-labs.com/graphql',
+	network: 'mainnet', // Required
+});
+
+const grpcClient = new SuiGrpcClient({
+	baseUrl: 'https://fullnode.mainnet.haneul.io:443',
+	network: 'mainnet', // Required
+});
+```
+
+### ClientWithCoreApi Interface
+
+Many SDK methods now accept any client implementing `ClientWithCoreApi`, enabling use with JSON-RPC,
+GraphQL, or gRPC transports:
+
+```ts
+import { SuiJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
+import { SuiGraphQLClient } from '@haneullabs/haneul/graphql';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+
+// All of these work with APIs that accept ClientWithCoreApi
+const jsonRpcClient = new SuiJsonRpcClient({ url, network: 'mainnet' });
+const graphqlClient = new SuiGraphQLClient({ url, network: 'mainnet' });
+const grpcClient = new SuiGrpcClient({ baseUrl, network: 'mainnet' });
+```
+
+## Package-Specific Guides
+
+For detailed migration instructions, see the SDK-specific guides:
+
+- **[@haneullabs/haneul](/haneul/migrations/haneul-2.0/haneul)** - Core SDK changes including client API, BCS
+  schemas, transactions, zkLogin, and GraphQL
+- **[@haneullabs/dapp-kit](/haneul/migrations/haneul-2.0/dapp-kit)** - Complete migration guide for the new
+  dApp Kit architecture
+- **[@haneullabs/kiosk](/haneul/migrations/haneul-2.0/kiosk)** - Kiosk SDK now exports a client extension,
+  low-level helpers removed
+- **[@haneullabs/zksend](/haneul/migrations/haneul-2.0/zksend)** - zkSend SDK now exports a client extension
+- **[@haneullabs/haneulns](/haneul/migrations/haneul-2.0/haneulns)** - HaneulNS now exports a client extension
+- **[@haneullabs/deepbook-v3](/haneul/migrations/haneul-2.0/deepbook-v3)** - DeepBook DEX now exports a client
+  extension
+- **[@haneullabs/walrus](/haneul/migrations/haneul-2.0/walrus)** - Walrus storage now exports a client
+  extension
+- **[@haneullabs/seal](/haneul/migrations/haneul-2.0/seal)** - Seal encryption now exports a client extension
+
+## Transport Migration
+
+- **[Migrating from JSON-RPC](/haneul/migrations/haneul-2.0/json-rpc-migration)** - Migrate from the
+  deprecated JSON-RPC client to gRPC and GraphQL
+
+## Ecosystem Migration Guides
+
+For wallet builders and SDK maintainers building on the Haneul ecosystem:
+
+- **[Wallet Builders](/haneul/migrations/haneul-2.0/wallet-builders)** - Guide for wallet implementations
+  adapting to `reportTransactionEffects` removal and new core API response format
+- **[SDK Maintainers](/haneul/migrations/haneul-2.0/sdk-maintainers)** - Guide for SDK authors migrating
+  to `ClientWithCoreApi` and the new transport-agnostic architecture

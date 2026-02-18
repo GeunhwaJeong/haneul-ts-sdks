@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { IdentifierRecord, SuiFeatures, SuiSignMessageFeature } from '@mysten/wallet-standard';
+import type { IdentifierRecord, HaneulFeatures, HaneulSignMessageFeature } from '@haneullabs/wallet-standard';
 
-export const signMessageFeature: SuiSignMessageFeature = {
-	'sui:signMessage': {
+export const signMessageFeature: HaneulSignMessageFeature = {
+	'haneul:signMessage': {
 		version: '1.0.0',
 		signMessage: vi.fn(),
 	},
@@ -17,25 +17,25 @@ export const superCoolFeature: IdentifierRecord<unknown> = {
 	},
 };
 
-export const suiFeatures: SuiFeatures = {
+export const suiFeatures: HaneulFeatures = {
 	...signMessageFeature,
-	'sui:signPersonalMessage': {
+	'haneul:signPersonalMessage': {
 		version: '1.1.0',
 		signPersonalMessage: vi.fn(),
 	},
-	'sui:signTransactionBlock': {
+	'haneul:signTransactionBlock': {
 		version: '1.0.0',
 		signTransactionBlock: vi.fn(),
 	},
-	'sui:signTransaction': {
+	'haneul:signTransaction': {
 		version: '2.0.0',
 		signTransaction: vi.fn(),
 	},
-	'sui:signAndExecuteTransactionBlock': {
+	'haneul:signAndExecuteTransactionBlock': {
 		version: '1.0.0',
 		signAndExecuteTransactionBlock: vi.fn(),
 	},
-	'sui:signAndExecuteTransaction': {
+	'haneul:signAndExecuteTransaction': {
 		version: '2.0.0',
 		signAndExecuteTransaction: vi.fn(),
 	},

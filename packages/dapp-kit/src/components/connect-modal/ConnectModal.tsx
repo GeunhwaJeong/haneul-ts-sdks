@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { WalletWithRequiredFeatures } from '@mysten/wallet-standard';
+import type { WalletWithRequiredFeatures } from '@haneullabs/wallet-standard';
 import * as Dialog from '@radix-ui/react-dialog';
 import clsx from 'clsx';
 import { useState } from 'react';

@@ -1,15 +1,15 @@
 ---
-title: '@mysten/create-dapp'
-description: Create a Sui dApp with one command
+title: '@haneullabs/create-dapp'
+description: Create a Haneul dApp with one command
 ---
 
-`@mysten/create-dapp` is a CLI tool that scaffolds a complete Sui dApp project with best practices
+`@haneullabs/create-dapp` is a CLI tool that scaffolds a complete Haneul dApp project with best practices
 built in.
 
 ## Quick Start
 
 ```sh npm2yarn
-npm create @mysten/dapp
+npm create @haneullabs/dapp
 ```
 
 The CLI prompts you to choose a template and project name, then creates a ready-to-run project.
@@ -30,7 +30,7 @@ A basic React dApp that demonstrates wallet connection and fetching owned object
 A complete end-to-end example with Move smart contract integration:
 
 - Move counter contract in `move/counter/`
-- TypeScript bindings generated with `@mysten/codegen`
+- TypeScript bindings generated with `@haneullabs/codegen`
 - Create, increment, and reset counters
 - MVR (Move Registry) name resolution for package IDs
 - Full transaction signing and execution
@@ -44,12 +44,12 @@ Both templates include:
 - [Vite](https://vitejs.dev/) - Fast build tooling
 - [Tailwind CSS v4](https://tailwindcss.com/) - Utility-first styling
 - [Lucide React](https://lucide.dev/) - Modern icons
-- [`@mysten/dapp-kit-react`](/dapp-kit) - Wallet connection and blockchain interaction
+- [`@haneullabs/dapp-kit-react`](/dapp-kit) - Wallet connection and blockchain interaction
 - [pnpm](https://pnpm.io/) - Package management
 
 The e2e-counter template also includes:
 
-- [`@mysten/codegen`](/codegen) - Generate TypeScript from Move code
+- [`@haneullabs/codegen`](/codegen) - Generate TypeScript from Move code
 
 ## Project Structure
 
@@ -87,18 +87,18 @@ move/
 
 ### 1. Deploy the Move Contract
 
-First, install the [Sui CLI](https://docs.sui.io/build/install) and set up testnet:
+First, install the [Haneul CLI](https://docs.haneul.io/build/install) and set up testnet:
 
 ```bash
-sui client new-env --alias testnet --rpc https://fullnode.testnet.sui.io:443
-sui client switch --env testnet
+haneul client new-env --alias testnet --rpc https://fullnode.testnet.haneul.io:443
+haneul client switch --env testnet
 ```
 
-Get testnet SUI from the [faucet](https://faucet.sui.io), then publish:
+Get testnet HANEUL from the [faucet](https://faucet.haneul.io), then publish:
 
 ```bash
 cd move
-sui client publish --gas-budget 100000000 counter
+haneul client publish --gas-budget 100000000 counter
 ```
 
 ### 2. Configure the Package ID
@@ -142,11 +142,11 @@ You can skip prompts with command-line flags:
 
 ```bash
 # Create with specific template
-npm create @mysten/dapp -- -t react-e2e-counter
+npm create @haneullabs/dapp -- -t react-e2e-counter
 
 # Create with specific name
-npm create @mysten/dapp -- -n my-app
+npm create @haneullabs/dapp -- -n my-app
 
 # Create with both
-npm create @mysten/dapp -- -t react-client-dapp -n my-app
+npm create @haneullabs/dapp -- -t react-client-dapp -n my-app
 ```

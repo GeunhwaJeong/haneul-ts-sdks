@@ -1,15 +1,15 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiClientTypes } from '@mysten/sui/client';
-import type { IdentifierString } from '@mysten/wallet-standard';
+import type { HaneulClientTypes } from '@haneullabs/haneul/client';
+import type { IdentifierString } from '@haneullabs/wallet-standard';
 import { DAppKitError } from './errors.js';
 import type { DAppKitCompatibleClient } from '../core/types.js';
 
-export type Networks = SuiClientTypes.Network[];
+export type Networks = HaneulClientTypes.Network[];
 
-export function getChain(network: SuiClientTypes.Network): IdentifierString {
-	return `sui:${network}`;
+export function getChain(network: HaneulClientTypes.Network): IdentifierString {
+	return `haneul:${network}`;
 }
 
 export function createNetworkConfig<
@@ -17,7 +17,7 @@ export function createNetworkConfig<
 	Client extends DAppKitCompatibleClient,
 >(networks: TNetworks, createClient: (network: TNetworks[number]) => Client) {
 	if (networks.length === 0) {
-		throw new DAppKitError('You must specify at least one Sui network for your application.');
+		throw new DAppKitError('You must specify at least one Haneul network for your application.');
 	}
 
 	const networkConfig = new Map<TNetworks[number], Client>();

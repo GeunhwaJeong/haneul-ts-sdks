@@ -10,7 +10,7 @@ import type { PackageConfig, GenerateBase } from '../src/config.js';
 
 const FIXTURE_PATH = join(__dirname, 'move/testpkg');
 
-// Test fixture (generated from Move source via `sui move summary`):
+// Test fixture (generated from Move source via `haneul move summary`):
 //
 // testpkg/counter module:
 //   Structs: Counter (key), AdminCap (key+store), CounterCreated (copy+drop),

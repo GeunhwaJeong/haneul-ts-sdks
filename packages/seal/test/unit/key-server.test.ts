@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromBase64 } from '@mysten/bcs';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+import { fromBase64 } from '@haneullabs/bcs';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { bcs } from '@mysten/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 
 import { GeneralError, InvalidClientOptionsError } from '../../src/error.js';
 import {
@@ -16,16 +16,16 @@ import {
 } from '../../src/key-server.js';
 import { Version } from '../../src/utils.js';
 
-// Data for mock response from SuiGrpcClient
+// Data for mock response from HaneulGrpcClient
 const pk = fromBase64(
 	'oEC1VIuwQo+6FZiVwHCAy/3HbvAbuIyiztXIWwd4LgmXCh9WhOKg3T0+Mb62y9fqAsSaN5SybG09n/3JnkmEzJgdDXLpM8KvMwkha/cBHp6Cx7aCdogvGLoOp/RadyHb',
 );
 const id = '0x73d05d62c18d9374e3ea529e8e0ed6161da1a141a94d3f76ae3fe4e99356db75';
 const keyType = 0;
-const url = 'https://seal-key-server-testnet-1.mystenlabs.com';
-const name = 'mysten-testnet-v1-1';
+const url = 'https://seal-key-server-testnet-1.haneul-labs.com';
+const name = 'haneullabs-testnet-v1-1';
 
-// Helper to create mock SuiClient for V2 servers.
+// Helper to create mock HaneulClient for V2 servers.
 function createMockV2Client(
 	objectId: string,
 	firstVersion: number,
@@ -98,7 +98,7 @@ function createMockV2Client(
 			getObject: mockGetObject,
 			getDynamicField: mockGetDynamicField,
 		},
-	} as unknown as SuiGrpcClient;
+	} as unknown as HaneulGrpcClient;
 }
 
 describe('key-server tests', () => {
@@ -127,13 +127,13 @@ describe('key-server tests', () => {
 			};
 		});
 
-		// Mock SuiGrpcClient
+		// Mock HaneulGrpcClient
 		const mockSuiClient = {
 			core: {
 				getObject: mockGetObject,
 				getDynamicField: vi.fn(), // This won't be called due to version check
 			},
-		} as unknown as SuiGrpcClient;
+		} as unknown as HaneulGrpcClient;
 
 		await expect(
 			retrieveKeyServers({
@@ -155,7 +155,7 @@ describe('key-server tests', () => {
 			// Mock fetch with exact response from the real service
 			const keyServers = await retrieveKeyServers({
 				objectIds: [id],
-				client: new SuiGrpcClient({
+				client: new HaneulGrpcClient({
 					network: 'testnet',
 					baseUrl: getJsonRpcFullnodeUrl('testnet'),
 				}),

@@ -1,7 +1,7 @@
 {
 	"root": true,
 	"title": "dApp Kit",
-	"description": "Build Sui dApps with @mysten/dapp-kit-core and @mysten/dapp-kit-react",
+	"description": "Build Haneul dApps with @haneullabs/dapp-kit-core and @haneullabs/dapp-kit-react",
 	"pages": [
 		"index",
 		"getting-started",

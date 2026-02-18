@@ -1,10 +1,10 @@
 {
-	"name": "@mysten/wallet-sdk",
+	"name": "@haneullabs/wallet-sdk",
 	"version": "0.1.1",
 	"private": false,
-	"description": "Utilities for building Sui wallets",
+	"description": "Utilities for building Haneul wallets",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"type": "module",
 	"main": "./dist/index.mjs",
 	"types": "./dist/index.d.mts",
@@ -36,26 +36,26 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
 		"url": "https://github.com/mystenlabs/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/MystenLabs/ts-sdks/packages/wallet-sdk#readme",
+	"homepage": "https://github.com/GeunhwaJeong/ts-sdks/packages/wallet-sdk#readme",
 	"devDependencies": {
-		"@mysten/dapp-kit-react": "workspace:^",
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/dapp-kit-react": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@types/node": "^25.0.8",
 		"msw": "^2.12.7",
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.17"
 	},
 	"dependencies": {
-		"@mysten/bcs": "workspace:^",
-		"@mysten/wallet-standard": "workspace:^",
+		"@haneullabs/bcs": "workspace:^",
+		"@haneullabs/wallet-standard": "workspace:^",
 		"valibot": "^1.2.0"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "*"
+		"@haneullabs/haneul": "*"
 	}
 }

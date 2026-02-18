@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromBase64, fromHex, toBase64 } from '@mysten/bcs';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
+import { fromBase64, fromHex, toBase64 } from '@haneullabs/bcs';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { SealClient } from '../../src/index.js';
@@ -24,7 +24,7 @@ import { decrypt } from '../../src/decrypt.js';
 import { KeyCacheKey, SealCompatibleClient } from '../../src/types.js';
 import { G1Element } from '../../src/bls12381.js';
 import { createFullId } from '../../src/utils.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 import { seal } from '../../src/client.js';
 
 /**
@@ -124,12 +124,12 @@ describe('Integration test', () => {
 	let whitelistId: string;
 	beforeAll(async () => {
 		keypair = Ed25519Keypair.fromSecretKey(
-			'suiprivkey1qqgzvw5zc2zmga0uyp4rzcgk42pzzw6387zqhahr82pp95yz0scscffh2d8',
+			'haneulprivkey1qqgzvw5zc2zmga0uyp4rzcgk42pzzw6387zqhahr82pp95yz0scscffh2d8',
 		);
 		suiAddress = keypair.getPublicKey().toSuiAddress();
-		suiClient = new SuiGrpcClient({
+		suiClient = new HaneulGrpcClient({
 			network: 'testnet',
-			baseUrl: 'https://fullnode.testnet.sui.io:443',
+			baseUrl: 'https://fullnode.testnet.haneul.io:443',
 		});
 		TESTNET_PACKAGE_ID = '0x8afa5d31dbaa0a8fb07082692940ca3d56b5e856c5126cb5a3693f0a4de63b82';
 		// Object ids pointing to ci key servers' urls
@@ -602,7 +602,7 @@ describe('Integration test', () => {
 
 		const encryptedObject = EncryptedObject.parse(encryptedBytes);
 
-		// Session key with mismatched sui address and personal msg signature fails.
+		// Session key with mismatched haneul address and personal msg signature fails.
 		const wrongSuiAddress = Ed25519Keypair.generate().getPublicKey().toSuiAddress();
 		const sessionKey = await SessionKey.create({
 			address: wrongSuiAddress,

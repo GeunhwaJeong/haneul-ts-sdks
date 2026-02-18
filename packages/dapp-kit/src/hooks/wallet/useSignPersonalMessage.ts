@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type {
-	SuiSignPersonalMessageInput,
-	SuiSignPersonalMessageOutput,
-} from '@mysten/wallet-standard';
+	HaneulSignPersonalMessageInput,
+	HaneulSignPersonalMessageOutput,
+} from '@haneullabs/wallet-standard';
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 
@@ -15,13 +15,13 @@ import {
 } from '../..//errors/walletErrors.js';
 import { walletMutationKeys } from '../../constants/walletMutationKeys.js';
 import type { PartialBy } from '../../types/utilityTypes.js';
-import { useSuiClientContext } from '../useSuiClient.js';
+import { useSuiClientContext } from '../useHaneulClient.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useCurrentWallet } from './useCurrentWallet.js';
 
-type UseSignPersonalMessageArgs = PartialBy<SuiSignPersonalMessageInput, 'account' | 'chain'>;
+type UseSignPersonalMessageArgs = PartialBy<HaneulSignPersonalMessageInput, 'account' | 'chain'>;
 
-type UseSignPersonalMessageResult = SuiSignPersonalMessageOutput;
+type UseSignPersonalMessageResult = HaneulSignPersonalMessageOutput;
 
 type UseSignPersonalMessageError =
 	| WalletFeatureNotSupportedError
@@ -68,17 +68,17 @@ export function useSignPersonalMessage({
 				);
 			}
 
-			const signPersonalMessageFeature = currentWallet.features['sui:signPersonalMessage'];
+			const signPersonalMessageFeature = currentWallet.features['haneul:signPersonalMessage'];
 			if (signPersonalMessageFeature) {
 				return await signPersonalMessageFeature.signPersonalMessage({
 					...signPersonalMessageArgs,
 					account: signerAccount,
-					chain: signPersonalMessageArgs.chain ?? `sui:${network}`,
+					chain: signPersonalMessageArgs.chain ?? `haneul:${network}`,
 				});
 			}
 
-			// TODO: Remove this once we officially discontinue sui:signMessage in the wallet standard
-			const signMessageFeature = currentWallet.features['sui:signMessage'];
+			// TODO: Remove this once we officially discontinue haneul:signMessage in the wallet standard
+			const signMessageFeature = currentWallet.features['haneul:signMessage'];
 			if (signMessageFeature) {
 				console.warn(
 					"This wallet doesn't support the `signPersonalMessage` feature... falling back to `signMessage`.",

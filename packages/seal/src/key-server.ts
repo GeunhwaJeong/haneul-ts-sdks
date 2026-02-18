@@ -1,6 +1,6 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { bcs, fromBase64, fromHex, toBase64, toHex } from '@mysten/bcs';
+import { bcs, fromBase64, fromHex, toBase64, toHex } from '@haneullabs/bcs';
 import { bls12_381 } from '@noble/curves/bls12-381.js';
 
 import { KeyServerMove, KeyServerMoveV1, KeyServerMoveV2 } from './bcs.js';
@@ -45,7 +45,7 @@ export const SERVER_VERSION_REQUIREMENT = new Version('0.4.1');
  * For V2 committee servers, returns the aggregator URL from the config.
  *
  * @param objectIds - The key server object IDs.
- * @param client - The Sui client to use (SuiGrpcClient, SuiGraphQLClient, or SuiJsonRpcClient).
+ * @param client - The Haneul client to use (HaneulGrpcClient, HaneulGraphQLClient, or HaneulJsonRpcClient).
  * @param configs - The key server configurations containing aggregator URLs.
  * @returns - An array of SealKeyServer.
  */

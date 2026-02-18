@@ -1,1 +1,1 @@
-# `@mysten/wallet-sdk`
+# `@haneullabs/wallet-sdk`

@@ -5,10 +5,10 @@ import {
 	extractStatusFromEffectsBcs,
 	parseTransactionBcs,
 	parseTransactionEffectsBcs,
-	type SuiClientTypes,
-} from '@mysten/sui/client';
+	type HaneulClientTypes,
+} from '@haneullabs/haneul/client';
 
-export type TransactionResultWithEffects = SuiClientTypes.TransactionResult<{
+export type TransactionResultWithEffects = HaneulClientTypes.TransactionResult<{
 	effects: true;
 	transaction: true;
 	bcs: true;
@@ -22,7 +22,7 @@ export function buildTransactionResult(
 ): TransactionResultWithEffects {
 	const status = extractStatusFromEffectsBcs(effectsBytes);
 
-	let effects: SuiClientTypes.TransactionEffects | null = null;
+	let effects: HaneulClientTypes.TransactionEffects | null = null;
 	try {
 		effects = parseTransactionEffectsBcs(effectsBytes);
 	} catch {
@@ -31,12 +31,12 @@ export function buildTransactionResult(
 		);
 	}
 
-	const txResult: SuiClientTypes.Transaction<{ effects: true; transaction: true; bcs: true }> = {
+	const txResult: HaneulClientTypes.Transaction<{ effects: true; transaction: true; bcs: true }> = {
 		digest,
 		signatures: [signature],
 		epoch: null,
 		status,
-		effects: effects as SuiClientTypes.TransactionEffects,
+		effects: effects as HaneulClientTypes.TransactionEffects,
 		transaction: parseTransactionBcs(transactionBytes),
 		balanceChanges: undefined,
 		events: undefined,

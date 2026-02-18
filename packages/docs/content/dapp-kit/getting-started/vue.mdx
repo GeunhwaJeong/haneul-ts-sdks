@@ -8,7 +8,7 @@ direct store access.
 ## Installation
 
 ```sh npm2yarn
-npm i @mysten/dapp-kit-core @mysten/sui @nanostores/vue
+npm i @haneullabs/dapp-kit-core @haneullabs/haneul @nanostores/vue
 ```
 
 ## Setup
@@ -17,11 +17,11 @@ npm i @mysten/dapp-kit-core @mysten/sui @nanostores/vue
 
 ```ts
 // src/dapp-kit.ts
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 };
 
 export const dAppKit = createDAppKit({
@@ -36,7 +36,7 @@ Import the web components in your app entry point:
 
 ```ts
 // src/main.ts
-import '@mysten/dapp-kit-core/web';
+import '@haneullabs/dapp-kit-core/web';
 import { createApp } from 'vue';
 import App from './App.vue';
 
@@ -52,8 +52,8 @@ import { dAppKit } from './dapp-kit';
 
 <template>
 	<div>
-		<h1>My Sui dApp</h1>
-		<mysten-dapp-kit-connect-button :instance="dAppKit" />
+		<h1>My Haneul dApp</h1>
+		<haneullabs-dapp-kit-connect-button :instance="dAppKit" />
 	</div>
 </template>
 ```
@@ -73,7 +73,7 @@ const network = useStore(dAppKit.stores.$currentNetwork);
 
 <template>
 	<div>
-		<mysten-dapp-kit-connect-button :instance="dAppKit" />
+		<haneullabs-dapp-kit-connect-button :instance="dAppKit" />
 
 		<div v-if="connection.account">
 			<p>Wallet: {{ connection.wallet?.name }}</p>
@@ -90,7 +90,7 @@ const network = useStore(dAppKit.stores.$currentNetwork);
 ```vue
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue';
-import { Transaction, coinWithBalance } from '@mysten/sui/transactions';
+import { Transaction, coinWithBalance } from '@haneullabs/haneul/transactions';
 import { dAppKit } from './dapp-kit';
 
 const connection = useStore(dAppKit.stores.$connection);
@@ -115,7 +115,7 @@ async function handleTransfer() {
 
 <template>
 	<div>
-		<mysten-dapp-kit-connect-button :instance="dAppKit" />
+		<haneullabs-dapp-kit-connect-button :instance="dAppKit" />
 
 		<button v-if="connection.account" @click="handleTransfer">Send Transaction</button>
 	</div>
@@ -127,7 +127,7 @@ async function handleTransfer() {
 ```vue
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue';
-import { Transaction, coinWithBalance } from '@mysten/sui/transactions';
+import { Transaction, coinWithBalance } from '@haneullabs/haneul/transactions';
 import { dAppKit } from './dapp-kit';
 
 const connection = useStore(dAppKit.stores.$connection);
@@ -155,8 +155,8 @@ async function handleTransfer() {
 
 <template>
 	<div class="app">
-		<h1>My Sui dApp</h1>
-		<mysten-dapp-kit-connect-button :instance="dAppKit" />
+		<h1>My Haneul dApp</h1>
+		<haneullabs-dapp-kit-connect-button :instance="dAppKit" />
 
 		<div v-if="connection.account" class="wallet-info">
 			<p>Wallet: {{ connection.wallet?.name }}</p>
@@ -175,8 +175,8 @@ Vue works with dApp Kit's Web Components through property binding:
 
 | Component      | Usage                                                                  |
 | -------------- | ---------------------------------------------------------------------- |
-| Connect Button | `<mysten-dapp-kit-connect-button :instance="dAppKit" />`               |
-| Connect Modal  | `<mysten-dapp-kit-connect-modal :instance="dAppKit" :open="isOpen" />` |
+| Connect Button | `<haneullabs-dapp-kit-connect-button :instance="dAppKit" />`               |
+| Connect Modal  | `<haneullabs-dapp-kit-connect-modal :instance="dAppKit" :open="isOpen" />` |
 
 See [Web Components](/dapp-kit/web-components/connect-button) for full documentation.
 
@@ -196,7 +196,7 @@ See [State Management](/dapp-kit/state) for full documentation.
 ## Example Application
 
 See the complete
-[Vue example](https://github.com/MystenLabs/ts-sdks/tree/main/packages/dapp-kit-next/examples/vue/simple)
+[Vue example](https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/dapp-kit-next/examples/vue/simple)
 on GitHub.
 
 ## Next Steps

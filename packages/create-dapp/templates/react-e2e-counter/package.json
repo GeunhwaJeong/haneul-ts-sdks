@@ -1,5 +1,5 @@
 {
-  "name": "@mysten/template-react-e2e-counter",
+  "name": "@haneullabs/template-react-e2e-counter",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,11 +7,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "codegen": "rm -rf src/contracts && sui-ts-codegen generate"
+    "codegen": "rm -rf src/contracts && haneul-ts-codegen generate"
   },
   "dependencies": {
-    "@mysten/dapp-kit-react": "workspace:^",
-    "@mysten/sui": "workspace:^",
+    "@haneullabs/dapp-kit-react": "workspace:^",
+    "@haneullabs/haneul": "workspace:^",
     "@nanostores/react": "^1.0.0",
     "@tanstack/react-query": "^5.90.16",
     "clsx": "^2.1.1",
@@ -21,7 +21,7 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "@mysten/codegen": "workspace:^",
+    "@haneullabs/codegen": "workspace:^",
     "@tailwindcss/vite": "^4.0.0",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",

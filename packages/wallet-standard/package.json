@@ -1,9 +1,9 @@
 {
-	"name": "@mysten/wallet-standard",
+	"name": "@haneullabs/wallet-standard",
 	"version": "0.20.1",
 	"description": "A suite of standard utilities for implementing wallets based on the Wallet Standard.",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"type": "module",
 	"main": "./dist/index.mjs",
 	"types": "./dist/index.d.mts",
@@ -22,10 +22,10 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MystenLabs/ts-sdks/issues/new"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues/new"
 	},
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
@@ -42,11 +42,11 @@
 		"@wallet-standard/core": "1.1.1"
 	},
 	"devDependencies": {
-		"@mysten/sui": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
 		"typescript": "^5.9.3",
 		"typescript-json-schema": "^0.67.1"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "*"
+		"@haneullabs/haneul": "*"
 	}
 }

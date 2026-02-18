@@ -7,20 +7,20 @@ import {
   useSignPersonalMessage,
   useSignTransaction,
   useSuiClientContext,
-} from "@mysten/dapp-kit";
-import { Transaction } from "@mysten/sui/transactions";
+} from "@haneullabs/dapp-kit";
+import { Transaction } from "@haneullabs/haneul/transactions";
 import {
   verifyPersonalMessageSignature,
   verifyTransactionSignature,
-} from "@mysten/sui/verify";
+} from "@haneullabs/haneul/verify";
 import { Button, Container } from "@radix-ui/themes";
-import { fromBase64 } from "@mysten/sui/utils";
+import { fromBase64 } from "@haneullabs/haneul/utils";
 import type {
-  SuiChain,
+  HaneulChain,
   WalletAccount,
   WalletWithRequiredFeatures,
-} from "@mysten/wallet-standard";
-import { signAndExecuteTransaction as signAndExecuteTransactionWalletStandard } from "@mysten/wallet-standard";
+} from "@haneullabs/wallet-standard";
+import { signAndExecuteTransaction as signAndExecuteTransactionWalletStandard } from "@haneullabs/wallet-standard";
 import { useMutation } from "@tanstack/react-query";
 
 export function Actions() {
@@ -39,7 +39,7 @@ export function Actions() {
     }: {
       transaction: Transaction;
       account: WalletAccount;
-      chain: SuiChain;
+      chain: HaneulChain;
       wallet: WalletWithRequiredFeatures;
     }) => {
       return signAndExecuteTransactionWalletStandard(wallet, {
@@ -62,7 +62,7 @@ export function Actions() {
           const { signature } = await signMessage.mutateAsync({
             message,
             account,
-            chain: `sui:${network}`,
+            chain: `haneul:${network}`,
           });
           try {
             await verifyPersonalMessageSignature(message, signature, {
@@ -85,7 +85,7 @@ export function Actions() {
           const { signature } = await signMessage.mutateAsync({
             message,
             account,
-            chain: `sui:${network}`,
+            chain: `haneul:${network}`,
           });
           try {
             await verifyPersonalMessageSignature(message, signature, {
@@ -112,7 +112,7 @@ export function Actions() {
           const { signature, bytes } = await signTransaction.mutateAsync({
             transaction,
             account,
-            chain: `sui:${network}`,
+            chain: `haneul:${network}`,
           });
           try {
             await verifyTransactionSignature(fromBase64(bytes), signature, {
@@ -139,7 +139,7 @@ export function Actions() {
           const { digest } = await signAndExecuteTransaction.mutateAsync({
             transaction,
             account,
-            chain: `sui:${network}`,
+            chain: `haneul:${network}`,
           });
           console.log("Transaction digest:", digest);
         }}
@@ -162,7 +162,7 @@ export function Actions() {
             await signAndExecuteTransactionForceInWallet.mutateAsync({
               transaction,
               account,
-              chain: `sui:${network}` as SuiChain,
+              chain: `haneul:${network}` as HaneulChain,
               wallet: currentWallet,
             });
           console.log("Transaction digest:", digest);

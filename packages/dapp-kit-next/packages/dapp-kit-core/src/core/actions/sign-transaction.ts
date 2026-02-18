@@ -2,21 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { DAppKitStores } from '../store.js';
-import { SuiSignTransaction, SuiSignTransactionBlock } from '@mysten/wallet-standard';
+import { HaneulSignTransaction, HaneulSignTransactionBlock } from '@haneullabs/wallet-standard';
 import type {
-	SuiSignTransactionBlockFeature,
-	SuiSignTransactionFeature,
-	SuiSignTransactionInput,
-} from '@mysten/wallet-standard';
+	HaneulSignTransactionBlockFeature,
+	HaneulSignTransactionFeature,
+	HaneulSignTransactionInput,
+} from '@haneullabs/wallet-standard';
 import { getWalletAccountForUiWalletAccount_DO_NOT_USE_OR_YOU_WILL_BE_FIRED as getWalletAccountForUiWalletAccount } from '@wallet-standard/ui-registry';
 import { FeatureNotSupportedError, WalletNotConnectedError } from '../../utils/errors.js';
 import { getChain } from '../../utils/networks.js';
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { tryGetAccountFeature } from '../../utils/wallets.js';
 
 export type SignTransactionArgs = {
 	transaction: Transaction | string;
-} & Omit<SuiSignTransactionInput, 'account' | 'chain' | 'transaction'>;
+} & Omit<HaneulSignTransactionInput, 'account' | 'chain' | 'transaction'>;
 
 export function signTransactionCreator({ $connection, $currentClient }: DAppKitStores) {
 	/**
@@ -46,8 +46,8 @@ export function signTransactionCreator({ $connection, $currentClient }: DAppKitS
 		const signTransactionFeature = tryGetAccountFeature({
 			account,
 			chain,
-			featureName: SuiSignTransaction,
-		}) as SuiSignTransactionFeature[typeof SuiSignTransaction];
+			featureName: HaneulSignTransaction,
+		}) as HaneulSignTransactionFeature[typeof HaneulSignTransaction];
 
 		if (signTransactionFeature) {
 			return await signTransactionFeature.signTransaction({
@@ -61,8 +61,8 @@ export function signTransactionCreator({ $connection, $currentClient }: DAppKitS
 		const signTransactionBlockFeature = tryGetAccountFeature({
 			account,
 			chain,
-			featureName: SuiSignTransactionBlock,
-		}) as SuiSignTransactionBlockFeature[typeof SuiSignTransactionBlock];
+			featureName: HaneulSignTransactionBlock,
+		}) as HaneulSignTransactionBlockFeature[typeof HaneulSignTransactionBlock];
 
 		if (signTransactionBlockFeature) {
 			const transaction = Transaction.from(await transactionWrapper.toJSON());

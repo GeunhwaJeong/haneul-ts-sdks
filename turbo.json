@@ -42,11 +42,11 @@
 			]
 		},
 		// Avoid running CPU intensive tests in parallel
-		"@mysten/walrus#test": {
-			"dependsOn": ["^build", "build", "@mysten/walrus-wasm#test"]
+		"@haneullabs/walrus#test": {
+			"dependsOn": ["^build", "build", "@haneullabs/walrus-wasm#test"]
 		},
-		"@mysten/seal#test": {
-			"dependsOn": ["^build", "build", "@mysten/walrus#test"]
+		"@haneullabs/seal#test": {
+			"dependsOn": ["^build", "build", "@haneullabs/walrus#test"]
 		},
 		"test:e2e": {
 			"dependsOn": ["^build", "build"],
@@ -96,7 +96,7 @@
 			],
 			"outputs": ["build/**", "dist/**"]
 		},
-		"@mysten/sdk-docs#build": {
+		"@haneullabs/sdk-docs#build": {
 			"dependsOn": ["^build"],
 			"inputs": [
 				"content/**",

@@ -3,16 +3,16 @@
 
 import { describe, expect, it } from 'vitest';
 import { SessionKey } from '../../src/session-key.js';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { UserError } from '../../src/error.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 
 describe('Session key tests', () => {
 	const TESTNET_PACKAGE_ID = '0x9709d4ee371488c2bc09f508e98e881bd1d5335e0805d7e6a99edd54a7027954';
 	it('import and export session key', async () => {
 		const kp = Ed25519Keypair.generate();
-		const suiClient = new SuiGrpcClient({
+		const suiClient = new HaneulGrpcClient({
 			network: 'testnet',
 			baseUrl: getJsonRpcFullnodeUrl('testnet'),
 		});

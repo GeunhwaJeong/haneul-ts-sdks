@@ -7,14 +7,14 @@ import { UseSignTransactionExample } from '../../../../examples/wallet-hooks-cli
 Use the `useSignTransaction` hook to prompt the user to sign a transaction with their wallet.
 
 ```ts
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import {
 	ConnectButton,
 	useCurrentAccount,
 	useSignTransaction,
 	useSuiClient,
-} from '@mysten/dapp-kit';
-import { toBase64 } from '@mysten/sui/utils';
+} from '@haneullabs/dapp-kit';
+import { toBase64 } from '@haneullabs/haneul/utils';
 import { useState } from 'react';
 
 function MyComponent() {
@@ -33,7 +33,7 @@ function MyComponent() {
 							onClick={async () => {
 								const { bytes, signature } = await signTransaction({
 									transaction: new Transaction(),
-									chain: 'sui:devnet',
+									chain: 'haneul:devnet',
 								});
 
 								const executeResult = await client.executeTransactionBlock({

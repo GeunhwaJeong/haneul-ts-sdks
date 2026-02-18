@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { normalizeSuiAddress, normalizeStructTag } from '@mysten/sui/utils';
-import type { SuiClientTypes } from '@mysten/sui/client';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { normalizeHaneulAddress, normalizeStructTag } from '@haneullabs/haneul/utils';
+import type { HaneulClientTypes } from '@haneullabs/haneul/client';
 
 export const DEFAULT_SENDER = '0x0000000000000000000000000000000000000000000000000000000000000123';
 
@@ -39,26 +39,26 @@ export const CoinStruct = bcs.struct('Coin', {
 });
 
 // Helper functions to create owner types
-export function createAddressOwner(address: string): SuiClientTypes.AddressOwner {
+export function createAddressOwner(address: string): HaneulClientTypes.AddressOwner {
 	return { $kind: 'AddressOwner', AddressOwner: address };
 }
 
-export function createSharedOwner(initialSharedVersion: string): SuiClientTypes.SharedOwner {
+export function createSharedOwner(initialSharedVersion: string): HaneulClientTypes.SharedOwner {
 	return { $kind: 'Shared', Shared: { initialSharedVersion } };
 }
 
-export function createImmutableOwner(): SuiClientTypes.ImmutableOwner {
+export function createImmutableOwner(): HaneulClientTypes.ImmutableOwner {
 	return { $kind: 'Immutable', Immutable: true };
 }
 
-export function createObjectOwner(objectId: string): SuiClientTypes.ParentOwner {
+export function createObjectOwner(objectId: string): HaneulClientTypes.ParentOwner {
 	return { $kind: 'ObjectOwner', ObjectOwner: objectId };
 }
 
 export function createConsensusAddressOwner(
 	owner: string,
 	startVersion: string,
-): SuiClientTypes.ConsensusAddressOwner {
+): HaneulClientTypes.ConsensusAddressOwner {
 	return { $kind: 'ConsensusAddressOwner', ConsensusAddressOwner: { owner, startVersion } };
 }
 
@@ -67,11 +67,11 @@ export function createMockCoin(params: {
 	objectId: string;
 	coinType: string;
 	balance: bigint;
-	owner: SuiClientTypes.ObjectOwner;
+	owner: HaneulClientTypes.ObjectOwner;
 	version?: string;
 	digest?: string;
-}): SuiClientTypes.Object<{ content: true }> {
-	const normalizedId = normalizeSuiAddress(params.objectId);
+}): HaneulClientTypes.Object<{ content: true }> {
+	const normalizedId = normalizeHaneulAddress(params.objectId);
 	const normalizedCoinType = normalizeStructTag(params.coinType);
 
 	const content = CoinStruct.serialize({
@@ -103,11 +103,11 @@ export const NFTStruct = bcs.struct('NFT', {
 export function createMockNFT(params: {
 	objectId: string;
 	nftType: string;
-	owner: SuiClientTypes.ObjectOwner;
+	owner: HaneulClientTypes.ObjectOwner;
 	version?: string;
 	digest?: string;
-}): SuiClientTypes.Object<{ content: true }> {
-	const normalizedId = normalizeSuiAddress(params.objectId);
+}): HaneulClientTypes.Object<{ content: true }> {
+	const normalizedId = normalizeHaneulAddress(params.objectId);
 	const normalizedNftType = normalizeStructTag(params.nftType);
 
 	// More realistic NFT structure
@@ -134,12 +134,12 @@ export function createMockNFT(params: {
 export function createMockObject(params: {
 	objectId: string;
 	objectType: string;
-	owner: SuiClientTypes.ObjectOwner;
+	owner: HaneulClientTypes.ObjectOwner;
 	version?: string;
 	digest?: string;
 	content?: Uint8Array;
-}): SuiClientTypes.Object<{ content: true }> {
-	const normalizedId = normalizeSuiAddress(params.objectId);
+}): HaneulClientTypes.Object<{ content: true }> {
+	const normalizedId = normalizeHaneulAddress(params.objectId);
 	const normalizedObjectType = normalizeStructTag(params.objectType);
 
 	// Default content is just the object ID as address
@@ -163,14 +163,14 @@ export function createMockMoveFunction(params: {
 	packageId: string;
 	moduleName: string;
 	name: string;
-	visibility: SuiClientTypes.Visibility;
+	visibility: HaneulClientTypes.Visibility;
 	isEntry: boolean;
-	typeParameters?: SuiClientTypes.TypeParameter[];
-	parameters: SuiClientTypes.OpenSignature[];
-	returns?: SuiClientTypes.OpenSignature[];
-}): SuiClientTypes.FunctionResponse {
+	typeParameters?: HaneulClientTypes.TypeParameter[];
+	parameters: HaneulClientTypes.OpenSignature[];
+	returns?: HaneulClientTypes.OpenSignature[];
+}): HaneulClientTypes.FunctionResponse {
 	return {
-		packageId: normalizeSuiAddress(params.packageId),
+		packageId: normalizeHaneulAddress(params.packageId),
 		moduleName: params.moduleName,
 		name: params.name,
 		visibility: params.visibility,
@@ -186,10 +186,10 @@ export function createMockCoins(params: {
 	coinType: string;
 	totalBalance: bigint;
 	numCoins: number;
-	owner: SuiClientTypes.ObjectOwner;
+	owner: HaneulClientTypes.ObjectOwner;
 	baseObjectId?: string;
-}): SuiClientTypes.Object<{ content: true }>[] {
-	const coins: SuiClientTypes.Object<{ content: true }>[] = [];
+}): HaneulClientTypes.Object<{ content: true }>[] {
+	const coins: HaneulClientTypes.Object<{ content: true }>[] = [];
 	const baseId = params.baseObjectId || '0xc01';
 
 	// Split balance deterministically across coins using powers of 2
@@ -209,7 +209,7 @@ export function createMockCoins(params: {
 	for (let i = 0; i < params.numCoins; i++) {
 		// Generate valid hex object ID
 		const suffix = i.toString(16).padStart(2, '0');
-		const objectId = normalizeSuiAddress(`${baseId}${suffix}`);
+		const objectId = normalizeHaneulAddress(`${baseId}${suffix}`);
 		coins.push(
 			createMockCoin({
 				objectId,
@@ -225,11 +225,11 @@ export function createMockCoins(params: {
 }
 
 // Default objects that the mock client knows about
-export const DEFAULT_OBJECTS: SuiClientTypes.Object<{ content: true }>[] = [
-	// 10 SUI coins for main sender (split across multiple coins)
+export const DEFAULT_OBJECTS: HaneulClientTypes.Object<{ content: true }>[] = [
+	// 10 HANEUL coins for main sender (split across multiple coins)
 	...createMockCoins({
-		coinType: '0x2::sui::SUI',
-		totalBalance: 10000000000n, // 10 SUI
+		coinType: '0x2::haneul::HANEUL',
+		totalBalance: 10000000000n, // 10 HANEUL
 		numCoins: 10,
 		owner: createAddressOwner(DEFAULT_SENDER),
 		baseObjectId: '0xa5c0',
@@ -253,21 +253,21 @@ export const DEFAULT_OBJECTS: SuiClientTypes.Object<{ content: true }>[] = [
 	// Coin with ObjectOwner for testing
 	createMockCoin({
 		objectId: '0xa5c04',
-		coinType: '0x2::sui::SUI',
+		coinType: '0x2::haneul::HANEUL',
 		balance: 100000000n,
 		owner: createObjectOwner('0xparent'),
 	}),
 	// Coin with ConsensusAddressOwner for testing
 	createMockCoin({
 		objectId: '0xa5c05',
-		coinType: '0x2::sui::SUI',
+		coinType: '0x2::haneul::HANEUL',
 		balance: 50000000n,
 		owner: createConsensusAddressOwner(DEFAULT_SENDER, '100'),
 	}),
-	// Another user's SUI coin
+	// Another user's HANEUL coin
 	createMockCoin({
 		objectId: '0xcafe',
-		coinType: '0x2::sui::SUI',
+		coinType: '0x2::haneul::HANEUL',
 		balance: 5000000n,
 		owner: createAddressOwner('0xbabe'),
 	}),
@@ -286,7 +286,7 @@ export const DEFAULT_OBJECTS: SuiClientTypes.Object<{ content: true }>[] = [
 ];
 
 // Default move functions that the mock client knows about
-export const DEFAULT_MOVE_FUNCTIONS: SuiClientTypes.FunctionResponse[] = [
+export const DEFAULT_MOVE_FUNCTIONS: HaneulClientTypes.FunctionResponse[] = [
 	createMockMoveFunction({
 		packageId: '0x999',
 		moduleName: 'test',
@@ -442,7 +442,7 @@ export const DEFAULT_MOVE_FUNCTIONS: SuiClientTypes.FunctionResponse[] = [
 							{
 								$kind: 'datatype',
 								datatype: {
-									typeName: '0x2::sui::SUI',
+									typeName: '0x2::haneul::HANEUL',
 									typeParameters: [],
 								},
 							},

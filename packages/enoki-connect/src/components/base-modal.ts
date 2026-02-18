@@ -4,8 +4,8 @@
 import { LitElement } from 'lit';
 import type { PropertyValues } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
-import { promiseWithResolvers } from '@mysten/utils';
-import type { PromiseWithResolvers } from '@mysten/utils';
+import { promiseWithResolvers } from '@haneullabs/utils';
+import type { PromiseWithResolvers } from '@haneullabs/utils';
 
 export class BaseModal extends LitElement {
 	#isOpen = false;

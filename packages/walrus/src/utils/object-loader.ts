@@ -1,19 +1,19 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { BcsType } from '@mysten/bcs';
-import { pureBcsSchemaFromTypeName } from '@mysten/sui/bcs';
-import type { PureTypeName, ShapeFromPureTypeName } from '@mysten/sui/bcs';
-import type { BaseClient, SuiClientTypes } from '@mysten/sui/client';
-import { deriveDynamicFieldID } from '@mysten/sui/utils';
+import type { BcsType } from '@haneullabs/bcs';
+import { pureBcsSchemaFromTypeName } from '@haneullabs/haneul/bcs';
+import type { PureTypeName, ShapeFromPureTypeName } from '@haneullabs/haneul/bcs';
+import type { BaseClient, HaneulClientTypes } from '@haneullabs/haneul/client';
+import { deriveDynamicFieldID } from '@haneullabs/haneul/utils';
 import DataLoader from 'dataloader';
 import { Field } from './bcs.js';
 
-export class SuiObjectDataLoader extends DataLoader<
+export class HaneulObjectDataLoader extends DataLoader<
 	string,
-	SuiClientTypes.Object<{ content: true }>
+	HaneulClientTypes.Object<{ content: true }>
 > {
-	#dynamicFieldCache = new Map<string, Map<string, SuiClientTypes.Object<{ content: true }>>>();
+	#dynamicFieldCache = new Map<string, Map<string, HaneulClientTypes.Object<{ content: true }>>>();
 	constructor(suiClient: BaseClient) {
 		super(async (ids: readonly string[]) => {
 			const { objects } = await suiClient.core.getObjects({
@@ -25,7 +25,7 @@ export class SuiObjectDataLoader extends DataLoader<
 		});
 	}
 
-	override async load<T = SuiClientTypes.Object<{ content: true }>>(
+	override async load<T = HaneulClientTypes.Object<{ content: true }>>(
 		id: string,
 		schema?: BcsType<T, any>,
 	): Promise<T> {
@@ -38,7 +38,7 @@ export class SuiObjectDataLoader extends DataLoader<
 		return data as T;
 	}
 
-	override async loadMany<T = SuiClientTypes.Object<{ content: true }>>(
+	override async loadMany<T = HaneulClientTypes.Object<{ content: true }>>(
 		ids: string[],
 		schema?: BcsType<T, any>,
 	): Promise<(T | Error)[]> {

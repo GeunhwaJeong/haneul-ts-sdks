@@ -9,8 +9,8 @@
  *   npx tsx examples/deriveCurrencyId.ts
  */
 
-import { bcs } from '@mysten/sui/bcs';
-import { deriveObjectID } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { deriveObjectID } from '@haneullabs/haneul/utils';
 
 const CurrencyKey = bcs.struct('CurrencyKey', {
 	dummy_value: bcs.bool(),

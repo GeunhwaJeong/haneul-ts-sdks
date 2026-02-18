@@ -8,8 +8,8 @@ Use the `useSignAndExecuteTransaction` hook to prompt the user to sign and execu
 block with their wallet.
 
 ```ts
-import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
-import { Transaction } from '@mysten/sui/transactions';
+import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction } from '@haneullabs/dapp-kit';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { useState } from 'react';
 
 function MyComponent() {
@@ -28,7 +28,7 @@ function MyComponent() {
 								signAndExecuteTransaction(
 									{
 										transaction: new Transaction(),
-										chain: 'sui:devnet',
+										chain: 'haneul:devnet',
 									},
 									{
 										onSuccess: (result) => {
@@ -65,8 +65,8 @@ import {
 	useSuiClient,
 	useCurrentAccount,
 	useSignAndExecuteTransaction,
-} from '@mysten/dapp-kit';
-import { Transaction } from '@mysten/sui/transactions';
+} from '@haneullabs/dapp-kit';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { useState } from 'react';
 
 function MyComponent() {
@@ -99,7 +99,7 @@ function MyComponent() {
 								signAndExecuteTransaction(
 									{
 										transaction: new Transaction(),
-										chain: 'sui:devnet',
+										chain: 'haneul:devnet',
 									},
 									{
 										onSuccess: (result) => {

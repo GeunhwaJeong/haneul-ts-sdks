@@ -9,8 +9,8 @@ scenarios.
 ## Usage
 
 ```typescript
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { Transaction, coinWithBalance } from '@mysten/sui/transactions';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { Transaction, coinWithBalance } from '@haneullabs/haneul/transactions';
 
 const dAppKit = createDAppKit({
 	/* config */
@@ -55,7 +55,7 @@ When passing a Transaction instance, the action automatically:
 
 ## Wallet Compatibility
 
-- The action transparently handles both `sui:signTransaction` and `sui:signTransactionBlock`
+- The action transparently handles both `haneul:signTransaction` and `haneul:signTransactionBlock`
   wallet-standard features
 
 ```typescript

@@ -1,9 +1,9 @@
 {
-	"name": "@mysten/enoki",
+	"name": "@haneullabs/enoki",
 	"version": "1.0.3",
 	"description": "zkLogin authentication and sponsored transactions",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"type": "module",
 	"main": "./dist/index.mjs",
 	"types": "./dist/index.d.mts",
@@ -37,15 +37,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
 		"url": "https://github.com/mystenlabs/ts-sdks/issues"
 	},
-	"homepage": "https://docs.enoki.mystenlabs.com",
+	"homepage": "https://docs.enoki.haneul-labs.com",
 	"devDependencies": {
-		"@mysten/dapp-kit-react": "workspace:^",
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/dapp-kit-react": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@types/node": "^25.0.8",
 		"@types/react": "^19.2.8",
 		"@types/react-dom": "^19.2.3",
@@ -56,16 +56,16 @@
 		"vite": "^7.3.1"
 	},
 	"dependencies": {
-		"@mysten/signers": "workspace:^",
-		"@mysten/utils": "workspace:^",
-		"@mysten/wallet-standard": "workspace:^",
+		"@haneullabs/signers": "workspace:^",
+		"@haneullabs/utils": "workspace:^",
+		"@haneullabs/wallet-standard": "workspace:^",
 		"@nanostores/react": "^1.0.0",
 		"@wallet-standard/ui": "^1.0.1",
 		"idb-keyval": "^6.2.2",
 		"nanostores": "^1.1.0"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@types/react": ">=17.0.0",
 		"react": ">=17.0.0"
 	},

@@ -36,9 +36,9 @@ export default async function setup(project: TestProject) {
 		.withPullPolicy(PullPolicy.alwaysPull())
 		.start();
 
-	const localnet = await new GenericContainer(`mysten/sui-tools:${SUI_TOOLS_TAG}`)
+	const localnet = await new GenericContainer(`myste./haneul-tools:${SUI_TOOLS_TAG}`)
 		.withCommand([
-			'sui',
+			'haneul',
 			'start',
 			'--with-faucet',
 			'--force-regenesis',

@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, it, expect } from 'vitest';
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { analyze } from '../../src/transaction-analyzer/analyzer.js';
 import { commands } from '../../src/transaction-analyzer/rules/commands.js';
-import { MockSuiClient } from '../mocks/MockSuiClient.js';
+import { MockSuiClient } from '../mock./MockHaneulClient.js';
 import { DEFAULT_SENDER, TEST_COIN_1_ID, TEST_COIN_2_ID } from '../mocks/mockData.js';
 
 describe('TransactionAnalyzer - Commands Rule', () => {
@@ -117,7 +117,7 @@ describe('TransactionAnalyzer - Commands Rule', () => {
 			          },
 			          "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			          "previousTransaction": undefined,
-			          "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			          "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			          "version": "100",
 			        },
 			      },
@@ -178,7 +178,7 @@ describe('TransactionAnalyzer - Commands Rule', () => {
 			          },
 			          "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			          "previousTransaction": undefined,
-			          "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			          "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			          "version": "101",
 			        },
 			      },
@@ -284,7 +284,7 @@ describe('TransactionAnalyzer - Commands Rule', () => {
 			        },
 			        "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			        "previousTransaction": undefined,
-			        "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			        "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			        "version": "100",
 			      },
 			    },
@@ -347,7 +347,7 @@ describe('TransactionAnalyzer - Commands Rule', () => {
 			          },
 			          "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			          "previousTransaction": undefined,
-			          "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			          "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			          "version": "101",
 			        },
 			      },

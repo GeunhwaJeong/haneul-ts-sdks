@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TransactionResult } from '@mysten/sui/transactions';
-import type { ClientWithCoreApi } from '@mysten/sui/client';
+import type { TransactionResult } from '@haneullabs/haneul/transactions';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/client';
 
 export type PaymentKitPackageConfig = {
 	packageId: string;

@@ -11,19 +11,19 @@ import CloudFlareAnalytics from '@/components/CloudFlareAnalytics';
 
 export const metadata: Metadata = {
 	title: {
-		template: '%s | Mysten Labs TypeScript SDK Docs',
-		default: 'Mysten Labs TypeScript SDK Docs',
+		template: '%s | Haneul Labs TypeScript SDK Docs',
+		default: 'Haneul Labs TypeScript SDK Docs',
 	},
 	description:
-		'Mysten Labs TypeScript SDK Docs. Discover the power of Sui and Walrus through examples, guides, and concepts.',
+		'Haneul Labs TypeScript SDK Docs. Discover the power of Haneul and Walrus through examples, guides, and concepts.',
 	openGraph: {
-		title: 'Mysten Labs TypeScript SDK Docs',
+		title: 'Haneul Labs TypeScript SDK Docs',
 		description:
-			'Mysten Labs TypeScript SDK Docs. Discover the power of Sui and Walrus through examples, guides, and concepts.',
-		siteName: 'Mysten Labs TypeScript SDK Docs',
+			'Haneul Labs TypeScript SDK Docs. Discover the power of Haneul and Walrus through examples, guides, and concepts.',
+		siteName: 'Haneul Labs TypeScript SDK Docs',
 	},
 	appleWebApp: {
-		title: 'Mysten Labs TypeScript SDK Docs',
+		title: 'Haneul Labs TypeScript SDK Docs',
 	},
 };
 
@@ -44,8 +44,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			</head>
 			<body className="flex flex-col min-h-screen">
 				<Banner id="sdk-2-migration">
-					@mysten/sui v2.0 and a new dApp Kit are here!&nbsp;
-					<Link href="/sui/migrations/sui-2.0" className="underline">
+					@haneullabs/haneul v2.0 and a new dApp Kit are here!&nbsp;
+					<Link href="/haneul/migration./haneul-2.0" className="underline">
 						Check out the migration guide
 					</Link>
 				</Banner>

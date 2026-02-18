@@ -10,7 +10,7 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '@local-pkg/walrus::active_set';
 export const ActiveSetEntry = new MoveStruct({
 	name: `${$moduleName}::ActiveSetEntry`,

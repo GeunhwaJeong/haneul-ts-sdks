@@ -2,15 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { serve } from '@hono/node-server';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 import { Hono } from 'hono';
 
 import { WalrusClient } from '../../src/index.js';
 import { getFundedKeypair } from '../funded-keypair.js';
 
-const suiClient = new SuiGrpcClient({
+const suiClient = new HaneulGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 });
 
 const walrusClient = new WalrusClient({

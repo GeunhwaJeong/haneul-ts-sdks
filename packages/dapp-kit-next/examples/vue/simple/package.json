@@ -11,8 +11,8 @@
 		"type-check": "vue-tsc --build"
 	},
 	"dependencies": {
-		"@mysten/dapp-kit-core": "workspace:^",
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/dapp-kit-core": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@nanostores/vue": "^1.0.1",
 		"vue": "^3.5.26"
 	},

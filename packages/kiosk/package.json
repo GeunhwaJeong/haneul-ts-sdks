@@ -1,7 +1,7 @@
 {
-	"name": "@mysten/kiosk",
-	"author": "Mysten Labs <build@mystenlabs.com>",
-	"description": "Sui Kiosk library",
+	"name": "@haneullabs/kiosk",
+	"author": "Haneul Labs <build@haneul-labs.com>",
+	"description": "Haneul Kiosk library",
 	"version": "1.1.2",
 	"license": "Apache-2.0",
 	"type": "module",
@@ -25,14 +25,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MystenLabs/ts-sdks/issues/new"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues/new"
 	},
 	"scripts": {
 		"build": "rm -rf dist && tsc --noEmit && tsdown",
-		"codegen": "sui-ts-codegen generate && pnpm lint:fix",
+		"codegen": "haneul-ts-codegen generate && pnpm lint:fix",
 		"test": "echo 'No unit tests for kiosk SDK'",
 		"pre-commit": "pnpm prettier:fix && pnpm lint && pnpm build",
 		"prettier:check": "prettier -c --ignore-unknown .",
@@ -44,12 +44,12 @@
 		"test:e2e": "vitest run e2e"
 	},
 	"dependencies": {
-		"@mysten/bcs": "workspace:^",
-		"@mysten/utils": "workspace:^"
+		"@haneullabs/bcs": "workspace:^",
+		"@haneullabs/utils": "workspace:^"
 	},
 	"devDependencies": {
-		"@mysten/codegen": "workspace:^",
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/codegen": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"cross-env": "^10.1.0",
 		"tmp": "^0.2.5",
 		"ts-retry-promise": "^0.8.1",
@@ -59,6 +59,6 @@
 		"wait-on": "^9.0.3"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "workspace:^"
+		"@haneullabs/haneul": "workspace:^"
 	}
 }

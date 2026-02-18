@@ -5,27 +5,27 @@ import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import type { DAppKitConnectButton } from './dapp-kit-connect-button.js';
 import { createDAppKit } from '../core/index.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 };
 
 const dAppKit = createDAppKit({
 	networks: ['testnet'],
 	createClient(network) {
-		return new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] });
+		return new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] });
 	},
 });
 
 const meta = {
 	title: 'Connect Button',
-	component: 'mysten-dapp-kit-connect-button',
+	component: 'haneullabs-dapp-kit-connect-button',
 	render: (args) =>
-		html`<mysten-dapp-kit-connect-button
+		html`<haneullabs-dapp-kit-connect-button
 			.modalOptions=${args['modalOptions']}
 			.instance=${dAppKit}
-		></mysten-dapp-kit-connect-button>`,
+		></haneullabs-dapp-kit-connect-button>`,
 	tags: ['autodocs'],
 } satisfies Meta;
 
@@ -35,9 +35,9 @@ export const Default: StoryObj<DAppKitConnectButton> = {};
 
 export const WithCustomLabel: StoryObj<DAppKitConnectButton> = {
 	render: () =>
-		html`<mysten-dapp-kit-connect-button .instance=${dAppKit}>
+		html`<haneullabs-dapp-kit-connect-button .instance=${dAppKit}>
 			Sign In
-		</mysten-dapp-kit-connect-button>`,
+		</haneullabs-dapp-kit-connect-button>`,
 };
 
 export const WithCustomTheme: StoryObj<DAppKitConnectButton> = {
@@ -66,7 +66,7 @@ export const WithCustomTheme: StoryObj<DAppKitConnectButton> = {
 					--radius: 1.5rem;
 				}
 			</style>
-			<mysten-dapp-kit-connect-button .instance=${dAppKit}></mysten-dapp-kit-connect-button>
+			<haneullabs-dapp-kit-connect-button .instance=${dAppKit}></haneullabs-dapp-kit-connect-button>
 		</div>
 	`,
 };

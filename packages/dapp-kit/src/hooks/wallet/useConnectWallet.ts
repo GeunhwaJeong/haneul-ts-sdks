@@ -6,7 +6,7 @@ import type {
 	StandardConnectOutput,
 	WalletAccount,
 	WalletWithRequiredFeatures,
-} from '@mysten/wallet-standard';
+} from '@haneullabs/wallet-standard';
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 
@@ -51,12 +51,12 @@ export function useConnectWallet({
 
 				const connectResult = await wallet.features['standard:connect'].connect(connectArgs);
 				let supportedIntents = connectResult.supportedIntents;
-				if (!supportedIntents && wallet.features['sui:getCapabilities']) {
+				if (!supportedIntents && wallet.features['haneul:getCapabilities']) {
 					supportedIntents =
-						(await wallet.features['sui:getCapabilities'].getCapabilities()).supportedIntents ?? [];
+						(await wallet.features['haneul:getCapabilities'].getCapabilities()).supportedIntents ?? [];
 				}
 				const connectedSuiAccounts = connectResult.accounts.filter((account) =>
-					account.chains.some((chain) => chain.split(':')[0] === 'sui'),
+					account.chains.some((chain) => chain.split(':')[0] === 'haneul'),
 				);
 				const selectedAccount = getSelectedAccount(connectedSuiAccounts, accountAddress);
 

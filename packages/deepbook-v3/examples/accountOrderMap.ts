@@ -2,21 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0
 import { execSync } from 'child_process';
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 import { deepbook } from '../src/index.js';
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.SUI_BINARY ?? `haneul`;
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 type Network = 'mainnet' | 'testnet';
 
 const getActiveNetwork = (): Network => {
-	const env = execSync(`${SUI} client active-env`, { encoding: 'utf8' }).trim();
+	const env = execSync(`${HANEUL} client active-env`, { encoding: 'utf8' }).trim();
 	if (env !== 'mainnet' && env !== 'testnet') {
 		throw new Error(`Unsupported network: ${env}. Only 'mainnet' and 'testnet' are supported.`);
 	}
@@ -35,7 +35,7 @@ const getActiveNetwork = (): Network => {
 		},
 	};
 
-	const client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+	const client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 		deepbook({
 			address: '0x0',
 			balanceManagers: balanceManagers,

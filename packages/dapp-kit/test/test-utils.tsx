@@ -1,26 +1,26 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getJsonRpcFullnodeUrl, SuiJsonRpcClient } from '@mysten/sui/jsonRpc';
-import type { IdentifierRecord, ReadonlyWalletAccount } from '@mysten/wallet-standard';
-import { getWallets } from '@mysten/wallet-standard';
+import { getJsonRpcFullnodeUrl, HaneulJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
+import type { IdentifierRecord, ReadonlyWalletAccount } from '@haneullabs/wallet-standard';
+import { getWallets } from '@haneullabs/wallet-standard';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ComponentProps } from 'react';
 
 import { WalletProvider } from '../src/components/WalletProvider.js';
-import { SuiClientProvider } from '../src/index.js';
+import { HaneulClientProvider } from '../src/index.js';
 import { createMockAccount } from './mocks/mockAccount.js';
 import { MockWallet } from './mocks/mockWallet.js';
 
-export function createSuiClientContextWrapper(client: SuiJsonRpcClient) {
-	return function SuiClientContextWrapper({ children }: { children: React.ReactNode }) {
-		return <SuiClientProvider networks={{ test: client }}>{children}</SuiClientProvider>;
+export function createSuiClientContextWrapper(client: HaneulJsonRpcClient) {
+	return function HaneulClientContextWrapper({ children }: { children: React.ReactNode }) {
+		return <HaneulClientProvider networks={{ test: client }}>{children}</HaneulClientProvider>;
 	};
 }
 
 export function createWalletProviderContextWrapper(
 	providerProps: Omit<ComponentProps<typeof WalletProvider>, 'children'> = {},
-	suiClient: SuiJsonRpcClient = new SuiJsonRpcClient({
+	suiClient: HaneulJsonRpcClient = new HaneulJsonRpcClient({
 		url: getJsonRpcFullnodeUrl('localnet'),
 		network: 'localnet',
 	}),
@@ -28,11 +28,11 @@ export function createWalletProviderContextWrapper(
 	const queryClient = new QueryClient();
 	return function WalletProviderContextWrapper({ children }: { children: React.ReactNode }) {
 		return (
-			<SuiClientProvider networks={{ test: suiClient }}>
+			<HaneulClientProvider networks={{ test: suiClient }}>
 				<QueryClientProvider client={queryClient}>
 					<WalletProvider {...providerProps}>{children}</WalletProvider>;
 				</QueryClientProvider>
-			</SuiClientProvider>
+			</HaneulClientProvider>
 		);
 	};
 }

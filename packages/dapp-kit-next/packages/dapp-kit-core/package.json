@@ -1,8 +1,8 @@
 {
-	"name": "@mysten/dapp-kit-core",
-	"author": "Mysten Labs <build@mystenlabs.com>",
-	"description": "Framework-agnostic toolkit for building decentralized applications on Sui.",
-	"homepage": "https://sdk.mystenlabs.com/sui",
+	"name": "@haneullabs/dapp-kit-core",
+	"author": "Haneul Labs <build@haneul-labs.com>",
+	"description": "Framework-agnostic toolkit for building decentralized applications on Haneul.",
+	"homepage": "https://sdk.haneul-labs.com/haneul",
 	"version": "1.0.4",
 	"license": "Apache-2.0",
 	"files": [
@@ -46,16 +46,16 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MystenLabs/ts-sdks/issues/new"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues/new"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"devDependencies": {
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@storybook/addon-essentials": "^8.6.14",
 		"@storybook/blocks": "^8.6.14",
 		"@storybook/web-components": "^10.1.11",
@@ -69,9 +69,9 @@
 		"@floating-ui/dom": "^1.7.4",
 		"@lit-labs/scoped-registry-mixin": "^1.0.4",
 		"@lit/task": "^1.0.3",
-		"@mysten/slush-wallet": "workspace:^",
-		"@mysten/utils": "workspace:^",
-		"@mysten/wallet-standard": "workspace:^",
+		"@haneullabs/slush-wallet": "workspace:^",
+		"@haneullabs/utils": "workspace:^",
+		"@haneullabs/wallet-standard": "workspace:^",
 		"@nanostores/lit": "^0.2.3",
 		"@wallet-standard/ui": "^1.0.1",
 		"@wallet-standard/ui-registry": "^1.0.1",
@@ -80,6 +80,6 @@
 		"nanostores": "^1.1.0"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "workspace:^"
+		"@haneullabs/haneul": "workspace:^"
 	}
 }

@@ -3,21 +3,21 @@
 
 import type { DAppKitStores } from '../store.js';
 import {
-	SuiSignAndExecuteTransaction,
-	SuiSignAndExecuteTransactionBlock,
-} from '@mysten/wallet-standard';
+	HaneulSignAndExecuteTransaction,
+	HaneulSignAndExecuteTransactionBlock,
+} from '@haneullabs/wallet-standard';
 import type {
-	SuiSignAndExecuteTransactionBlockFeature,
-	SuiSignAndExecuteTransactionFeature,
-	SuiSignAndExecuteTransactionInput,
-} from '@mysten/wallet-standard';
+	HaneulSignAndExecuteTransactionBlockFeature,
+	HaneulSignAndExecuteTransactionFeature,
+	HaneulSignAndExecuteTransactionInput,
+} from '@haneullabs/wallet-standard';
 import { getWalletAccountForUiWalletAccount_DO_NOT_USE_OR_YOU_WILL_BE_FIRED as getWalletAccountForUiWalletAccount } from '@wallet-standard/ui-registry';
 import { FeatureNotSupportedError, WalletNotConnectedError } from '../../utils/errors.js';
 import { getChain } from '../../utils/networks.js';
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { tryGetAccountFeature } from '../../utils/wallets.js';
-import { bcs } from '@mysten/sui/bcs';
-import { fromBase64 } from '@mysten/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { fromBase64 } from '@haneullabs/utils';
 import {
 	buildTransactionResult,
 	type TransactionResultWithEffects,
@@ -25,7 +25,7 @@ import {
 
 export type SignAndExecuteTransactionArgs = {
 	transaction: Transaction | string;
-} & Omit<SuiSignAndExecuteTransactionInput, 'account' | 'chain' | 'transaction'>;
+} & Omit<HaneulSignAndExecuteTransactionInput, 'account' | 'chain' | 'transaction'>;
 
 export type SignAndExecuteTransactionResult = TransactionResultWithEffects;
 
@@ -60,8 +60,8 @@ export function signAndExecuteTransactionCreator({ $connection, $currentClient }
 		const signAndExecuteTransactionFeature = tryGetAccountFeature({
 			account,
 			chain,
-			featureName: SuiSignAndExecuteTransaction,
-		}) as SuiSignAndExecuteTransactionFeature[typeof SuiSignAndExecuteTransaction];
+			featureName: HaneulSignAndExecuteTransaction,
+		}) as HaneulSignAndExecuteTransactionFeature[typeof HaneulSignAndExecuteTransaction];
 
 		if (signAndExecuteTransactionFeature) {
 			const result = await signAndExecuteTransactionFeature.signAndExecuteTransaction({
@@ -84,8 +84,8 @@ export function signAndExecuteTransactionCreator({ $connection, $currentClient }
 		const signAndExecuteTransactionBlockFeature = tryGetAccountFeature({
 			account,
 			chain,
-			featureName: SuiSignAndExecuteTransactionBlock,
-		}) as SuiSignAndExecuteTransactionBlockFeature[typeof SuiSignAndExecuteTransactionBlock];
+			featureName: HaneulSignAndExecuteTransactionBlock,
+		}) as HaneulSignAndExecuteTransactionBlockFeature[typeof HaneulSignAndExecuteTransactionBlock];
 
 		if (signAndExecuteTransactionBlockFeature) {
 			const transactionBlock = Transaction.from(await transactionWrapper.toJSON());

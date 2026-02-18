@@ -1,0 +1,21 @@
+{
+	"root": true,
+	"title": "Haneul SDK",
+	"description": "TypeScript interfaces for Haneul",
+	"pages": [
+		"index",
+		"install",
+		"hello-haneul",
+		"faucet",
+		"clients",
+		"transaction-building",
+		"cryptography",
+		"utils",
+		"bcs",
+		"zklogin",
+		"executors",
+		"plugins",
+		"sdk-building",
+		"migrations"
+	]
+}

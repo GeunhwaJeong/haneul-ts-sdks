@@ -11,7 +11,7 @@
  * @property {BcsReader}
  */
 
-import { toBase58, fromBase58, toBase64, fromBase64, toHex, fromHex } from '@mysten/utils';
+import { toBase58, fromBase58, toBase64, fromBase64, toHex, fromHex } from '@haneullabs/utils';
 import type { BcsTypeOptions } from './bcs-type.js';
 import {
 	BcsType,

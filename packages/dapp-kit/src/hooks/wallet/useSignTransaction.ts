@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Transaction } from '@mysten/sui/transactions';
-import { signTransaction } from '@mysten/wallet-standard';
-import type { SignedTransaction, SuiSignTransactionInput } from '@mysten/wallet-standard';
+import type { Transaction } from '@haneullabs/haneul/transactions';
+import { signTransaction } from '@haneullabs/wallet-standard';
+import type { SignedTransaction, HaneulSignTransactionInput } from '@haneullabs/wallet-standard';
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 
@@ -14,12 +14,12 @@ import {
 	WalletNotConnectedError,
 } from '../../errors/walletErrors.js';
 import type { PartialBy } from '../../types/utilityTypes.js';
-import { useSuiClientContext } from '../useSuiClient.js';
+import { useSuiClientContext } from '../useHaneulClient.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useCurrentWallet } from './useCurrentWallet.js';
 
 type UseSignTransactionArgs = PartialBy<
-	Omit<SuiSignTransactionInput, 'transaction'>,
+	Omit<HaneulSignTransactionInput, 'transaction'>,
 	'account' | 'chain'
 > & {
 	transaction: Transaction | string;
@@ -73,8 +73,8 @@ export function useSignTransaction({
 			}
 
 			if (
-				!currentWallet.features['sui:signTransaction'] &&
-				!currentWallet.features['sui:signTransactionBlock']
+				!currentWallet.features['haneul:signTransaction'] &&
+				!currentWallet.features['haneul:signTransactionBlock']
 			) {
 				throw new WalletFeatureNotSupportedError(
 					"This wallet doesn't support the `signTransaction` feature.",
@@ -85,7 +85,7 @@ export function useSignTransaction({
 				transaction.setSenderIfNotSet(signerAccount.address);
 			}
 
-			const chain = signTransactionArgs.chain ?? `sui:${network}`;
+			const chain = signTransactionArgs.chain ?? `haneul:${network}`;
 			const { bytes, signature } = await signTransaction(currentWallet, {
 				...signTransactionArgs,
 				transaction: {

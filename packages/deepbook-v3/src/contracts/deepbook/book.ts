@@ -8,7 +8,7 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 import * as big_vector from './big_vector.js';
 const $moduleName = '@deepbook/core::book';
 export const Book = new MoveStruct({

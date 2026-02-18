@@ -1,9 +1,9 @@
 {
-	"name": "@mysten/codegen",
+	"name": "@haneullabs/codegen",
 	"version": "0.8.2",
-	"description": "typescript codegen for sui move",
+	"description": "typescript codegen for haneul move",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"sideEffects": false,
 	"type": "module",
 	"main": "./dist/index.mjs",
@@ -21,7 +21,7 @@
 		"src"
 	],
 	"bin": {
-		"sui-ts-codegen": "dist/bin/cli.mjs",
+		"haneul-ts-codegen": "dist/bin/cli.mjs",
 		"__sui-ts-codegen_bash_complete": "dist/bin/bash-complete.mjs"
 	},
 	"scripts": {
@@ -40,23 +40,23 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"keywords": [
 		"move",
 		"codegen",
-		"sui"
+		"haneul"
 	],
 	"bugs": {
 		"url": "https://github.com/mystenlabs/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/MystenLabs/ts-sdks/blob/main/packages/codegen#readme",
+	"homepage": "https://github.com/GeunhwaJeong/ts-sdks/blob/main/packages/codegen#readme",
 	"devDependencies": {
 		"vitest": "^4.0.17"
 	},
 	"dependencies": {
-		"@mysten/bcs": "workspace:^",
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/bcs": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@stricli/auto-complete": "^1.2.5",
 		"@stricli/core": "^1.2.5",
 		"@types/node": "^25.0.8",

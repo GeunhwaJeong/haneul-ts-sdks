@@ -1,22 +1,22 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { getFaucetHost, requestSuiFromFaucetV2 } from '@mysten/sui/faucet';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
-import { MIST_PER_SUI, parseStructTag } from '@mysten/sui/utils';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
+import { GEUNHWA_PER_HANEUL, parseStructTag } from '@haneullabs/haneul/utils';
 
 import { TESTNET_WALRUS_PACKAGE_CONFIG } from '../src/index.js';
 
 export async function getFundedKeypair() {
-	const suiClient = new SuiGrpcClient({
+	const suiClient = new HaneulGrpcClient({
 		network: 'testnet',
-		baseUrl: 'https://fullnode.testnet.sui.io:443',
+		baseUrl: 'https://fullnode.testnet.haneul.io:443',
 	});
 
 	const keypair = Ed25519Keypair.fromSecretKey(
-		'suiprivkey1qzmcxscyglnl9hnq82crqsuns0q33frkseks5jw0fye3tuh83l7e6ajfhxx',
+		'haneulprivkey1qzmcxscyglnl9hnq82crqsuns0q33frkseks5jw0fye3tuh83l7e6ajfhxx',
 	);
 	console.log(keypair.toSuiAddress());
 
@@ -24,7 +24,7 @@ export async function getFundedKeypair() {
 		owner: keypair.toSuiAddress(),
 	});
 
-	if (BigInt(balance.balance) < MIST_PER_SUI) {
+	if (BigInt(balance.balance) < GEUNHWA_PER_HANEUL) {
 		await requestSuiFromFaucetV2({
 			host: getFaucetHost('testnet'),
 			recipient: keypair.toSuiAddress(),
@@ -37,7 +37,7 @@ export async function getFundedKeypair() {
 	});
 	console.log('wal balance:', walBalance.balance);
 
-	if (Number(walBalance.balance) < Number(MIST_PER_SUI) / 2) {
+	if (Number(walBalance.balance) < Number(GEUNHWA_PER_HANEUL) / 2) {
 		const tx = new Transaction();
 
 		const exchange = await suiClient.getObject({
@@ -54,7 +54,7 @@ export async function getFundedKeypair() {
 			arguments: [
 				tx.object(TESTNET_WALRUS_PACKAGE_CONFIG.exchangeIds[0]),
 				coinWithBalance({
-					balance: MIST_PER_SUI / 2n,
+					balance: GEUNHWA_PER_HANEUL / 2n,
 				}),
 			],
 		});

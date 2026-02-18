@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 };
 
 export const dAppKit = createDAppKit({
@@ -14,6 +14,6 @@ export const dAppKit = createDAppKit({
 	networks: ['mainnet', 'testnet'],
 	defaultNetwork: 'testnet',
 	createClient(network) {
-		return new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] });
+		return new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] });
 	},
 });

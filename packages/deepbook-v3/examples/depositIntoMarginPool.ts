@@ -11,22 +11,22 @@
 
 import { execSync } from 'child_process';
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { Transaction } from '@mysten/sui/transactions';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { deepbook } from '../src/index.js';
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.SUI_BINARY ?? `haneul`;
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 type Network = 'mainnet' | 'testnet';
 
 const getActiveNetwork = (): Network => {
-	const env = execSync(`${SUI} client active-env`, { encoding: 'utf8' }).trim();
+	const env = execSync(`${HANEUL} client active-env`, { encoding: 'utf8' }).trim();
 	if (env !== 'mainnet' && env !== 'testnet') {
 		throw new Error(`Unsupported network: ${env}. Only 'mainnet' and 'testnet' are supported.`);
 	}
@@ -36,7 +36,7 @@ const getActiveNetwork = (): Network => {
 async function main() {
 	const network = getActiveNetwork();
 
-	const client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+	const client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 		deepbook({
 			address: '0xYOUR_ADDRESS_HERE', // Replace with your address
 		}),
@@ -56,14 +56,14 @@ async function main() {
 		client.deepbook.marginManager.newMarginManagerWithInitializer(poolKey)(tx1);
 
 	// 1a. Deposit during initialization using AMOUNT
-	// coinType should be the actual coin key (e.g., 'SUI', 'DBUSDC', 'DEEP')
+	// coinType should be the actual coin key (e.g., 'HANEUL', 'DBUSDC', 'DEEP')
 	client.deepbook.marginManager.depositDuringInitialization({
 		manager,
 		poolKey,
-		coinType: 'SUI',
-		amount: 1.0, // 1 SUI
+		coinType: 'HANEUL',
+		amount: 1.0, // 1 HANEUL
 	})(tx1);
-	console.log('1a. Deposit SUI during init with amount: 1.0');
+	console.log('1a. Deposit HANEUL during init with amount: 1.0');
 
 	client.deepbook.marginManager.depositDuringInitialization({
 		manager,
@@ -83,14 +83,14 @@ async function main() {
 
 	// 1d. Deposit during initialization using COIN TransactionArgument
 	// Useful when you have a coin from a previous operation (e.g., splitCoins)
-	// const [suiCoinToDeposit] = tx1.splitCoins(tx1.gas, [tx1.pure.u64(500000000)]); // 0.5 SUI
+	// const [suiCoinToDeposit] = tx1.splitCoins(tx1.gas, [tx1.pure.u64(500000000)]); // 0.5 HANEUL
 	// client.deepbook.marginManager.depositDuringInitialization({
 	// 	manager,
 	// 	poolKey,
-	// 	coinType: 'SUI',
+	// 	coinType: 'HANEUL',
 	// 	coin: suiCoinToDeposit,
 	// })(tx1);
-	// console.log('1d. Deposit SUI during init with coin TransactionArgument');
+	// console.log('1d. Deposit HANEUL during init with coin TransactionArgument');
 
 	// Share the margin manager
 	client.deepbook.marginManager.shareMarginManager(poolKey, manager, initializer)(tx1);
@@ -110,7 +110,7 @@ async function main() {
 	// 2a. Deposit using AMOUNT (creates coinWithBalance internally)
 	client.deepbook.marginManager.depositBase({
 		managerKey,
-		amount: 1.0, // 1 SUI (base coin)
+		amount: 1.0, // 1 HANEUL (base coin)
 	})(tx2);
 	console.log('2a. depositBase with amount: 1.0');
 
@@ -128,7 +128,7 @@ async function main() {
 
 	// 2d. Deposit using COIN TransactionArgument
 	// Useful when you have coins from previous operations
-	// const [splitBaseCoin] = tx2.splitCoins(tx2.gas, [tx2.pure.u64(500000000)]); // 0.5 SUI
+	// const [splitBaseCoin] = tx2.splitCoins(tx2.gas, [tx2.pure.u64(500000000)]); // 0.5 HANEUL
 	// client.deepbook.marginManager.depositBase({
 	// 	managerKey,
 	// 	coin: splitBaseCoin,
@@ -152,7 +152,7 @@ async function main() {
 	console.log('\n=== Summary ===');
 	console.log('Deposit methods:');
 	console.log('  - depositDuringInitialization: Use before sharing a new margin manager');
-	console.log('    - coinType: Use actual coin key (e.g., "SUI", "DBUSDC", "DEEP")');
+	console.log('    - coinType: Use actual coin key (e.g., "HANEUL", "DBUSDC", "DEEP")');
 	console.log('  - depositBase/Quote/Deep: Use for existing shared margin managers');
 	console.log('');
 	console.log('Input options:');

@@ -1,5 +1,5 @@
 {
-  "name": "@mysten/walrus-wasm",
+  "name": "@haneullabs/walrus-wasm",
   "collaborators": [
     "jonaslindstrom"
   ],
@@ -9,7 +9,7 @@
   "types": "./index.d.mts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MystenLabs/ts-sdks.git"
+    "url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
   },
   "scripts": {
     "build:wasm": "pnpm build:nodejs && pnpm build:web",
@@ -34,7 +34,7 @@
     }
   },
   "devDependencies": {
-    "@mysten/bcs": "workspace:^",
+    "@haneullabs/bcs": "workspace:^",
     "vite": "^7.3.1",
     "vitest": "^4.0.17"
   }

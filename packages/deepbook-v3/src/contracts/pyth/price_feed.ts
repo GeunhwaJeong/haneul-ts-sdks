@@ -2,7 +2,7 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { type Transaction } from '@mysten/sui/transactions';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 import * as price_identifier from './price_identifier.js';
 import * as price from './price.js';
 const $moduleName =

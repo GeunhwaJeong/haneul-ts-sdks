@@ -2,8 +2,8 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveStruct, MoveEnum } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import * as group_ops from './deps/sui/group_ops.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import * as group_ops from './deps/haneul/group_ops.js';
 const $moduleName = '@local-pkg/walrus::bls_aggregate';
 export const BlsCommitteeMember = new MoveStruct({
 	name: `${$moduleName}::BlsCommitteeMember`,

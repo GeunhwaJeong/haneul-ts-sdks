@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import type { Keypair } from '@mysten/sui/cryptography';
-import { getFaucetHost, requestSuiFromFaucetV2 } from '@mysten/sui/faucet';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
-import { MIST_PER_SUI } from '@mysten/sui/utils';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import type { Keypair } from '@haneullabs/haneul/cryptography';
+import { getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { GEUNHWA_PER_HANEUL } from '@haneullabs/haneul/utils';
 import { beforeAll, describe, expect, test } from 'vitest';
 
 import { zksend } from './index.js';
@@ -16,14 +16,14 @@ export const DEMO_BEAR_CONFIG = {
 	type: '0xab8ed19f16874f9b8b66b0b6e325ee064848b1a7fdcb1c2f0478b17ad8574e65::demo_bear::DemoBear',
 };
 
-const client = new SuiGrpcClient({
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+const client = new HaneulGrpcClient({
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 	network: 'testnet',
 }).$extend(zksend());
 
 // address:  0x8ab2b2a5cfa538db19062b79622abe28f3171c8b8048c5957b01846d57574630
 const keypair = Ed25519Keypair.fromSecretKey(
-	'suiprivkey1qz3v0pjxalg3z3p9p6lp4x84y74g0qt2y2q36amvkgfh9zzmm4q66y6ccdz',
+	'haneulprivkey1qz3v0pjxalg3z3p9p6lp4x84y74g0qt2y2q36amvkgfh9zzmm4q66y6ccdz',
 );
 
 // Automatically get gas from testnet is not working reliably, manually request gas via discord,
@@ -33,7 +33,7 @@ beforeAll(async () => {
 		owner: keypair.toSuiAddress(),
 	});
 
-	if (Number(balance.balance.balance) < Number(MIST_PER_SUI) * 0.02) {
+	if (Number(balance.balance.balance) < Number(GEUNHWA_PER_HANEUL) * 0.02) {
 		await getSuiFromFaucet(keypair);
 	}
 }, 30_000);
@@ -77,7 +77,7 @@ describe('Contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);
@@ -149,7 +149,7 @@ describe('Contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);
@@ -258,7 +258,7 @@ describe('Contract links', () => {
 					[
 					  {
 					    "amount": 100n,
-					    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+					    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 					  },
 					]
 				`);
@@ -317,7 +317,7 @@ describe('Contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);

@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/bcs';
+import { bcs } from '@haneullabs/bcs';
 import type { EncodingType } from '../types.js';
 import type { QuiltPatchV1 } from './bcs.js';
 import { QuiltIndexV1, QuiltPatchBlobHeader, QuiltPatchId, QuiltPatchTags } from './bcs.js';

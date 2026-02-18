@@ -1,6 +1,6 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { config } from 'dotenv';
 
 import { DeepBookMarketMaker } from './deepbookMarketMaker.js';
@@ -31,11 +31,11 @@ config();
 	const tx = new Transaction();
 
 	// Read only calls - access via client.deepbook
-	console.log(await mmClient.client.deepbook.checkManagerBalance('MANAGER_1', 'SUI'));
+	console.log(await mmClient.client.deepbook.checkManagerBalance('MANAGER_1', 'HANEUL'));
 	console.log(await mmClient.client.deepbook.getLevel2Range('SUI_DBUSDC', 0.1, 100, true));
 
 	// // Balance manager contract call
-	// mmClient.client.deepbook.balanceManager.depositIntoManager('MANAGER_1', 'SUI', 10)(tx);
+	// mmClient.client.deepbook.balanceManager.depositIntoManager('MANAGER_1', 'HANEUL', 10)(tx);
 
 	// // Example PTB call
 	// mmClient.placeLimitOrderExample(tx);

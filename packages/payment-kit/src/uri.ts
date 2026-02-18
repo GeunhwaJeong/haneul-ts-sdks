@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { isValidNamedType, isValidSuiAddress, isValidSuiObjectId } from '@mysten/sui/utils';
+import { isValidNamedType, isValidHaneulAddress, isValidHaneulObjectId } from '@haneullabs/haneul/utils';
 import type { PaymentUriParams } from './types.js';
 import { PaymentKitUriError } from './error.js';
 import { SUI_PAYMENT_KIT_PROTOCOL } from './constants.js';
@@ -26,8 +26,8 @@ const isValidCoinType = (coinType: string) => {
  * ```ts
  * const uri = createPaymentTransactionUri({
  *   receiverAddress: "0x...",
- *   amount: "10000000", (0.01 SUI)
- *   coinType: "0x2::sui::SUI",
+ *   amount: "10000000", (0.01 HANEUL)
+ *   coinType: "0x2::haneul::HANEUL",
  *   nonce: <nonce>,
  *   registryName: "my-registry"
  * });
@@ -38,10 +38,10 @@ export const createPaymentTransactionUri = (params: PaymentUriParams): string =>
 
 	const uri = new URL(SUI_PAYMENT_KIT_PROTOCOL);
 
-	if (isValidSuiAddress(receiverAddress)) {
+	if (isValidHaneulAddress(receiverAddress)) {
 		uri.searchParams.append('receiver', receiverAddress);
 	} else {
-		throw new PaymentKitUriError('Invalid Sui address');
+		throw new PaymentKitUriError('Invalid Haneul address');
 	}
 
 	if (isValidAmount(amount)) {
@@ -63,10 +63,10 @@ export const createPaymentTransactionUri = (params: PaymentUriParams): string =>
 	}
 
 	if (registryId) {
-		if (isValidSuiObjectId(registryId)) {
+		if (isValidHaneulObjectId(registryId)) {
 			uri.searchParams.append('registry', registryId);
 		} else {
-			throw new PaymentKitUriError('Invalid Sui Object Id for Registry Id');
+			throw new PaymentKitUriError('Invalid Haneul Object Id for Registry Id');
 		}
 	}
 
@@ -95,12 +95,12 @@ export const createPaymentTransactionUri = (params: PaymentUriParams): string =>
  *
  * @example
  * ```ts
- * const params = parsePaymentTransactionUri("sui:0x...?amount=1000000&coinType=0x...&nonce=...");
+ * const params = parsePaymentTransactionUri("haneul:0x...?amount=1000000&coinType=0x...&nonce=...");
  * ```
  */
 export const parsePaymentTransactionUri = (uri: string): PaymentUriParams => {
 	if (!uri.startsWith(SUI_PAYMENT_KIT_PROTOCOL + '?')) {
-		throw new PaymentKitUriError('Invalid URI: Must start with sui:pay?');
+		throw new PaymentKitUriError('Invalid URI: Must start with haneul:pay?');
 	}
 
 	const url = new URL(uri);
@@ -118,7 +118,7 @@ export const parsePaymentTransactionUri = (uri: string): PaymentUriParams => {
 	}
 
 	// Validate the receiver address
-	if (!isValidSuiAddress(receiver)) {
+	if (!isValidHaneulAddress(receiver)) {
 		throw new PaymentKitUriError('Invalid URI: Receiver address is not valid');
 	}
 
@@ -144,7 +144,7 @@ export const parsePaymentTransactionUri = (uri: string): PaymentUriParams => {
 	let registryName: string | undefined;
 
 	if (registry) {
-		if (isValidSuiObjectId(registry)) {
+		if (isValidHaneulObjectId(registry)) {
 			registryId = registry;
 		} else {
 			registryName = registry;

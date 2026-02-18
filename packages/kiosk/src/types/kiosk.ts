@@ -1,15 +1,15 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TransactionArgument } from '@mysten/sui/transactions';
+import type { TransactionArgument } from '@haneullabs/haneul/transactions';
 
 import type { ObjectArgument } from './index.js';
 
-import { SUI_FRAMEWORK_ADDRESS } from '@mysten/sui/utils';
-import { SuiClientTypes } from '@mysten/sui/client';
+import { HANEUL_FRAMEWORK_ADDRESS } from '@haneullabs/haneul/utils';
+import { HaneulClientTypes } from '@haneullabs/haneul/client';
 
 /** The Kiosk module. */
-export const KIOSK_MODULE = `${SUI_FRAMEWORK_ADDRESS}::kiosk`;
+export const KIOSK_MODULE = `${HANEUL_FRAMEWORK_ADDRESS}::kiosk`;
 
 /** The Kiosk type. */
 export const KIOSK_TYPE = `${KIOSK_MODULE}::Kiosk`;
@@ -93,7 +93,7 @@ export type KioskDisplay = {
 	error: string | null;
 };
 
-export type ObjectWithDisplay = SuiClientTypes.Object<{
+export type ObjectWithDisplay = HaneulClientTypes.Object<{
 	content: true;
 	previousTransaction: true;
 }> & {

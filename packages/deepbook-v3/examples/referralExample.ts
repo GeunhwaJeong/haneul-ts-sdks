@@ -1,21 +1,21 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { execSync } from 'child_process';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { Transaction } from '@mysten/sui/transactions';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { deepbook } from '../src/index.js';
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.SUI_BINARY ?? `haneul`;
 
 type Network = 'mainnet' | 'testnet';
 
 export const getActiveAddress = () => {
-	return execSync(`${SUI} client active-address`, { encoding: 'utf8' }).trim();
+	return execSync(`${HANEUL} client active-address`, { encoding: 'utf8' }).trim();
 };
 
 const getActiveNetwork = (): Network => {
-	const env = execSync(`${SUI} client active-env`, { encoding: 'utf8' }).trim();
+	const env = execSync(`${HANEUL} client active-env`, { encoding: 'utf8' }).trim();
 	if (env !== 'mainnet' && env !== 'testnet') {
 		throw new Error(`Unsupported network: ${env}. Only 'mainnet' and 'testnet' are supported.`);
 	}
@@ -23,8 +23,8 @@ const getActiveNetwork = (): Network => {
 };
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 (async () => {
@@ -52,7 +52,7 @@ const GRPC_URLS = {
 	const deepSuiDeepbookReferral =
 		'0x1f6fbf3ecaa948df7b448c932f9f72a604477be63de199d37cee8a9a863c31eb';
 
-	const client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+	const client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 		deepbook({
 			address: getActiveAddress(),
 			adminCap,
@@ -111,12 +111,12 @@ const GRPC_URLS = {
 	client.deepbook.marginManager.unsetMarginManagerReferral('MARGIN_MANAGER_1', 'SUI_DBUSDC')(tx);
 
 	// // 8. Mint a supply referral for a margin pool
-	client.deepbook.marginPool.mintSupplyReferral('SUI')(tx);
+	client.deepbook.marginPool.mintSupplyReferral('HANEUL')(tx);
 
 	// // 9. Withdraw referral fees from a margin pool (requires SupplyReferral object)
 	const suiSupplyReferral = '0xaed597fe1a05b9838b198a3dfa2cdd191b6fa7b319f4c3fc676c7b7348cec194';
 	const referralFees = client.deepbook.marginPool.withdrawReferralFees(
-		'SUI',
+		'HANEUL',
 		suiSupplyReferral,
 	)(tx);
 	tx.transferObjects([referralFees], getActiveAddress());

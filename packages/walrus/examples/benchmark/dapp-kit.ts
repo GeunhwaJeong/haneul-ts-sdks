@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { createDAppKit } from '@mysten/dapp-kit-react';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-react';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 import { walrus } from '../../src/index.js';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 export const dAppKit = createDAppKit({
@@ -14,7 +14,7 @@ export const dAppKit = createDAppKit({
 	defaultNetwork: 'testnet',
 	autoConnect: true,
 	createClient(network) {
-		return new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+		return new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 			walrus({
 				name: 'walrusWithRelay',
 
@@ -42,7 +42,7 @@ export const dAppKit = createDAppKit({
 	},
 });
 
-declare module '@mysten/dapp-kit-react' {
+declare module '@haneullabs/dapp-kit-react' {
 	interface Register {
 		dAppKit: typeof dAppKit;
 	}

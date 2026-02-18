@@ -1,9 +1,9 @@
 {
-	"name": "@mysten/signers",
+	"name": "@haneullabs/signers",
 	"version": "1.0.1",
 	"description": "A collection of signers for various providers",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"type": "module",
 	"exports": {
 		"./aws": {
@@ -53,14 +53,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
 		"url": "https://github.com/mystenlabs/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/MystenLabs/ts-sdks/tree/main/packages/signers#readme",
+	"homepage": "https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/signers#readme",
 	"devDependencies": {
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@types/node": "^25.0.8",
 		"dotenv": "^17.2.3",
 		"typescript": "^5.9.3",
@@ -68,7 +68,7 @@
 	},
 	"dependencies": {
 		"@google-cloud/kms": "^5.2.1",
-		"@mysten/ledgerjs-hw-app-sui": "workspace:^",
+		"@haneullabs/ledgerjs-hw-app-haneul": "workspace:^",
 		"@noble/curves": "^2.0.1",
 		"@noble/hashes": "^2.0.1",
 		"asn1-ts": "^11.0.5"
@@ -77,6 +77,6 @@
 		"node": ">=22"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "workspace:^"
+		"@haneullabs/haneul": "workspace:^"
 	}
 }

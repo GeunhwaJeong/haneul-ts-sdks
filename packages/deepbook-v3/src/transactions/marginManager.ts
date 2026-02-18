@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import type { Transaction, TransactionArgument } from '@mysten/sui/transactions';
-import { coinWithBalance } from '@mysten/sui/transactions';
+import type { Transaction, TransactionArgument } from '@haneullabs/haneul/transactions';
+import { coinWithBalance } from '@haneullabs/haneul/transactions';
 
 import type { DeepBookConfig } from '../utils/config.js';
 import type { DepositParams, DepositDuringInitParams } from '../types/index.js';
@@ -94,7 +94,7 @@ export class MarginManagerContract {
 		const baseCoin = this.#config.getCoin(pool.baseCoin);
 		const quoteCoin = this.#config.getCoin(pool.quoteCoin);
 
-		// Get the deposit coin from config using the coinType key (e.g., 'SUI', 'DBUSDC', 'DEEP')
+		// Get the deposit coin from config using the coinType key (e.g., 'HANEUL', 'DBUSDC', 'DEEP')
 		const depositCoin = this.#config.getCoin(coinType);
 
 		// If amount is provided, create a coin with balance; otherwise use the provided coin

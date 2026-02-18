@@ -5,7 +5,7 @@ import { getOrCreateUiWalletForStandardWallet_DO_NOT_USE_OR_YOU_WILL_BE_FIRED as
 
 import type { DAppKitStores } from '../src/core/store.js';
 import type { UiWallet } from '@wallet-standard/ui';
-import type { Wallet } from '@mysten/wallet-standard';
+import type { Wallet } from '@haneullabs/wallet-standard';
 
 export const TEST_DEFAULT_NETWORK = 'localnet';
 const TEST_NETWORKS_CONST = ['devnet', 'testnet', 'localnet', 'mainnet'] as const;

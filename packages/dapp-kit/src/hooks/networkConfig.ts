@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiJsonRpcClientOptions } from '@mysten/sui/jsonRpc';
+import type { HaneulJsonRpcClientOptions } from '@haneullabs/haneul/jsonRpc';
 
-import { useSuiClientContext } from './useSuiClient.js';
+import { useSuiClientContext } from './useHaneulClient.js';
 
-export type NetworkConfig<T extends object = object> = SuiJsonRpcClientOptions & {
+export type NetworkConfig<T extends object = object> = HaneulJsonRpcClientOptions & {
 	variables?: T;
 };
 

@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { getJsonRpcFullnodeUrl } from "@mysten/sui/jsonRpc";
-import { createNetworkConfig } from "@mysten/dapp-kit";
+import { getJsonRpcFullnodeUrl } from "@haneullabs/haneul/jsonRpc";
+import { createNetworkConfig } from "@haneullabs/dapp-kit";
 
 const { networkConfig, useNetworkVariable, useNetworkVariables } =
   createNetworkConfig({

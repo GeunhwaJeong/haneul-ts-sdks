@@ -2,7 +2,7 @@
 
 The mvr-static tool is a typescript CLI tool to generate a static file for Move Registry (mvr)
 resolution. This can be used to cache all MVR names for performance & security reasons, and used
-with the Sui client's built-in MVR support.
+with the Haneul client's built-in MVR support.
 
 ## Usage
 
@@ -11,7 +11,7 @@ with the Sui client's built-in MVR support.
 You can generate your static file by running the following command:
 
 ```bash
-pnpm dlx @mysten/mvr-static
+pnpm dlx @haneullabs/mvr-static
 ```
 
 Available options:
@@ -20,9 +20,9 @@ Available options:
 - `--output <file-name>`: The output's file name (defaults to `mvr.ts`)
 - `--depth <depth>`: The depth of recursive search for MVR names (defaults to `10`)
 - `--url-mainnet <url>`: The URL to the mainnet MVR (defaults to
-  `https://mainnet.mvr.mystenlabs.com`)
+  `https://mainnet.mvr.haneul-labs.com`)
 - `--url-testnet <url>`: The URL to the testnet MVR (defaults to
-  `https://testnet.mvr.mystenlabs.com`)
+  `https://testnet.mvr.haneul-labs.com`)
 - `--include <dir_patterns>`: The directory patterns to include in the search (defaults to
   `**/*.{js,ts,jsx,tsx,mjs,cjs}`)
 - `--exclude <dir_patterns>`: The directory patterns to exclude in the search (defaults to
@@ -32,16 +32,16 @@ Available options:
 ### Use the static file in your project
 
 Once you have your static file, you can use it in your project by importing it and passing it to the
-Sui client initialization. MVR resolution is now built into the core client.
+Haneul client initialization. MVR resolution is now built into the core client.
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 import { getMvrCache } from './mvr.ts';
 
 // Create a gRPC client with MVR overrides for your network
 const client = new SuiGrpcClient({
 	network: 'mainnet',
-	baseUrl: 'https://fullnode.mainnet.sui.io:443',
+	baseUrl: 'https://fullnode.mainnet.haneul.io:443',
 	mvr: {
 		overrides: getMvrCache('mainnet'),
 	},

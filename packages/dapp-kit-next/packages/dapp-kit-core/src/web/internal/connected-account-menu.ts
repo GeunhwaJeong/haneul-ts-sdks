@@ -5,7 +5,7 @@ import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
 
 import { html, LitElement } from 'lit';
 import { Button } from './button.js';
-import { formatAddress } from '@mysten/sui/utils';
+import { formatAddress } from '@haneullabs/haneul/utils';
 import { property, query, state } from 'lit/decorators.js';
 import { unlinkIcon } from './icons/unlink-icon.js';
 import { styles } from './connected-account-menu.styles.js';
@@ -15,7 +15,7 @@ import { AccountMenuItem } from './connected-account-menu-item.js';
 import { chevronDownIcon } from './icons/chevron-down-icon.js';
 import type { WalletConnection } from '../../core/store.js';
 import { plusIcon } from './icons/plus-icon.js';
-import { SLUSH_WALLET_NAME } from '@mysten/slush-wallet';
+import { SLUSH_WALLET_NAME } from '@haneullabs/slush-wallet';
 import { when } from 'lit/directives/when.js';
 import { Task } from '@lit/task';
 import { resolveNameServiceName } from '../../utils/name.js';

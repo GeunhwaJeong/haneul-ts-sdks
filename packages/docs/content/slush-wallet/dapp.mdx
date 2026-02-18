@@ -8,7 +8,7 @@ title: dApp Integration
 </Callout>
 
 Using the Slush Wallet SDK, you can allow users to connect to the Slush wallet from your dApp. The
-wallet is provided through the [Wallet Standard](https://docs.sui.io/standards/wallet-standard), and
+wallet is provided through the [Wallet Standard](https://docs.haneul.io/standards/wallet-standard), and
 should appear automatically in your existing wallet connection UI.
 
 <Callout>
@@ -33,7 +33,7 @@ your application's lifecycle.
     supports `mainnet` and `testnet`.
 
 ```ts
-import { registerSlushWallet } from '@mysten/slush-wallet';
+import { registerSlushWallet } from '@haneullabs/slush-wallet';
 
 registerSlushWallet('Your dApp Name');
 ```
@@ -55,8 +55,8 @@ For example, if you are using `dapp-kit`, you can use the `useCurrentWallet` hoo
 wallet, and check if it is the Slush wallet.
 
 ```ts
-import { useCurrentWallet } from '@mysten/dapp-kit';
-import { SLUSH_WALLET_NAME } from '@mysten/slush-wallet';
+import { useCurrentWallet } from '@haneullabs/dapp-kit';
+import { SLUSH_WALLET_NAME } from '@haneullabs/slush-wallet';
 
 function SlushOnly() {
 	const { currentWallet } = useCurrentWallet();
@@ -68,13 +68,13 @@ function SlushOnly() {
 
 # Migration from Stashed Wallet -> Slush Wallet
 
-If you're currently using `@mysten/zksend`'s `registerStashedWallet` directly, you should migrate to
-the `@mysten/slush-wallet` package to ensure compatibility with the new Slush experience.
+If you're currently using `@haneullabs/zksend`'s `registerStashedWallet` directly, you should migrate to
+the `@haneullabs/slush-wallet` package to ensure compatibility with the new Slush experience.
 
 ## 🚀 Installation
 
 ```bash
-pnpm install @mysten/slush-wallet
+pnpm install @haneullabs/slush-wallet
 ```
 
 ## 🔁 Migration
@@ -84,7 +84,7 @@ If you're using `registerStashedWallet`, switch to `registerSlushWallet`:
 **Before:**
 
 ```ts
-import { registerStashedWallet } from '@mysten/zksend';
+import { registerStashedWallet } from '@haneullabs/zksend';
 
 registerStashedWallet(...);
 ```
@@ -92,7 +92,7 @@ registerStashedWallet(...);
 **After:**
 
 ```ts
-import { registerSlushWallet } from '@mysten/slush-wallet';
+import { registerSlushWallet } from '@haneullabs/slush-wallet';
 
 registerSlushWallet(...);
 ```

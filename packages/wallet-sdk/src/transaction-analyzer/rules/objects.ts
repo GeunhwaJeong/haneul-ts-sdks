@@ -1,13 +1,13 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
 import { createAnalyzer } from '../analyzer.js';
 import type { TransactionAnalysisIssue } from '../analyzer.js';
 
 import { data } from './core.js';
 
-export type AnalyzedObject = SuiClientTypes.Object<{
+export type AnalyzedObject = HaneulClientTypes.Object<{
 	content: true;
 }> & {
 	ownerAddress: string | null;
@@ -79,7 +79,7 @@ export const objects = createAnalyzer({
 			const foundObjects = objects.filter(
 				(
 					obj,
-				): obj is SuiClientTypes.Object<{
+				): obj is HaneulClientTypes.Object<{
 					content: true;
 				}> => {
 					if (obj instanceof Error) {

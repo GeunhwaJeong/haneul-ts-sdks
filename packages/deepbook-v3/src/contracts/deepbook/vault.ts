@@ -8,8 +8,8 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import * as balance from './deps/sui/balance.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import * as balance from './deps/haneul/balance.js';
 import * as type_name from './deps/std/type_name.js';
 const $moduleName = '@deepbook/core::vault';
 export const Vault = new MoveStruct({

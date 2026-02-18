@@ -1,9 +1,9 @@
 {
-	"name": "@mysten/utils",
+	"name": "@haneullabs/utils",
 	"version": "0.3.1",
-	"description": "Shared utilities for @mysten/* packages",
+	"description": "Shared utilities for @haneullabs/* packages",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"sideEffects": false,
 	"type": "module",
 	"main": "./dist/index.mjs",
@@ -32,15 +32,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"keywords": [
 		"utils"
 	],
 	"bugs": {
-		"url": "https://github.com/MystenLabs/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/MystenLabs/ts-sdks/tree/main/packages/utils#readme",
+	"homepage": "https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/utils#readme",
 	"devDependencies": {
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.17"

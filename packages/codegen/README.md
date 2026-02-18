@@ -1,4 +1,4 @@
-# Sui typescript codegen
+# Haneul typescript codegen
 
 ⚠️ **Warning**: This package is currently in development and may have breaking changes.
 
@@ -7,10 +7,10 @@
 To use this package you will need to install it from npm:
 
 ```bash
-pnpm install @mysten/codegen
+pnpm install @haneullabs/codegen
 ```
 
-Then create a `sui-codegen.config.ts` to define what packages you want to generate code for:
+Then create a `haneul-codegen.config.ts` to define what packages you want to generate code for:
 
 ```ts
 import type { SuiCodegenConfig } from './src/config.js';
@@ -40,19 +40,19 @@ To generate code, you will first need to create `package_summaries` for your pac
 this by running the following command in the root of you move package:
 
 ```bash
-sui move summary
+haneul move summary
 ```
 
 this will create a new `package_summaries` directory (which can be added to `.gitignore`) for the
 codegen tool to analyze when generating code for your package.
 
-If you are having trouble with this command, ensure you are using the latest version of the sui cli
+If you are having trouble with this command, ensure you are using the latest version of the haneul cli
 (version `1.51.1` or later).
 
 Now that you have the `package_summaries` you can generate you typescript code, by running
 
 ```bash
-pnpm sui-ts-codegen generate
+pnpm haneul-ts-codegen generate
 ```
 
 or by adding something the following script to your package.json and running `pnpm codegen`
@@ -60,23 +60,23 @@ or by adding something the following script to your package.json and running `pn
 ```json
 {
 	"scripts": {
-		"codegen": "sui-ts-codegen generate"
+		"codegen": "haneul-ts-codegen generate"
 	}
 }
 ```
 
-## Setting up Sui Client with MVR
+## Setting up Haneul Client with MVR
 
 If your package is registered on MVR, the generated code should work without additional
 configuration. If you are using a `@local-pkg` name, you will need to configure your `SuiGrpcClient`
 to resolve the package name correctly:
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 	mvr: {
 		overrides: {
 			packages: {
@@ -91,11 +91,11 @@ If you are using `dapp-kit-core`, you can configure package overrides when creat
 instance:
 
 ```ts
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 };
 
 const PACKAGE_IDS = {
@@ -133,7 +133,7 @@ To create new objects from your Move package, use the generated `create` functio
 This example assumes a simple `counter` package based on the `create-dapp` template:
 
 ```tsx
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import * as counter from './generated/counter/counter';
 
 async function createCounter() {

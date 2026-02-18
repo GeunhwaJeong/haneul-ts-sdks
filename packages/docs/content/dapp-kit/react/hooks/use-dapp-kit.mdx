@@ -13,8 +13,8 @@ enabling you to call actions and access the underlying functionality.
 ## Usage
 
 ```tsx
-import type { UiWallet } from '@mysten/dapp-kit-react';
-import { useDAppKit } from '@mysten/dapp-kit-react';
+import type { UiWallet } from '@haneullabs/dapp-kit-react';
+import { useDAppKit } from '@haneullabs/dapp-kit-react';
 
 export function MyComponent({ wallet }: { wallet: UiWallet }) {
 	const dAppKit = useDAppKit();
@@ -62,8 +62,8 @@ export function MyComponent({ wallet }: { wallet: UiWallet }) {
 ### Transaction Execution
 
 ```tsx
-import { useDAppKit } from '@mysten/dapp-kit-react';
-import { Transaction } from '@mysten/sui/transactions';
+import { useDAppKit } from '@haneullabs/dapp-kit-react';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 export function TransferButton() {
 	const dAppKit = useDAppKit();
@@ -95,7 +95,7 @@ export function TransferButton() {
 
 ```tsx
 import { useEffect } from 'react';
-import { useDAppKit } from '@mysten/dapp-kit-react';
+import { useDAppKit } from '@haneullabs/dapp-kit-react';
 
 export function ConnectionMonitor() {
 	const dAppKit = useDAppKit();

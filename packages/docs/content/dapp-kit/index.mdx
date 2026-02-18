@@ -1,19 +1,19 @@
 ---
-title: Sui dApp Kit
+title: Haneul dApp Kit
 ---
 
 <Callout type="info">
-	**Migrating from @mysten/dapp-kit?** If you're currently using the legacy `@mysten/dapp-kit`
-	package, check out our [Migration Guide](/sui/migrations/sui-2.0/dapp-kit) to upgrade to the new
+	**Migrating from @haneullabs/dapp-kit?** If you're currently using the legacy `@haneullabs/dapp-kit`
+	package, check out our [Migration Guide](/haneul/migrations/haneul-2.0/dapp-kit) to upgrade to the new
 	packages with gRPC and GraphQL support.
 </Callout>
 
-The Sui dApp Kit provides tools and components for building decentralized applications on the Sui
+The Haneul dApp Kit provides tools and components for building decentralized applications on the Haneul
 network. The SDK consists of two packages that work together:
 
 ## Packages
 
-### @mysten/dapp-kit-core
+### @haneullabs/dapp-kit-core
 
 Framework-agnostic core that works with vanilla JS, React, Vue, or any framework:
 
@@ -22,7 +22,7 @@ Framework-agnostic core that works with vanilla JS, React, Vue, or any framework
 - Automatic state management with nanostores
 - Smaller bundle size and improved performance
 
-### @mysten/dapp-kit-react
+### @haneullabs/dapp-kit-react
 
 React bindings for the core package:
 
@@ -37,13 +37,13 @@ Choose the installation method based on your framework:
 ### For React Applications
 
 ```sh npm2yarn
-npm i @mysten/dapp-kit-react @mysten/sui
+npm i @haneullabs/dapp-kit-react @haneullabs/haneul
 ```
 
 ### Vanilla JavaScript and other frameworks
 
 ```sh npm2yarn
-npm i @mysten/dapp-kit-core @mysten/sui
+npm i @haneullabs/dapp-kit-core @haneullabs/haneul
 ```
 
 ## Getting Started
@@ -56,7 +56,7 @@ Check the framework-specific guides:
 
 ## Legacy Package
 
-### @mysten/dapp-kit (Legacy)
+### @haneullabs/dapp-kit (Legacy)
 
 See the [Legacy dApp Kit documentation](/dapp-kit/legacy).
 
@@ -70,5 +70,5 @@ The original React-focused version of the dApp Kit. This package provides:
 <Callout type="warning">
 	**Deprecated JSON RPC Only**: This legacy package only works with the deprecated JSON RPC API and
 	will not be updated to support gRPC or GraphQL. All new projects should use
-	`@mysten/dapp-kit-core` and `@mysten/dapp-kit-react`.
+	`@haneullabs/dapp-kit-core` and `@haneullabs/dapp-kit-react`.
 </Callout>

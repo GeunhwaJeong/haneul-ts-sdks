@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiClientTypes } from '@mysten/sui/client';
-import { graphql } from '@mysten/sui/graphql/schema';
-import { isSuiGraphQLClient } from '@mysten/sui/graphql';
-import { isSuiJsonRpcClient } from '@mysten/sui/jsonRpc';
-import { normalizeStructTag } from '@mysten/sui/utils';
-import { chunk, fromBase64 } from '@mysten/utils';
+import type { HaneulClientTypes } from '@haneullabs/haneul/client';
+import { graphql } from '@haneullabs/haneul/graphql/schema';
+import { isSuiGraphQLClient } from '@haneullabs/haneul/graphql';
+import { isSuiJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
+import { normalizeStructTag } from '@haneullabs/haneul/utils';
+import { chunk, fromBase64 } from '@haneullabs/utils';
 
 import type { KioskDisplay, ObjectWithDisplay } from '../types/kiosk.js';
 import type { KioskCompatibleClient } from '../types/index.js';
@@ -179,9 +179,9 @@ export async function getAllObjects(
 	);
 }
 
-function parseJsonRpcOwner(owner: NonNullable<unknown>): SuiClientTypes.ObjectOwner {
+function parseJsonRpcOwner(owner: NonNullable<unknown>): HaneulClientTypes.ObjectOwner {
 	if (owner === 'Immutable') {
-		return { $kind: 'Immutable', Immutable: true } as SuiClientTypes.ObjectOwner;
+		return { $kind: 'Immutable', Immutable: true } as HaneulClientTypes.ObjectOwner;
 	}
 
 	const ownerObj = owner as Record<string, any>;
@@ -193,21 +193,21 @@ function parseJsonRpcOwner(owner: NonNullable<unknown>): SuiClientTypes.ObjectOw
 				owner: ownerObj.ConsensusAddressOwner.owner,
 				startVersion: ownerObj.ConsensusAddressOwner.start_version,
 			},
-		} as SuiClientTypes.ObjectOwner;
+		} as HaneulClientTypes.ObjectOwner;
 	}
 
 	if ('AddressOwner' in ownerObj) {
 		return {
 			$kind: 'AddressOwner',
 			AddressOwner: ownerObj.AddressOwner,
-		} as SuiClientTypes.ObjectOwner;
+		} as HaneulClientTypes.ObjectOwner;
 	}
 
 	if ('ObjectOwner' in ownerObj) {
 		return {
 			$kind: 'ObjectOwner',
 			ObjectOwner: ownerObj.ObjectOwner,
-		} as SuiClientTypes.ObjectOwner;
+		} as HaneulClientTypes.ObjectOwner;
 	}
 
 	if ('Shared' in ownerObj) {
@@ -216,7 +216,7 @@ function parseJsonRpcOwner(owner: NonNullable<unknown>): SuiClientTypes.ObjectOw
 			Shared: {
 				initialSharedVersion: ownerObj.Shared.initial_shared_version,
 			},
-		} as SuiClientTypes.ObjectOwner;
+		} as HaneulClientTypes.ObjectOwner;
 	}
 
 	throw new Error(`Unknown owner type: ${JSON.stringify(owner)}`);
@@ -224,26 +224,26 @@ function parseJsonRpcOwner(owner: NonNullable<unknown>): SuiClientTypes.ObjectOw
 
 function mapGraphQLOwner(
 	owner: NonNullable<unknown> & { __typename?: string },
-): SuiClientTypes.ObjectOwner {
+): HaneulClientTypes.ObjectOwner {
 	const o = owner as Record<string, any>;
 	switch (o.__typename) {
 		case 'AddressOwner':
 			return {
 				$kind: 'AddressOwner',
 				AddressOwner: o.address?.address!,
-			} as SuiClientTypes.ObjectOwner;
+			} as HaneulClientTypes.ObjectOwner;
 		case 'ObjectOwner':
 			return {
 				$kind: 'ObjectOwner',
 				ObjectOwner: o.address?.address!,
-			} as SuiClientTypes.ObjectOwner;
+			} as HaneulClientTypes.ObjectOwner;
 		case 'Immutable':
-			return { $kind: 'Immutable', Immutable: true } as SuiClientTypes.ObjectOwner;
+			return { $kind: 'Immutable', Immutable: true } as HaneulClientTypes.ObjectOwner;
 		case 'Shared':
 			return {
 				$kind: 'Shared',
 				Shared: { initialSharedVersion: String(o.initialSharedVersion) },
-			} as SuiClientTypes.ObjectOwner;
+			} as HaneulClientTypes.ObjectOwner;
 		case 'ConsensusAddressOwner':
 			return {
 				$kind: 'ConsensusAddressOwner',
@@ -251,7 +251,7 @@ function mapGraphQLOwner(
 					owner: o.address?.address!,
 					startVersion: String(o.startVersion),
 				},
-			} as SuiClientTypes.ObjectOwner;
+			} as HaneulClientTypes.ObjectOwner;
 		default:
 			throw new Error(`Unknown GraphQL owner type: ${o.__typename}`);
 	}

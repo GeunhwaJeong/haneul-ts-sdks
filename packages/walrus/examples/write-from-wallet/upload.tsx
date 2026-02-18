@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCurrentAccount, useDAppKit, useCurrentClient } from '@mysten/dapp-kit-react';
+import { useCurrentAccount, useDAppKit, useCurrentClient } from '@haneullabs/dapp-kit-react';
 import { useState, useRef } from 'react';
 
 import type { WriteFilesFlow } from '../../src/index.js';

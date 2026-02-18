@@ -2,7 +2,7 @@
 title: Connect Button
 ---
 
-The `<mysten-dapp-kit-connect-button>` Web Component provides a complete wallet connection UI. It
+The `<haneullabs-dapp-kit-connect-button>` Web Component provides a complete wallet connection UI. It
 displays a "Connect Wallet" button when no wallet is connected, and shows the connected account with
 a menu when a wallet is active.
 
@@ -17,10 +17,10 @@ a menu when a wallet is active.
 ### Vanilla
 
 ```html
-<mysten-dapp-kit-connect-button></mysten-dapp-kit-connect-button>
+<haneullabs-dapp-kit-connect-button></haneullabs-dapp-kit-connect-button>
 
 <script>
-	const button = document.querySelector('mysten-dapp-kit-connect-button');
+	const button = document.querySelector('haneullabs-dapp-kit-connect-button');
 	   button!.instance = dAppKit;
 </script>
 ```
@@ -33,7 +33,7 @@ import { dAppKit } from './dapp-kit.ts';
 </script>
 
 <template>
-	<mysten-dapp-kit-connect-button :instance="dAppKit" />
+	<haneullabs-dapp-kit-connect-button :instance="dAppKit" />
 </template>
 ```
 
@@ -63,22 +63,22 @@ The connect button component automatically handles:
 Use the default slot to customize the button text when not connected:
 
 ```html
-<mysten-dapp-kit-connect-button>
+<haneullabs-dapp-kit-connect-button>
 	<span>Sign In</span>
-</mysten-dapp-kit-connect-button>
+</haneullabs-dapp-kit-connect-button>
 ```
 
 ## Modal Integration
 
 The connect button automatically manages its own modal. You don't need to add a separate
-`<mysten-dapp-kit-connect-modal>` component when using the connect button.
+`<haneullabs-dapp-kit-connect-modal>` component when using the connect button.
 
 ## Connected State
 
 When a wallet is connected, the button transforms into an account menu that displays:
 
 - Account address (truncated)
-- SUI balance
+- HANEUL balance
 - Network indicator
 - Menu options for:
   - Switching accounts (if multiple accounts available)
@@ -87,5 +87,5 @@ When a wallet is connected, the button transforms into an account menu that disp
 
 ## Server-Side Rendering (SSR)
 
-The `<mysten-dapp-kit-connect-button>` Web Component can be only client-side rendered, as wallets
+The `<haneullabs-dapp-kit-connect-button>` Web Component can be only client-side rendered, as wallets
 are detected in the browser. For Next.js guide see [here](../getting-started/next-js).

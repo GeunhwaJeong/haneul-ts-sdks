@@ -9,8 +9,8 @@ import {
 } from '../../test-utils.js';
 import { createMockWallets, MockWallet } from '../../mocks/mock-wallet.js';
 import { createDAppKit, DAppKit } from '../../../src/index.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { getWallets } from '@mysten/wallet-standard';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { getWallets } from '@haneullabs/wallet-standard';
 import { createMockAccount } from '../../mocks/mock-account.js';
 import { UiWallet } from '@wallet-standard/ui';
 
@@ -22,9 +22,9 @@ describe('[Integration] connectWallet action', () => {
 
 	beforeEach(() => {
 		const GRPC_URLS = {
-			testnet: 'https://fullnode.testnet.sui.io:443',
-			mainnet: 'https://fullnode.mainnet.sui.io:443',
-			devnet: 'https://fullnode.devnet.sui.io:443',
+			testnet: 'https://fullnode.testnet.haneul.io:443',
+			mainnet: 'https://fullnode.mainnet.haneul.io:443',
+			devnet: 'https://fullnode.devnet.haneul.io:443',
 			localnet: 'http://127.0.0.1:9000',
 		} as const;
 
@@ -32,7 +32,7 @@ describe('[Integration] connectWallet action', () => {
 			networks: TEST_NETWORKS,
 			defaultNetwork: TEST_DEFAULT_NETWORK,
 			createClient(network) {
-				return new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] });
+				return new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] });
 			},
 			walletInitializers: [
 				{

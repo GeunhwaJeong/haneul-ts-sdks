@@ -22,8 +22,8 @@ The following example is from the original Kiosk SDK V1 documentation.
 ### Before
 
 ```typescript
-import { placeAndList } from '@mysten/kiosk';
-import { Transaction } from '@mysten/sui/transactions';
+import { placeAndList } from '@haneullabs/kiosk';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const placeAndListToKiosk = async () => {
 	const kiosk = 'SomeKioskId';
@@ -46,8 +46,8 @@ const placeAndListToKiosk = async () => {
 Using the new SDK, you can build the same transaction as follows:
 
 ```typescript
-import { kiosk, KioskTransaction } from '@mysten/kiosk';
-import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+import { kiosk, KioskTransaction } from '@haneullabs/kiosk';
+import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 
 // You need to do this only once and re-use it in the application.
 const client = new SuiJsonRpcClient({
@@ -81,8 +81,8 @@ The following example is from the original Kiosk SDK V1 documentation.
 ### Before
 
 ```typescript
-import { createKioskAndShare } from '@mysten/kiosk';
-import { Transaction } from '@mysten/sui/transactions';
+import { createKioskAndShare } from '@haneullabs/kiosk';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const createKiosk = async () => {
 	const accountAddress = '0xSomeSuiAddress';
@@ -102,8 +102,8 @@ const createKiosk = async () => {
 Using the new SDK, you can build the same transaction as follows:
 
 ```typescript
-import { kiosk, KioskTransaction } from '@mysten/kiosk';
-import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+import { kiosk, KioskTransaction } from '@haneullabs/kiosk';
+import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 
 // You need to do this only once and re-use it in the application.
 const client = new SuiJsonRpcClient({
@@ -134,11 +134,11 @@ import {
 	purchaseAndResolvePolicies,
 	place,
 	testnetEnvironment,
-} from '@mysten/kiosk';
-import { SuiJsonRpcClient } from '@mysten/sui/jsonRpc';
+} from '@haneullabs/kiosk';
+import { SuiJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
 
 const client = new SuiJsonRpcClient({
-	url: 'https://fullnode.testnet.sui.io:443',
+	url: 'https://fullnode.testnet.haneul.io:443',
 });
 
 // The kiosk we're purchasing from.
@@ -151,7 +151,7 @@ const item = {
 	listing: {
 		isExclusive: false,
 		listingId: '0x368b512ff2514dbea814f26ec9a3d41198c00e8ed778099961e9ed22a9f0032b',
-		price: '20000000000', // in MIST
+		price: '20000000000', // in GEUNHWA
 	},
 };
 const ownedKiosk = `0xMyKioskAddress`;
@@ -205,8 +205,8 @@ Using the new SDK, you can build the same transaction as follows:
 > This works with both personal and non-personal kiosks.
 
 ```typescript
-import { kiosk, KioskTransaction } from '@mysten/kiosk';
-import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+import { kiosk, KioskTransaction } from '@haneullabs/kiosk';
+import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 
 // You need to do this only once and re-use it in the application.
 const client = new SuiJsonRpcClient({
@@ -223,7 +223,7 @@ const item = {
 	listing: {
 		isExclusive: false,
 		listingId: '0x368b512ff2514dbea814f26ec9a3d41198c00e8ed778099961e9ed22a9f0032b',
-		price: '20000000000', // in MIST
+		price: '20000000000', // in GEUNHWA
 	},
 };
 
@@ -265,10 +265,10 @@ import {
 	createTransferPolicy,
 	percentageToBasisPoints,
 	testnetEnvironment,
-} from '@mysten/kiosk';
-import { Transaction } from '@mysten/sui/transactions';
+} from '@haneullabs/kiosk';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
-// Attaches a royalty rule of 1% or 0.1 SUI (whichever is bigger)
+// Attaches a royalty rule of 1% or 0.1 HANEUL (whichever is bigger)
 // as well as a kiosk lock, making the objects tradeable only from/to a kiosk.
 const attachStrongRoyalties = async () => {
 	const type = 'SomePackageId::type::MyType'; // the Type for which we're attaching rules.
@@ -277,7 +277,7 @@ const attachStrongRoyalties = async () => {
 
 	// Royalties configuration.
 	const percentage = 2.55; // 2.55%
-	const minAmount = 100_000_000; // 0.1 SUI.
+	const minAmount = 100_000_000; // 0.1 HANEUL.
 
 	// The environment on which we're referencing the rules package.
 	// Use `mainnetEnvironment` for mainnet.
@@ -306,8 +306,8 @@ const attachStrongRoyalties = async () => {
 On the new SDK, the same transaction can be built as follows:
 
 ```typescript
-import { kiosk, TransferPolicyTransaction, percentageToBasisPoints } from '@mysten/kiosk';
-import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+import { kiosk, TransferPolicyTransaction, percentageToBasisPoints } from '@haneullabs/kiosk';
+import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 
 // You need to do this only once and re-use it in the application.
 const client = new SuiJsonRpcClient({

@@ -22,7 +22,7 @@ describe.runIf(E2E_AWS_KMS_TEST_ENABLE === 'true')('Aws KMS signer E2E testing',
 		});
 	});
 
-	it('should retrieve the correct sui address', async () => {
+	it('should retrieve the correct haneul address', async () => {
 		// Get the public key
 		const publicKey = signer.getPublicKey();
 		expect(publicKey.toSuiAddress()).toEqual(

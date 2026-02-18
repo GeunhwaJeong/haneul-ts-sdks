@@ -28,7 +28,7 @@ Payment Kit provides a default registry that's ready to use:
 // Use the default registry
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	sender: senderAddress,
@@ -206,7 +206,7 @@ const registryId = getRegistryIdFromName('my-app-payments', namespaceId);
 
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver: registryId, // Must be the registry itself
 	sender: senderAddress,
@@ -226,7 +226,7 @@ const tx = client.paymentKit.tx.processRegistryPayment({
 You can configure both settings independently:
 
 ```ts
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const tx = new Transaction();
 
@@ -260,9 +260,9 @@ await client.signAndExecuteTransaction({
 If you've enabled registry-managed funds, you can withdraw accumulated coins:
 
 ```ts
-// Withdraw all SUI from the registry
+// Withdraw all HANEUL from the registry
 const tx = client.paymentKit.tx.withdrawFromRegistry({
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	registryName: 'my-app-payments',
 	adminCapId: adminCapId,
 });
@@ -292,10 +292,10 @@ If your registry accumulates different coin types:
 ```ts
 const tx = new Transaction();
 
-// Withdraw SUI
+// Withdraw HANEUL
 tx.add(
 	client.paymentKit.calls.withdrawFromRegistry({
-		coinType: '0x2::sui::SUI',
+		coinType: '0x2::haneul::HANEUL',
 		registryName: 'my-app-payments',
 		adminCapId: adminCapId,
 	}),
@@ -324,7 +324,7 @@ After the expiration period, payment records can be deleted to reclaim storage f
 // Delete an expired payment record
 const tx = client.paymentKit.tx.deletePaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	registryName: 'my-app-payments',
@@ -351,7 +351,7 @@ console.log('Record deleted, storage rebate received');
 // Get the payment record
 const record = await client.paymentKit.getPaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	registryName: 'my-app-payments',
@@ -382,7 +382,7 @@ const registryId = '0x123abc...';
 // Process payment using registry ID
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	sender: senderAddress,
@@ -392,7 +392,7 @@ const tx = client.paymentKit.tx.processRegistryPayment({
 // Query using registry ID
 const record = await client.paymentKit.getPaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	registryId: registryId,
@@ -404,13 +404,13 @@ const record = await client.paymentKit.getPaymentRecord({
 Here's a complete workflow for setting up a custom registry:
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { paymentKit } from '@mysten/payment-kit';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { paymentKit } from '@haneullabs/payment-kit';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(paymentKit());
 
 const keypair = Ed25519Keypair.generate();
@@ -488,7 +488,7 @@ const registryId = getRegistryIdFromName(registryName, namespaceId);
 
 const paymentTx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver: registryId, // Funds go to registry
 	sender: keypair.getPublicKey().toSuiAddress(),

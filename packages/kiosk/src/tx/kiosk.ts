@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Transaction, TransactionObjectArgument } from '@mysten/sui/transactions';
+import type { Transaction, TransactionObjectArgument } from '@haneullabs/haneul/transactions';
 import * as kiosk from '../contracts/0x2/kiosk.js';
 
 /**

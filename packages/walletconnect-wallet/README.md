@@ -1,1 +1,1 @@
-# `@mysten/walletconnect-wallet`
+# `@haneullabs/walletconnect-wallet`

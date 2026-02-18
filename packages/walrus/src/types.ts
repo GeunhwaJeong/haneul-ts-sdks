@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Signer } from '@mysten/sui/cryptography';
-import type { ClientWithCoreApi } from '@mysten/sui/client';
-import type { Transaction, TransactionObjectArgument } from '@mysten/sui/transactions';
+import type { Signer } from '@haneullabs/haneul/cryptography';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/client';
+import type { Transaction, TransactionObjectArgument } from '@haneullabs/haneul/transactions';
 
 import type { StorageNodeInfo } from './contracts/walrus/storage_node.js';
 import type { RequestOptions, StorageNodeClientOptions } from './storage-node/client.js';
@@ -19,7 +19,7 @@ import type { WalrusFile } from './files/file.js';
 import type { Blob } from './contracts/walrus/blob.js';
 
 /**
- * Configuration for the Walrus package on sui
+ * Configuration for the Walrus package on haneul
  *
  * This is used to configure the Walrus package to use a specific package ID, system object ID, staking pool ID, and WAL package ID.
  */
@@ -76,7 +76,7 @@ interface BaseWalrusClientConfig {
 /**
  * Configuration for the Walrus client.
  *
- * This is used to configure the Walrus client to use a specific storage node client options, network, and Sui client or RPC URL.
+ * This is used to configure the Walrus client to use a specific storage node client options, network, and Haneul client or RPC URL.
  */
 export type WalrusClientConfig = BaseWalrusClientConfig &
 	WalrusNetworkOrPackageConfig & {

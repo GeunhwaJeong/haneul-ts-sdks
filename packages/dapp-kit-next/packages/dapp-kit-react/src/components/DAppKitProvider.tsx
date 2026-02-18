@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { DefaultExpectedDppKit } from '@mysten/dapp-kit-core';
+import type { DefaultExpectedDppKit } from '@haneullabs/dapp-kit-core';
 import { createContext } from 'react';
 import type { PropsWithChildren } from 'react';
 

@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { ConnectButton, useCurrentAccount, useDAppKit, useWallets } from '@mysten/dapp-kit-react';
-import { Transaction } from '@mysten/sui/transactions';
+import { ConnectButton, useCurrentAccount, useDAppKit, useWallets } from '@haneullabs/dapp-kit-react';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { useState } from 'react';
 
 import { isEnokiWallet, isGoogleWallet } from '../src/wallet/utils.js';

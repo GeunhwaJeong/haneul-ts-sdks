@@ -3,7 +3,7 @@
 
 import { LitElement } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { promiseWithResolvers } from '@mysten/utils';
+import { promiseWithResolvers } from '@haneullabs/utils';
 
 export class BaseModal extends LitElement {
 	#isOpen = false;

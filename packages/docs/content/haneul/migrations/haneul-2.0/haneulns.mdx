@@ -1,0 +1,45 @@
+---
+title: '@haneullabs/haneulns'
+---
+
+This package now exports a client extension that integrates with Haneul clients.
+
+```diff
+- import { SuiClient, getFullnodeUrl } from '@haneullabs/haneul/client';
+- import { SuinsClient } from '@haneullabs/haneulns';
++ import { SuiGrpcClient } from '@haneullabs/haneul/grpc'; // or SuiJsonRpcClient, SuiGraphQLClient
++ import { haneulns } from '@haneullabs/haneulns';
+
+- const suiClient = new SuiClient({ url: getFullnodeUrl('mainnet') });
+- const haneulnsClient = new SuinsClient({
+-   client: suiClient,
+-   network: 'mainnet',
+- });
++ const client = new SuiGrpcClient({
++   baseUrl: 'https://fullnode.mainnet.haneul.io:443',
++   network: 'mainnet',
++ }).$extend(haneulns());
+
+- const nameRecord = await haneulnsClient.getNameRecord('example.haneul');
++ const nameRecord = await client.haneulns.getNameRecord('example.haneul');
+```
+
+## Custom Package IDs
+
+For custom deployments or networks other than mainnet/testnet, you can provide custom package info:
+
+```ts
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { haneulns, type PackageInfo } from '@haneullabs/haneulns';
+
+const customPackageInfo: PackageInfo = {
+	packageId: '0x...',
+	packageIdV1: '0x...',
+	// ... other required fields
+};
+
+const client = new SuiGrpcClient({
+	baseUrl: 'http://localhost:9000',
+	network: 'localnet',
+}).$extend(haneulns({ packageInfo: customPackageInfo }));
+```

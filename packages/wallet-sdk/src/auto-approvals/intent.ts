@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Transaction, TransactionResult } from '@mysten/sui/transactions';
-import type { TransactionDataBuilder } from '@mysten/sui/transactions';
-import { TransactionCommands } from '@mysten/sui/transactions';
+import type { Transaction, TransactionResult } from '@haneullabs/haneul/transactions';
+import type { TransactionDataBuilder } from '@haneullabs/haneul/transactions';
+import { TransactionCommands } from '@haneullabs/haneul/transactions';
 
-export const OPERATION_INTENT = '@mysten/wallet-kit/AutoApprovalOperation';
+export const OPERATION_INTENT = '@haneullabs/wallet-kit/AutoApprovalOperation';
 
 export function operationType(operationType: string) {
 	return (tx: Transaction): TransactionResult => {

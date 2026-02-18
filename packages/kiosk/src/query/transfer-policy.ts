@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { isValidSuiAddress } from '@mysten/sui/utils';
+import { isValidHaneulAddress } from '@haneullabs/haneul/utils';
 
 import {
 	TransferPolicyCap as TransferPolicyCapStruct,
@@ -24,7 +24,7 @@ import { queryEvents } from './client-utils.js';
  * This method requires event querying support (JSON-RPC or GraphQL clients).
  * gRPC clients do not support event querying and will throw an error.
  *
- * @param client - The Sui client (must support event querying)
+ * @param client - The Haneul client (must support event querying)
  * @param type - The type of the asset (e.g., "0x123::nft::NFT")
  * @throws Error if the client doesn't support event querying
  */
@@ -67,7 +67,7 @@ export async function queryTransferPolicy(
 /**
  * Fetches all TransferPolicyCap objects owned by an address for a specific type.
  *
- * @param client - The Sui client
+ * @param client - The Haneul client
  * @param address - The owner address
  * @param type - The type of the asset
  * @returns Array of TransferPolicyCap objects
@@ -77,7 +77,7 @@ export async function queryTransferPolicyCapsByType(
 	address: string,
 	type: string,
 ): Promise<TransferPolicyCap[]> {
-	if (!isValidSuiAddress(address)) return [];
+	if (!isValidHaneulAddress(address)) return [];
 
 	const policies = [];
 	let hasNextPage = true;
@@ -119,7 +119,7 @@ export async function queryTransferPolicyCapsByType(
  * only TransferPolicyCap objects. This matches all generic instantiations
  * (e.g., TransferPolicyCap<T> for any T) and is supported natively by all clients.
  *
- * @param client - The Sui client
+ * @param client - The Haneul client
  * @param address - The owner address
  * @returns Array of TransferPolicyCap objects or undefined if address is invalid
  */
@@ -127,7 +127,7 @@ export async function queryOwnedTransferPolicies(
 	client: KioskCompatibleClient,
 	address: string,
 ): Promise<TransferPolicyCap[] | undefined> {
-	if (!isValidSuiAddress(address)) return;
+	if (!isValidHaneulAddress(address)) return;
 
 	let hasNextPage = true;
 	let cursor: string | null = null;

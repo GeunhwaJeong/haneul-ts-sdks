@@ -43,7 +43,7 @@ async function main() {
 			type: 'input',
 			name: 'dAppName',
 			message: 'What is the name of your dApp? (this will be used as the directory name)',
-			initial: 'my-first-sui-dapp',
+			initial: 'my-first-haneul-dapp',
 		},
 	].filter((question) => {
 		if (question.name === 'template' && args.template) return false;
@@ -110,15 +110,15 @@ async function collectFiles(template: string, dAppName: string) {
 					const json = JSON.parse(content.toString());
 					json.name = dAppName;
 
-					if (json.dependencies?.['@mysten/sui']) {
-						json.dependencies['@mysten/sui'] = dependencies['@mysten/sui'];
+					if (json.dependencies?.['@haneullabs/haneul']) {
+						json.dependencies['@haneullabs/haneul'] = dependencies['@haneullabs/haneul'];
 					}
-					if (json.dependencies?.['@mysten/dapp-kit-react']) {
-						json.dependencies['@mysten/dapp-kit-react'] = dependencies['@mysten/dapp-kit-react'];
+					if (json.dependencies?.['@haneullabs/dapp-kit-react']) {
+						json.dependencies['@haneullabs/dapp-kit-react'] = dependencies['@haneullabs/dapp-kit-react'];
 					}
 
-					if (json.devDependencies?.['@mysten/codegen']) {
-						json.devDependencies['@mysten/codegen'] = dependencies['@mysten/codegen'];
+					if (json.devDependencies?.['@haneullabs/codegen']) {
+						json.devDependencies['@haneullabs/codegen'] = dependencies['@haneullabs/codegen'];
 					}
 
 					content = Buffer.from(JSON.stringify(json, null, 2));

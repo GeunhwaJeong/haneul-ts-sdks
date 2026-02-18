@@ -1,13 +1,13 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { InferBcsType } from '@mysten/bcs';
-import { bcs } from '@mysten/bcs';
-import type { Signer } from '@mysten/sui/cryptography';
-import type { ClientCache, ClientWithCoreApi } from '@mysten/sui/client';
-import type { TransactionObjectArgument, TransactionResult } from '@mysten/sui/transactions';
-import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
-import { normalizeStructTag, parseStructTag } from '@mysten/sui/utils';
+import type { InferBcsType } from '@haneullabs/bcs';
+import { bcs } from '@haneullabs/bcs';
+import type { Signer } from '@haneullabs/haneul/cryptography';
+import type { ClientCache, ClientWithCoreApi } from '@haneullabs/haneul/client';
+import type { TransactionObjectArgument, TransactionResult } from '@haneullabs/haneul/transactions';
+import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeStructTag, parseStructTag } from '@haneullabs/haneul/utils';
 
 import {
 	MAINNET_WALRUS_PACKAGE_CONFIG,
@@ -111,10 +111,10 @@ import {
 	toPairIndex,
 	toShardIndex,
 } from './utils/index.js';
-import { SuiObjectDataLoader } from './utils/object-loader.js';
+import { HaneulObjectDataLoader } from './utils/object-loader.js';
 import { shuffle, weightedShuffle } from './utils/randomness.js';
 import { getWasmBindings } from './wasm.js';
-import { chunk } from '@mysten/utils';
+import { chunk } from '@haneullabs/utils';
 import { UploadRelayClient } from './upload-relay/client.js';
 import { encodeQuilt, encodeQuiltPatchId, parseWalrusId } from './utils/quilts.js';
 import { BlobReader } from './files/readers/blob.js';
@@ -161,7 +161,7 @@ export class WalrusClient {
 
 	#packageConfig: WalrusPackageConfig;
 	#suiClient: ClientWithCoreApi;
-	#objectLoader: SuiObjectDataLoader;
+	#objectLoader: HaneulObjectDataLoader;
 
 	#blobMetadataConcurrencyLimit = 10;
 	#readCommittee?: CommitteeInfo | Promise<CommitteeInfo> | null;
@@ -197,8 +197,8 @@ export class WalrusClient {
 		this.#suiClient = config.suiClient;
 
 		this.#storageNodeClient = new StorageNodeClient(config.storageNodeClientOptions);
-		this.#objectLoader = new SuiObjectDataLoader(this.#suiClient);
-		this.#cache = this.#suiClient.cache.scope('@mysten/walrus');
+		this.#objectLoader = new HaneulObjectDataLoader(this.#suiClient);
+		this.#cache = this.#suiClient.cache.scope('@haneullabs/walrus');
 	}
 
 	/** The Move type for a WAL coin */

@@ -8,20 +8,20 @@ to create your own zkSend Claim Links, with support for any publicly transferrab
 ## Installation
 
 ```sh npm2yarn
-npm i @mysten/zksend @mysten/sui
+npm i @haneullabs/zksend @haneullabs/haneul
 ```
 
 ## Setup
 
-To use the zkSend SDK, create a Sui client and extend it with the zkSend extension:
+To use the zkSend SDK, create a Haneul client and extend it with the zkSend extension:
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { zksend } from '@mysten/zksend';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { zksend } from '@haneullabs/zksend';
 
 const client = new SuiGrpcClient({
 	network: 'mainnet',
-	baseUrl: 'https://fullnode.mainnet.sui.io:443',
+	baseUrl: 'https://fullnode.mainnet.haneul.io:443',
 }).$extend(zksend());
 ```
 

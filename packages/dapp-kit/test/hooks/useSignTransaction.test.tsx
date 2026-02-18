@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
 
@@ -18,7 +18,7 @@ describe('useSignTransaction', () => {
 		const wrapper = createWalletProviderContextWrapper();
 		const { result } = renderHook(() => useSignTransaction(), { wrapper });
 
-		result.current.mutate({ transaction: new Transaction(), chain: 'sui:testnet' });
+		result.current.mutate({ transaction: new Transaction(), chain: 'haneul:testnet' });
 
 		await waitFor(() => expect(result.current.error).toBeInstanceOf(WalletNotConnectedError));
 	});
@@ -42,7 +42,7 @@ describe('useSignTransaction', () => {
 
 		result.current.signTransaction.mutate({
 			transaction: new Transaction(),
-			chain: 'sui:testnet',
+			chain: 'haneul:testnet',
 		});
 		await waitFor(() =>
 			expect(result.current.signTransaction.error).toBeInstanceOf(WalletFeatureNotSupportedError),
@@ -70,7 +70,7 @@ describe('useSignTransaction', () => {
 
 		await waitFor(() => expect(result.current.connectWallet.isSuccess).toBe(true));
 
-		const signTransactionFeature = mockWallet.features['sui:signTransaction'];
+		const signTransactionFeature = mockWallet.features['haneul:signTransaction'];
 		const signTransactionMock = signTransactionFeature!.signTransaction as Mock;
 
 		signTransactionMock.mockReturnValueOnce({
@@ -80,7 +80,7 @@ describe('useSignTransaction', () => {
 
 		result.current.signTransaction.mutate({
 			transaction: new Transaction(),
-			chain: 'sui:testnet',
+			chain: 'haneul:testnet',
 		});
 
 		await waitFor(() => expect(result.current.signTransaction.isSuccess).toBe(true));
@@ -92,7 +92,7 @@ describe('useSignTransaction', () => {
 		expect(signTransactionMock).toHaveBeenCalledWith({
 			transaction: expect.any(Object),
 			account: mockWallet.accounts[0],
-			chain: `sui:testnet`,
+			chain: `haneul:testnet`,
 		});
 
 		act(() => unregister());
@@ -117,7 +117,7 @@ describe('useSignTransaction', () => {
 
 		await waitFor(() => expect(result.current.connectWallet.isSuccess).toBe(true));
 
-		const signTransactionFeature = mockWallet.features['sui:signTransaction'];
+		const signTransactionFeature = mockWallet.features['haneul:signTransaction'];
 		const signTransactionMock = signTransactionFeature!.signTransaction as Mock;
 
 		signTransactionMock.mockReturnValueOnce({
@@ -133,7 +133,7 @@ describe('useSignTransaction', () => {
 		expect(signTransactionMock).toHaveBeenCalledWith({
 			transaction: expect.any(Object),
 			account: mockWallet.accounts[0],
-			chain: 'sui:test',
+			chain: 'haneul:test',
 		});
 
 		act(() => unregister());

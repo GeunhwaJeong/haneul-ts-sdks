@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import {
@@ -365,8 +365,8 @@ describe('Testing Kiosk SDK transaction building & querying e2e', () => {
 		});
 
 		expect(kiosk).toHaveProperty('kiosk');
-		expect(normalizeSuiAddress(kiosk.kiosk?.owner || '')).toBe(
-			normalizeSuiAddress(toolbox.address()),
+		expect(normalizeHaneulAddress(kiosk.kiosk?.owner || '')).toBe(
+			normalizeHaneulAddress(toolbox.address()),
 		);
 	});
 

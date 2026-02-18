@@ -74,13 +74,13 @@ Apply custom properties to affect all dApp Kit components:
 Target specific components:
 
 ```css
-mysten-dapp-kit-connect-button {
+haneullabs-dapp-kit-connect-button {
 	--primary: #10b981;
 	--primary-foreground: #ffffff;
 	--radius: 0.75rem;
 }
 
-mysten-dapp-kit-connect-modal {
+haneullabs-dapp-kit-connect-modal {
 	--background: #f8fafc;
 	--popover: #ffffff;
 }
@@ -166,7 +166,7 @@ Here's a complete theme example matching a custom design system:
 ### React
 
 ```tsx
-import { ConnectButton } from '@mysten/dapp-kit-react';
+import { ConnectButton } from '@haneullabs/dapp-kit-react';
 import './theme.css'; // Your theme CSS file
 
 export function App() {
@@ -178,7 +178,7 @@ export function App() {
 
 ```vue
 <template>
-	<mysten-dapp-kit-connect-button :instance="dAppKit" />
+	<haneullabs-dapp-kit-connect-button :instance="dAppKit" />
 </template>
 
 <style>
@@ -195,7 +195,7 @@ export function App() {
 		<link rel="stylesheet" href="theme.css" />
 	</head>
 	<body>
-		<mysten-dapp-kit-connect-button></mysten-dapp-kit-connect-button>
+		<haneullabs-dapp-kit-connect-button></haneullabs-dapp-kit-connect-button>
 	</body>
 </html>
 ```

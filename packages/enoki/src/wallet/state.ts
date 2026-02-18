@@ -9,7 +9,7 @@ import { atom, onMount, onSet, task } from 'nanostores';
 import type { Encryption } from '../encryption.js';
 import { createDefaultEncryption } from '../encryption.js';
 import type { EnokiClientConfig } from '../EnokiClient/index.js';
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
 
 import type { EnokiSessionContext, ZkLoginSession, ZkLoginState } from './types.js';
 
@@ -27,7 +27,7 @@ export class EnokiWalletState {
 	#encryptionKey: string;
 
 	#stateStore: UseStore;
-	#sessionContextByNetwork: Map<SuiClientTypes.Network, EnokiSessionContext>;
+	#sessionContextByNetwork: Map<HaneulClientTypes.Network, EnokiSessionContext>;
 	#zkLoginState: WritableAtom<ZkLoginState | null>;
 
 	constructor(config: EnokiWalletStateConfig) {
@@ -63,7 +63,7 @@ export class EnokiWalletState {
 		return this.#sessionContextByNetwork;
 	}
 
-	getSessionContext(network: SuiClientTypes.Network) {
+	getSessionContext(network: HaneulClientTypes.Network) {
 		const context = this.#sessionContextByNetwork.get(network);
 		if (!context) {
 			throw new Error(`The network ${network} isn't supported.`);

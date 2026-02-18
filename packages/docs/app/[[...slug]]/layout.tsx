@@ -14,13 +14,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			sidebar={{
 				tabs: [
 					{
-						title: 'Sui SDK',
-						description: 'TypeScript interfaces for Sui',
-						url: '/sui',
+						title: 'Haneul SDK',
+						description: 'TypeScript interfaces for Haneul',
+						url: '/haneul',
 					},
 					{
 						title: 'BCS',
-						description: 'Encoding and decoding Sui objects',
+						description: 'Encoding and decoding Haneul objects',
 						url: '/bcs',
 					},
 					{
@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 					},
 					{
 						title: 'dApp Kit',
-						description: 'Build Sui dApps',
+						description: 'Build Haneul dApps',
 						url: '/dapp-kit',
 					},
 					{
@@ -55,7 +55,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 					},
 					{
 						title: 'zkSend',
-						description: 'Send Sui with a link',
+						description: 'Send Haneul with a link',
 						url: '/zksend',
 					},
 					{

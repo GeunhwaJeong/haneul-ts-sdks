@@ -1,11 +1,11 @@
-# Sui KMS Signers
+# Haneul KMS Signers
 
-The Sui KMS Signers package provides a set of tools for securely signing transactions using Key
+The Haneul KMS Signers package provides a set of tools for securely signing transactions using Key
 Management Services (KMS) like AWS KMS and GCP KMS.
 
 ## Table of Contents
 
-- [Sui KMS Signers](#sui-kms-signers)
+- [Haneul KMS Signers](#haneul-kms-signers)
   - [Table of Contents](#table-of-contents)
   - [AWS KMS Signer](#aws-kms-signer)
     - [Usage](#usage)
@@ -26,12 +26,12 @@ Management Services (KMS) like AWS KMS and GCP KMS.
 
 ## AWS KMS Signer
 
-The AWS KMS Signer allows you to leverage AWS's Key Management Service to sign Sui transactions.
+The AWS KMS Signer allows you to leverage AWS's Key Management Service to sign Haneul transactions.
 
 ### Usage
 
 ```typescript
-import { AwsKmsSigner } from '@mysten/signers/aws';
+import { AwsKmsSigner } from '@haneullabs/signers/aws';
 
 const prepareSigner = async () => {
 	const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_KMS_KEY_ID } = process.env;
@@ -81,14 +81,14 @@ const signer = await AwsKmsSigner.fromKeyId('your-kms-key-id', {
 ```
 
 Returns
-**[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[AwsKmsSigner](https://github.com/MystenLabs/ts-sdks/blob/main/packages/signers/src/aws/aws-kms-signer.ts)>**
+**[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[AwsKmsSigner](https://github.com/GeunhwaJeong/ts-sdks/blob/main/packages/signers/src/aws/aws-kms-signer.ts)>**
 An instance of AwsKmsSigner.
 
 **Notice**: AWS Signer requires Node >=20 due to dependency on `crypto`
 
 ## GCP KMS Signer
 
-The GCP KMS Signer allows you to leverage Google Cloud's Key Management Service to sign Sui
+The GCP KMS Signer allows you to leverage Google Cloud's Key Management Service to sign Haneul
 transactions.
 
 ### Usage
@@ -131,7 +131,7 @@ const signer = await GcpKmsSigner.fromOptions({
 	cryptoKeyVersion: 'your-google-key-name-version',
 });
 
-// Retrieve the public key and get the Sui address
+// Retrieve the public key and get the Haneul address
 const publicKey = signer.getPublicKey();
 console.log(publicKey.toSuiAddress());
 
@@ -149,7 +149,7 @@ console.log(isValid); // Should print true if the signature is valid
 
 ## Ledger Signer
 
-The Ledger Signer allows you to leverage a Ledger hardware wallet to sign Sui transactions.
+The Ledger Signer allows you to leverage a Ledger hardware wallet to sign Haneul transactions.
 
 ### Usage
 
@@ -172,16 +172,16 @@ cryptographic operations.
 
 ```typescript
 import Transport from '@ledgerhq/hw-transport-node-hid';
-import SuiLedgerClient from '@mysten/ledgerjs-hw-app-sui';
-import { LedgerSigner } from '@mysten/signers/ledger';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { Transaction } from '@mysten/sui/transactions';
+import SuiLedgerClient from '@haneullabs/ledgerjs-hw-app-haneul';
+import { LedgerSigner } from '@haneullabs/signers/ledger';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const transport = await Transport.open(undefined);
 const ledgerClient = new SuiLedgerClient(transport);
 const suiClient = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 });
 
 const signer = await LedgerSigner.fromDerivationPath(
@@ -190,7 +190,7 @@ const signer = await LedgerSigner.fromDerivationPath(
 	suiClient,
 );
 
-// Log the Sui address:
+// Log the Haneul address:
 console.log(signer.toSuiAddress());
 
 // Define a test transaction:

@@ -9,7 +9,7 @@ import * as styles from './GettingStarted.css.js';
 export function GettingStarted() {
 	return (
 		<div className={styles.container}>
-			<Heading as="h2">Get Started with Sui</Heading>
+			<Heading as="h2">Get Started with Haneul</Heading>
 			<div className={styles.content}>
 				<InfoSection title="Install the Slush Extension">
 					We recommend pinning Slush to your taskbar for quicker access.
@@ -24,7 +24,7 @@ export function GettingStarted() {
 				<div className={styles.installButtonContainer}>
 					<Button variant="outline" asChild>
 						<a
-							href="https://chromewebstore.google.com/detail/slush-%E2%80%94-a-sui-wallet/opcgpfmipidbgpenhmajoajpbobppdi"
+							href="https://chromewebstore.google.com/detail/slush-%E2%80%94-a-haneul-wallet/opcgpfmipidbgpenhmajoajpbobppdi"
 							target="_blank"
 							rel="noreferrer"
 						>

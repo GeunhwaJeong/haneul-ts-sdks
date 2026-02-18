@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-import { DAppKitProvider } from "@mysten/dapp-kit-react";
+import { DAppKitProvider } from "@haneullabs/dapp-kit-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App.tsx";
 import { dAppKit } from "./dApp-kit.ts";

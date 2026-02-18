@@ -8,7 +8,7 @@
  *
  * Configuration:
  *
- * - floor_price - the floor price in MIST.
+ * - floor_price - the floor price in GEUNHWA.
  *
  * Use cases:
  *
@@ -17,8 +17,8 @@
  */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 const $moduleName = '@local-pkg/kiosk::floor_price_rule';
 export const Rule = new MoveStruct({
 	name: `${$moduleName}::Rule`,

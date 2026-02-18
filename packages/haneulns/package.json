@@ -1,0 +1,67 @@
+{
+	"name": "@haneullabs/haneulns",
+	"author": "Haneul Labs <build@haneul-labs.com>",
+	"description": "SuiNS SDK",
+	"version": "1.0.2",
+	"license": "Apache-2.0",
+	"private": false,
+	"type": "module",
+	"main": "./dist/index.mjs",
+	"types": "./dist/index.d.mts",
+	"keywords": [
+		"Haneul",
+		"suins",
+		"haneullabs"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.mts",
+			"import": "./dist/index.mjs",
+			"default": "./dist/index.mjs"
+		}
+	},
+	"sideEffects": false,
+	"files": [
+		"CHANGELOG.md",
+		"dist",
+		"src"
+	],
+	"scripts": {
+		"codegen": "haneul-ts-codegen generate && pnpm lint:fix",
+		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
+		"build": "rm -rf dist && tsc --noEmit && tsdown",
+		"prettier:check": "prettier -c --ignore-unknown .",
+		"prettier:fix": "prettier -w --ignore-unknown .",
+		"oxlint:check": "oxlint  .",
+		"oxlint:fix": "oxlint --fix",
+		"lint": "pnpm run oxlint:check && pnpm run prettier:check",
+		"lint:fix": "pnpm run oxlint:fix && pnpm run prettier:fix",
+		"test:e2e": "vitest run"
+	},
+	"engines": {
+		"node": ">=16"
+	},
+	"dependencies": {
+		"axios": "^1.13.5",
+		"axios-retry": "^4.5.0"
+	},
+	"devDependencies": {
+		"@haneullabs/codegen": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
+		"@types/tmp": "^0.2.6",
+		"ts-retry-promise": "^0.8.1",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.1",
+		"vitest": "^4.0.17"
+	},
+	"peerDependencies": {
+		"@haneullabs/haneul": "workspace:^"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/mystenlabs/suins-contracts/issues"
+	}
+}

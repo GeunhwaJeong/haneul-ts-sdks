@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { ClientCache } from '@mysten/sui/client';
+import { ClientCache } from '@haneullabs/haneul/client';
 import type { BlobReader } from './blob.js';
 import { QuiltPatchBlobHeader, QuiltPatchId } from '../../utils/bcs.js';
 import {
@@ -9,7 +9,7 @@ import {
 	parseQuiltPatchId,
 	QUILT_PATCH_BLOB_HEADER_SIZE,
 } from '../../utils/quilts.js';
-import { bcs } from '@mysten/bcs';
+import { bcs } from '@haneullabs/bcs';
 import { QuiltPatchTags } from '../../utils/bcs.js';
 import { QuiltIndexV1 } from '../../utils/bcs.js';
 import { urlSafeBase64 } from '../../utils/index.js';

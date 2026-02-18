@@ -2,9 +2,9 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as _package from './deps/sui/package.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as _package from './deps/haneul/package.js';
 const $moduleName = '@local-pkg/walrus::init';
 export const INIT = new MoveStruct({
 	name: `${$moduleName}::INIT`,

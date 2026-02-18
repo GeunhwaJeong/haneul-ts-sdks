@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import type {
 	IdentifierArray,
 	IdentifierString,
@@ -10,23 +10,23 @@ import type {
 	StandardConnectMethod,
 	StandardEventsFeature,
 	StandardEventsOnMethod,
-	SuiFeatures,
-	SuiSignAndExecuteTransactionMethod,
-	SuiSignPersonalMessageMethod,
-	SuiSignTransactionMethod,
-} from '@mysten/wallet-standard';
+	HaneulFeatures,
+	HaneulSignAndExecuteTransactionMethod,
+	HaneulSignPersonalMessageMethod,
+	HaneulSignTransactionMethod,
+} from '@haneullabs/wallet-standard';
 import {
 	getWallets,
 	ReadonlyWalletAccount,
 	StandardConnect,
 	StandardEvents,
-	SuiSignAndExecuteTransaction,
-	SuiSignPersonalMessage,
-	SuiSignTransaction,
-} from '@mysten/wallet-standard';
-import type { Wallet } from '@mysten/wallet-standard';
-import { toBase64 } from '@mysten/utils';
-import type { ClientWithCoreApi } from '@mysten/sui/client';
+	HaneulSignAndExecuteTransaction,
+	HaneulSignPersonalMessage,
+	HaneulSignTransaction,
+} from '@haneullabs/wallet-standard';
+import type { Wallet } from '@haneullabs/wallet-standard';
+import { toBase64 } from '@haneullabs/utils';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/client';
 import type { WalletInitializer } from './index.js';
 import { getChain } from '../utils/networks.js';
 
@@ -60,7 +60,7 @@ export class UnsafeBurnerWallet implements Wallet {
 			address: this.#keypair.getPublicKey().toSuiAddress(),
 			publicKey: this.#keypair.getPublicKey().toSuiBytes(),
 			chains: this.chains,
-			features: [SuiSignTransaction, SuiSignAndExecuteTransaction, SuiSignPersonalMessage],
+			features: [HaneulSignTransaction, HaneulSignAndExecuteTransaction, HaneulSignPersonalMessage],
 		});
 
 		console.warn(
@@ -88,7 +88,7 @@ export class UnsafeBurnerWallet implements Wallet {
 		return [this.#account];
 	}
 
-	get features(): StandardConnectFeature & StandardEventsFeature & SuiFeatures {
+	get features(): StandardConnectFeature & StandardEventsFeature & HaneulFeatures {
 		return {
 			[StandardConnect]: {
 				version: '1.0.0',
@@ -98,15 +98,15 @@ export class UnsafeBurnerWallet implements Wallet {
 				version: '1.0.0',
 				on: this.#on,
 			},
-			[SuiSignPersonalMessage]: {
+			[HaneulSignPersonalMessage]: {
 				version: '1.1.0',
 				signPersonalMessage: this.#signPersonalMessage,
 			},
-			[SuiSignTransaction]: {
+			[HaneulSignTransaction]: {
 				version: '2.0.0',
 				signTransaction: this.#signTransaction,
 			},
-			[SuiSignAndExecuteTransaction]: {
+			[HaneulSignAndExecuteTransaction]: {
 				version: '2.0.0',
 				signAndExecuteTransaction: this.#signAndExecuteTransaction,
 			},
@@ -121,11 +121,11 @@ export class UnsafeBurnerWallet implements Wallet {
 		return { accounts: this.accounts };
 	};
 
-	#signPersonalMessage: SuiSignPersonalMessageMethod = async (messageInput) => {
+	#signPersonalMessage: HaneulSignPersonalMessageMethod = async (messageInput) => {
 		return await this.#keypair.signPersonalMessage(messageInput.message);
 	};
 
-	#signTransaction: SuiSignTransactionMethod = async ({ transaction, signal, chain }) => {
+	#signTransaction: HaneulSignTransactionMethod = async ({ transaction, signal, chain }) => {
 		signal?.throwIfAborted();
 
 		const client = this.#chainConfig[chain];
@@ -136,7 +136,7 @@ export class UnsafeBurnerWallet implements Wallet {
 		return await this.#keypair.signTransaction(builtTransaction);
 	};
 
-	#signAndExecuteTransaction: SuiSignAndExecuteTransactionMethod = async ({
+	#signAndExecuteTransaction: HaneulSignAndExecuteTransactionMethod = async ({
 		transaction,
 		signal,
 		chain,

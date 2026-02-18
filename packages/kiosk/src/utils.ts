@@ -1,15 +1,15 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { PaginationArguments } from '@mysten/sui/jsonRpc';
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
-import { normalizeStructTag, normalizeSuiAddress, parseStructTag } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { PaginationArguments } from '@haneullabs/haneul/jsonRpc';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
+import { normalizeStructTag, normalizeHaneulAddress, parseStructTag } from '@haneullabs/haneul/utils';
 
 import { Item, Listing, Lock, Kiosk as KioskStruct } from './contracts/0x2/kiosk.js';
 import type { Kiosk, KioskData, KioskListing, ObjectWithDisplay } from './types/index.js';
 
-export type DynamicFieldInfo = SuiClientTypes.ListDynamicFieldsResponse['dynamicFields'][number];
+export type DynamicFieldInfo = HaneulClientTypes.ListDynamicFieldsResponse['dynamicFields'][number];
 
 export async function getKioskObject(client: ClientWithCoreApi, id: string): Promise<Kiosk> {
 	const { object } = await client.core.getObject({
@@ -44,7 +44,7 @@ export function extractKioskData(
 			const type = val.name.type;
 
 			const parsedType = parseStructTag(type);
-			const baseType = `${normalizeSuiAddress(parsedType.address)}::${parsedType.module}::${parsedType.name}`;
+			const baseType = `${normalizeHaneulAddress(parsedType.address)}::${parsedType.module}::${parsedType.name}`;
 
 			if (
 				baseType ===
@@ -104,7 +104,7 @@ export function extractKioskData(
 export function attachListingsAndPrices(
 	kioskData: KioskData,
 	listings: KioskListing[],
-	listingObjects: SuiClientTypes.Object[],
+	listingObjects: HaneulClientTypes.Object[],
 ) {
 	const itemListings = listings.reduce<Record<string, KioskListing>>(
 		(acc: Record<string, KioskListing>, item, idx) => {
@@ -213,6 +213,6 @@ export function percentageToBasisPoints(percentage: number) {
 // Normalizes the packageId part of a rule's type.
 export function getNormalizedRuleType(rule: string) {
 	const normalizedRuleAddress = rule.split('::');
-	normalizedRuleAddress[0] = normalizeSuiAddress(normalizedRuleAddress[0]);
+	normalizedRuleAddress[0] = normalizeHaneulAddress(normalizedRuleAddress[0]);
 	return normalizedRuleAddress.join('::');
 }

@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { isValidSuiAddress } from '@mysten/sui/utils';
+import { isValidHaneulAddress } from '@haneullabs/haneul/utils';
 import { ValidationError, ConfigurationError } from './errors.js';
 
 /**
@@ -19,15 +19,15 @@ export function validateRequired<T>(value: T | undefined, errorMessage: string):
 }
 
 /**
- * @description Validate that a Sui address is valid
+ * @description Validate that a Haneul address is valid
  * @param {string} address - The address to validate
  * @param {string} [fieldName] - Name of the field for error messages (default 'Address')
  * @returns {string} The validated address
  * @throws {ValidationError} If the address is invalid
  */
 export function validateAddress(address: string, fieldName: string = 'Address'): string {
-	if (!isValidSuiAddress(address)) {
-		throw new ValidationError(`${fieldName} must be a valid Sui address`);
+	if (!isValidHaneulAddress(address)) {
+		throw new ValidationError(`${fieldName} must be a valid Haneul address`);
 	}
 	return address;
 }

@@ -12,15 +12,15 @@ The Kiosk SDK exports a client extension that provides all Kiosk functionality.
 
 ## Setting up the kiosk extension
 
-Add the kiosk extension to your Sui client using `$extend()`. The extension currently supports
+Add the kiosk extension to your Haneul client using `$extend()`. The extension currently supports
 `mainnet` and `testnet`. See the next section for usage on other networks.
 
-_Mysten Kiosk rules and extensions are not supported in Devnet due to network wipes (that would
+_Haneul Kiosk rules and extensions are not supported in Devnet due to network wipes (that would
 require constantly changing the package IDs)._
 
 ```typescript
-import { kiosk } from '@mysten/kiosk';
-import { getJsonRpcFullnodeUrl, SuiJsonRpcClient } from '@mysten/sui/jsonRpc';
+import { kiosk } from '@haneullabs/kiosk';
+import { getJsonRpcFullnodeUrl, SuiJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
 
 const client = new SuiJsonRpcClient({
 	url: getJsonRpcFullnodeUrl('testnet'),
@@ -37,8 +37,8 @@ To use all the functionality of Kiosk SDK outside of `mainnet` and `testnet`, pa
 for the rules and extensions you want to use.
 
 ```typescript
-import { kiosk } from '@mysten/kiosk';
-import { getJsonRpcFullnodeUrl, SuiJsonRpcClient } from '@mysten/sui/jsonRpc';
+import { kiosk } from '@haneullabs/kiosk';
+import { getJsonRpcFullnodeUrl, SuiJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
 
 const client = new SuiJsonRpcClient({
 	url: getJsonRpcFullnodeUrl('devnet'),

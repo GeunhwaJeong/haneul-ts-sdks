@@ -1,0 +1,14 @@
+---
+title: '@haneullabs/seal'
+---
+
+The deprecated `SealClient.asClientExtension()` static method has been removed. Use the `seal()`
+registration function instead:
+
+```diff
+- import { SealClient } from '@haneullabs/seal';
++ import { seal } from '@haneullabs/seal';
+
+- const client = suiClient.$extend(SealClient.asClientExtension());
++ const client = suiClient.$extend(seal());
+```

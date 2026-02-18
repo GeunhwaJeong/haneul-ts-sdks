@@ -15,7 +15,7 @@ import { ConnectionStatus } from './internal/connection-status.js';
 import {
 	isWalletStandardError,
 	WALLET_STANDARD_ERROR__USER__REQUEST_REJECTED,
-} from '@mysten/wallet-standard';
+} from '@haneullabs/wallet-standard';
 import { styles } from './dapp-kit-connect-modal.styles.js';
 import { Button } from './internal/button.js';
 import { iconButtonStyles } from './styles/icon-button.js';
@@ -32,11 +32,11 @@ export type DAppKitConnectModalOptions = {
 };
 
 /**
- * A modal component for connecting to a Sui wallet, meant to be opened via a trigger button.
+ * A modal component for connecting to a Haneul wallet, meant to be opened via a trigger button.
  *
  * Opens a modal to let the user select and connect to a wallet.
  *
- * @element mysten-dapp-kit-connect-modal
+ * @element haneullabs-dapp-kit-connect-modal
  *
  * @fires open - Fired *before* the dialog opens (cancelable).
  * @fires opened - Fired *after* the dialog has fully opened.
@@ -68,7 +68,7 @@ export type DAppKitConnectModalOptions = {
  * @cssprop --font-weight-medium - Medium font weight for text (typically used for buttons and interactive elements).
  * @cssprop --font-weight-semibold - Semibold font weight for text (typically used for headings or emphasized text).
  */
-@customElement('mysten-dapp-kit-connect-modal')
+@customElement('haneullabs-dapp-kit-connect-modal')
 export class DAppKitConnectModal
 	extends ScopedRegistryHost(BaseModal)
 	implements DAppKitConnectModalOptions
@@ -239,6 +239,6 @@ export class DAppKitConnectModal
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'mysten-dapp-kit-connect-modal': DAppKitConnectModal;
+		'haneullabs-dapp-kit-connect-modal': DAppKitConnectModal;
 	}
 }

@@ -9,8 +9,8 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import * as vec_map from './deps/sui/vec_map.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import * as vec_map from './deps/haneul/vec_map.js';
 import * as trade_params from './trade_params.js';
 const $moduleName = '@deepbook/core::governance';
 export const Proposal = new MoveStruct({

@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import type { ClientWithCoreApi } from '@mysten/sui/client';
-import type { Transaction } from '@mysten/sui/transactions';
-import { coinWithBalance } from '@mysten/sui/transactions';
-import { fromBase64, fromHex, parseStructTag } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/client';
+import type { Transaction } from '@haneullabs/haneul/transactions';
+import { coinWithBalance } from '@haneullabs/haneul/transactions';
+import { fromBase64, fromHex, parseStructTag } from '@haneullabs/haneul/utils';
 
 import type { HexString } from './PriceServiceConnection.js';
 import { PriceServiceConnection } from './PriceServiceConnection.js';
@@ -15,7 +15,7 @@ import { State as WormholeState } from '../contracts/wormhole/state.js';
 
 const MAX_ARGUMENT_SIZE = 16 * 1024;
 export type ObjectId = string;
-export class SuiPriceServiceConnection extends PriceServiceConnection {
+export class HaneulPriceServiceConnection extends PriceServiceConnection {
 	/**
 	 * Fetch price feed update data.
 	 *
@@ -27,7 +27,7 @@ export class SuiPriceServiceConnection extends PriceServiceConnection {
 		return latestVaas.map((vaa) => fromBase64(vaa));
 	}
 }
-export class SuiPythClient {
+export class HaneulPythClient {
 	#pythPackageId?: Promise<ObjectId>;
 	#wormholePackageId?: Promise<ObjectId>;
 	#priceFeedObjectIdCache: Map<HexString, Promise<ObjectId>> = new Map();

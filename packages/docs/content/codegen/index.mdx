@@ -1,8 +1,8 @@
 ---
-title: Sui TypeScript Codegen
+title: Haneul TypeScript Codegen
 ---
 
-The `@mysten/codegen` package automatically generates type-safe TypeScript code from your Move
+The `@haneullabs/codegen` package automatically generates type-safe TypeScript code from your Move
 packages, enabling seamless interaction with your smart contracts from TypeScript applications.
 
 <Callout type="warn">
@@ -24,17 +24,17 @@ This package is currently in development and may have breaking changes.
 Install the codegen package as a dev dependency:
 
 ```sh npm2yarn
-npm install -D @mysten/codegen
+npm install -D @haneullabs/codegen
 ```
 
 ## Quick Start
 
 ### 1. Create a configuration file
 
-Create a `sui-codegen.config.ts` file in your project root:
+Create a `haneul-codegen.config.ts` file in your project root:
 
 ```typescript
-import type { SuiCodegenConfig } from '@mysten/codegen';
+import type { SuiCodegenConfig } from '@haneullabs/codegen';
 
 const config: SuiCodegenConfig = {
 	output: './src/contracts',
@@ -56,7 +56,7 @@ Add a script to your `package.json`:
 ```json
 {
 	"scripts": {
-		"codegen": "sui-ts-codegen generate"
+		"codegen": "haneul-ts-codegen generate"
 	}
 }
 ```
@@ -78,7 +78,7 @@ The `SuiCodegenConfig` type supports the following options:
 | `output`                       | `string`               | —       | The directory where generated code will be written                                                                                                                    |
 | `packages`                     | `PackageConfig[]`      | —       | Array of Move packages to generate code for                                                                                                                           |
 | `prune`                        | `boolean`              | `true`  | When enabled, only generates code for the main package and omits dependency modules (dependency types referenced by included types are still generated under `deps/`) |
-| `generateSummaries`            | `boolean`              | `true`  | Automatically run `sui move summary` before generating code. Creates a `package_summaries` directory in your Move package which can be added to `.gitignore`          |
+| `generateSummaries`            | `boolean`              | `true`  | Automatically run `haneul move summary` before generating code. Creates a `package_summaries` directory in your Move package which can be added to `.gitignore`          |
 | `generate`                     | `GenerateOptions`      | —       | Default [generate options](#the-generate-option) (types, functions) for all packages                                                                                  |
 | `importExtension`              | `'.js' \| '.ts' \| ''` | `'.js'` | File extension used in generated import statements                                                                                                                    |
 | `includePhantomTypeParameters` | `boolean`              | `false` | Include [phantom type parameters](#phantom-types) as function arguments in generated BCS types                                                                        |
@@ -191,7 +191,7 @@ the global level.
 
 ### Examples
 
-Only generate code from specific modules of the Sui framework:
+Only generate code from specific modules of the Haneul framework:
 
 ```typescript
 {
@@ -344,7 +344,7 @@ export function Balance<T extends BcsType<any>>(T: T) {
 The generated code provides type-safe functions for calling Move functions:
 
 ```typescript
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import * as counter from './contracts/counter/counter';
 
 // Increment a counter
@@ -397,11 +397,11 @@ If your package is registered on MVR, the generated code works without additiona
 For local packages using `@local-pkg/*` identifiers, configure your client with package overrides:
 
 ```typescript
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 	mvr: {
 		overrides: {
 			packages: {
@@ -417,11 +417,11 @@ const client = new SuiGrpcClient({
 Configure package overrides when creating your dApp Kit instance:
 
 ```typescript
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 };
 
 const PACKAGE_IDS = {
@@ -452,7 +452,7 @@ const dAppKit = createDAppKit({
 
 - [create-dapp](/dapp-kit/getting-started/create-dapp) - Bootstrap a working dApp with codegen
   already configured
-- [Sui Move documentation](https://docs.sui.io/concepts/sui-move-concepts)
+- [Haneul Move documentation](https://docs.haneul.io/concepts/haneul-move-concepts)
 - [BCS documentation](/bcs)
-- [Transaction building](/sui/transaction-building/basics)
+- [Transaction building](/haneul/transaction-building/basics)
 - [dApp Kit](/dapp-kit)

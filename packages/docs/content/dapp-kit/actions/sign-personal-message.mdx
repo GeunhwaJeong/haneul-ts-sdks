@@ -9,7 +9,7 @@ that a user controls a specific account.
 ## Usage
 
 ```typescript
-import { createDAppKit } from '@mysten/dapp-kit-core';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
 
 const dAppKit = createDAppKit({
 	/* config */
@@ -40,7 +40,7 @@ Returns a `Promise` that resolves to an object containing:
 The message parameter must be a `Uint8Array`. Common patterns for creating byte arrays:
 
 ```typescript
-const textMessage = new TextEncoder().encode('Hello, Sui!');
+const textMessage = new TextEncoder().encode('Hello, Haneul!');
 await dAppKit.signPersonalMessage({ message: textMessage });
 
 const jsonMessage = new TextEncoder().encode(

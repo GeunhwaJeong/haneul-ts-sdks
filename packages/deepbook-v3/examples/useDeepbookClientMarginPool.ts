@@ -2,21 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0
 import { execSync } from 'child_process';
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 import { deepbook } from '../src/index.js';
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.SUI_BINARY ?? `haneul`;
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 type Network = 'mainnet' | 'testnet';
 
 const getActiveNetwork = (): Network => {
-	const env = execSync(`${SUI} client active-env`, { encoding: 'utf8' }).trim();
+	const env = execSync(`${HANEUL} client active-env`, { encoding: 'utf8' }).trim();
 	if (env !== 'mainnet' && env !== 'testnet') {
 		throw new Error(`Unsupported network: ${env}. Only 'mainnet' and 'testnet' are supported.`);
 	}
@@ -25,7 +25,7 @@ const getActiveNetwork = (): Network => {
 
 (async () => {
 	const network = getActiveNetwork();
-	const client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+	const client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 		deepbook({
 			address: '0x0',
 		}),
@@ -37,8 +37,8 @@ const getActiveNetwork = (): Network => {
 	console.log('--- Original Functions ---');
 	try {
 		console.log(
-			'Manager Balance (SUI):',
-			await client.deepbook.checkManagerBalance('MANAGER_1', 'SUI'),
+			'Manager Balance (HANEUL):',
+			await client.deepbook.checkManagerBalance('MANAGER_1', 'HANEUL'),
 		);
 		console.log(
 			'Level 2 Range (SUI_DBUSDC):',
@@ -50,8 +50,8 @@ const getActiveNetwork = (): Network => {
 
 	console.log('\n--- Testing New Margin Pool Functions ---');
 
-	// Test margin pool functions for SUI
-	const coinKey = 'SUI';
+	// Test margin pool functions for HANEUL
+	const coinKey = 'HANEUL';
 	const testSupplierCapId = '0x2e0d4a8deabf642108f4492134f72b7e14e327adbaf57db83f9ba5e7ed2a0fc4'; // Example supplier cap ID
 	const testDeepbookPoolId = '0x1c19362ca52b8ffd7a33cee805a67d40f31e6ba303753fd3a4cfdfacea7163a5'; // Example deepbook pool ID
 

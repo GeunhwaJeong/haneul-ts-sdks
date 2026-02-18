@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCurrentAccount, useCurrentClient } from '@mysten/dapp-kit-react';
+import { useCurrentAccount, useCurrentClient } from '@haneullabs/dapp-kit-react';
 import { useState, useEffect, useCallback } from 'react';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import type { BenchmarkSettings } from '../components/BenchmarkSettings.js';
 import type { BenchmarkResult } from '../components/BenchmarkResults.js';
 import '../dapp-kit.js';

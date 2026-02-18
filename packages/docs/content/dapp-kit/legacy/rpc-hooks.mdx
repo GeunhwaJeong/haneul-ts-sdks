@@ -2,12 +2,12 @@
 title: Rpc Hooks
 ---
 
-Sui dApp Kit ships with hooks for each of the RPC methods defined in the
-[JSON RPC specification](https://docs.sui.io/sui-api-ref).
+Haneul dApp Kit ships with hooks for each of the RPC methods defined in the
+[JSON RPC specification](https://docs.haneul.io/haneul-api-ref).
 
 ## useSuiClientQuery
 
-Load data from the Sui RPC using the `useSuiClientQuery` hook. This hook is a wrapper around the
+Load data from the Haneul RPC using the `useSuiClientQuery` hook. This hook is a wrapper around the
 [useQuery](https://tanstack.com/query/latest/docs/react/guides/queries) hook from
 @tanstack/react-query.
 
@@ -17,7 +17,7 @@ You can pass any additional `useQuery` options as the third argument. You can re
 details on the full set of options available.
 
 ```tsx
-import { useSuiClientQuery } from '@mysten/dapp-kit';
+import { useSuiClientQuery } from '@haneullabs/dapp-kit';
 
 function MyComponent() {
 	const { data, isPending, isError, error, refetch } = useSuiClientQuery(
@@ -42,7 +42,7 @@ function MyComponent() {
 
 ## useSuiClientQueries
 
-You can fetch a variable number of Sui RPC queries using the `useSuiClientQueries` hook. This hook
+You can fetch a variable number of Haneul RPC queries using the `useSuiClientQueries` hook. This hook
 is a wrapper around the
 [useQueries](https://tanstack.com/query/latest/docs/react/reference/useQueries) hook from
 @tanstack/react-query.
@@ -53,7 +53,7 @@ The `combine` parameter is optional. Use this parameter to combine the results o
 single value. The result is structurally shared to be as referentially stable as possible.
 
 ```tsx
-import { useSuiClientQueries } from '@mysten/dapp-kit';
+import { useSuiClientQueries } from '@haneullabs/dapp-kit';
 
 function MyComponent() {
 	const { data, isPending, isError } = useSuiClientQueries({
@@ -102,7 +102,7 @@ hook. For more details check out the
 [`useInfiniteQuery` documentation](https://tanstack.com/query/latest/docs/react/guides/infinite-queries).
 
 ```tsx
-import { useSuiClientInfiniteQuery } from '@mysten/dapp-kit';
+import { useSuiClientInfiniteQuery } from '@haneullabs/dapp-kit';
 
 function MyComponent() {
 	const { data, isPending, isError, error, isFetching, fetchNextPage, hasNextPage } =
@@ -129,7 +129,7 @@ with any RPC method to imperatively call the RPC method. For more details, check
 [`useMutation` documentation](https://tanstack.com/query/latest/docs/react/guides/mutations).
 
 ```tsx
-import { useSuiClientMutation } from '@mysten/dapp-kit';
+import { useSuiClientMutation } from '@haneullabs/dapp-kit';
 
 function MyComponent() {
 	const { mutate } = useSuiClientMutation('dryRunTransactionBlock');
@@ -148,15 +148,15 @@ function MyComponent() {
 }
 ```
 
-## useResolveSuiNSName
+## useResolveHaneulNSName
 
-To get the SuiNS name for a given address, use the `useResolveSuiNSName` hook.
+To get the HaneulNS name for a given address, use the `useResolveHaneulNSName` hook.
 
 ```tsx
-import { useResolveSuiNSName } from '@mysten/dapp-kit';
+import { useResolveHaneulNSName } from '@haneullabs/dapp-kit';
 
 function MyComponent() {
-	const { data, isPending } = useResolveSuiNSName('0x123');
+	const { data, isPending } = useResolveHaneulNSName('0x123');
 
 	if (isPending) {
 		return <div>Loading...</div>;

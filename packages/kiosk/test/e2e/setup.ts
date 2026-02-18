@@ -4,13 +4,13 @@
 import path from 'path';
 import type {
 	DevInspectResults,
-	SuiObjectChangePublished,
-	SuiTransactionBlockResponse,
-} from '@mysten/sui/jsonRpc';
-import { getJsonRpcFullnodeUrl, SuiJsonRpcClient } from '@mysten/sui/jsonRpc';
-import { FaucetRateLimitError, getFaucetHost, requestSuiFromFaucetV2 } from '@mysten/sui/faucet';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
+	HaneulObjectChangePublished,
+	HaneulTransactionBlockResponse,
+} from '@haneullabs/haneul/jsonRpc';
+import { getJsonRpcFullnodeUrl, HaneulJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
+import { FaucetRateLimitError, getFaucetHost, requestSuiFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import type { ContainerRuntimeClient } from 'testcontainers';
 import { getContainerRuntimeClient } from 'testcontainers';
 import { retry } from 'ts-retry-promise';
@@ -24,10 +24,10 @@ const DEFAULT_FULLNODE_URL = process.env.FULLNODE_URL ?? getJsonRpcFullnodeUrl('
 
 export class TestToolbox {
 	keypair: Ed25519Keypair;
-	client: SuiJsonRpcClient;
+	client: HaneulJsonRpcClient;
 	configPath: string;
 
-	constructor(keypair: Ed25519Keypair, client: SuiJsonRpcClient, configPath: string) {
+	constructor(keypair: Ed25519Keypair, client: HaneulJsonRpcClient, configPath: string) {
 		this.keypair = keypair;
 		this.client = client;
 		this.configPath = configPath;
@@ -42,14 +42,14 @@ export class TestToolbox {
 	}
 }
 
-export function getClient(): SuiJsonRpcClient {
-	return new SuiJsonRpcClient({
+export function getClient(): HaneulJsonRpcClient {
+	return new HaneulJsonRpcClient({
 		network: 'localnet',
 		url: DEFAULT_FULLNODE_URL,
 	});
 }
 
-// TODO: expose these testing utils from @mysten/sui
+// TODO: expose these testing utils from @haneullabs/haneul
 export async function setupSuiClient() {
 	const keypair = Ed25519Keypair.generate();
 	const address = keypair.getPublicKey().toSuiAddress();
@@ -66,7 +66,7 @@ export async function setupSuiClient() {
 	const configDir = path.join('/test-data', `${Math.random().toString(36).substring(2, 15)}`);
 	await execSuiTools(['mkdir', '-p', configDir]);
 	const configPath = path.join(configDir, 'client.yaml');
-	await execSuiTools(['sui', 'client', '--yes', '--client.config', configPath]);
+	await execSuiTools(['haneul', 'client', '--yes', '--client.config', configPath]);
 	return new TestToolbox(keypair, client, configPath);
 }
 
@@ -77,7 +77,7 @@ export async function publishPackage(packageName: string, toolbox?: TestToolbox)
 	}
 
 	const result = await execSuiTools([
-		'sui',
+		'haneul',
 		'move',
 		'--client.config',
 		toolbox.configPath,
@@ -119,7 +119,7 @@ export async function publishPackage(packageName: string, toolbox?: TestToolbox)
 
 	const packageId = ((publishTxn.objectChanges?.filter(
 		(a) => a.type === 'published',
-	) as SuiObjectChangePublished[]) ?? [])[0]?.packageId.replace(/^(0x)(0+)/, '0x') as string;
+	) as HaneulObjectChangePublished[]) ?? [])[0]?.packageId.replace(/^(0x)(0+)/, '0x') as string;
 
 	expect(packageId).toBeTypeOf('string');
 
@@ -183,7 +183,7 @@ export async function createPersonalKiosk(toolbox: TestToolbox, kioskClient: Kio
 	await executeTransaction(toolbox, tx);
 }
 
-function getCreatedObjectIdByType(res: SuiTransactionBlockResponse, type: string): string {
+function getCreatedObjectIdByType(res: HaneulTransactionBlockResponse, type: string): string {
 	return res.objectChanges?.filter(
 		(x) => x.type === 'created' && x.objectType.endsWith(type),
 		//@ts-ignore-next-line
@@ -207,7 +207,7 @@ export async function getPublisherObject(toolbox: TestToolbox): Promise<string> 
 export async function executeTransaction(
 	toolbox: TestToolbox,
 	tx: Transaction,
-): Promise<SuiTransactionBlockResponse> {
+): Promise<HaneulTransactionBlockResponse> {
 	const resp = await toolbox.client.signAndExecuteTransaction({
 		signer: toolbox.keypair,
 		transaction: tx,

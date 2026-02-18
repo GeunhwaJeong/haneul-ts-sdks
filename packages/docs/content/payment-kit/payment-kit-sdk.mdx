@@ -29,12 +29,12 @@ paymentKit<Name extends string = 'paymentKit'>({
 **Example:**
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { paymentKit } from '@mysten/payment-kit';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { paymentKit } from '@haneullabs/payment-kit';
 
 const client = new SuiGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(paymentKit());
 
 // Access Payment Kit functionality
@@ -69,7 +69,7 @@ processRegistryPayment(
 ```ts
 type ProcessRegistryPaymentOptions = {
 	nonce: string; // Unique payment identifier
-	coinType: string; // Coin type (e.g., '0x2::sui::SUI')
+	coinType: string; // Coin type (e.g., '0x2::haneul::HANEUL')
 	amount: number | bigint; // Amount in smallest unit
 	receiver: string; // Recipient address
 	sender: string; // Sender address (must match signer)
@@ -85,7 +85,7 @@ type ProcessRegistryPaymentOptions = {
 ```ts
 const tx = client.paymentKit.tx.processRegistryPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	sender: senderAddress,
@@ -144,7 +144,7 @@ type ProcessEphemeralPaymentOptions = {
 ```ts
 const tx = client.paymentKit.tx.processEphemeralPayment({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 500000000,
 	receiver,
 	sender: senderAddress,
@@ -336,7 +336,7 @@ type WithdrawFromRegistryOptions = {
 
 ```ts
 const tx = client.paymentKit.tx.withdrawFromRegistry({
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	registryName: 'my-registry',
 	adminCapId: adminCapId,
 });
@@ -386,7 +386,7 @@ type DeletePaymentRecordOptions = {
 ```ts
 const tx = client.paymentKit.tx.deletePaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 	registryName: 'my-registry',
@@ -446,7 +446,7 @@ type GetPaymentRecordResponse = {
 ```ts
 const record = await client.paymentKit.getPaymentRecord({
 	nonce: crypto.randomUUID(),
-	coinType: '0x2::sui::SUI',
+	coinType: '0x2::haneul::HANEUL',
 	amount: 1000000000,
 	receiver,
 });
@@ -484,7 +484,7 @@ processRegistryPayment(
 **Example:**
 
 ```ts
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const tx = new Transaction();
 
@@ -500,7 +500,7 @@ tx.moveCall({
 tx.add(
 	client.paymentKit.calls.processRegistryPayment({
 		nonce: crypto.randomUUID(),
-		coinType: '0x2::sui::SUI',
+		coinType: '0x2::haneul::HANEUL',
 		amount: 1000000000,
 		receiver,
 		sender: senderAddress,
@@ -587,15 +587,15 @@ class PaymentKitClientError extends Error {
 ## URI Utilities
 
 Payment Kit provides utility functions for creating and parsing payment transaction URIs. These URIs
-follow the `sui:pay` protocol and can be used to encode payment parameters for QR codes, deep links,
+follow the `haneul:pay` protocol and can be used to encode payment parameters for QR codes, deep links,
 or other sharing mechanisms.
 
 ### URI Format
 
-Payment URIs follow the `sui:pay` protocol:
+Payment URIs follow the `haneul:pay` protocol:
 
 ```
-sui:pay?
+haneul:pay?
   receiver=<address>
   &amount=<amount>
   &coinType=<coinType>
@@ -610,9 +610,9 @@ sui:pay?
 
 | Parameter  | Description                                  |
 | ---------- | -------------------------------------------- |
-| `receiver` | Recipient Sui address                        |
-| `amount`   | Payment amount in smallest unit (e.g., MIST) |
-| `coinType` | Coin type (e.g., `0x2::sui::SUI`)            |
+| `receiver` | Recipient Haneul address                        |
+| `amount`   | Payment amount in smallest unit (e.g., GEUNHWA) |
+| `coinType` | Coin type (e.g., `0x2::haneul::HANEUL`)            |
 | `nonce`    | Unique payment identifier (max 36 chars)     |
 
 **Optional Parameters:**
@@ -638,9 +638,9 @@ createPaymentTransactionUri(params: PaymentUriParams): string
 
 ```ts
 type PaymentUriParams = {
-	receiverAddress: string; // Recipient Sui address
+	receiverAddress: string; // Recipient Haneul address
 	amount: bigint; // Amount in smallest unit
-	coinType: string; // Coin type (e.g., '0x2::sui::SUI')
+	coinType: string; // Coin type (e.g., '0x2::haneul::HANEUL')
 	nonce: string; // Unique identifier (max 36 chars)
 	label?: string; // Optional human-readable label
 	message?: string; // Optional message/memo
@@ -653,13 +653,13 @@ type PaymentUriParams = {
 **Example:**
 
 ```ts
-import { createPaymentTransactionUri } from '@mysten/payment-kit';
+import { createPaymentTransactionUri } from '@haneullabs/payment-kit';
 
 // Create a URI for a registry-based payment
 const uri = createPaymentTransactionUri({
 	receiverAddress: '0x1234...abcd',
-	amount: 1000000000n, // 1 SUI
-	coinType: '0x2::sui::SUI',
+	amount: 1000000000n, // 1 HANEUL
+	coinType: '0x2::haneul::HANEUL',
 	nonce: crypto.randomUUID(),
 	registryName: 'my-payment-registry',
 	label: 'Coffee Purchase',
@@ -667,10 +667,10 @@ const uri = createPaymentTransactionUri({
 });
 
 // Result:
-// sui:pay?
+// haneul:pay?
 //   receiver=0x1234...
 //   &amount=1000000000
-//   &coinType=0x2::sui::SUI
+//   &coinType=0x2::haneul::HANEUL
 //   &nonce=abc-123-def
 //   &registry=my-payment-registry
 //   &label=Coffee+Purchase
@@ -679,8 +679,8 @@ const uri = createPaymentTransactionUri({
 // Create a URI for an ephemeral payment (no registry)
 const ephemeralUri = createPaymentTransactionUri({
 	receiverAddress: '0x1234...abcd',
-	amount: 500000000n, // 0.5 SUI
-	coinType: '0x2::sui::SUI',
+	amount: 500000000n, // 0.5 HANEUL
+	coinType: '0x2::haneul::HANEUL',
 	nonce: crypto.randomUUID(),
 });
 ```
@@ -691,7 +691,7 @@ const ephemeralUri = createPaymentTransactionUri({
 - `PaymentKitUriError` if amount is not positive
 - `PaymentKitUriError` if coin type is invalid
 - `PaymentKitUriError` if nonce is missing or exceeds 36 characters
-- `PaymentKitUriError` if registry ID is not a valid Sui object ID
+- `PaymentKitUriError` if registry ID is not a valid Haneul object ID
 
 ---
 
@@ -714,16 +714,16 @@ parsePaymentTransactionUri(uri: string): PaymentUriParams
 **Example:**
 
 ```ts
-import { parsePaymentTransactionUri } from '@mysten/payment-kit';
+import { parsePaymentTransactionUri } from '@haneullabs/payment-kit';
 
 const uri =
-	'sui:pay?receiver=0x1234...&amount=1000000000&coinType=0x2::sui::SUI&nonce=abc123&registry=my-registry';
+	'haneul:pay?receiver=0x1234...&amount=1000000000&coinType=0x2::haneul::HANEUL&nonce=abc123&registry=my-registry';
 
 const params = parsePaymentTransactionUri(uri);
 
 console.log(params.receiverAddress); // '0x1234...'
 console.log(params.amount); // 1000000000n (bigint)
-console.log(params.coinType); // '0x2::sui::SUI'
+console.log(params.coinType); // '0x2::haneul::HANEUL'
 console.log(params.nonce); // 'abc123'
 console.log(params.registryName); // 'my-registry'
 
@@ -740,7 +740,7 @@ const tx = client.paymentKit.tx.processRegistryPayment({
 
 **Throws:**
 
-- `PaymentKitUriError` if URI doesn't start with `sui:pay?`
+- `PaymentKitUriError` if URI doesn't start with `haneul:pay?`
 - `PaymentKitUriError` if required parameters are missing
 - `PaymentKitUriError` if receiver address is invalid
 - `PaymentKitUriError` if coin type is invalid
@@ -750,5 +750,5 @@ const tx = client.paymentKit.tx.processRegistryPayment({
 ### Future Versions
 
 Check the
-[CHANGELOG](https://github.com/MystenLabs/ts-sdks/blob/main/packages/payment-kit/CHANGELOG.md) for
+[CHANGELOG](https://github.com/GeunhwaJeong/ts-sdks/blob/main/packages/payment-kit/CHANGELOG.md) for
 updates.

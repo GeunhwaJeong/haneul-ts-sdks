@@ -28,11 +28,11 @@ export default function App() {
 ### With Custom Configuration
 
 ```tsx
-import { createDAppKit, DAppKitProvider } from '@mysten/dapp-kit-react';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit, DAppKitProvider } from '@haneullabs/dapp-kit-react';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 const dAppKit = createDAppKit({
@@ -44,7 +44,7 @@ const dAppKit = createDAppKit({
 });
 
 // global type registration necessary for the hooks to work correctly
-declare module '@mysten/dapp-kit-react' {
+declare module '@haneullabs/dapp-kit-react' {
 	interface Register {
 		dAppKit: typeof dAppKit;
 	}
@@ -64,8 +64,8 @@ export function App() {
 Once your app is wrapped with `DAppKitProvider`, you can use any dApp Kit hooks in child components:
 
 ```tsx
-import type { UiWallet } from '@mysten/dapp-kit-react';
-import { useDAppKit, useCurrentAccount, useCurrentNetwork } from '@mysten/dapp-kit-react';
+import type { UiWallet } from '@haneullabs/dapp-kit-react';
+import { useDAppKit, useCurrentAccount, useCurrentNetwork } from '@haneullabs/dapp-kit-react';
 
 export function MyComponent({ wallet }: { wallet: UiWallet }) {
 	const dAppKit = useDAppKit();

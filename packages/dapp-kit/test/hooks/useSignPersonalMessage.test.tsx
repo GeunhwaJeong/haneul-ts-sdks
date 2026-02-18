@@ -49,7 +49,7 @@ describe('useSignPersonalMessage', () => {
 		act(() => unregister());
 	});
 
-	test('falls back to the `sui:signMessage` feature with a wallet that lacks support for `sui:signPersonalMessage`.', async () => {
+	test('falls back to the `haneul:signMessage` feature with a wallet that lacks support for `haneul:signPersonalMessage`.', async () => {
 		const { unregister, mockWallet } = registerMockWallet({
 			walletName: 'Mock Wallet 1',
 			features: signMessageFeature,
@@ -67,7 +67,7 @@ describe('useSignPersonalMessage', () => {
 		result.current.connectWallet.mutate({ wallet: mockWallet });
 		await waitFor(() => expect(result.current.connectWallet.isSuccess).toBe(true));
 
-		const mockSignMessageFeature = mockWallet.features['sui:signMessage'];
+		const mockSignMessageFeature = mockWallet.features['haneul:signMessage'];
 		const signMessageMock = mockSignMessageFeature!.signMessage as Mock;
 
 		signMessageMock.mockReturnValueOnce({ messageBytes: 'abc', signature: '123' });
@@ -104,20 +104,20 @@ describe('useSignPersonalMessage', () => {
 
 		await waitFor(() => expect(result.current.connectWallet.isSuccess).toBe(true));
 
-		const signPersonalMessageFeature = mockWallet.features['sui:signPersonalMessage'];
+		const signPersonalMessageFeature = mockWallet.features['haneul:signPersonalMessage'];
 		const signPersonalMessageMock = signPersonalMessageFeature!.signPersonalMessage as Mock;
 
 		signPersonalMessageMock.mockReturnValueOnce({ bytes: 'abc', signature: '123' });
 
 		const message = new Uint8Array().fill(123);
-		result.current.signPersonalMessage.mutate({ message, chain: 'sui:testnet' });
+		result.current.signPersonalMessage.mutate({ message, chain: 'haneul:testnet' });
 
 		await waitFor(() => expect(result.current.signPersonalMessage.isSuccess).toBe(true));
 
 		expect(signPersonalMessageMock).toHaveBeenCalledWith({
 			message,
 			account: mockWallet.accounts[0],
-			chain: `sui:testnet`,
+			chain: `haneul:testnet`,
 		});
 
 		expect(result.current.signPersonalMessage.data).toStrictEqual({
@@ -147,7 +147,7 @@ describe('useSignPersonalMessage', () => {
 
 		await waitFor(() => expect(result.current.connectWallet.isSuccess).toBe(true));
 
-		const signPersonalMessageFeature = mockWallet.features['sui:signPersonalMessage'];
+		const signPersonalMessageFeature = mockWallet.features['haneul:signPersonalMessage'];
 		const signPersonalMessageMock = signPersonalMessageFeature!.signPersonalMessage as Mock;
 
 		signPersonalMessageMock.mockReturnValueOnce({ bytes: 'abc', signature: '123' });
@@ -160,7 +160,7 @@ describe('useSignPersonalMessage', () => {
 		expect(signPersonalMessageMock).toHaveBeenCalledWith({
 			message,
 			account: mockWallet.accounts[0],
-			chain: 'sui:test',
+			chain: 'haneul:test',
 		});
 
 		expect(result.current.signPersonalMessage.data).toStrictEqual({

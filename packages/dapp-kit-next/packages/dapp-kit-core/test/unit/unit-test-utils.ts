@@ -9,16 +9,16 @@ import {
 	TEST_NETWORKS,
 	unbindStoreListeners,
 } from '../test-utils.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 import type { MockWalletOptions } from '../mocks/mock-wallet.js';
 import { createMockWallets } from '../mocks/mock-wallet.js';
 import { createMockAccount } from '../mocks/mock-account.js';
 
 const GRPC_URLS = {
-	devnet: 'https://fullnode.devnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	devnet: 'https://fullnode.devnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 	localnet: 'http://127.0.0.1:9000',
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
 };
 
 export function createTestStores({
@@ -29,11 +29,11 @@ export function createTestStores({
 	const clients = Object.fromEntries(
 		[...TEST_NETWORKS].map((network) => [
 			network,
-			new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
+			new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
 		]),
 	);
 
-	return createStores<typeof TEST_NETWORKS, SuiGrpcClient>({
+	return createStores<typeof TEST_NETWORKS, HaneulGrpcClient>({
 		defaultNetwork: currentNetwork,
 		getClient: (network) => clients[network as keyof typeof clients],
 	});

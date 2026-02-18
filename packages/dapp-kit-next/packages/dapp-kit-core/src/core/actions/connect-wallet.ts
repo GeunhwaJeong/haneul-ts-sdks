@@ -4,9 +4,9 @@
 import type { DAppKitStores } from '../store.js';
 import { task } from 'nanostores';
 import type { UiWallet, UiWalletAccount } from '@wallet-standard/ui';
-import type { StandardConnectInput, SuiWalletFeatures } from '@mysten/wallet-standard';
-import type { StandardConnectFeature } from '@mysten/wallet-standard';
-import { StandardConnect } from '@mysten/wallet-standard';
+import type { StandardConnectInput, HaneulWalletFeatures } from '@haneullabs/wallet-standard';
+import type { StandardConnectFeature } from '@haneullabs/wallet-standard';
+import { StandardConnect } from '@haneullabs/wallet-standard';
 import { getWalletFeature, uiWalletAccountBelongsToUiWallet } from '@wallet-standard/ui';
 import {
 	getOrCreateUiWalletAccountForStandardWalletAccount_DO_NOT_USE_OR_YOU_WILL_BE_FIRED as getOrCreateUiWalletAccountForStandardWalletAccount,
@@ -104,14 +104,14 @@ export async function internalConnectWallet(
 }
 
 export async function getSupportedIntentsFromFeature(wallet: UiWallet) {
-	if (!wallet.features.includes('sui:getCapabilities')) {
+	if (!wallet.features.includes('haneul:getCapabilities')) {
 		return [];
 	}
 
 	const getCapabilitiesFeature = getWalletFeature(
 		wallet,
-		'sui:getCapabilities',
-	) as SuiWalletFeatures['sui:getCapabilities'];
+		'haneul:getCapabilities',
+	) as HaneulWalletFeatures['haneul:getCapabilities'];
 
 	return (await getCapabilitiesFeature?.getCapabilities())?.supportedIntents ?? [];
 }

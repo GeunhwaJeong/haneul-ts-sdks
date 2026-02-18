@@ -1,5 +1,5 @@
 {
-	"name": "@mysten/move-bytecode-template",
+	"name": "@haneullabs/move-bytecode-template",
 	"version": "0.3.0",
 	"description": "Move Binary Format implementation in WASM",
 	"main": "index.js",
@@ -29,10 +29,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MystenLabs/ts-sdks/issues/new"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues/new"
 	},
 	"scripts": {
 		"build:wasm": "pnpm build:nodejs && pnpm build:web",
@@ -40,10 +40,10 @@
 		"build:web": "wasm-pack build --target web --release --out-dir web --no-pack && rm web/.gitignore",
 		"test": "vitest run"
 	},
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"license": "Apache-2.0",
 	"devDependencies": {
-		"@mysten/bcs": "workspace:^",
+		"@haneullabs/bcs": "workspace:^",
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.17"
 	}

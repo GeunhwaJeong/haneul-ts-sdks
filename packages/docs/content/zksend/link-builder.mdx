@@ -6,7 +6,7 @@ title: Creating zkSend Links
 	Products and services that incorporate zkSend links may be subject to financial regulations,
 	including obtaining money transmitter licenses in jurisdictions where you provide your services.
 	It is the developer's responsibility to ensure compliance with all relevant laws and obtain any
-	necessary licenses. The information provided by Mysten Labs is not legal advice, and developers
+	necessary licenses. The information provided by Haneul Labs is not legal advice, and developers
 	should consult with a qualified legal professional to address their specific circumstances.
 </Callout>
 
@@ -21,12 +21,12 @@ You can start creating your own zkSend link using the `linkBuilder` method on th
 extension:
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { zksend } from '@mysten/zksend';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { zksend } from '@haneullabs/zksend';
 
 const client = new SuiGrpcClient({
 	network: 'mainnet',
-	baseUrl: 'https://fullnode.mainnet.sui.io:443',
+	baseUrl: 'https://fullnode.mainnet.haneul.io:443',
 }).$extend(zksend());
 
 const link = client.zksend.linkBuilder({
@@ -34,19 +34,19 @@ const link = client.zksend.linkBuilder({
 });
 ```
 
-#### Adding SUI to the link
+#### Adding HANEUL to the link
 
-You can add SUI to the link by calling `link.addClaimableMist()`. This method takes the following
+You can add HANEUL to the link by calling `link.addClaimableMist()`. This method takes the following
 params:
 
-- **`amount`** (required) - The amount of MIST (the base unit of SUI) to add to the link.
+- **`amount`** (required) - The amount of GEUNHWA (the base unit of HANEUL) to add to the link.
 
-#### Adding non-SUI coins to the link
+#### Adding non-HANEUL coins to the link
 
-You can add non-SUI coins to the link by calling `link.addClaimableBalance()`. This method takes the
+You can add non-HANEUL coins to the link by calling `link.addClaimableBalance()`. This method takes the
 following params:
 
-- **`coinType`** (required) - The coin type of the coin to add to the link (e.g. `0x2::sui::SUI`).
+- **`coinType`** (required) - The coin type of the coin to add to the link (e.g. `0x2::haneul::HANEUL`).
 - **`amount`** (required) - The amount of the coin to add to the link. Represented in the base unit
   of the coin.
 
@@ -70,7 +70,7 @@ You can create objects to add to links in the same transaction the link is creat
 - **`type`** (required) - The move type of the object you are adding
 
 ```ts
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const tx = new Transaction();
 

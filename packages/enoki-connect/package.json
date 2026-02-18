@@ -1,9 +1,9 @@
 {
-	"name": "@mysten/enoki-connect",
+	"name": "@haneullabs/enoki-connect",
 	"version": "1.0.2",
 	"description": "Enoki Connect Wallet-Standard implementation",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"type": "module",
 	"main": "./dist/index.mjs",
 	"types": "./dist/index.d.mts",
@@ -31,25 +31,25 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
 		"url": "https://github.com/mystenlabs/ts-sdks/issues"
 	},
-	"homepage": "https://github.com/MystenLabs/ts-sdks/tree/main/packages/enoki-connect#readme",
+	"homepage": "https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/enoki-connect#readme",
 	"devDependencies": {
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@types/node": "^25.0.8",
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.17"
 	},
 	"dependencies": {
-		"@mysten/utils": "workspace:^",
-		"@mysten/wallet-standard": "workspace:^",
-		"@mysten/window-wallet-core": "workspace:^",
+		"@haneullabs/utils": "workspace:^",
+		"@haneullabs/wallet-standard": "workspace:^",
+		"@haneullabs/window-wallet-core": "workspace:^",
 		"lit": "^3.3.2"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "workspace:^"
+		"@haneullabs/haneul": "workspace:^"
 	}
 }

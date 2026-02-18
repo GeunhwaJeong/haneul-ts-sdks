@@ -8,7 +8,7 @@ while working in this package. This helps future sessions avoid repeating the sa
 
 ## Overview
 
-DeepBook V3 is a decentralized exchange (DEX) SDK for Sui blockchain. It provides client extensions
+DeepBook V3 is a decentralized exchange (DEX) SDK for Haneul blockchain. It provides client extensions
 for interacting with DeepBook pools, margin managers, and flash loans.
 
 ## Package Structure
@@ -33,11 +33,11 @@ packages/deepbook-v3/
 
 ### Client Extension Pattern
 
-DeepBook uses the Sui client extension pattern via `$extend()`:
+DeepBook uses the Haneul client extension pattern via `$extend()`:
 
 ```typescript
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { deepbook } from '@mysten/deepbook-v3';
+import { SuiGrpcClient } from '@haneullabs/haneul/grpc';
+import { deepbook } from '@haneullabs/deepbook-v3';
 
 const client = new SuiGrpcClient({ network: 'mainnet', baseUrl: '...' }).$extend(
   deepbook({
@@ -118,7 +118,7 @@ Configured via `PRICE_INFO_OBJECT_MAX_AGE_MS` in `src/utils/config.ts`.
 ```typescript
 const priceUpdateTx = new Transaction();
 const priceInfoObjects = await client.deepbook.getPriceInfoObjects(priceUpdateTx, [
-	'SUI',
+	'HANEUL',
 	'USDC',
 	'DEEP',
 	'WBTC',
@@ -149,10 +149,10 @@ When using the new gRPC client (replacing JSON-RPC):
 
 ```bash
 # Run tests
-pnpm --filter @mysten/deepbook-v3 test
+pnpm --filter @haneullabs/deepbook-v3 test
 
 # Run codegen (requires ../deepbookv3 sibling repo)
-pnpm --filter @mysten/deepbook-v3 codegen
+pnpm --filter @haneullabs/deepbook-v3 codegen
 ```
 
 ## Formatting
@@ -176,7 +176,7 @@ pnpm exec prettier --write .
 
 ## Dependencies
 
-- `@mysten/sui` - Core Sui SDK
+- `@haneullabs/haneul` - Core Haneul SDK
 - Requires sibling repo `../deepbookv3` for codegen
 
 ## NPM Package Change Summary Format
@@ -184,7 +184,7 @@ pnpm exec prettier --write .
 When asked for a summary of changes for the npm package, use this format:
 
 ```
-## @mysten/deepbook-v3 Changes Summary
+## @haneullabs/deepbook-v3 Changes Summary
 
 ### New Features
 
