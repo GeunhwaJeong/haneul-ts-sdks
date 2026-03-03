@@ -59,16 +59,16 @@ const walletAccountFeatures = [
 	'haneul:signPersonalMessage',
 ] as const;
 
-const HaneulCaipNetworks: CustomCaipNetwork<'sui'>[] = HANEUL_CHAINS.map((chain) => {
+const HaneulCaipNetworks = HANEUL_CHAINS.map((chain) => {
 	const [_, chainId] = chain.split(':');
 	return {
 		id: chainId,
-		chainNamespace: 'sui',
-		caipNetworkId: `sui:${chainId}`,
+		chainNamespace: 'haneul',
+		caipNetworkId: `haneul:${chainId}`,
 		name: `Haneul ${chainId}`,
 		nativeCurrency: { name: 'HANEUL', symbol: 'HANEUL', decimals: 9 },
 		rpcUrls: { default: { http: [`https://haneul-${chainId}.gateway.tatum.io`] } },
-	};
+	} as unknown as CustomCaipNetwork;
 });
 
 const WalletMetadataSchema = object({
@@ -193,12 +193,12 @@ export class WalletConnectWallet implements Wallet {
 			},
 			networks: [
 				{
-					namespace: 'sui',
+					namespace: 'haneul',
 					methods: [
-						'sui_signTransaction',
-						'sui_signPersonalMessage',
-						'sui_signAndExecuteTransaction',
-						'sui_getAccounts',
+						'haneul_signTransaction',
+						'haneul_signPersonalMessage',
+						'haneul_signAndExecuteTransaction',
+						'haneul_getAccounts',
 					],
 					events: ['chainChanged', 'accountsChanged'],
 					chains: HaneulCaipNetworks,
@@ -218,7 +218,7 @@ export class WalletConnectWallet implements Wallet {
 
 		const response = (await this.#connector?.request(
 			{
-				method: 'sui_signTransaction',
+				method: 'haneul_signTransaction',
 				params: {
 					transaction: tx,
 					address: account.address,
@@ -245,7 +245,7 @@ export class WalletConnectWallet implements Wallet {
 		const bytes = await parsedTransaction.build({ client });
 		const response = (await this.#connector?.request(
 			{
-				method: 'sui_signAndExecuteTransaction',
+				method: 'haneul_signAndExecuteTransaction',
 				params: {
 					transaction: data,
 					address: account.address,
@@ -273,7 +273,7 @@ export class WalletConnectWallet implements Wallet {
 		const messageString = new TextDecoder().decode(message);
 		const response = (await this.#connector?.request(
 			{
-				method: 'sui_signPersonalMessage',
+				method: 'haneul_signPersonalMessage',
 				params: {
 					message: messageString,
 					address: account.address,
@@ -300,11 +300,11 @@ export class WalletConnectWallet implements Wallet {
 
 	#getAccounts = async () => {
 		let accounts: { address: string; pubkey: string }[] | undefined = JSON.parse(
-			this.#connector?.provider?.session?.sessionProperties?.['sui_getAccounts'] ?? '[]',
+			this.#connector?.provider?.session?.sessionProperties?.['haneul_getAccounts'] ?? '[]',
 		);
 
 		if (!accounts?.length) {
-			accounts = (await this.#connector?.request({ method: 'sui_getAccounts' }, 'haneul:mainnet')) as {
+			accounts = (await this.#connector?.request({ method: 'haneul_getAccounts' }, 'haneul:mainnet')) as {
 				address: string;
 				pubkey: string;
 			}[];
@@ -322,7 +322,7 @@ export class WalletConnectWallet implements Wallet {
 			}
 		}
 
-		if (!this.#connector?.provider?.session?.namespaces?.sui) {
+		if (!this.#connector?.provider?.session?.namespaces?.haneul) {
 			await this.#connector?.connect();
 		}
 
@@ -334,11 +334,11 @@ export class WalletConnectWallet implements Wallet {
 
 	#getPreviouslyAuthorizedAccounts = async () => {
 		const session = this.#connector?.provider?.session;
-		if (!session?.namespaces?.sui) {
+		if (!session?.namespaces?.haneul) {
 			return [];
 		}
 
-		const accounts = JSON.parse(session.sessionProperties?.['sui_getAccounts'] ?? '[]') as {
+		const accounts = JSON.parse(session.sessionProperties?.['haneul_getAccounts'] ?? '[]') as {
 			address: string;
 			pubkey: string;
 		}[];
