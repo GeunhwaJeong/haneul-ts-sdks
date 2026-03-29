@@ -1,16 +1,16 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { decodeSuiPrivateKey } from '@mysten/sui/cryptography';
-import type { Keypair, Signer } from '@mysten/sui/cryptography';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import type { TransactionObjectArgument } from '@mysten/sui/transactions';
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeStructTag, normalizeSuiAddress, SUI_TYPE_ARG, toBase64 } from '@mysten/sui/utils';
+import { decodeHaneulPrivateKey } from '@haneullabs/haneul/cryptography';
+import type { Keypair, Signer } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import type { TransactionObjectArgument } from '@haneullabs/haneul/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeStructTag, normalizeHaneulAddress, HANEUL_TYPE_ARG, toBase64 } from '@haneullabs/haneul/utils';
 
 import type { ZkBagContractOptions } from './zk-bag.js';
 import { getContractIds, ZkBag } from './zk-bag.js';
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
 
 export interface ZkSendLinkBuilderOptions {
 	host?: string;
@@ -28,7 +28,7 @@ const DEFAULT_ZK_SEND_LINK_OPTIONS = {
 	network: 'mainnet' as const,
 };
 
-const SUI_COIN_TYPE = normalizeStructTag(SUI_TYPE_ARG);
+const HANEUL_COIN_TYPE = normalizeStructTag(HANEUL_TYPE_ARG);
 
 export interface CreateZkSendLinkOptions {
 	transaction?: Transaction;
@@ -47,7 +47,7 @@ export class ZkSendLinkBuilder {
 	#path: string;
 	keypair: Keypair;
 	#client: ClientWithCoreApi;
-	#coinsByType = new Map<string, SuiClientTypes.Coin[]>();
+	#coinsByType = new Map<string, HaneulClientTypes.Coin[]>();
 	#contract: ZkBag<ZkBagContractOptions>;
 
 	constructor({
@@ -65,14 +65,14 @@ export class ZkSendLinkBuilder {
 		this.#path = path;
 		this.keypair = keypair;
 		this.#client = client;
-		this.sender = normalizeSuiAddress(sender);
+		this.sender = normalizeHaneulAddress(sender);
 		this.network = resolvedNetwork;
 
 		this.#contract = new ZkBag(resolvedContract.packageId, resolvedContract);
 	}
 
 	addClaimableMist(amount: bigint) {
-		this.addClaimableBalance(SUI_COIN_TYPE, amount);
+		this.addClaimableBalance(HANEUL_COIN_TYPE, amount);
 	}
 
 	addClaimableBalance(coinType: string, amount: bigint) {
@@ -92,7 +92,7 @@ export class ZkSendLinkBuilder {
 		const link = new URL(this.#host);
 		link.pathname = this.#path;
 		// NOTE: The $ prefix here is intentional, and not a typo, it is used to designate a contract-based link
-		link.hash = `$${toBase64(decodeSuiPrivateKey(this.keypair.getSecretKey()).secretKey)}`;
+		link.hash = `$${toBase64(decodeHaneulPrivateKey(this.keypair.getSecretKey()).secretKey)}`;
 
 		if (this.network !== 'mainnet') {
 			link.searchParams.set('network', this.network);
@@ -178,10 +178,10 @@ export class ZkSendLinkBuilder {
 		);
 
 		for (const [coinType, amount] of this.balances) {
-			if (coinType === SUI_COIN_TYPE) {
-				const [sui] = tx.splitCoins(tx.gas, [amount]);
+			if (coinType === HANEUL_COIN_TYPE) {
+				const [haneul] = tx.splitCoins(tx.gas, [amount]);
 				refsWithType.push({
-					ref: sui,
+					ref: haneul,
 					type: `0x2::coin::Coin<${coinType}>`,
 				} as never);
 			} else {
@@ -233,7 +233,7 @@ export class ZkSendLinkBuilder {
 		const contract = new ZkBag(resolvedContractIds.packageId, resolvedContractIds);
 		const store = transaction.object(contract.ids.bagStoreId);
 
-		const coinsByType = new Map<string, SuiClientTypes.Coin[]>();
+		const coinsByType = new Map<string, HaneulClientTypes.Coin[]>();
 		const allIds = links.flatMap((link) => [...link.objectIds]);
 		const sender = links[0].sender;
 		transaction.setSenderIfNotSet(sender);
@@ -287,11 +287,11 @@ export class ZkSendLinkBuilder {
 		}
 
 		const mergedCoins = new Map<string, TransactionObjectArgument>([
-			[SUI_COIN_TYPE, transaction.gas],
+			[HANEUL_COIN_TYPE, transaction.gas],
 		]);
 
 		for (const [coinType, coins] of coinsByType) {
-			if (coinType === SUI_COIN_TYPE) {
+			if (coinType === HANEUL_COIN_TYPE) {
 				continue;
 			}
 
@@ -309,7 +309,7 @@ export class ZkSendLinkBuilder {
 		}
 
 		for (const link of links) {
-			const receiver = link.keypair.toSuiAddress();
+			const receiver = link.keypair.toHaneulAddress();
 			transaction.add(contract.new({ arguments: [store, receiver] }));
 
 			link.objectRefs.forEach(({ ref, type }) => {
@@ -346,7 +346,7 @@ export class ZkSendLinkBuilder {
 			for (const [i, link] of linksWithCoin.entries()) {
 				transaction.add(
 					contract.add({
-						arguments: [store, link.keypair.toSuiAddress(), splits[i]],
+						arguments: [store, link.keypair.toHaneulAddress(), splits[i]],
 						typeArguments: [`0x2::coin::Coin<${coinType}>`],
 					}),
 				);

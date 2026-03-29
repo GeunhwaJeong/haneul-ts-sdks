@@ -3,7 +3,7 @@ title: State
 description: Access and subscribe to wallet connection state in dApp Kit
 ---
 
-The Sui dApp Kit SDK uses [nanostores](https://github.com/nanostores/nanostores) for state
+The Haneul dApp Kit SDK uses [nanostores](https://github.com/nanostores/nanostores) for state
 management, providing a lightweight, framework-agnostic solution that works across React, Vue,
 Vanilla JavaScript, and other frameworks.
 
@@ -21,7 +21,7 @@ The dApp Kit exposes four reactive stores that you can subscribe to:
 All stores are available through the `dAppKit.stores` property:
 
 ```typescript
-import { createDAppKit } from '@mysten/dapp-kit-core';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
 
 const dAppKit = createDAppKit({
 	/* config */
@@ -102,7 +102,7 @@ Note: This store is read-only. Use `dAppKit.switchNetwork()` to change networks.
 
 ### Current Client Store (`$currentClient`)
 
-Contains the SuiClient instance for the current network:
+Contains the HaneulClient instance for the current network:
 
 ```typescript
 const client = dAppKit.stores.$currentClient.get();

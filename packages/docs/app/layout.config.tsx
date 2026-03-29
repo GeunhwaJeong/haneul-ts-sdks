@@ -11,16 +11,16 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
  */
 export const baseOptions: BaseLayoutProps = {
 	nav: {
-		title: 'Mysten Labs SDKs',
+		title: 'Haneul Labs SDKs',
 	},
 	links: [
 		{
 			text: 'GitHub',
-			url: 'https://github.com/MystenLabs/ts-sdks',
+			url: 'https://github.com/GeunhwaJeong/ts-sdks',
 		},
 		{
 			text: 'Discord',
-			url: 'https://discord.com/invite/Sui',
+			url: 'https://discord.com/invite/Haneul',
 		},
 	],
 };

@@ -17,9 +17,9 @@ import {
 	normalizeMoveArguments,
 	type RawTransactionArgument,
 } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as balance from './deps/sui/balance.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as balance from './deps/haneul/balance.js';
 const $moduleName = '@local-pkg/walrus::staked_wal';
 /**
  * The state of the staked WAL. It can be either `Staked` or `Withdrawing`. The

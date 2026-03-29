@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi, SuiClientRegistration, SuiClientTypes } from '@mysten/sui/client';
-import type { Transaction } from '@mysten/sui/transactions';
+import type { ClientWithCoreApi, HaneulClientRegistration, HaneulClientTypes } from '@haneullabs/haneul/client';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 
 import type { QueryContext } from './queries/context.js';
 import { AccountQueries } from './queries/accountQueries.js';
@@ -59,7 +59,7 @@ import type {
 } from './types/index.js';
 import { DeepBookConfig } from './utils/config.js';
 import type { CoinMap, DeepbookPackageIds, PoolMap } from './utils/constants.js';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 export interface DeepBookCompatibleClient extends ClientWithCoreApi {}
 
@@ -79,13 +79,13 @@ export interface DeepBookOptions<Name = 'deepbook'> {
 
 export interface DeepBookClientOptions extends DeepBookOptions {
 	client: DeepBookCompatibleClient;
-	network: SuiClientTypes.Network;
+	network: HaneulClientTypes.Network;
 }
 
 export function deepbook<Name extends string = 'deepbook'>({
 	name = 'deepbook' as Name,
 	...options
-}: DeepBookOptions<Name>): SuiClientRegistration<DeepBookCompatibleClient, Name, DeepBookClient> {
+}: DeepBookOptions<Name>): HaneulClientRegistration<DeepBookCompatibleClient, Name, DeepBookClient> {
 	return {
 		name,
 		register: (client) => {
@@ -145,7 +145,7 @@ export class DeepBookClient {
 		packageIds,
 		pyth,
 	}: DeepBookClientOptions) {
-		const normalizedAddress = normalizeSuiAddress(address);
+		const normalizedAddress = normalizeHaneulAddress(address);
 		const config = new DeepBookConfig({
 			address: normalizedAddress,
 			network,

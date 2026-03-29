@@ -1,10 +1,10 @@
 /**************************************************************
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
-import { type BcsType, bcs } from '@mysten/sui/bcs';
+import { type BcsType, bcs } from '@haneullabs/haneul/bcs';
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { type Transaction } from '@mysten/sui/transactions';
-const $moduleName = '@mysten/pas::clawback_funds';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+const $moduleName = '@haneullabs/pas::clawback_funds';
 export function ClawbackFunds<T extends BcsType<any>>(...typeParameters: [T]) {
 	return new MoveStruct({
 		name: `${$moduleName}::ClawbackFunds<${typeParameters[0].name as T['name']}>`,
@@ -27,7 +27,7 @@ export interface OwnerOptions {
 	typeArguments: [string];
 }
 export function owner(options: OwnerOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['request'];
 	return (tx: Transaction) =>
@@ -48,7 +48,7 @@ export interface AccountIdOptions {
 	typeArguments: [string];
 }
 export function accountId(options: AccountIdOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['request'];
 	return (tx: Transaction) =>
@@ -69,7 +69,7 @@ export interface FundsOptions {
 	typeArguments: [string];
 }
 export function funds(options: FundsOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['request'];
 	return (tx: Transaction) =>
@@ -100,7 +100,7 @@ export interface ResolveOptions {
  * 3.  Make sure policy has enabled clawback resolution
  */
 export function resolve(options: ResolveOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null] satisfies (string | null)[];
 	const parameterNames = ['request', 'policy'];
 	return (tx: Transaction) =>

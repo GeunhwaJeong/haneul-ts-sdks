@@ -19,7 +19,7 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs, type BcsType } from '@mysten/sui/bcs';
+import { bcs, type BcsType } from '@haneullabs/haneul/bcs';
 const $moduleName = '@deepbook/core::big_vector';
 export const BigVector = new MoveStruct({
 	name: `${$moduleName}::BigVector<phantom E>`,

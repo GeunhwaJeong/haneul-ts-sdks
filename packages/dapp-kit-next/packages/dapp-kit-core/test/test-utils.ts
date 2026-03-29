@@ -5,7 +5,7 @@ import { getOrCreateUiWalletForStandardWallet_DO_NOT_USE_OR_YOU_WILL_BE_FIRED as
 
 import type { DAppKitStores } from '../src/core/store.js';
 import type { UiWallet } from '@wallet-standard/ui';
-import type { Wallet } from '@mysten/wallet-standard';
+import type { Wallet } from '@haneullabs/wallet-standard';
 
 export const TEST_DEFAULT_NETWORK = 'localnet';
 const TEST_NETWORKS_CONST = ['devnet', 'testnet', 'localnet', 'mainnet'] as const;
@@ -38,8 +38,8 @@ export function excludeUiWalletsByName(
 }
 
 export const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	devnet: 'https://fullnode.devnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	devnet: 'https://fullnode.devnet.haneul.io:443',
 	localnet: 'http://127.0.0.1:9000',
 } as const;

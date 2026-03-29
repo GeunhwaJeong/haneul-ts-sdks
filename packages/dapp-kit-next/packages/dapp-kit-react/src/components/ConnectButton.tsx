@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { createComponent } from '@lit/react';
-import { DAppKitConnectButton as ConnectButtonElement } from '@mysten/dapp-kit-core/web';
+import { DAppKitConnectButton as ConnectButtonElement } from '@haneullabs/dapp-kit-core/web';
 import { useDAppKit } from '../hooks/useDAppKit.js';
 import type { ComponentProps } from 'react';
 
@@ -11,7 +11,7 @@ export type ConnectButtonProps = ComponentProps<typeof ConnectButtonComponent>;
 
 const ConnectButtonComponent = createComponent({
 	react: React,
-	tagName: 'mysten-dapp-kit-connect-button',
+	tagName: 'haneullabs-dapp-kit-connect-button',
 	elementClass: ConnectButtonElement,
 });
 

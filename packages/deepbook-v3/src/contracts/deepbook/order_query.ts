@@ -8,8 +8,8 @@
  */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 import * as order from './order.js';
 const $moduleName = '@deepbook/core::order_query';
 export const OrderPage = new MoveStruct({

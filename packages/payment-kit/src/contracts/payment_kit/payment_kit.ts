@@ -8,11 +8,11 @@ import {
 	normalizeMoveArguments,
 	type RawTransactionArgument,
 } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as vec_map from './deps/sui/vec_map.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as vec_map from './deps/haneul/vec_map.js';
 import * as config from './config.js';
-const $moduleName = '@mysten/payment-kit::payment_kit';
+const $moduleName = '@haneullabs/payment-kit::payment_kit';
 export const Namespace = new MoveStruct({
 	name: `${$moduleName}::Namespace`,
 	fields: {
@@ -90,7 +90,7 @@ export interface CreateRegistryOptions {
  * the registry's ID.
  */
 export function createRegistry(options: CreateRegistryOptions) {
-	const packageAddress = options.package ?? '@mysten/payment-kit';
+	const packageAddress = options.package ?? '@haneullabs/payment-kit';
 	const argumentsTypes = [null, '0x1::string::String'] satisfies (string | null)[];
 	const parameterNames = ['namespace', 'name'];
 	return (tx: Transaction) =>
@@ -124,7 +124,7 @@ export interface ProcessEphemeralPaymentOptions {
  * event.
  */
 export function processEphemeralPayment(options: ProcessEphemeralPaymentOptions) {
-	const packageAddress = options.package ?? '@mysten/payment-kit';
+	const packageAddress = options.package ?? '@haneullabs/payment-kit';
 	const argumentsTypes = [
 		'0x1::string::String',
 		'u64',
@@ -167,7 +167,7 @@ export interface ProcessRegistryPaymentOptions {
  * and protecting from double spending for the same key.
  */
 export function processRegistryPayment(options: ProcessRegistryPaymentOptions) {
-	const packageAddress = options.package ?? '@mysten/payment-kit';
+	const packageAddress = options.package ?? '@haneullabs/payment-kit';
 	const argumentsTypes = [
 		null,
 		'0x1::string::String',
@@ -202,7 +202,7 @@ export interface WithdrawFromRegistryOptions {
  * specified coin from the registry.
  */
 export function withdrawFromRegistry(options: WithdrawFromRegistryOptions) {
-	const packageAddress = options.package ?? '@mysten/payment-kit';
+	const packageAddress = options.package ?? '@haneullabs/payment-kit';
 	const argumentsTypes = [null, null] satisfies (string | null)[];
 	const parameterNames = ['registry', 'cap'];
 	return (tx: Transaction) =>
@@ -227,7 +227,7 @@ export interface DeletePaymentRecordOptions {
 }
 /** Removes an expired Payment Record from the Registry. */
 export function deletePaymentRecord(options: DeletePaymentRecordOptions) {
-	const packageAddress = options.package ?? '@mysten/payment-kit';
+	const packageAddress = options.package ?? '@haneullabs/payment-kit';
 	const argumentsTypes = [null, null] satisfies (string | null)[];
 	const parameterNames = ['registry', 'paymentKey'];
 	return (tx: Transaction) =>
@@ -257,7 +257,7 @@ export interface CreatePaymentKeyOptions {
 }
 /** Creates a PaymentKey from payment parameters. */
 export function createPaymentKey(options: CreatePaymentKeyOptions) {
-	const packageAddress = options.package ?? '@mysten/payment-kit';
+	const packageAddress = options.package ?? '@haneullabs/payment-kit';
 	const argumentsTypes = ['0x1::string::String', 'u64', 'address'] satisfies (string | null)[];
 	const parameterNames = ['nonce', 'paymentAmount', 'receiver'];
 	return (tx: Transaction) =>
@@ -290,7 +290,7 @@ export interface SetConfigEpochExpirationDurationOptions {
  * payment records will expire 30 epochs after their creation.
  */
 export function setConfigEpochExpirationDuration(options: SetConfigEpochExpirationDurationOptions) {
-	const packageAddress = options.package ?? '@mysten/payment-kit';
+	const packageAddress = options.package ?? '@haneullabs/payment-kit';
 	const argumentsTypes = [null, null, 'u64'] satisfies (string | null)[];
 	const parameterNames = ['registry', 'cap', 'epochExpirationDuration'];
 	return (tx: Transaction) =>
@@ -322,7 +322,7 @@ export interface SetConfigRegistryManagedFundsOptions {
  * false, payments will be transferred directly to the specified receiver.
  */
 export function setConfigRegistryManagedFunds(options: SetConfigRegistryManagedFundsOptions) {
-	const packageAddress = options.package ?? '@mysten/payment-kit';
+	const packageAddress = options.package ?? '@haneullabs/payment-kit';
 	const argumentsTypes = [null, null, 'bool'] satisfies (string | null)[];
 	const parameterNames = ['registry', 'cap', 'registryManagedFunds'];
 	return (tx: Transaction) =>
@@ -348,7 +348,7 @@ export interface ShareOptions {
  * - `registry` - The PaymentRegistry to share
  */
 export function share(options: ShareOptions) {
-	const packageAddress = options.package ?? '@mysten/payment-kit';
+	const packageAddress = options.package ?? '@haneullabs/payment-kit';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['registry'];
 	return (tx: Transaction) =>

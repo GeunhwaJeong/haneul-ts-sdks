@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, it, expect } from 'vitest';
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { analyze } from '../../src/transaction-analyzer/analyzer.js';
 import { coins, gasCoins } from '../../src/transaction-analyzer/rules/coins.js';
-import { MockSuiClient } from '../mocks/MockSuiClient.js';
+import { MockHaneulClient } from '../mocks/MockHaneulClient.js';
 import {
 	DEFAULT_SENDER,
 	createAddressOwner,
@@ -16,7 +16,7 @@ import {
 
 describe('TransactionAnalyzer - Coins Rule', () => {
 	it('should analyze all coin-related functionality in a single transaction', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 
 		// Add additional coins to exercise various features
 		client.addCoin({
@@ -28,7 +28,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 
 		client.addCoin({
 			objectId: '0xdef456',
-			coinType: '0x2::sui::SUI',
+			coinType: '0x2::haneul::HANEUL',
 			balance: 100000000n,
 			owner: { $kind: 'ObjectOwner', ObjectOwner: '0x00parent' },
 		});
@@ -36,9 +36,9 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
-		// 1. Use SUI coins in various commands
-		const suiCoin1 = tx.object(TEST_COIN_1_ID);
-		const suiCoin2 = tx.object(TEST_COIN_2_ID);
+		// 1. Use HANEUL coins in various commands
+		const haneulCoin1 = tx.object(TEST_COIN_1_ID);
+		const haneulCoin2 = tx.object(TEST_COIN_2_ID);
 
 		// 2. Use USDC coin
 		const usdcCoin = tx.object('0xabc123');
@@ -47,26 +47,26 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 		const parentOwnedCoin = tx.object('0xdef456');
 
 		// 5. Split/merge operations
-		tx.splitCoins(suiCoin1, [100, 200]);
-		tx.mergeCoins(suiCoin1, [suiCoin2]);
+		tx.splitCoins(haneulCoin1, [100, 200]);
+		tx.mergeCoins(haneulCoin1, [haneulCoin2]);
 
 		// 6. Use gas coin (should appear in gasCoins, not coins)
 		tx.splitCoins(tx.gas, [50]);
 
 		// 7. Create vector of coins (nested structure)
 		const coinVec = tx.makeMoveVec({
-			elements: [suiCoin1, usdcCoin],
+			elements: [haneulCoin1, usdcCoin],
 		});
 
 		// 8. Use coins in multiple ways (deduplication test)
 		tx.moveCall({
 			target: '0x999::test::transfer',
-			arguments: [suiCoin1, parentOwnedCoin],
+			arguments: [haneulCoin1, parentOwnedCoin],
 		});
 
 		tx.moveCall({
 			target: '0x999::test::batch_transfer',
-			arguments: [coinVec, suiCoin1], // suiCoin1 used again
+			arguments: [coinVec, haneulCoin1], // haneulCoin1 used again
 		});
 
 		// 9. Include a non-coin object to verify filtering
@@ -90,7 +90,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			{
 			  "0x0000000000000000000000000000000000000000000000000000000000a5c000": {
 			    "balance": 5000000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			    "content": Uint8Array [
 			      0,
 			      0,
@@ -144,12 +144,12 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "100",
 			  },
 			  "0x0000000000000000000000000000000000000000000000000000000000a5c001": {
 			    "balance": 2500000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			    "content": Uint8Array [
 			      0,
 			      0,
@@ -203,7 +203,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "101",
 			  },
 			  "0x0000000000000000000000000000000000000000000000000000000000abc123": {
@@ -267,7 +267,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			  },
 			  "0x0000000000000000000000000000000000000000000000000000000000def456": {
 			    "balance": 100000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			    "content": Uint8Array [
 			      0,
 			      0,
@@ -321,7 +321,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			    },
 			    "ownerAddress": "0x00parent",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "100",
 			  },
 			}
@@ -331,7 +331,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			[
 			  {
 			    "balance": 5000000000n,
-			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			    "content": Uint8Array [
 			      0,
 			      0,
@@ -385,7 +385,7 @@ describe('TransactionAnalyzer - Coins Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "100",
 			  },
 			]

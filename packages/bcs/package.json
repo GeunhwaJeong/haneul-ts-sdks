@@ -1,9 +1,9 @@
 {
-	"name": "@mysten/bcs",
+	"name": "@haneullabs/bcs",
 	"version": "2.0.3",
 	"description": "BCS - Canonical Binary Serialization implementation for JavaScript",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"sideEffects": false,
 	"type": "module",
 	"main": "./dist/index.mjs",
@@ -36,7 +36,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"keywords": [
 		"bcs",
@@ -47,7 +47,7 @@
 		"serde"
 	],
 	"bugs": {
-		"url": "https://github.com/MystenLabs/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
 	},
 	"size-limit": [
 		{
@@ -55,7 +55,7 @@
 			"limit": "10 kB"
 		}
 	],
-	"homepage": "https://sdk.mystenlabs.com/bcs",
+	"homepage": "https://sdk.haneul-labs.com/bcs",
 	"devDependencies": {
 		"@size-limit/preset-small-lib": "^12.0.0",
 		"size-limit": "^12.0.0",
@@ -63,7 +63,7 @@
 		"vitest": "^4.0.17"
 	},
 	"dependencies": {
-		"@mysten/utils": "workspace:^",
+		"@haneullabs/utils": "workspace:^",
 		"@scure/base": "^2.0.0"
 	}
 }

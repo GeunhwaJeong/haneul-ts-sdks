@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromHex } from '@mysten/bcs';
+import { fromHex } from '@haneullabs/bcs';
 
 import type { IBEEncryptions } from './bcs.js';
 import type { G1Element, GTElement } from './bls12381.js';
@@ -15,7 +15,7 @@ import { InvalidCiphertextError } from './error.js';
 /**
  * The domain separation tag for the signing proof of possession.
  */
-export const DST_POP: Uint8Array = new TextEncoder().encode('SUI-SEAL-IBE-BLS12381-POP-00');
+export const DST_POP: Uint8Array = new TextEncoder().encode('HANEUL-SEAL-IBE-BLS12381-POP-00');
 
 /**
  * The interface for the key servers.

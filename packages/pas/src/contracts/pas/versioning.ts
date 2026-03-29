@@ -12,10 +12,10 @@
  */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as vec_set from './deps/sui/vec_set.js';
-const $moduleName = '@mysten/pas::versioning';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as vec_set from './deps/haneul/vec_set.js';
+const $moduleName = '@haneullabs/pas::versioning';
 export const Versioning = new MoveStruct({
 	name: `${$moduleName}::Versioning`,
 	fields: {
@@ -37,7 +37,7 @@ export interface IsValidVersionOptions {
 }
 /** Verify that a version is not part of the blocked version list. */
 export function isValidVersion(options: IsValidVersionOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, 'u64'] satisfies (string | null)[];
 	const parameterNames = ['versioning', 'version'];
 	return (tx: Transaction) =>
@@ -56,7 +56,7 @@ export interface AssertIsValidVersionOptions {
 	arguments: AssertIsValidVersionArguments | [versioning: RawTransactionArgument<string>];
 }
 export function assertIsValidVersion(options: AssertIsValidVersionOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['versioning'];
 	return (tx: Transaction) =>

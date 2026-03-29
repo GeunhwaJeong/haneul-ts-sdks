@@ -20,8 +20,8 @@
 /// wish to move the item somewhere else.
 ///
 module kiosk::kiosk_lock_rule {
-    use sui::kiosk::{Self, Kiosk};
-    use sui::transfer_policy::{
+    use haneul::kiosk::{Self, Kiosk};
+    use haneul::transfer_policy::{
         Self as policy,
         TransferPolicy,
         TransferPolicyCap,

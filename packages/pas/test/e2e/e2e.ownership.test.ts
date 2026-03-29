@@ -1,32 +1,32 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SuiClientTypes } from '@mysten/sui/client';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import type { HaneulClientTypes } from '@haneullabs/haneul/client';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import { describe, expect, it } from 'vitest';
 
-import { Field } from '../../src/contracts/sui/dynamic_field.js';
+import { Field } from '../../src/contracts/haneul/dynamic_field.js';
 import { TypeName } from '../../src/contracts/pas/deps/std/type_name.js';
 import { Command, MoveCall } from '../../src/contracts/ptb/ptb.js';
 import { InvalidObjectOwnershipError } from '../../src/error.js';
 import { validateTemplateObjects } from '../../src/intents.js';
 import { getClient, setupToolbox } from './setup.js';
 
-type SuiObject = SuiClientTypes.Object<{ content: true }>;
+type HaneulObject = HaneulClientTypes.Object<{ content: true }>;
 
 /**
  * Builds a fake template DF object whose command references the given
  * object IDs via `object_by_id` extensions. No on-chain publish needed.
  */
-function buildFakeTemplate(objectIds: string[]): SuiObject {
+function buildFakeTemplate(objectIds: string[]): HaneulObject {
 	const args = objectIds.map((id) => ({
 		Input: {
-			Object: { Ext: `object_by_id:${normalizeSuiAddress(id)}` },
+			Object: { Ext: `object_by_id:${normalizeHaneulAddress(id)}` },
 		},
 	}));
 
 	const moveCallBytes = MoveCall.serialize({
-		package_id: normalizeSuiAddress('0x1'),
+		package_id: normalizeHaneulAddress('0x1'),
 		module_name: 'fake',
 		function: 'fake',
 		arguments: args as any,
@@ -35,13 +35,13 @@ function buildFakeTemplate(objectIds: string[]): SuiObject {
 
 	const FieldType = Field(TypeName, Command);
 	const content = FieldType.serialize({
-		id: normalizeSuiAddress('0x0'),
+		id: normalizeHaneulAddress('0x0'),
 		name: { name: 'fake::FakeApproval' },
 		value: [0, [...moveCallBytes]] as any,
 	}).toBytes();
 
 	return {
-		objectId: normalizeSuiAddress('0x0'),
+		objectId: normalizeHaneulAddress('0x0'),
 		version: '0',
 		digest: '',
 		owner: { $kind: 'Shared', Shared: { initialSharedVersion: '0' } },
@@ -50,7 +50,7 @@ function buildFakeTemplate(objectIds: string[]): SuiObject {
 		previousTransaction: undefined,
 		objectBcs: undefined,
 		json: undefined,
-	} as unknown as SuiObject;
+	} as unknown as HaneulObject;
 }
 
 describe('template object ownership validation', () => {
@@ -73,10 +73,10 @@ describe('template object ownership validation', () => {
 		const toolbox = await setupToolbox();
 		const client = getClient();
 		const namespaceId = toolbox.client.pas.getPackageConfig().namespaceId;
-		// 0x2 is the Sui framework package -- always immutable.
-		const suiFrameworkId = normalizeSuiAddress('0x2');
+		// 0x2 is the Haneul framework package -- always immutable.
+		const haneulFrameworkId = normalizeHaneulAddress('0x2');
 
-		const template = buildFakeTemplate([namespaceId, suiFrameworkId]);
+		const template = buildFakeTemplate([namespaceId, haneulFrameworkId]);
 
 		await expect(validateTemplateObjects(client, [template])).resolves.not.toThrow();
 	});

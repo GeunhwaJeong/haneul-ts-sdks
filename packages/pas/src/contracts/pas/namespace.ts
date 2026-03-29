@@ -12,10 +12,10 @@
  */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 import * as versioning from './versioning.js';
-const $moduleName = '@mysten/pas::namespace';
+const $moduleName = '@haneullabs/pas::namespace';
 export const Namespace = new MoveStruct({
 	name: `${$moduleName}::Namespace`,
 	fields: {
@@ -45,7 +45,7 @@ export interface SetupOptions {
  * package).
  */
 export function setup(options: SetupOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null] satisfies (string | null)[];
 	const parameterNames = ['namespace', 'cap'];
 	return (tx: Transaction) =>
@@ -78,7 +78,7 @@ export interface BlockVersionOptions {
  * there is a breaking change
  */
 export function blockVersion(options: BlockVersionOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null, 'u64'] satisfies (string | null)[];
 	const parameterNames = ['namespace', 'cap', 'version'];
 	return (tx: Transaction) =>
@@ -106,7 +106,7 @@ export interface UnblockVersionOptions {
 }
 /** Allows the package admin to unblock a version of the package. */
 export function unblockVersion(options: UnblockVersionOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null, 'u64'] satisfies (string | null)[];
 	const parameterNames = ['namespace', 'cap', 'version'];
 	return (tx: Transaction) =>
@@ -127,7 +127,7 @@ export interface PolicyExistsOptions {
 }
 /** Check if `Policy<T>` exists in the namespace */
 export function policyExists(options: PolicyExistsOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['namespace'];
 	return (tx: Transaction) =>
@@ -149,7 +149,7 @@ export interface PolicyAddressOptions {
 }
 /** The derived address for `Policy<T>` */
 export function policyAddress(options: PolicyAddressOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['namespace'];
 	return (tx: Transaction) =>
@@ -172,7 +172,7 @@ export interface AccountExistsOptions {
 		| [namespace: RawTransactionArgument<string>, owner: RawTransactionArgument<string>];
 }
 export function accountExists(options: AccountExistsOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, 'address'] satisfies (string | null)[];
 	const parameterNames = ['namespace', 'owner'];
 	return (tx: Transaction) =>
@@ -194,7 +194,7 @@ export interface AccountAddressOptions {
 		| [namespace: RawTransactionArgument<string>, owner: RawTransactionArgument<string>];
 }
 export function accountAddress(options: AccountAddressOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, 'address'] satisfies (string | null)[];
 	const parameterNames = ['namespace', 'owner'];
 	return (tx: Transaction) =>

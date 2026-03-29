@@ -1,10 +1,10 @@
-# Mysten Typescript SDKs
+# Haneullabs Typescript SDKs
 
-A collection of TypeScript SDKs for interacting with the Sui blockchain ecosystem.
+A collection of TypeScript SDKs for interacting with the Haneul blockchain ecosystem.
 
 ## Documentation
 
-For SDK documentation visit https://sdk.mystenlabs.com/sui
+For SDK documentation visit https://sdk.haneul-labs.com/haneul
 
 ## Development
 

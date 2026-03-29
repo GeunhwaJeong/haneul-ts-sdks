@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import type { ManagerBalance } from '../types/index.js';
 import type { QueryContext } from './context.js';
@@ -138,7 +138,7 @@ export class BalanceManagerQueries {
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const vecOfAddresses = bcs.vector(bcs.Address).parse(bytes);
 
-		return vecOfAddresses.map((id: string) => normalizeSuiAddress(id));
+		return vecOfAddresses.map((id: string) => normalizeHaneulAddress(id));
 	}
 
 	async accountExists(poolKey: string, managerKey: string): Promise<boolean> {

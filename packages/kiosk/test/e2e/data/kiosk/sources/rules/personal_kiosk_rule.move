@@ -19,8 +19,8 @@
 /// trade + Kiosk is fixed to the owner).
 ///
 module kiosk::personal_kiosk_rule {
-    use sui::kiosk::{Self, Kiosk};
-    use sui::transfer_policy::{
+    use haneul::kiosk::{Self, Kiosk};
+    use haneul::transfer_policy::{
         Self as policy,
         TransferPolicy,
         TransferPolicyCap,

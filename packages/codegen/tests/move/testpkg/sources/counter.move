@@ -4,7 +4,7 @@
 module testpkg::counter {
     use std::string::String;
     use std::ascii;
-    use sui::clock::Clock;
+    use haneul::clock::Clock;
 
     /// A simple counter object.
     public struct Counter has key {
@@ -81,7 +81,7 @@ module testpkg::counter {
             owner: ctx.sender(),
         };
         let id = object::id(&counter);
-        sui::event::emit(CounterCreated { counter_id: id, initial_value: 0 });
+        haneul::event::emit(CounterCreated { counter_id: id, initial_value: 0 });
         transfer::share_object(counter);
     }
 

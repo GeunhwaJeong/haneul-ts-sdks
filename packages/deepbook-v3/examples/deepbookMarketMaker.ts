@@ -1,18 +1,18 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import type { ClientWithExtensions } from '@mysten/sui/client';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { decodeSuiPrivateKey } from '@mysten/sui/cryptography';
-import type { Keypair } from '@mysten/sui/cryptography';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import type { Transaction } from '@mysten/sui/transactions';
+import type { ClientWithExtensions } from '@haneullabs/haneul/client';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { decodeHaneulPrivateKey } from '@haneullabs/haneul/cryptography';
+import type { Keypair } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 
 import { deepbook, type DeepBookClient } from '../src/index.js'; // Adjust path according to new structure
 import type { BalanceManager } from '../src/types/index.js';
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 export class DeepBookMarketMaker {
@@ -33,10 +33,10 @@ export class DeepBookMarketMaker {
 			resolvedKeypair = keypair;
 		}
 
-		const address = resolvedKeypair.toSuiAddress();
+		const address = resolvedKeypair.toHaneulAddress();
 
 		this.keypair = resolvedKeypair;
-		this.client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+		this.client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 			deepbook({
 				address: address,
 				balanceManagers: balanceManagers,
@@ -46,7 +46,7 @@ export class DeepBookMarketMaker {
 	}
 
 	static #getSignerFromPK = (privateKey: string) => {
-		const { scheme, secretKey } = decodeSuiPrivateKey(privateKey);
+		const { scheme, secretKey } = decodeHaneulPrivateKey(privateKey);
 		if (scheme === 'ED25519') return Ed25519Keypair.fromSecretKey(secretKey);
 
 		throw new Error(`Unsupported scheme: ${scheme}`);
@@ -60,24 +60,24 @@ export class DeepBookMarketMaker {
 	};
 
 	getActiveAddress() {
-		return this.keypair.getPublicKey().toSuiAddress();
+		return this.keypair.getPublicKey().toHaneulAddress();
 	}
 
 	// Example of a flash loan transaction
-	// Borrow 1 DEEP from DEEP_SUI pool
-	// Swap 0.5 DBUSDC for SUI in SUI_DBUSDC pool, pay with deep borrowed
-	// Swap SUI back to DEEP
-	// Return 1 DEEP to DEEP_SUI pool
+	// Borrow 1 DEEP from DEEP_HANEUL pool
+	// Swap 0.5 DBUSDC for HANEUL in HANEUL_DBUSDC pool, pay with deep borrowed
+	// Swap HANEUL back to DEEP
+	// Return 1 DEEP to DEEP_HANEUL pool
 	flashLoanExample = async (tx: Transaction) => {
 		const borrowAmount = 1;
 		const [deepCoin, flashLoan] = tx.add(
-			this.client.deepbook.flashLoans.borrowBaseAsset('DEEP_SUI', borrowAmount),
+			this.client.deepbook.flashLoans.borrowBaseAsset('DEEP_HANEUL', borrowAmount),
 		);
 
 		// Execute trade using borrowed DEEP
 		const [baseOut, quoteOut, deepOut] = tx.add(
 			this.client.deepbook.deepBook.swapExactQuoteForBase({
-				poolKey: 'SUI_DBUSDC',
+				poolKey: 'HANEUL_DBUSDC',
 				amount: 0.5,
 				deepAmount: 1,
 				minOut: 0,
@@ -90,7 +90,7 @@ export class DeepBookMarketMaker {
 		// Execute second trade to get back DEEP for repayment
 		const [baseOut2, quoteOut2, deepOut2] = tx.add(
 			this.client.deepbook.deepBook.swapExactQuoteForBase({
-				poolKey: 'DEEP_SUI',
+				poolKey: 'DEEP_HANEUL',
 				amount: 10,
 				deepAmount: 0,
 				minOut: 0,
@@ -102,7 +102,7 @@ export class DeepBookMarketMaker {
 		// Return borrowed DEEP
 		const loanRemain = tx.add(
 			this.client.deepbook.flashLoans.returnBaseAsset(
-				'DEEP_SUI',
+				'DEEP_HANEUL',
 				borrowAmount,
 				baseOut2,
 				flashLoan,
@@ -114,7 +114,7 @@ export class DeepBookMarketMaker {
 	placeLimitOrderExample = (tx: Transaction) => {
 		tx.add(
 			this.client.deepbook.deepBook.placeLimitOrder({
-				poolKey: 'SUI_DBUSDC',
+				poolKey: 'HANEUL_DBUSDC',
 				balanceManagerKey: 'MANAGER_1',
 				clientOrderId: '123456789',
 				price: 1,

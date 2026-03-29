@@ -1,4 +1,4 @@
-import { useCurrentAccount, useCurrentClient } from "@mysten/dapp-kit-react";
+import { useCurrentAccount, useCurrentClient } from "@haneullabs/dapp-kit-react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Card,

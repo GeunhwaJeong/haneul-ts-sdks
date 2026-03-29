@@ -15,10 +15,10 @@ use pas::send_funds::SendFunds;
 use pas::templates::{PAS, Templates};
 use ptb::ptb;
 use std::type_name;
-use sui::balance::Balance;
-use sui::clock::Clock;
-use sui::coin::TreasuryCap;
-use sui::coin_registry::{Self, MetadataCap};
+use haneul::balance::Balance;
+use haneul::clock::Clock;
+use haneul::coin::TreasuryCap;
+use haneul::coin_registry::{Self, MetadataCap};
 
 #[error(code = 0)]
 const EInvalidAmount: vector<u8> = b"Any amount over 10K is not allowed in this demo.";

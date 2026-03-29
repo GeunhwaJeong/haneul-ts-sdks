@@ -1,4 +1,4 @@
-# `@mysten/payment-kit`
+# `@haneullabs/payment-kit`
 
 > ⚠️ **Warning** - This package is in active development. APIs are experimental and subject to
 > breaking changes without notice. We recommend thoroughly testing any implementation before using
@@ -7,22 +7,22 @@
 ## Installation
 
 ```bash
-npm install --save @mysten/payment-kit @mysten/sui
+npm install --save @haneullabs/payment-kit @haneullabs/haneul
 ```
 
 ## Setup
 
-In order to use the Payment Kit SDK you will first need to create an instance of SuiGrpcClient from
+In order to use the Payment Kit SDK you will first need to create an instance of HaneulGrpcClient from
 the Typescript SDK, and a client instance of the Payment Kit SDK.
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { paymentKit } from '@mysten/payment-kit';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { paymentKit } from '@haneullabs/payment-kit';
 
-// Create a Sui client with a Payment Kit extension
-const client = new SuiGrpcClient({
+// Create a Haneul client with a Payment Kit extension
+const client = new HaneulGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(paymentKit());
 ```
 
@@ -33,7 +33,7 @@ based payments are routed through a default payment registry, but more on that l
 ## SDK Overview
 
 The Payment Kit SDK is designed to allow for direct interactions with the
-[sui-payment-kit](https://github.com/MystenLabs/sui-payment-kit) Move Package. This includes:
+[haneul-payment-kit](https://github.com/GeunhwaJeong/haneul-payment-kit) Move Package. This includes:
 
 - Processing payments
 - Creating and managing `PaymentRegistry` instances

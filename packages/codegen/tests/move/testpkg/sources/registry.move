@@ -62,7 +62,7 @@ module testpkg::registry {
         ctx: &TxContext,
     ) {
         registry.count = registry.count + 1;
-        sui::event::emit(EntryRegistered {
+        haneul::event::emit(EntryRegistered {
             registry_id: object::id(registry),
             name,
         });

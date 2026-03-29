@@ -10,9 +10,9 @@ import {
 } from '../test-utils.js';
 import { createMockWallets } from '../mocks/mock-wallet.js';
 import { createDAppKit } from '../../src/index.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import type { Wallet } from '@mysten/wallet-standard';
-import { getWallets } from '@mysten/wallet-standard';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import type { Wallet } from '@haneullabs/wallet-standard';
+import { getWallets } from '@haneullabs/wallet-standard';
 
 /**
  * Creates a wallet object that simulates a non-compliant wallet extension
@@ -44,7 +44,7 @@ function createTestDAppKit(initialize: () => TestWalletInitializeResult) {
 		networks: TEST_NETWORKS,
 		defaultNetwork: TEST_DEFAULT_NETWORK,
 		createClient(network) {
-			return new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] });
+			return new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] });
 		},
 		walletInitializers: [{ id: 'Test Wallets', initialize }],
 		slushWalletConfig: null,

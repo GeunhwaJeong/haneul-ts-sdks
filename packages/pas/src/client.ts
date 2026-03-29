@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi } from '@mysten/sui/client';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/client';
 
 import { TESTNET_PAS_PACKAGE_CONFIG } from './constants.js';
 import {
@@ -30,7 +30,7 @@ export function pas<const Name extends string = 'pas'>({
 	return {
 		name,
 		register: (client: ClientWithCoreApi) =>
-			new PASClient({ packageConfig, suiClient: client, ...options }),
+			new PASClient({ packageConfig, haneulClient: client, ...options }),
 	};
 }
 
@@ -38,7 +38,7 @@ export class PASClient {
 	#packageConfig: PASPackageConfig;
 
 	constructor(config: PASClientConfig) {
-		const network = config.suiClient.network;
+		const network = config.haneulClient.network;
 
 		// Mainnet: no custom config allowed (avoid accidental republishing).
 		if (network === 'mainnet' && config.packageConfig) {
@@ -87,7 +87,7 @@ export class PASClient {
 	 * Derives the policy address for a given asset type T.
 	 * By default wraps with `Balance<T>` to match the on-chain convention.
 	 *
-	 * @param assetType - The full type of the asset (e.g., "0x2::sui::SUI")
+	 * @param assetType - The full type of the asset (e.g., "0x2::haneul::HANEUL")
 	 * @returns The derived policy object ID
 	 */
 	derivePolicyAddress(assetType: string): string {
@@ -129,7 +129,7 @@ export class PASClient {
 			 * @param options.from - The sender's address (owner of the source account)
 			 * @param options.to - The receiver's address (owner of the destination account)
 			 * @param options.amount - The amount to transfer
-			 * @param options.assetType - The full asset type (e.g., "0x2::sui::SUI")
+			 * @param options.assetType - The full asset type (e.g., "0x2::haneul::HANEUL")
 			 * @returns A sync closure `(tx: Transaction) => TransactionResult`
 			 */
 			sendBalance: sendBalanceIntent(this.#packageConfig),
@@ -142,19 +142,19 @@ export class PASClient {
 			 * @param options - Unlock options
 			 * @param options.from - The sender's address (owner of the source account)
 			 * @param options.amount - The amount to unlock
-			 * @param options.assetType - The full asset type (e.g., "0x2::sui::SUI")
+			 * @param options.assetType - The full asset type (e.g., "0x2::haneul::HANEUL")
 			 * @returns A sync closure `(tx: Transaction) => TransactionResult`
 			 */
 			unlockBalance: unlockBalanceIntent(this.#packageConfig),
 
 			/**
 			 * Creates an unlock balance intent for unrestricted (non-managed) assets.
-			 * Use this when no Policy exists for the asset type (e.g., SUI).
+			 * Use this when no Policy exists for the asset type (e.g., HANEUL).
 			 *
 			 * @param options - Unlock options
 			 * @param options.from - The sender's address (owner of the source account)
 			 * @param options.amount - The amount to unlock
-			 * @param options.assetType - The full asset type (e.g., "0x2::sui::SUI")
+			 * @param options.assetType - The full asset type (e.g., "0x2::haneul::HANEUL")
 			 * @returns A sync closure `(tx: Transaction) => TransactionResult`
 			 */
 			unlockUnrestrictedBalance: unlockUnrestrictedBalanceIntent(this.#packageConfig),

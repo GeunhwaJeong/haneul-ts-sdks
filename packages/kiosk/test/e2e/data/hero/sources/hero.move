@@ -3,7 +3,7 @@
 
 module hero::hero;
 
-use sui::package;
+use haneul::package;
 
 public struct Hero has key, store {
     id: UID,

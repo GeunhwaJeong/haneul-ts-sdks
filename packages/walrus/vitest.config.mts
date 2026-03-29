@@ -9,10 +9,10 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			'@mysten/bcs': new URL('../bcs/src', import.meta.url).pathname,
-			'@mysten/sui': new URL('../sui/src', import.meta.url).pathname,
-			'@mysten/utils': new URL('../utils/src', import.meta.url).pathname,
-			'@mysten/walrus-wasm': new URL('../walrus-wasm', import.meta.url).pathname,
+			'@haneullabs/bcs': new URL('../bcs/src', import.meta.url).pathname,
+			'@haneullabs/haneul': new URL('../haneul/src', import.meta.url).pathname,
+			'@haneullabs/utils': new URL('../utils/src', import.meta.url).pathname,
+			'@haneullabs/walrus-wasm': new URL('../walrus-wasm', import.meta.url).pathname,
 		},
 	},
 });

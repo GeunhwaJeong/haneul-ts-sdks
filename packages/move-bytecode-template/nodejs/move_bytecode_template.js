@@ -204,7 +204,7 @@ function takeFromExternrefTable0(idx) {
  * The JSON object contains the ABI (Application Binary Interface) of the module.
  *
  * ```javascript
- * import * as template from '@mysten/move-binary-template';
+ * import * as template from '@haneullabs/move-binary-template';
  *
  * const json = template.deserialize( binary );
  * console.log( json, json.identifiers );
@@ -231,7 +231,7 @@ function getArrayU8FromWasm0(ptr, len) {
  * Returns the updated bytecode.
  *
  * ```javascript
- * import * as template from '@mysten/move-binary-template';
+ * import * as template from '@haneullabs/move-binary-template';
  *
  * const updated = template.update_identifiers( binary, {
  *     'TEMPLATE': 'NEW_VALUE',
@@ -264,8 +264,8 @@ module.exports.update_identifiers = function(binary, map) {
  * capitalized version of the type: U8, Address, Vector(Bool), Vector(U8), etc.
  *
  * ```javascript
- * import * as template from '@mysten/move-binary-template';
- * import { bcs } from '@mysten/bcs';
+ * import * as template from '@haneullabs/move-binary-template';
+ * import { bcs } from '@haneullabs/bcs';
  *
  * let binary = template.update_constants(
  *     binary, // Uint8Array
@@ -303,7 +303,7 @@ module.exports.update_constants = function(binary, new_value, expected_value, ex
  * with their type and BCS value.
  *
  * ```javascript
- * import * as template from '@mysten/move-binary-template';
+ * import * as template from '@haneullabs/move-binary-template';
  *
  * let consts = template.get_constants(binary);
  * ```

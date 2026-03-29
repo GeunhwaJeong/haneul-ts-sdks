@@ -9,7 +9,7 @@ rendering (SSR).
 ## Installation
 
 ```sh npm2yarn
-npm i @mysten/dapp-kit-react @mysten/sui
+npm i @haneullabs/dapp-kit-react @haneullabs/haneul
 ```
 
 ## Setup
@@ -18,20 +18,20 @@ npm i @mysten/dapp-kit-react @mysten/sui
 
 ```ts
 // app/dapp-kit.ts
-import { createDAppKit } from '@mysten/dapp-kit-react';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-react';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 export const dAppKit = createDAppKit({
 	networks: ['testnet'],
-	createClient: (network) => new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
+	createClient: (network) => new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
 });
 
 // Register types for hook type inference
-declare module '@mysten/dapp-kit-react' {
+declare module '@haneullabs/dapp-kit-react' {
 	interface Register {
 		dAppKit: typeof dAppKit;
 	}
@@ -46,8 +46,8 @@ Wallet detection only works in the browser, so dApp Kit components must be clien
 // app/DAppKitClientProvider.tsx
 'use client';
 
-import { DAppKitProvider } from '@mysten/dapp-kit-react';
-import { ConnectButton } from '@mysten/dapp-kit-react/ui';
+import { DAppKitProvider } from '@haneullabs/dapp-kit-react';
+import { ConnectButton } from '@haneullabs/dapp-kit-react/ui';
 import { dAppKit } from './dapp-kit';
 
 export function DAppKitClientProvider({ children }: { children: React.ReactNode }) {
@@ -79,7 +79,7 @@ export default function Home() {
 	return (
 		<DAppKitClientProvider>
 			<main>
-				<h1>My Sui dApp</h1>
+				<h1>My Haneul dApp</h1>
 				<ConnectButton />
 			</main>
 		</DAppKitClientProvider>
@@ -95,9 +95,9 @@ For simpler apps, create a single client component:
 // app/WalletApp.tsx
 'use client';
 
-import { DAppKitProvider, useCurrentAccount, useDAppKit } from '@mysten/dapp-kit-react';
-import { ConnectButton } from '@mysten/dapp-kit-react/ui';
-import { Transaction, coinWithBalance } from '@mysten/sui/transactions';
+import { DAppKitProvider, useCurrentAccount, useDAppKit } from '@haneullabs/dapp-kit-react';
+import { ConnectButton } from '@haneullabs/dapp-kit-react/ui';
+import { Transaction, coinWithBalance } from '@haneullabs/haneul/transactions';
 import { dAppKit } from './dapp-kit';
 
 function WalletStatus() {
@@ -150,7 +150,7 @@ const WalletApp = dynamic(() => import('./WalletApp'), {
 export default function Home() {
 	return (
 		<main>
-			<h1>My Sui dApp</h1>
+			<h1>My Haneul dApp</h1>
 			<WalletApp />
 		</main>
 	);
@@ -172,7 +172,7 @@ imports or are inside a `'use client'` component that's dynamically imported.
 ## Example Application
 
 See the complete
-[Next.js example](https://github.com/MystenLabs/ts-sdks/tree/main/packages/dapp-kit-next/examples/next-js/simple)
+[Next.js example](https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/dapp-kit-next/examples/next-js/simple)
 on GitHub.
 
 ## Next Steps

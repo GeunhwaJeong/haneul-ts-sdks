@@ -7,7 +7,7 @@ export type StateStorage = {
 	removeItem: (name: string) => unknown | Promise<unknown>;
 };
 
-export const DEFAULT_STORAGE_KEY = 'mysten-dapp-kit:selected-wallet-and-address';
+export const DEFAULT_STORAGE_KEY = 'haneullabs-dapp-kit:selected-wallet-and-address';
 
 export function getDefaultStorage() {
 	return isLocalStorageAvailable() ? localStorage : createInMemoryStorage();

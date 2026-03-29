@@ -1,21 +1,21 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 import { execSync } from 'child_process';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { Transaction } from '@mysten/sui/transactions';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { deepbook } from '../src/index.js';
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.HANEUL_BINARY ?? `haneul`;
 
 type Network = 'mainnet' | 'testnet';
 
 export const getActiveAddress = () => {
-	return execSync(`${SUI} client active-address`, { encoding: 'utf8' }).trim();
+	return execSync(`${HANEUL} client active-address`, { encoding: 'utf8' }).trim();
 };
 
 const getActiveNetwork = (): Network => {
-	const env = execSync(`${SUI} client active-env`, { encoding: 'utf8' }).trim();
+	const env = execSync(`${HANEUL} client active-env`, { encoding: 'utf8' }).trim();
 	if (env !== 'mainnet' && env !== 'testnet') {
 		throw new Error(`Unsupported network: ${env}. Only 'mainnet' and 'testnet' are supported.`);
 	}
@@ -23,8 +23,8 @@ const getActiveNetwork = (): Network => {
 };
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 (async () => {
@@ -43,16 +43,16 @@ const GRPC_URLS = {
 	const marginManagers = {
 		MARGIN_MANAGER_1: {
 			address: '0x70a5f28a2400fca515adce1262da0b45ba8f3d1e48f1f2a9568aa29642b5c104',
-			poolKey: 'SUI_DBUSDC',
+			poolKey: 'HANEUL_DBUSDC',
 		},
 	};
 
-	const suiDbusdcDeepbookReferral =
+	const haneulDbusdcDeepbookReferral =
 		'0x35db71e6431935bde42803fdad7f69d4688bc92abb5e1522bbb8aa3db33c5169';
-	const deepSuiDeepbookReferral =
+	const deepHaneulDeepbookReferral =
 		'0x1f6fbf3ecaa948df7b448c932f9f72a604477be63de199d37cee8a9a863c31eb';
 
-	const client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+	const client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 		deepbook({
 			address: getActiveAddress(),
 			adminCap,
@@ -68,19 +68,19 @@ const GRPC_URLS = {
 	// --- DeepBook Pool Referral Functions ---
 
 	// // 1. Mint a new referral for a pool (multiplier determines fee share)
-	client.deepbook.deepBook.mintReferral('SUI_DBUSDC', 1)(tx);
-	client.deepbook.deepBook.mintReferral('DEEP_SUI', 0.5)(tx);
+	client.deepbook.deepBook.mintReferral('HANEUL_DBUSDC', 1)(tx);
+	client.deepbook.deepBook.mintReferral('DEEP_HANEUL', 0.5)(tx);
 
 	// // 2. Update the multiplier for an existing referral
 	client.deepbook.deepBook.updatePoolReferralMultiplier(
-		'SUI_DBUSDC',
-		suiDbusdcDeepbookReferral,
+		'HANEUL_DBUSDC',
+		haneulDbusdcDeepbookReferral,
 		0.75,
 	)(tx);
 
 	// // 3. Claim referral rewards (returns base, quote, and deep coins)
 	const { baseRewards, quoteRewards, deepRewards } =
-		client.deepbook.deepBook.claimPoolReferralRewards('SUI_DBUSDC', suiDbusdcDeepbookReferral)(tx);
+		client.deepbook.deepBook.claimPoolReferralRewards('HANEUL_DBUSDC', haneulDbusdcDeepbookReferral)(tx);
 	tx.transferObjects([baseRewards, quoteRewards, deepRewards], getActiveAddress());
 
 	// --- Balance Manager Referral Functions ---
@@ -88,14 +88,14 @@ const GRPC_URLS = {
 	// // 4. Set a referral for a balance manager (requires tradeCap)
 	client.deepbook.balanceManager.setBalanceManagerReferral(
 		'BALANCE_MANAGER_1',
-		suiDbusdcDeepbookReferral,
+		haneulDbusdcDeepbookReferral,
 		tx.object(balanceManagers.BALANCE_MANAGER_1.tradeCap),
 	)(tx);
 
 	// // 5. Unset a referral for a balance manager (requires poolKey and tradeCap)
 	client.deepbook.balanceManager.unsetBalanceManagerReferral(
 		'BALANCE_MANAGER_1',
-		'SUI_DBUSDC',
+		'HANEUL_DBUSDC',
 		tx.object(balanceManagers.BALANCE_MANAGER_1.tradeCap),
 	)(tx);
 
@@ -104,20 +104,20 @@ const GRPC_URLS = {
 	// // 6. Set a referral for a margin manager (DeepBookPoolReferral)
 	client.deepbook.marginManager.setMarginManagerReferral(
 		'MARGIN_MANAGER_1',
-		suiDbusdcDeepbookReferral,
+		haneulDbusdcDeepbookReferral,
 	)(tx);
 
 	// // 7. Unset a referral for a margin manager
-	client.deepbook.marginManager.unsetMarginManagerReferral('MARGIN_MANAGER_1', 'SUI_DBUSDC')(tx);
+	client.deepbook.marginManager.unsetMarginManagerReferral('MARGIN_MANAGER_1', 'HANEUL_DBUSDC')(tx);
 
 	// // 8. Mint a supply referral for a margin pool
-	client.deepbook.marginPool.mintSupplyReferral('SUI')(tx);
+	client.deepbook.marginPool.mintSupplyReferral('HANEUL')(tx);
 
 	// // 9. Withdraw referral fees from a margin pool (requires SupplyReferral object)
-	const suiSupplyReferral = '0xaed597fe1a05b9838b198a3dfa2cdd191b6fa7b319f4c3fc676c7b7348cec194';
+	const haneulSupplyReferral = '0xaed597fe1a05b9838b198a3dfa2cdd191b6fa7b319f4c3fc676c7b7348cec194';
 	const referralFees = client.deepbook.marginPool.withdrawReferralFees(
-		'SUI',
-		suiSupplyReferral,
+		'HANEUL',
+		haneulSupplyReferral,
 	)(tx);
 	tx.transferObjects([referralFees], getActiveAddress());
 
@@ -129,63 +129,63 @@ const GRPC_URLS = {
 
 	// 1. Get referral balances for each pool
 	console.log('\n--- DeepBook Pool Referral: getPoolReferralBalances ---');
-	const suiDbusdcReferralBalances = await client.deepbook.getPoolReferralBalances(
-		'SUI_DBUSDC',
-		suiDbusdcDeepbookReferral,
+	const haneulDbusdcReferralBalances = await client.deepbook.getPoolReferralBalances(
+		'HANEUL_DBUSDC',
+		haneulDbusdcDeepbookReferral,
 	);
-	console.log('SUI_DBUSDC Referral Balances:', suiDbusdcReferralBalances);
+	console.log('HANEUL_DBUSDC Referral Balances:', haneulDbusdcReferralBalances);
 
-	const deepSuiReferralBalances = await client.deepbook.getPoolReferralBalances(
-		'DEEP_SUI',
-		deepSuiDeepbookReferral,
+	const deepHaneulReferralBalances = await client.deepbook.getPoolReferralBalances(
+		'DEEP_HANEUL',
+		deepHaneulDeepbookReferral,
 	);
-	console.log('DEEP_SUI Referral Balances:', deepSuiReferralBalances);
+	console.log('DEEP_HANEUL Referral Balances:', deepHaneulReferralBalances);
 
 	// 2. Get multiplier for referrals
 	console.log('\n--- DeepBook Pool Referral: poolReferralMultiplier ---');
 	console.log(
-		'SUI_DBUSDC Multiplier:',
-		await client.deepbook.poolReferralMultiplier('SUI_DBUSDC', suiDbusdcDeepbookReferral),
+		'HANEUL_DBUSDC Multiplier:',
+		await client.deepbook.poolReferralMultiplier('HANEUL_DBUSDC', haneulDbusdcDeepbookReferral),
 	);
 	console.log(
-		'DEEP_SUI Multiplier:',
-		await client.deepbook.poolReferralMultiplier('DEEP_SUI', deepSuiDeepbookReferral),
+		'DEEP_HANEUL Multiplier:',
+		await client.deepbook.poolReferralMultiplier('DEEP_HANEUL', deepHaneulDeepbookReferral),
 	);
 
 	// --- Balance Manager Referral Read-only Functions ---
 
 	// 3. Get owner of the referrals
 	console.log('\n--- Balance Manager Referral: balanceManagerReferralOwner ---');
-	const suiDbusdcReferralOwner =
-		await client.deepbook.balanceManagerReferralOwner(suiDbusdcDeepbookReferral);
-	console.log('SUI_DBUSDC Referral Owner:', suiDbusdcReferralOwner);
+	const haneulDbusdcReferralOwner =
+		await client.deepbook.balanceManagerReferralOwner(haneulDbusdcDeepbookReferral);
+	console.log('HANEUL_DBUSDC Referral Owner:', haneulDbusdcReferralOwner);
 
-	const deepSuiReferralOwner =
-		await client.deepbook.balanceManagerReferralOwner(deepSuiDeepbookReferral);
-	console.log('DEEP_SUI Referral Owner:', deepSuiReferralOwner);
+	const deepHaneulReferralOwner =
+		await client.deepbook.balanceManagerReferralOwner(deepHaneulDeepbookReferral);
+	console.log('DEEP_HANEUL Referral Owner:', deepHaneulReferralOwner);
 
 	// 4. Get pool ID from referral
 	console.log('\n--- Balance Manager Referral: balanceManagerReferralPoolId ---');
 	console.log(
-		'SUI_DBUSDC Pool ID:',
-		await client.deepbook.balanceManagerReferralPoolId(suiDbusdcDeepbookReferral),
+		'HANEUL_DBUSDC Pool ID:',
+		await client.deepbook.balanceManagerReferralPoolId(haneulDbusdcDeepbookReferral),
 	);
 	console.log(
-		'DEEP_SUI Pool ID:',
-		await client.deepbook.balanceManagerReferralPoolId(deepSuiDeepbookReferral),
+		'DEEP_HANEUL Pool ID:',
+		await client.deepbook.balanceManagerReferralPoolId(deepHaneulDeepbookReferral),
 	);
 
 	// 5. Get the referral ID set on the balance manager
 	console.log('\n--- Balance Manager Referral: getBalanceManagerReferralId ---');
-	const suiDbusdcReferralId = await client.deepbook.getBalanceManagerReferralId(
+	const haneulDbusdcReferralId = await client.deepbook.getBalanceManagerReferralId(
 		'BALANCE_MANAGER_1',
-		'SUI_DBUSDC',
+		'HANEUL_DBUSDC',
 	);
-	console.log('SUI_DBUSDC Referral ID on BALANCE_MANAGER_1:', suiDbusdcReferralId);
+	console.log('HANEUL_DBUSDC Referral ID on BALANCE_MANAGER_1:', haneulDbusdcReferralId);
 
-	const deepSuiReferralId = await client.deepbook.getBalanceManagerReferralId(
+	const deepHaneulReferralId = await client.deepbook.getBalanceManagerReferralId(
 		'BALANCE_MANAGER_1',
-		'DEEP_SUI',
+		'DEEP_HANEUL',
 	);
-	console.log('DEEP_SUI Referral ID on BALANCE_MANAGER_1:', deepSuiReferralId);
+	console.log('DEEP_HANEUL Referral ID on BALANCE_MANAGER_1:', deepHaneulReferralId);
 })();

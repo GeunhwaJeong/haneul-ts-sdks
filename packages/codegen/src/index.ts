@@ -15,7 +15,7 @@ import type {
 	PackageGenerate,
 	TypesOption,
 } from './config.js';
-export { type SuiCodegenConfig } from './config.js';
+export { type HaneulCodegenConfig } from './config.js';
 
 export async function generateFromPackageSummary({
 	package: pkg,

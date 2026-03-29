@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCurrentAccount, useDAppKit, useCurrentClient } from '@mysten/dapp-kit-react';
+import { useCurrentAccount, useDAppKit, useCurrentClient } from '@haneullabs/dapp-kit-react';
 import { useState, useRef } from 'react';
 
 import type { WriteFilesFlow } from '../../src/index.js';
@@ -10,7 +10,7 @@ import { WalrusFile } from '../../src/index.js';
 export function FileUpload({ onComplete }: { onComplete: (ids: string[]) => void }) {
 	const dAppKit = useDAppKit();
 	const currentAccount = useCurrentAccount();
-	const suiClient = useCurrentClient();
+	const haneulClient = useCurrentClient();
 	const flowRef = useRef<WriteFilesFlow | null>(null);
 	const [state, setState] = useState<
 		| 'empty'
@@ -38,7 +38,7 @@ export function FileUpload({ onComplete }: { onComplete: (ids: string[]) => void
 		setState('encoding');
 
 		const arrayBuffer = await file.arrayBuffer();
-		const flow = suiClient.walrusWithRelay.writeFilesFlow({
+		const flow = haneulClient.walrusWithRelay.writeFilesFlow({
 			files: [
 				WalrusFile.from({
 					contents: new Uint8Array(arrayBuffer),

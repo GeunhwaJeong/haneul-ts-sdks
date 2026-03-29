@@ -42,11 +42,11 @@
 			]
 		},
 		// Avoid running CPU intensive tests in parallel
-		"@mysten/walrus#test": {
-			"dependsOn": ["^build", "build", "@mysten/walrus-wasm#test"]
+		"@haneullabs/walrus#test": {
+			"dependsOn": ["^build", "build", "@haneullabs/walrus-wasm#test"]
 		},
-		"@mysten/seal#test": {
-			"dependsOn": ["^build", "build", "@mysten/walrus#test"]
+		"@haneullabs/seal#test": {
+			"dependsOn": ["^build", "build", "@haneullabs/walrus#test"]
 		},
 		"test:e2e": {
 			"dependsOn": ["^build", "build"],
@@ -100,19 +100,19 @@
 			"inputs": ["../docs/content/**", "../docs/scripts/**"],
 			"outputs": ["docs/**"]
 		},
-		"@mysten/dapp-kit-core#build:docs": {
+		"@haneullabs/dapp-kit-core#build:docs": {
 			"inputs": ["../../../docs/content/**", "../../../docs/scripts/**"],
 			"outputs": ["docs/**"]
 		},
-		"@mysten/dapp-kit-react#build:docs": {
+		"@haneullabs/dapp-kit-react#build:docs": {
 			"inputs": ["../../../docs/content/**", "../../../docs/scripts/**"],
 			"outputs": ["docs/**"]
 		},
-		"@mysten/docs#build:docs": {
+		"@haneullabs/docs#build:docs": {
 			"inputs": ["content/**", "scripts/**"],
 			"outputs": ["dist/**"]
 		},
-		"@mysten/docs#build": {
+		"@haneullabs/docs#build": {
 			"dependsOn": ["^build", "build:docs"],
 			"inputs": [
 				"content/**",

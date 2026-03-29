@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromHex } from '@mysten/bcs';
+import { fromHex } from '@haneullabs/bcs';
 import { describe, expect, it } from 'vitest';
 
 import { AesGcm256, Hmac256Ctr } from '../../src/dem.js';

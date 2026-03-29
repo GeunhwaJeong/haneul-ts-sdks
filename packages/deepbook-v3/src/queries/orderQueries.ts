@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { Transaction } from '@mysten/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { Order } from '../types/bcs.js';
 import { VecSet } from '../types/bcs.js';

@@ -10,9 +10,9 @@
  */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-const $moduleName = '@mysten/pas::templates';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+const $moduleName = '@haneullabs/pas::templates';
 export const PAS = new MoveStruct({
 	name: `${$moduleName}::PAS`,
 	fields: {
@@ -34,7 +34,7 @@ export interface SetupOptions {
 }
 /** Create the templates registry */
 export function setup(options: SetupOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['namespace'];
 	return (tx: Transaction) =>
@@ -63,7 +63,7 @@ export interface SetTemplateCommandOptions {
 }
 /** Sets the PTB template for a given Action. */
 export function setTemplateCommand(options: SetTemplateCommandOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null, null] satisfies (string | null)[];
 	const parameterNames = ['templates', '_', 'command'];
 	return (tx: Transaction) =>
@@ -87,7 +87,7 @@ export interface UnsetTemplateCommandOptions {
 	typeArguments: [string];
 }
 export function unsetTemplateCommand(options: UnsetTemplateCommandOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null] satisfies (string | null)[];
 	const parameterNames = ['templates', '_'];
 	return (tx: Transaction) =>

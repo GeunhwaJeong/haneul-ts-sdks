@@ -3,7 +3,7 @@ title: Connect Modal
 description: Framework-agnostic web component for wallet selection
 ---
 
-The `<mysten-dapp-kit-connect-modal>` Web Component provides a modal dialog for wallet connection.
+The `<haneullabs-dapp-kit-connect-modal>` Web Component provides a modal dialog for wallet connection.
 While most apps should use the [`Connect Button`](./connect-button) which includes an integrated
 modal, the standalone modal is useful for advanced scenarios requiring custom trigger mechanisms.
 
@@ -25,15 +25,15 @@ instead.
 
 ```html
 <button id="custom-trigger">Open Wallet Selector</button>
-<mysten-dapp-kit-connect-modal></mysten-dapp-kit-connect-modal>
+<haneullabs-dapp-kit-connect-modal></haneullabs-dapp-kit-connect-modal>
 
 <script>
-	import { createDAppKit } from '@mysten/dapp-kit-core';
-	import { SuiGrpcClient } from '@mysten/sui/grpc';
+	import { createDAppKit } from '@haneullabs/dapp-kit-core';
+	import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 	const GRPC_URLS = {
-	    mainnet: 'https://fullnode.mainnet.sui.io:443',
-	    testnet: 'https://fullnode.testnet.sui.io:443',
+	    mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	    testnet: 'https://fullnode.testnet.haneul.io:443',
 	};
 
 	const dAppKit = createDAppKit({
@@ -41,11 +41,11 @@ instead.
 	    networks: ['mainnet', 'testnet'],
 	    defaultNetwork: 'testnet',
 	    createClient(network) {
-	        return new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] });
+	        return new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] });
 	    },
 	});
 
-	const modal = document.querySelector('mysten-dapp-kit-connect-modal');
+	const modal = document.querySelector('haneullabs-dapp-kit-connect-modal');
 	modal!.instance = dAppKit;
 
 	const trigger = document.getElementById('custom-trigger');
@@ -78,7 +78,7 @@ const openModal = () => {
 	<button @click="openModal">Select Wallet</button>
 
 	<!-- Modal component -->
-	<mysten-dapp-kit-connect-modal
+	<haneullabs-dapp-kit-connect-modal
 		ref="modalRef"
 		:instance="dAppKit"
 		:open="isModalOpen"
@@ -107,7 +107,7 @@ DApp Kit React bindings provide a [React wrapper](../react/components/connect-mo
 Opens the modal programmatically:
 
 ```js
-const modal = document.querySelector('mysten-dapp-kit-connect-modal');
+const modal = document.querySelector('haneullabs-dapp-kit-connect-modal');
 await modal?.show();
 ```
 
@@ -116,7 +116,7 @@ await modal?.show();
 Closes the modal with an optional return value:
 
 ```js
-const modal = document.querySelector('mysten-dapp-kit-connect-modal');
+const modal = document.querySelector('haneullabs-dapp-kit-connect-modal');
 await modal?.close('user-cancelled');
 ```
 
@@ -131,7 +131,7 @@ The modal fires several events during its lifecycle:
 - **cancel** - Fired when clicking backdrop or pressing Escape (cancelable)
 
 ```js
-const modal = document.querySelector('mysten-dapp-kit-connect-modal');
+const modal = document.querySelector('haneullabs-dapp-kit-connect-modal');
 
 modal?.addEventListener('open', (event) => {
 	console.log('Modal is about to open');
@@ -157,7 +157,7 @@ modal?.addEventListener('cancel', (event) => {
 ### Programmatic Control
 
 ```js
-const modal = document.querySelector('mysten-dapp-kit-connect-modal');
+const modal = document.querySelector('haneullabs-dapp-kit-connect-modal');
 modal.instance = dAppKit;
 
 // Open modal when user tries to perform an action that requires connection
@@ -176,5 +176,5 @@ async function performAction() {
 
 ## Server-Side Rendering (SSR)
 
-The `<mysten-dapp-kit-connect-modal>` Web Component can be only client-side rendered, as wallets are
+The `<haneullabs-dapp-kit-connect-modal>` Web Component can be only client-side rendered, as wallets are
 detected in the browser. For Next.js guide see [here](../getting-started/next-js).

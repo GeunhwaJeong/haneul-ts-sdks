@@ -9,8 +9,8 @@ import type {
 	Wallet,
 	WalletWithRequiredFeatures,
 	IdentifierRecord,
-} from '@mysten/wallet-standard';
-import { SUI_CHAINS } from '@mysten/wallet-standard';
+} from '@haneullabs/wallet-standard';
+import { HANEUL_CHAINS } from '@haneullabs/wallet-standard';
 import type { Mock } from 'vitest';
 import { vi } from 'vitest';
 import { createMockAccount } from './mock-account.js';
@@ -58,7 +58,7 @@ export class MockWallet implements Wallet {
 		const {
 			id = crypto.randomUUID(),
 			name,
-			chains = SUI_CHAINS,
+			chains = HANEUL_CHAINS,
 			accounts = [createMockAccount()],
 			skippedFeatures = [],
 			addedFeatures = {},
@@ -108,11 +108,11 @@ export class MockWallet implements Wallet {
 				version: '1.0.0',
 				on: this.#on,
 			},
-			'sui:signTransaction': {
+			'haneul:signTransaction': {
 				version: '2.0.0',
 				signTransaction: this.mocks.signTransaction,
 			},
-			'sui:signTransactionBlock': {
+			'haneul:signTransactionBlock': {
 				version: '1.0.0',
 				signTransactionBlock: this.mocks.signTransactionBlock,
 			},

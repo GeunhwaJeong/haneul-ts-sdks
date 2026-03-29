@@ -1,4 +1,4 @@
-import { useCurrentAccount } from "@mysten/dapp-kit-react";
+import { useCurrentAccount } from "@haneullabs/dapp-kit-react";
 import { OwnedObjects } from "./OwnedObjects";
 import {
   Card,
@@ -36,7 +36,7 @@ export function WalletStatus() {
             </div>
           ) : (
             <p className="text-muted-foreground">
-              Click the connect button above to link your Sui wallet.
+              Click the connect button above to link your Haneul wallet.
             </p>
           )}
         </CardContent>

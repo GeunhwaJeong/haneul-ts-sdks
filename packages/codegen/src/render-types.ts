@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import type {
 	Datatype,
@@ -11,9 +11,9 @@ import type {
 	TypeParameter,
 } from './types/summary.js';
 
-export const MOVE_STDLIB_ADDRESS = normalizeSuiAddress('0x1');
-export const SUI_FRAMEWORK_ADDRESS = normalizeSuiAddress('0x2');
-export const SUI_SYSTEM_ADDRESS = normalizeSuiAddress('0x3');
+export const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress('0x1');
+export const HANEUL_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
+export const HANEUL_SYSTEM_ADDRESS = normalizeHaneulAddress('0x3');
 
 type TypeSignatureFormat = 'typescriptArg' | 'bcs' | 'typeTag';
 interface RenderTypeSignatureOptions {
@@ -237,7 +237,7 @@ function isPureDataType(type: Datatype, options: RenderTypeSignatureOptions) {
 		}
 	}
 
-	if (address === SUI_FRAMEWORK_ADDRESS) {
+	if (address === HANEUL_FRAMEWORK_ADDRESS) {
 		if (type.module.name === 'object' && (type.name === 'ID' || type.name === 'UID')) {
 			return true;
 		}
@@ -250,7 +250,7 @@ function renderDataType(type: Datatype, options: RenderTypeSignatureOptions): st
 	const address = options.resolveAddress(type.module.address);
 
 	if (options.format === 'typeTag') {
-		if (address === SUI_FRAMEWORK_ADDRESS) {
+		if (address === HANEUL_FRAMEWORK_ADDRESS) {
 			if (type.module.name === 'clock' && type.name === 'Clock') return '0x2::clock::Clock';
 			if (type.module.name === 'random' && type.name === 'Random') return '0x2::random::Random';
 			if (type.module.name === 'deny_list' && type.name === 'DenyList')
@@ -258,9 +258,9 @@ function renderDataType(type: Datatype, options: RenderTypeSignatureOptions): st
 			if (type.module.name === 'object' && (type.name === 'ID' || type.name === 'UID'))
 				return '0x2::object::ID';
 		}
-		if (address === SUI_SYSTEM_ADDRESS) {
-			if (type.module.name === 'sui_system' && type.name === 'SuiSystemState')
-				return '0x3::sui_system::SuiSystemState';
+		if (address === HANEUL_SYSTEM_ADDRESS) {
+			if (type.module.name === 'haneul_system' && type.name === 'HaneulSystemState')
+				return '0x3::haneul_system::HaneulSystemState';
 		}
 
 		if (address === MOVE_STDLIB_ADDRESS) {
@@ -306,7 +306,7 @@ function renderDataType(type: Datatype, options: RenderTypeSignatureOptions): st
 		}
 	}
 
-	if (address === SUI_FRAMEWORK_ADDRESS) {
+	if (address === HANEUL_FRAMEWORK_ADDRESS) {
 		if (type.module.name === 'object' && (type.name === 'ID' || type.name === 'UID')) {
 			switch (options.format) {
 				case 'typescriptArg':

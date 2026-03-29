@@ -16,7 +16,7 @@
 /// - Implement a custom requirement on the creator side an link the logic.
 ///
 module kiosk::witness_rule {
-    use sui::transfer_policy::{
+    use haneul::transfer_policy::{
         Self as policy,
         TransferPolicy,
         TransferPolicyCap,

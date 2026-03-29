@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable */
 
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const _demoFunction = () => {
 	const transaction = new Transaction();
@@ -15,7 +15,7 @@ const _demoFunction = () => {
 			// eslint-disable-next-line prettier/prettier
 			'@mvr/app::type::Type<@kiosk/core::kiosk::Kiosk, bool>',
 			// eslint-disable-next-line prettier/prettier
-			'app.sui/app::t::T',
+			'app.haneul/app::t::T',
 			'@pkg/qwer::mvr_b::V2',
 		],
 	});

@@ -1,6 +1,6 @@
 {
 	"root": true,
 	"title": "TypeScript Codegen",
-	"description": "Generate type-safe TypeScript code from Sui Move packages",
+	"description": "Generate type-safe TypeScript code from Haneul Move packages",
 	"pages": ["index"]
 }

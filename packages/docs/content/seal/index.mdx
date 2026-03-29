@@ -1,32 +1,32 @@
 ---
 title: Seal SDK
-description: Decentralized secrets management with threshold encryption on Sui
+description: Decentralized secrets management with threshold encryption on Haneul
 ---
 
 <Callout type="info">
-	This is a beta version of Seal. See https://github.com/MystenLabs/seal for more details.
+	This is a beta version of Seal. See https://github.com/GeunhwaJeong/seal for more details.
 </Callout>
 
-The Seal SDK provides threshold encryption capabilities for Sui applications, enabling secure data
+The Seal SDK provides threshold encryption capabilities for Haneul applications, enabling secure data
 encryption with configurable key servers.
 
 ## Installation
 
 ```bash npm2yarn
-npm install --save @mysten/seal @mysten/sui
+npm install --save @haneullabs/seal @haneullabs/haneul
 ```
 
 ## Setup
 
-To use the Seal SDK, create a Sui client and extend it with the Seal extension:
+To use the Seal SDK, create a Haneul client and extend it with the Seal extension:
 
 ```ts
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { seal } from '@mysten/seal';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { seal } from '@haneullabs/seal';
 
-const client = new SuiGrpcClient({
+const client = new HaneulGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 }).$extend(
 	seal({
 		serverConfigs: [
@@ -63,7 +63,7 @@ const { encryptedObject } = await client.seal.encrypt({
 ### Decrypting Data
 
 ```ts
-import { SessionKey } from '@mysten/seal';
+import { SessionKey } from '@haneullabs/seal';
 
 // Create a session key for decryption
 const sessionKey = await SessionKey.create({
@@ -71,7 +71,7 @@ const sessionKey = await SessionKey.create({
 	packageId: '0x...your-package-id',
 	ttlMin: 10, // Time-to-live in minutes
 	signer: keypair,
-	suiClient: client,
+	haneulClient: client,
 });
 
 // Build transaction bytes that call seal_approve
@@ -88,4 +88,4 @@ const decryptedData = await client.seal.decrypt({
 ## Resources
 
 For detailed documentation on threshold encryption and key server setup, see the
-[Seal repository](https://github.com/MystenLabs/seal).
+[Seal repository](https://github.com/GeunhwaJeong/seal).

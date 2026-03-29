@@ -10,7 +10,7 @@ const SUMMARIES_DIR = join(__dirname, 'move/testpkg/package_summaries');
 
 const ADDRESS_MAPPINGS = {
 	std: '0x0000000000000000000000000000000000000000000000000000000000000001',
-	sui: '0x0000000000000000000000000000000000000000000000000000000000000002',
+	haneul: '0x0000000000000000000000000000000000000000000000000000000000000002',
 	testpkg: '0x0000000000000000000000000000000000000000000000000000000000000000',
 };
 
@@ -587,8 +587,8 @@ describe('name collision handling', () => {
 		id: { address: 'testpkg', name: 'transaction_module' },
 		doc: '',
 		immediate_dependencies: [
-			{ address: 'sui', name: 'object' },
-			{ address: 'sui', name: 'tx_context' },
+			{ address: 'haneul', name: 'object' },
+			{ address: 'haneul', name: 'tx_context' },
 		],
 		attributes: [],
 		functions: {
@@ -610,7 +610,7 @@ describe('name collision handling', () => {
 								true,
 								{
 									Datatype: {
-										module: { address: 'sui', name: 'tx_context' },
+										module: { address: 'haneul', name: 'tx_context' },
 										name: 'TxContext',
 										type_arguments: [],
 									},
@@ -665,7 +665,7 @@ describe('name collision handling', () => {
 							doc: null,
 							type_: {
 								Datatype: {
-									module: { address: 'sui', name: 'object' },
+									module: { address: 'haneul', name: 'object' },
 									name: 'UID',
 									type_arguments: [],
 								},

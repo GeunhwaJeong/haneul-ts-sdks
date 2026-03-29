@@ -8,24 +8,24 @@ description: Advanced Kiosk SDK usage patterns and examples
 For these examples, assume you have the following data and functions available:
 
 ```typescript
-import { kiosk, KioskTransaction } from '@mysten/kiosk';
-import { SuiJsonRpcClient, getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+import { kiosk, KioskTransaction } from '@haneullabs/kiosk';
+import { HaneulJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 
 // a constant for bullshark's type.
-const bullsharkType = `${packageId}::suifrens::SuiFren<${packageId}::bullshark::Bullshark>`;
+const bullsharkType = `${packageId}::haneulfrens::HaneulFren<${packageId}::bullshark::Bullshark>`;
 // a constant for capy's type.
-const capyType = `${packageId}::suifrens::SuiFren<${packageId}::capy::Capy>`;
+const capyType = `${packageId}::haneulfrens::HaneulFren<${packageId}::capy::Capy>`;
 
 // initialize the client with the kiosk extension.
-const client = new SuiJsonRpcClient({
+const client = new HaneulJsonRpcClient({
 	url: getJsonRpcFullnodeUrl('mainnet'),
 	network: 'mainnet',
 }).$extend(kiosk());
 ```
 
-## Minting a SuiFren
+## Minting a HaneulFren
 
-This example demonstrates how to mint a SuiFren.
+This example demonstrates how to mint a HaneulFren.
 
 ```typescript
 async function mintFren(address: string) {
@@ -42,7 +42,7 @@ async function mintFren(address: string) {
 
 	// Let's mint a capy here into the kiosk (either a new or an existing one).
 	tx.moveCall({
-		target: `${packageId}::suifrens::mint_app::mint`,
+		target: `${packageId}::haneulfrens::mint_app::mint`,
 		arguments: [kioskTx.getKiosk(), kioskTx.getKioskCap()],
 		typeArguments: [capyType],
 	});
@@ -57,7 +57,7 @@ async function mintFren(address: string) {
 }
 ```
 
-## Mixing two Suifrens
+## Mixing two Haneulfrens
 
 This example demonstrates how to use the Kiosk SDK to mix two `bullsharks`.
 

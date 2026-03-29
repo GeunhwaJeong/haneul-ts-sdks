@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, it, expect } from 'vitest';
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { analyze } from '../../src/transaction-analyzer/analyzer.js';
 import { moveFunctions } from '../../src/transaction-analyzer/rules/functions.js';
-import { MockSuiClient } from '../mocks/MockSuiClient.js';
+import { MockHaneulClient } from '../mocks/MockHaneulClient.js';
 import {
 	DEFAULT_SENDER,
 	TEST_COIN_1_ID,
@@ -17,7 +17,7 @@ import {
 
 describe('TransactionAnalyzer - Functions Rule', () => {
 	it('should analyze all Move functions in a single transaction', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 
 		// Add additional Move functions to test various scenarios
 		client.addMoveFunction({

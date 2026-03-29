@@ -1,5 +1,5 @@
-import { Transaction } from "@mysten/sui/transactions";
-import { useCurrentClient, useDAppKit } from "@mysten/dapp-kit-react";
+import { Transaction } from "@haneullabs/haneul/transactions";
+import { useCurrentClient, useDAppKit } from "@haneullabs/dapp-kit-react";
 import { useState } from "react";
 import { create as createCounter } from "./contracts/counter/counter";
 import { Button } from "./components/ui/button";
@@ -78,7 +78,7 @@ export function CreateCounter({
           Create Counter
         </CardTitle>
         <CardDescription>
-          Deploy a new counter object on the Sui blockchain.
+          Deploy a new counter object on the Haneul blockchain.
         </CardDescription>
       </CardHeader>
       <CardContent>

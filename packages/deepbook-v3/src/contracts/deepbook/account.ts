@@ -5,9 +5,9 @@
 /** Account module manages the account data for each user. */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as vec_set from './deps/sui/vec_set.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as vec_set from './deps/haneul/vec_set.js';
 import * as balances from './balances.js';
 const $moduleName = '@deepbook/core::account';
 export const Account = new MoveStruct({

@@ -10,25 +10,25 @@ import {
 	BcsStruct,
 	BcsEnum,
 	BcsTuple,
-} from '@mysten/sui/bcs';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
-import { TransactionArgument, isArgument } from '@mysten/sui/transactions';
-import { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
+} from '@haneullabs/haneul/bcs';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
+import { TransactionArgument, isArgument } from '@haneullabs/haneul/transactions';
+import { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
 
-const MOVE_STDLIB_ADDRESS = normalizeSuiAddress('0x1');
-const SUI_FRAMEWORK_ADDRESS = normalizeSuiAddress('0x2');
+const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress('0x1');
+const HANEUL_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
 
 export type RawTransactionArgument<T> = T | TransactionArgument;
 
 export interface GetOptions<
-	Include extends Omit<SuiClientTypes.ObjectInclude, 'content'> = {},
-> extends SuiClientTypes.GetObjectOptions<Include> {
+	Include extends Omit<HaneulClientTypes.ObjectInclude, 'content'> = {},
+> extends HaneulClientTypes.GetObjectOptions<Include> {
 	client: ClientWithCoreApi;
 }
 
 export interface GetManyOptions<
-	Include extends Omit<SuiClientTypes.ObjectInclude, 'content'> = {},
-> extends SuiClientTypes.GetObjectsOptions<Include> {
+	Include extends Omit<HaneulClientTypes.ObjectInclude, 'content'> = {},
+> extends HaneulClientTypes.GetObjectsOptions<Include> {
 	client: ClientWithCoreApi;
 }
 
@@ -56,7 +56,7 @@ export function getPureBcsSchema(typeTag: string | TypeTag): BcsType<any> | null
 		return type ? bcs.vector(type) : null;
 	} else if ('struct' in parsedTag) {
 		const structTag = parsedTag.struct;
-		const pkg = normalizeSuiAddress(structTag.address);
+		const pkg = normalizeHaneulAddress(structTag.address);
 
 		if (pkg === MOVE_STDLIB_ADDRESS) {
 			if (
@@ -73,7 +73,7 @@ export function getPureBcsSchema(typeTag: string | TypeTag): BcsType<any> | null
 		}
 
 		if (
-			pkg === SUI_FRAMEWORK_ADDRESS &&
+			pkg === HANEUL_FRAMEWORK_ADDRESS &&
 			structTag.module === 'object' &&
 			(structTag.name === 'ID' || structTag.name === 'UID')
 		) {
@@ -115,7 +115,7 @@ export function normalizeMoveArguments(
 			continue;
 		}
 
-		if (argType === '0x3::sui_system::SuiSystemState') {
+		if (argType === '0x3::haneul_system::HaneulSystemState') {
 			normalizedArgs.push((tx) => tx.object.system());
 			continue;
 		}
@@ -169,11 +169,11 @@ export class MoveStruct<
 	T extends Record<string, BcsType<any>>,
 	const Name extends string = string,
 > extends BcsStruct<T, Name> {
-	async get<Include extends Omit<SuiClientTypes.ObjectInclude, 'content' | 'json'> = {}>({
+	async get<Include extends Omit<HaneulClientTypes.ObjectInclude, 'content' | 'json'> = {}>({
 		objectId,
 		...options
 	}: GetOptions<Include>): Promise<
-		SuiClientTypes.Object<Include & { content: true, json: true }> & { json: BcsStruct<T>['$inferType'] }
+		HaneulClientTypes.Object<Include & { content: true, json: true }> & { json: BcsStruct<T>['$inferType'] }
 	> {
 		const [res] = await this.getMany<Include>({
 			...options,
@@ -183,11 +183,11 @@ export class MoveStruct<
 		return res;
 	}
 
-	async getMany<Include extends Omit<SuiClientTypes.ObjectInclude, 'content' | 'json'> = {}>({
+	async getMany<Include extends Omit<HaneulClientTypes.ObjectInclude, 'content' | 'json'> = {}>({
 		client,
 		...options
 	}: GetManyOptions<Include>): Promise<
-		Array<SuiClientTypes.Object<Include & { content: true, json: true }> & { json: BcsStruct<T>['$inferType'] }>
+		Array<HaneulClientTypes.Object<Include & { content: true, json: true }> & { json: BcsStruct<T>['$inferType'] }>
 	> {
 		const response = (await client.core.getObjects({
 			...options,
@@ -195,7 +195,7 @@ export class MoveStruct<
 				...options.include,
 				content: true,
 			},
-		})) as SuiClientTypes.GetObjectsResponse<Include & { content: true }>;
+		})) as HaneulClientTypes.GetObjectsResponse<Include & { content: true }>;
 
 		return response.objects.map((obj) => {
 			if (obj instanceof Error) {

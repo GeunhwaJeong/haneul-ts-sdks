@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Wallet, WalletWithFeatures } from '@mysten/wallet-standard';
+import type { Wallet, WalletWithFeatures } from '@haneullabs/wallet-standard';
 import type { UiWallet } from '@wallet-standard/ui';
 import { getWalletFeature } from '@wallet-standard/ui';
 import type { EnokiWallet } from './wallet.js';

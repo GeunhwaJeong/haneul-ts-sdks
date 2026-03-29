@@ -1,0 +1,46 @@
+---
+title: '@haneullabs/haneulns'
+description: Migrate @haneullabs/haneulns to 2.0
+---
+
+This package now exports a client extension that integrates with Haneul clients.
+
+```diff
+- import { HaneulClient, getFullnodeUrl } from '@haneullabs/haneul/client';
+- import { HaneulnsClient } from '@haneullabs/haneulns';
++ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc'; // or HaneulJsonRpcClient, HaneulGraphQLClient
++ import { haneulns } from '@haneullabs/haneulns';
+
+- const haneulClient = new HaneulClient({ url: getFullnodeUrl('mainnet') });
+- const haneulnsClient = new HaneulnsClient({
+-   client: haneulClient,
+-   network: 'mainnet',
+- });
++ const client = new HaneulGrpcClient({
++   baseUrl: 'https://fullnode.mainnet.haneul.io:443',
++   network: 'mainnet',
++ }).$extend(haneulns());
+
+- const nameRecord = await haneulnsClient.getNameRecord('example.haneul');
++ const nameRecord = await client.haneulns.getNameRecord('example.haneul');
+```
+
+## Custom Package IDs
+
+For custom deployments or networks other than mainnet/testnet, you can provide custom package info:
+
+```ts
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { haneulns, type PackageInfo } from '@haneullabs/haneulns';
+
+const customPackageInfo: PackageInfo = {
+	packageId: '0x...',
+	packageIdV1: '0x...',
+	// ... other required fields
+};
+
+const client = new HaneulGrpcClient({
+	baseUrl: 'http://localhost:9000',
+	network: 'localnet',
+}).$extend(haneulns({ packageInfo: customPackageInfo }));
+```

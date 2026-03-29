@@ -1,25 +1,25 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import type { Keypair } from '@mysten/sui/cryptography';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import type { TransactionObjectArgument } from '@mysten/sui/transactions';
-import { Transaction } from '@mysten/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { Keypair } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import type { TransactionObjectArgument } from '@haneullabs/haneul/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import {
 	fromBase64,
 	normalizeStructTag,
-	normalizeSuiAddress,
+	normalizeHaneulAddress,
 	parseStructTag,
 	toBase64,
-} from '@mysten/sui/utils';
+} from '@haneullabs/haneul/utils';
 
 import type { ZkSendLinkBuilderOptions } from './builder.js';
 import { ZkSendLinkBuilder } from './builder.js';
 import type { LinkAssets } from './utils.js';
 import type { ZkBagContractOptions } from './zk-bag.js';
 import { getContractIds, ZkBag, ZkBagStruct } from './zk-bag.js';
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
 
 export const CoinStruct = bcs.struct('Coin', {
 	id: bcs.Address,
@@ -59,7 +59,7 @@ export class ZkSendLink {
 	assets?: LinkAssets;
 	claimed?: boolean;
 	claimedBy?: string;
-	bagObject?: SuiClientTypes.GetDynamicFieldResponse['dynamicField'] | null;
+	bagObject?: HaneulClientTypes.GetDynamicFieldResponse['dynamicField'] | null;
 
 	#client: ClientWithCoreApi;
 	#contract: ZkBag<ZkBagContractOptions>;
@@ -85,7 +85,7 @@ export class ZkSendLink {
 
 		this.#client = client;
 		this.keypair = keypair;
-		this.address = address ?? keypair!.toSuiAddress();
+		this.address = address ?? keypair!.toHaneulAddress();
 		this.#claimApi = claimApi;
 		this.#network = network;
 		this.#host = host;
@@ -139,7 +139,7 @@ export class ZkSendLink {
 
 	async loadAssets(
 		options: {
-			transaction?: SuiClientTypes.TransactionResult;
+			transaction?: HaneulClientTypes.TransactionResult;
 			loadAssets?: boolean;
 			loadClaimedAssets?: boolean;
 		} = {},
@@ -182,7 +182,7 @@ export class ZkSendLink {
 		const sponsored = await this.#createSponsoredTransaction(
 			tx,
 			address,
-			reclaim ? address : this.keypair!.toSuiAddress(),
+			reclaim ? address : this.keypair!.toHaneulAddress(),
 		);
 
 		const bytes = fromBase64(sponsored.bytes);
@@ -221,7 +221,7 @@ export class ZkSendLink {
 		}
 
 		const tx = new Transaction();
-		const sender = reclaim ? address : this.keypair!.toSuiAddress();
+		const sender = reclaim ? address : this.keypair!.toHaneulAddress();
 		tx.setSender(sender);
 
 		const store = tx.object(this.#contract.ids.bagStoreId);
@@ -291,7 +291,7 @@ export class ZkSendLink {
 			keypair: newLinkKp,
 		});
 
-		const to = tx.pure.address(newLinkKp.toSuiAddress());
+		const to = tx.pure.address(newLinkKp.toHaneulAddress());
 
 		tx.add(this.#contract.update_receiver({ arguments: [store, this.address, to] }));
 
@@ -377,7 +377,7 @@ export class ZkSendLink {
 			const type = parseStructTag(normalizeStructTag(object.type));
 
 			if (
-				type.address === normalizeSuiAddress('0x2') &&
+				type.address === normalizeHaneulAddress('0x2') &&
 				type.module === 'coin' &&
 				type.name === 'Coin'
 			) {

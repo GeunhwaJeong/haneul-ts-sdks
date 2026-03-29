@@ -31,7 +31,7 @@ import { signTransactionCreator } from './actions/sign-transaction.js';
 import { slushWebWalletInitializer } from '../wallets/slush-web.js';
 import { registerAdditionalWallets } from '../wallets/index.js';
 import { unsafeBurnerWalletInitializer } from '../wallets/unsafe-burner.js';
-import type { SignedPersonalMessage, SignedTransaction } from '@mysten/wallet-standard';
+import type { SignedPersonalMessage, SignedTransaction } from '@haneullabs/wallet-standard';
 import type { UiWalletAccount } from '@wallet-standard/ui';
 
 export type DAppKit<

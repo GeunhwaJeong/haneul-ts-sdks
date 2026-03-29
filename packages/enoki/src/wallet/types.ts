@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { StandardEventsListeners, Wallet } from '@mysten/wallet-standard';
+import type { StandardEventsListeners, Wallet } from '@haneullabs/wallet-standard';
 
 import type { EnokiClientConfig } from '../EnokiClient/index.js';
 import type { AuthProvider, EnokiNetwork } from '../EnokiClient/type.js';
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
-import type { ZkLoginSignatureInputs } from '@mysten/sui/zklogin';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
+import type { ZkLoginSignatureInputs } from '@haneullabs/haneul/zklogin';
 import type { UseStore } from 'idb-keyval';
 import type { WritableAtom } from 'nanostores';
 
@@ -42,7 +42,7 @@ type ClientConfig = {
 	/**
 	 * A function that returns the current network that the application is acting on.
 	 */
-	getCurrentNetwork: () => SuiClientTypes.Network;
+	getCurrentNetwork: () => HaneulClientTypes.Network;
 };
 
 export type EnokiWalletOptions = {
@@ -88,7 +88,7 @@ export type RegisterEnokiWalletsOptions = {
 		| ClientConfig
 		| {
 				/**
-				 * The Sui Client instance to use when building and executing transactions.
+				 * The Haneul Client instance to use when building and executing transactions.
 				 */
 				client: ClientWithCoreApi;
 

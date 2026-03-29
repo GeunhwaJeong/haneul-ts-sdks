@@ -7,18 +7,18 @@ import { createMockAccount } from '../../mocks/mock-account.js';
 import type { MockWalletOptions } from '../../mocks/mock-wallet.js';
 import {
 	StandardConnect,
-	SuiSignTransaction,
-	SuiSignTransactionBlock,
-} from '@mysten/wallet-standard';
+	HaneulSignTransaction,
+	HaneulSignTransactionBlock,
+} from '@haneullabs/wallet-standard';
 import { excludeUiWalletsByName } from '../../test-utils.js';
 
 describe('[Unit] $compatibleWallets', () => {
-	test('Regular Sui wallets are compatible', () => {
+	test('Regular Haneul wallets are compatible', () => {
 		const { stores, uiWallets } = setDefaultUnitTestEnvWithUnmockedStores({
 			additionalWallets: [
 				{
 					name: 'Additional Mock Wallet 1',
-					accounts: [createMockAccount({ chains: ['sui:testnet', 'sui:localnet'] })],
+					accounts: [createMockAccount({ chains: ['haneul:testnet', 'haneul:localnet'] })],
 				},
 			],
 		});
@@ -66,8 +66,8 @@ describe('[Unit] $compatibleWallets', () => {
 	test('Wallet with all signing features missing is not compatible', () => {
 		const additionalWallet = {
 			name: 'Additional Mock Wallet 1',
-			accounts: [createMockAccount({ chains: ['sui:testnet', 'sui:localnet'] })],
-			skippedFeatures: [SuiSignTransaction, SuiSignTransactionBlock],
+			accounts: [createMockAccount({ chains: ['haneul:testnet', 'haneul:localnet'] })],
+			skippedFeatures: [HaneulSignTransaction, HaneulSignTransactionBlock],
 		} satisfies MockWalletOptions;
 
 		const { stores, uiWallets } = setDefaultUnitTestEnvWithUnmockedStores({

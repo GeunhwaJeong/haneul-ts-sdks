@@ -26,7 +26,7 @@ export function useAutoConnectWallet(): 'disabled' | 'idle' | 'attempted' {
 
 	const { data, isError } = useQuery({
 		queryKey: [
-			'@mysten/dapp-kit',
+			'@haneullabs/dapp-kit',
 			'autoconnect',
 			{
 				isConnected,

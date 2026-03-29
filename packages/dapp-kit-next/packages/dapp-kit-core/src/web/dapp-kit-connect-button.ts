@@ -14,11 +14,11 @@ import { ConnectedAccountMenu } from './internal/connected-account-menu.js';
 import type { AccountSelectedEvent } from './internal/connected-account-menu-item.js';
 
 /**
- * A button component for connecting to a Sui wallet.
+ * A button component for connecting to a Haneul wallet.
  *
  * Displays a "Connect Wallet" button when no wallet is connected or a connected account menu when a wallet is active.
  *
- * @element mysten-dapp-kit-connect-button
+ * @element haneullabs-dapp-kit-connect-button
  *
  * @prop {DAppKitConnectModalOptions} modalOptions - Options to configure the connect modal.
  * @prop {RegisteredDAppKit} instance - The dApp Kit instance used for state management.
@@ -46,11 +46,11 @@ import type { AccountSelectedEvent } from './internal/connected-account-menu-ite
  *
  * @csspart trigger - The underlying button element. Use `::part(trigger)` to customize sizing, padding, border-radius, etc.
  */
-@customElement('mysten-dapp-kit-connect-button')
+@customElement('haneullabs-dapp-kit-connect-button')
 export class DAppKitConnectButton extends ScopedRegistryHost(LitElement) {
 	static elementDefinitions = {
 		'internal-button': Button,
-		'mysten-dapp-kit-connect-modal': DAppKitConnectModal,
+		'haneullabs-dapp-kit-connect-modal': DAppKitConnectModal,
 		'connected-account-menu': ConnectedAccountMenu,
 	};
 
@@ -73,7 +73,7 @@ export class DAppKitConnectButton extends ScopedRegistryHost(LitElement) {
 	@storeProperty()
 	instance!: DefaultExpectedDppKit;
 
-	@query('mysten-dapp-kit-connect-modal')
+	@query('haneullabs-dapp-kit-connect-modal')
 	private readonly _modal!: DAppKitConnectModal;
 
 	override render() {
@@ -98,11 +98,11 @@ export class DAppKitConnectButton extends ScopedRegistryHost(LitElement) {
 			: html`<internal-button exportparts="trigger" @click=${this.#openModal}>
 						<slot>Connect Wallet</slot>
 					</internal-button>
-					<mysten-dapp-kit-connect-modal
+					<haneullabs-dapp-kit-connect-modal
 						.instance=${this.instance}
 						.filterFn=${this.modalOptions?.filterFn}
 						.sortFn=${this.modalOptions?.sortFn}
-					></mysten-dapp-kit-connect-modal>`;
+					></haneullabs-dapp-kit-connect-modal>`;
 	}
 
 	#openModal() {
@@ -112,6 +112,6 @@ export class DAppKitConnectButton extends ScopedRegistryHost(LitElement) {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'mysten-dapp-kit-connect-button': DAppKitConnectButton;
+		'haneullabs-dapp-kit-connect-button': DAppKitConnectButton;
 	}
 }

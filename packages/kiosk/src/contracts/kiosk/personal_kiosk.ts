@@ -8,9 +8,9 @@
  */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as kiosk from './deps/sui/kiosk.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as kiosk from './deps/haneul/kiosk.js';
 const $moduleName = '@local-pkg/kiosk::personal_kiosk';
 export const PersonalKioskCap = new MoveStruct({
 	name: `${$moduleName}::PersonalKioskCap`,

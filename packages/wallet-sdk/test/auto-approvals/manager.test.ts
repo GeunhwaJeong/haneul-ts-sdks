@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, test, expect } from 'vitest';
-import { Transaction } from '@mysten/sui/transactions';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import {
 	analyze,
 	autoApprovalAnalyzer,
@@ -11,8 +11,8 @@ import {
 	AutoApprovalPolicy,
 	operationType,
 } from '../../src/index.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { MIST_PER_SUI } from '@mysten/sui/utils';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { GEUNHWA_PER_HANEUL } from '@haneullabs/haneul/utils';
 
 const policy: AutoApprovalPolicy = {
 	schemaVersion: '1.0.0',
@@ -29,9 +29,9 @@ const policy: AutoApprovalPolicy = {
 describe('AutoApprovalManager', () => {
 	test.skip('placeholder example', async () => {
 		const keypair = new Ed25519Keypair();
-		const client = new SuiGrpcClient({
+		const client = new HaneulGrpcClient({
 			network: 'testnet',
-			baseUrl: 'https://fullnode.testnet.sui.io:443',
+			baseUrl: 'https://fullnode.testnet.haneul.io:443',
 		});
 
 		const tx = new Transaction();
@@ -67,7 +67,7 @@ describe('AutoApprovalManager', () => {
 			remainingTransactions: 10,
 			usdBudget: 10,
 			coinBudgets: {
-				'sui:0x2::sui::SUI': String(10n * MIST_PER_SUI),
+				'haneul:0x2::haneul::HANEUL': String(10n * GEUNHWA_PER_HANEUL),
 			},
 			sharedBudget: null,
 		});

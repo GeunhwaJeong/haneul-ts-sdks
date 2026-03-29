@@ -1,0 +1,9 @@
+[package]
+name = "serializer"
+edition = "2024.beta"
+
+[dependencies]
+Haneul = { git = "https://github.com/GeunhwaJeong/haneul.git", subdir = "crates/haneul-framework/packages/haneul-framework", rev = "framework/testnet" }
+
+[addresses]
+serializer = "0x0"

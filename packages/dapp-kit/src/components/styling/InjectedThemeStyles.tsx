@@ -19,7 +19,7 @@ export function InjectedThemeStyles({ theme }: InjectedThemeStylesProps) {
 	return (
 		<style
 			precedence="default"
-			href="mysten-dapp-kit-theme"
+			href="haneullabs-dapp-kit-theme"
 			dangerouslySetInnerHTML={{
 				__html: themeStyles,
 			}}

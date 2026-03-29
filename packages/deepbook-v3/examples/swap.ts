@@ -7,7 +7,7 @@
  * - Swap exact quote for base (buy)
  *
  * Usage:
- *   PRIVATE_KEY=suiprivkey1... npx tsx examples/swap.ts
+ *   PRIVATE_KEY=haneulprivkey1... npx tsx examples/swap.ts
  */
 
 import { execSync } from 'child_process';
@@ -15,29 +15,29 @@ import { readFileSync } from 'fs';
 import { homedir } from 'os';
 import path from 'path';
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { decodeSuiPrivateKey } from '@mysten/sui/cryptography';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { fromBase64 } from '@mysten/sui/utils';
-import { Transaction } from '@mysten/sui/transactions';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { decodeHaneulPrivateKey } from '@haneullabs/haneul/cryptography';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { fromBase64 } from '@haneullabs/haneul/utils';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { deepbook } from '../src/index.js';
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.HANEUL_BINARY ?? `haneul`;
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 type Network = 'mainnet' | 'testnet';
 
 const getActiveAddress = () => {
-	return execSync(`${SUI} client active-address`, { encoding: 'utf8' }).trim();
+	return execSync(`${HANEUL} client active-address`, { encoding: 'utf8' }).trim();
 };
 
 const getActiveNetwork = (): Network => {
-	const env = execSync(`${SUI} client active-env`, { encoding: 'utf8' }).trim();
+	const env = execSync(`${HANEUL} client active-env`, { encoding: 'utf8' }).trim();
 	if (env !== 'mainnet' && env !== 'testnet') {
 		throw new Error(`Unsupported network: ${env}. Only 'mainnet' and 'testnet' are supported.`);
 	}
@@ -46,21 +46,21 @@ const getActiveNetwork = (): Network => {
 
 const getSigner = () => {
 	if (process.env.PRIVATE_KEY) {
-		const { scheme, secretKey } = decodeSuiPrivateKey(process.env.PRIVATE_KEY);
+		const { scheme, secretKey } = decodeHaneulPrivateKey(process.env.PRIVATE_KEY);
 		if (scheme === 'ED25519') return Ed25519Keypair.fromSecretKey(secretKey);
 		throw new Error(`Unsupported scheme: ${scheme}`);
 	}
 
 	const sender = getActiveAddress();
 	const keystore = JSON.parse(
-		readFileSync(path.join(homedir(), '.sui', 'sui_config', 'sui.keystore'), 'utf8'),
+		readFileSync(path.join(homedir(), '.haneul', 'haneul_config', 'haneul.keystore'), 'utf8'),
 	);
 
 	for (const priv of keystore) {
 		const raw = fromBase64(priv);
 		if (raw[0] !== 0) continue;
 		const pair = Ed25519Keypair.fromSecretKey(raw.slice(1));
-		if (pair.getPublicKey().toSuiAddress() === sender) return pair;
+		if (pair.getPublicKey().toHaneulAddress() === sender) return pair;
 	}
 
 	throw new Error(`keypair not found for sender: ${sender}`);
@@ -69,7 +69,7 @@ const getSigner = () => {
 (async () => {
 	const network = getActiveNetwork();
 	const signer = getSigner();
-	const address = signer.getPublicKey().toSuiAddress();
+	const address = signer.getPublicKey().toHaneulAddress();
 
 	console.log(`Using address: ${address}`);
 	console.log(`Network: ${network}\n`);
@@ -81,14 +81,14 @@ const getSigner = () => {
 		},
 	};
 
-	const client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+	const client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 		deepbook({
 			address,
 			balanceManagers,
 		}),
 	);
 
-	const poolKey = network === 'mainnet' ? 'SUI_USDC' : 'SUI_DBUSDC';
+	const poolKey = network === 'mainnet' ? 'HANEUL_USDC' : 'HANEUL_DBUSDC';
 
 	// First, check what we'd get for swapping
 	console.log('--- Swap Quotes ---');
@@ -98,14 +98,14 @@ const getSigner = () => {
 	const baseOut = await client.deepbook.getBaseQuantityOut(poolKey, 10);
 	console.log(`Buying with 10 quote -> base out:`, baseOut);
 
-	// Example: Swap exact base for quote (sell SUI for USDC)
+	// Example: Swap exact base for quote (sell HANEUL for USDC)
 	const tx = new Transaction();
 
 	// swapExactBaseForQuote: sell exact amount of base asset
 	const [baseOutCoin, quoteOutCoin, deepOutCoin] = tx.add(
 		client.deepbook.deepBook.swapExactBaseForQuote({
 			poolKey,
-			amount: 0.1, // sell 0.1 SUI
+			amount: 0.1, // sell 0.1 HANEUL
 			deepAmount: 0, // DEEP fee amount (0 if not paying with DEEP)
 			minOut: 0, // minimum quote out (set to 0 for no slippage protection)
 		}),

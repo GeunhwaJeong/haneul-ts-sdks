@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromBase64 } from '@mysten/bcs';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+import { fromBase64 } from '@haneullabs/bcs';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { bcs } from '@mysten/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 
 import { GeneralError, InvalidClientOptionsError } from '../../src/error.js';
 import {
@@ -16,16 +16,16 @@ import {
 } from '../../src/key-server.js';
 import { Version } from '../../src/utils.js';
 
-// Data for mock response from SuiGrpcClient
+// Data for mock response from HaneulGrpcClient
 const pk = fromBase64(
 	'oEC1VIuwQo+6FZiVwHCAy/3HbvAbuIyiztXIWwd4LgmXCh9WhOKg3T0+Mb62y9fqAsSaN5SybG09n/3JnkmEzJgdDXLpM8KvMwkha/cBHp6Cx7aCdogvGLoOp/RadyHb',
 );
 const id = '0x73d05d62c18d9374e3ea529e8e0ed6161da1a141a94d3f76ae3fe4e99356db75';
 const keyType = 0;
-const url = 'https://seal-key-server-testnet-1.mystenlabs.com';
-const name = 'mysten-testnet-v1-1';
+const url = 'https://seal-key-server-testnet-1.haneul-labs.com';
+const name = 'haneullabs-testnet-v1-1';
 
-// Helper to create mock SuiClient for V2 servers.
+// Helper to create mock HaneulClient for V2 servers.
 function createMockV2Client(
 	objectId: string,
 	firstVersion: number,
@@ -105,7 +105,7 @@ function createMockV2Client(
 			getObject: mockGetObject,
 			getDynamicField: mockGetDynamicField,
 		},
-	} as unknown as SuiGrpcClient;
+	} as unknown as HaneulGrpcClient;
 }
 
 describe('key-server tests', () => {
@@ -134,18 +134,18 @@ describe('key-server tests', () => {
 			};
 		});
 
-		// Mock SuiGrpcClient
-		const mockSuiClient = {
+		// Mock HaneulGrpcClient
+		const mockHaneulClient = {
 			core: {
 				getObject: mockGetObject,
 				getDynamicField: vi.fn(), // This won't be called due to version check
 			},
-		} as unknown as SuiGrpcClient;
+		} as unknown as HaneulGrpcClient;
 
 		await expect(
 			retrieveKeyServers({
 				objectIds: [id],
-				client: mockSuiClient,
+				client: mockHaneulClient,
 				configs: new Map(),
 			}),
 		).rejects.toThrow(
@@ -162,7 +162,7 @@ describe('key-server tests', () => {
 			// Mock fetch with exact response from the real service
 			const keyServers = await retrieveKeyServers({
 				objectIds: [id],
-				client: new SuiGrpcClient({
+				client: new HaneulGrpcClient({
 					network: 'testnet',
 					baseUrl: getJsonRpcFullnodeUrl('testnet'),
 				}),
@@ -230,25 +230,25 @@ describe('key-server tests', () => {
 	});
 
 	it('test retrieveKeyServers throws error for committee server without aggregatorUrl', async () => {
-		const mockSuiClient = createMockV2Client(id, 2, 2, 'Committee');
+		const mockHaneulClient = createMockV2Client(id, 2, 2, 'Committee');
 
 		await expect(
 			retrieveKeyServers({
 				objectIds: [id],
-				client: mockSuiClient,
+				client: mockHaneulClient,
 				configs: new Map(), // Missing aggregatorUrl
 			}),
 		).rejects.toThrow(InvalidClientOptionsError);
 	});
 
 	it('test retrieveKeyServers V2 uses aggregatorUrl for committee servers', async () => {
-		const mockSuiClient = createMockV2Client(id, 2, 2, 'Committee');
+		const mockHaneulClient = createMockV2Client(id, 2, 2, 'Committee');
 
 		const configs = new Map([[id, { objectId: id, weight: 1, aggregatorUrl: url }]]);
 
 		const keyServers = await retrieveKeyServers({
 			objectIds: [id],
-			client: mockSuiClient,
+			client: mockHaneulClient,
 			configs,
 		});
 
@@ -258,11 +258,11 @@ describe('key-server tests', () => {
 	});
 
 	it('test retrieveKeyServers V2 uses server URL for independent servers', async () => {
-		const mockSuiClient = createMockV2Client(id, 2, 2, 'Independent', url);
+		const mockHaneulClient = createMockV2Client(id, 2, 2, 'Independent', url);
 
 		const keyServers = await retrieveKeyServers({
 			objectIds: [id],
-			client: mockSuiClient,
+			client: mockHaneulClient,
 			configs: new Map(),
 		});
 
@@ -272,12 +272,12 @@ describe('key-server tests', () => {
 	});
 
 	it('test version selection prefers highest supported version', async () => {
-		const mockSuiClient = createMockV2Client(id, 1, 2, 'Independent'); // Supports both V1 and V2
+		const mockHaneulClient = createMockV2Client(id, 1, 2, 'Independent'); // Supports both V1 and V2
 
-		await retrieveKeyServers({ objectIds: [id], client: mockSuiClient, configs: new Map() });
+		await retrieveKeyServers({ objectIds: [id], client: mockHaneulClient, configs: new Map() });
 
 		// Verify getDynamicField was called with version 2 (highest supported)
-		expect(mockSuiClient.core.getDynamicField).toHaveBeenCalledWith(
+		expect(mockHaneulClient.core.getDynamicField).toHaveBeenCalledWith(
 			expect.objectContaining({
 				parentId: id,
 				name: {

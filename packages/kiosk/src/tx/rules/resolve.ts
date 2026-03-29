@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { TransactionArgument } from '@mysten/sui/transactions';
-import { Transaction } from '@mysten/sui/transactions';
-import { bcs } from '@mysten/sui/bcs';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import type { TransactionArgument } from '@haneullabs/haneul/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import type { RuleResolvingParams } from '../../types/index.js';
 import * as kiosk from '../../contracts/0x2/kiosk.js';
@@ -48,7 +48,7 @@ export async function resolveRoyaltyRule(params: RuleResolvingParams) {
 	let amount: TransactionArgument | bigint | null = null;
 
 	try {
-		feeTx.setSender(tx.getData().sender || normalizeSuiAddress('0x0'));
+		feeTx.setSender(tx.getData().sender || normalizeHaneulAddress('0x0'));
 		const txBytes = await feeTx.build({ client: kioskClient.client });
 
 		const result = await kioskClient.client.core.simulateTransaction({

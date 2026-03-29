@@ -14,8 +14,8 @@ default = ["console_error_panic_hook"]
 bcs = "0.1"
 wasm-bindgen = "0.2.84"
 js-sys = "0.3"
-fastcrypto = { git = "https://github.com/mystenlabs/fastcrypto.git", rev = "f519333aefa238384f813af74bbb58c68cc38ee7", features = ["wasm"]}
-walrus-core = { git = "ssh://git@github.com/mystenlabs/walrus.git", branch = "main", package = "walrus-core" }
+fastcrypto = { git = "https://github.com/GeunhwaJeong/fastcrypto.git", rev = "f519333aefa238384f813af74bbb58c68cc38ee7", features = ["wasm"]}
+walrus-core = { git = "ssh://git@github.com/GeunhwaJeong/walrus.git", branch = "main", package = "walrus-core" }
 serde-wasm-bindgen = "0.4"
 reed-solomon-simd = "3.0.1"
 

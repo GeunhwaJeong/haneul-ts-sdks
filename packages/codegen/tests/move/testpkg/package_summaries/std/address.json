@@ -10,7 +10,7 @@
     "length": {
       "source_index": 0,
       "index": 0,
-      "doc": " Should be converted to a native function.\n Current implementation only works for Sui.",
+      "doc": " Should be converted to a native function.\n Current implementation only works for Haneul.",
       "attributes": [],
       "visibility": "Public",
       "entry": false,

@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromHex } from '@mysten/bcs';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { getJsonRpcFullnodeUrl } from '@mysten/sui/jsonRpc';
+import { fromHex } from '@haneullabs/bcs';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
 import { describe, it, expect } from 'vitest';
 
 import { seal } from '../../src/client.js';
@@ -19,7 +19,7 @@ describe('Committee Aggregator Tests', () => {
 		// Committee key server object for aggregator ci server, that points to a committee of ci key servers.
 		const COMMITTEE_KEY_SERVER_OBJ_ID =
 			'0x94b78303db00d33efc117e1d5bd7a0eb8a30ce31ec1fee84aa911bb2a454cb3b';
-		const AGGREGATOR_URL = 'https://seal-aggregator-ci.mystenlabs.com';
+		const AGGREGATOR_URL = 'https://seal-aggregator-ci.haneul-labs.com';
 
 		// A v1 independent server in ci.
 		const INDEPENDENT_SERVER_OBJ_ID =
@@ -29,12 +29,12 @@ describe('Committee Aggregator Tests', () => {
 		const PACKAGE_ID = '0x58dce5d91278bceb65d44666ffa225ab397fc3ae9d8398c8c779c5530bd978c2';
 
 		const testKeypair = Ed25519Keypair.generate();
-		const testAddress = testKeypair.getPublicKey().toSuiAddress();
+		const testAddress = testKeypair.getPublicKey().toHaneulAddress();
 
 		const testData = crypto.getRandomValues(new Uint8Array(100));
 
 		// Create client with seal extension.
-		const client = new SuiGrpcClient({
+		const client = new HaneulGrpcClient({
 			network: 'testnet',
 			baseUrl: getJsonRpcFullnodeUrl('testnet'),
 		}).$extend(
@@ -68,7 +68,7 @@ describe('Committee Aggregator Tests', () => {
 			packageId: PACKAGE_ID,
 			ttlMin: 10,
 			signer: testKeypair,
-			suiClient: client,
+			haneulClient: client,
 		});
 
 		// Build transaction.

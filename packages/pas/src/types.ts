@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi } from '@mysten/sui/client';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/client';
 
 /**
  * Configuration for the PAS package on a specific network
@@ -17,8 +17,8 @@ export interface PASPackageConfig {
  * Configuration for the PAS client
  */
 export interface PASClientConfig {
-	/** The Sui client to use */
-	suiClient: ClientWithCoreApi;
+	/** The Haneul client to use */
+	haneulClient: ClientWithCoreApi;
 	/** The package configuration (if network is not provided or supported) */
 	packageConfig?: PASPackageConfig;
 }

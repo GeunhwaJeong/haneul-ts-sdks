@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, it, expect } from 'vitest';
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { analyze } from '../../src/transaction-analyzer/analyzer.js';
 import {
 	objectIds,
@@ -10,7 +10,7 @@ import {
 	ownedObjects,
 	objectsById,
 } from '../../src/transaction-analyzer/rules/objects.js';
-import { MockSuiClient } from '../mocks/MockSuiClient.js';
+import { MockHaneulClient } from '../mocks/MockHaneulClient.js';
 import {
 	DEFAULT_SENDER,
 	TEST_COIN_1_ID,
@@ -22,7 +22,7 @@ import {
 
 describe('TransactionAnalyzer - Objects Rule', () => {
 	it('should analyze all object types in a single transaction', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -138,7 +138,7 @@ describe('TransactionAnalyzer - Objects Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "100",
 			  },
 			  {
@@ -195,7 +195,7 @@ describe('TransactionAnalyzer - Objects Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "104",
 			  },
 			  {
@@ -407,7 +407,7 @@ describe('TransactionAnalyzer - Objects Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "105",
 			  },
 			]
@@ -471,7 +471,7 @@ describe('TransactionAnalyzer - Objects Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "100",
 			  },
 			  {
@@ -528,7 +528,7 @@ describe('TransactionAnalyzer - Objects Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "104",
 			  },
 			  {
@@ -689,7 +689,7 @@ describe('TransactionAnalyzer - Objects Rule', () => {
 			    },
 			    "ownerAddress": "0x0000000000000000000000000000000000000000000000000000000000000123",
 			    "previousTransaction": undefined,
-			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI>",
+			    "type": "0x0000000000000000000000000000000000000000000000000000000000000002::coin::Coin<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>",
 			    "version": "105",
 			  },
 			]

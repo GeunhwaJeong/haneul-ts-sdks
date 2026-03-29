@@ -2,7 +2,7 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveStruct, MoveEnum } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 const $moduleName = '@local-pkg/walrus::messages';
 export const ProofOfPossessionMessage = new MoveStruct({
 	name: `${$moduleName}::ProofOfPossessionMessage`,
@@ -11,7 +11,7 @@ export const ProofOfPossessionMessage = new MoveStruct({
 		intent_version: bcs.u8(),
 		intent_app: bcs.u8(),
 		epoch: bcs.u32(),
-		sui_address: bcs.Address,
+		haneul_address: bcs.Address,
 		bls_key: bcs.vector(bcs.u8()),
 	},
 });

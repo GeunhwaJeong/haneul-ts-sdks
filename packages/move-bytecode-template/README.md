@@ -1,7 +1,7 @@
 # Move Bytecode Template
 
 Move Bytecode Template allows updating a pre-compiled bytecode, so that a standard template could be
-customized and used to publish new modules on Sui directly in the browser. Hence, removing the need
+customized and used to publish new modules on Haneul directly in the browser. Hence, removing the need
 for a backend to compile new modules.
 
 This crate builds a WASM binary for the `move-language/move-binary-format` allowing bytecode
@@ -19,14 +19,14 @@ This package is a perfect fit for the following applications:
 ## Example of a Template Module
 
 The following code is a close-copy of the `Coin` example from the
-[Coins and Tokens](https://docs.sui.io/standards/currency).
+[Coins and Tokens](https://docs.haneul.io/standards/currency).
 
 ```move
 module 0x0::template {
     use std::option;
-    use sui::coin;
-    use sui::transfer;
-    use sui::tx_context::{Self, TxContext};
+    use haneul::coin;
+    use haneul::transfer;
+    use haneul::tx_context::{Self, TxContext};
 
     /// The OTW for the Coin
     struct TEMPLATE has drop {}
@@ -51,7 +51,7 @@ module 0x0::template {
 To update the identifiers, you can use the `update_identifiers` function.
 
 ```ts
-import { fromHex, update_identifiers } from '@mysten/move-bytecode-template';
+import { fromHex, update_identifiers } from '@haneullabs/move-bytecode-template';
 
 let bytecode = /* ... */;
 let updated = update_identifiers(bytecode, {
@@ -67,8 +67,8 @@ you need to supply new value as BCS bytes, existing value as BCS, and the type o
 string: `U8`, `U16` ... `U256`, `Address`, `Vector(U8)` and so on).
 
 ```ts
-import { bcs } from '@mysten/bcs';
-import * as template from '@mysten/move-bytecode-template';
+import { bcs } from '@haneullabs/bcs';
+import * as template from '@haneullabs/move-bytecode-template';
 
 // please, manually scan the existing values, this operation is very sensitive
 console.log(template.get_constants(bytecode));
@@ -101,7 +101,7 @@ updated = update_constants(
 ```
 
 After updating the bytecode, refer to the
-[Asset Tokenization](https://docs.sui.io/guides/developer/nft/asset-tokenization#closer-view-of-the-template-module)
+[Asset Tokenization](https://docs.haneul.io/guides/developer/nft/asset-tokenization#closer-view-of-the-template-module)
 guide to deploy the contract.
 
 ## Usage in Web applications
@@ -109,7 +109,7 @@ guide to deploy the contract.
 In some bundler and web applications you will need to set up and initialize the wasm bindings. The
 exact requirements depend on how your application is being built.
 
-The `@mysten/move-bytecode-template` has 2 relevant exports you might need to get things working
+The `@haneullabs/move-bytecode-template` has 2 relevant exports you might need to get things working
 correctly.
 
 - `init` is an exported function that initializes the wasm module in browser environments (a no-op
@@ -123,7 +123,7 @@ In webpack and nodejs you should be able to initialize the wasm module without s
 location of the wasm module:
 
 ```ts
-import init, * as template from '@mysten/move-bytecode-template';
+import init, * as template from '@haneullabs/move-bytecode-template';
 
 await init();
 
@@ -139,7 +139,7 @@ can be loaded correctly. You can add something like this to your vite config:
 ```ts
 export default defineConfig({
 	optimizeDeps: {
-		exclude: ["@mysten/move-bytecode-template"],
+		exclude: ["@haneullabs/move-bytecode-template"],
 	},
 });
 ```
@@ -151,8 +151,8 @@ loaded. Some bundlers support a `?url` suffix for imports that will return a url
 can be loaded from:
 
 ```ts
-import init, * as template from '@mysten/move-bytecode-template';
-import url from '@mysten/move-bytecode-template/web/move_bytecode_template_bg.wasm?url';
+import init, * as template from '@haneullabs/move-bytecode-template';
+import url from '@haneullabs/move-bytecode-template/web/move_bytecode_template_bg.wasm?url';
 
 await init({ module_or_path: url });
 ```

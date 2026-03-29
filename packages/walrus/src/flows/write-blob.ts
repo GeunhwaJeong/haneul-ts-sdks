@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromBase64, toBase64 } from '@mysten/bcs';
-import type { Signer } from '@mysten/sui/cryptography';
-import { Transaction } from '@mysten/sui/transactions';
+import { fromBase64, toBase64 } from '@haneullabs/bcs';
+import type { Signer } from '@haneullabs/haneul/cryptography';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import type { Blob } from '../contracts/walrus/blob.js';
 import { WalrusClientError } from '../error.js';
@@ -323,7 +323,7 @@ export function createWriteBlobFlow(
 				signer: options.signer,
 				epochs: options.epochs,
 				deletable: options.deletable,
-				owner: options.owner ?? options.signer.toSuiAddress(),
+				owner: options.owner ?? options.signer.toHaneulAddress(),
 				attributes: options.attributes,
 			});
 			registerDigest = regResult.txDigest;

@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
-import { Inputs, Transaction, TransactionCommands } from '@mysten/sui/transactions';
+import { bcs } from '@haneullabs/haneul/bcs';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
+import { Inputs, Transaction, TransactionCommands } from '@haneullabs/haneul/transactions';
 import type {
 	Argument,
 	CallArg,
@@ -11,8 +11,8 @@ import type {
 	TransactionDataBuilder,
 	TransactionPlugin,
 	TransactionResult,
-} from '@mysten/sui/transactions';
-import { normalizeStructTag } from '@mysten/sui/utils';
+} from '@haneullabs/haneul/transactions';
+import { normalizeStructTag } from '@haneullabs/haneul/utils';
 
 import {
 	deriveAccountAddress,
@@ -186,7 +186,7 @@ export function accountForAddressIntent(
 //     output value (so external references to the intent can be remapped)
 //
 
-type SuiObject = SuiClientTypes.Object<{ content: true }>;
+type HaneulObject = HaneulClientTypes.Object<{ content: true }>;
 
 type AccountState = { kind: 'existing' } | { kind: 'created'; resultIndex: number };
 
@@ -199,9 +199,9 @@ interface BuildResult {
 
 class Resolver {
 	/** Pre-fetched on-chain objects (accounts, rules). null = does not exist. */
-	readonly objects: Map<string, SuiObject | null>;
+	readonly objects: Map<string, HaneulObject | null>;
 	/** Pre-fetched template dynamic field objects. */
-	readonly templates: Map<string, SuiObject>;
+	readonly templates: Map<string, HaneulObject>;
 	/** Pre-parsed template lookup: policyId:actionType -> approval type names. */
 	readonly templateApprovals: Map<string, string[]>;
 	/** Account existence / creation tracking. */
@@ -221,8 +221,8 @@ class Resolver {
 		config,
 	}: {
 		transactionData: TransactionDataBuilder;
-		objects: Map<string, SuiObject | null>;
-		templates: Map<string, SuiObject>;
+		objects: Map<string, HaneulObject | null>;
+		templates: Map<string, HaneulObject>;
 		templateApprovals: Map<string, string[]>;
 		accounts: Map<string, AccountState>;
 		config: PASPackageConfig;
@@ -267,7 +267,7 @@ class Resolver {
 
 	// -- Object lookup -------------------------------------------------------
 
-	getObjectOrThrow(objectId: string, errorFactory: () => Error): SuiObject {
+	getObjectOrThrow(objectId: string, errorFactory: () => Error): HaneulObject {
 		const obj = this.objects.get(objectId);
 		if (!obj) throw errorFactory();
 		return obj;
@@ -684,7 +684,7 @@ async function initializeContext(
 		include: { content: true },
 	});
 
-	const objects = new Map<string, SuiObject | null>();
+	const objects = new Map<string, HaneulObject | null>();
 
 	for (const id of allIds) {
 		const obj = fetched.filter((o) => 'content' in o).find((o) => o.objectId === id);
@@ -735,7 +735,7 @@ async function initializeContext(
 	}
 
 	// 4. Batch-fetch all template data
-	const templates = new Map<string, SuiObject>();
+	const templates = new Map<string, HaneulObject>();
 	if (templateIds.length > 0) {
 		const { objects: templateObjects } = await client.core.getObjects({
 			objectIds: templateIds,
@@ -764,7 +764,7 @@ const resolvePASIntents: TransactionPlugin = async (transactionData, buildOption
 	const client = buildOptions.client;
 	if (!client)
 		throw new PASClientError(
-			'A SuiClient must be provided to build transactions with PAS intents.',
+			'A HaneulClient must be provided to build transactions with PAS intents.',
 		);
 
 	const requirements = collectIntentData(transactionData.commands);
@@ -830,7 +830,7 @@ const resolvePASIntents: TransactionPlugin = async (transactionData, buildOption
  */
 export async function validateTemplateObjects(
 	client: ClientWithCoreApi,
-	templates: SuiObject[],
+	templates: HaneulObject[],
 ): Promise<void> {
 	const allTemplateCommands = templates.map(getCommandFromTemplate);
 	const objectIds = collectTemplateObjectIds(allTemplateCommands);

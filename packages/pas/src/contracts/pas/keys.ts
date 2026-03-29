@@ -2,9 +2,9 @@
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
 import { MoveTuple, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-const $moduleName = '@mysten/pas::keys';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+const $moduleName = '@haneullabs/pas::keys';
 export const PolicyKey = new MoveTuple({
 	name: `${$moduleName}::PolicyKey<phantom T>`,
 	fields: [bcs.bool()],
@@ -22,7 +22,7 @@ export interface SendFundsActionOptions {
 	arguments?: [];
 }
 export function sendFundsAction(options: SendFundsActionOptions = {}) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	return (tx: Transaction) =>
 		tx.moveCall({
 			package: packageAddress,
@@ -35,7 +35,7 @@ export interface UnlockFundsActionOptions {
 	arguments?: [];
 }
 export function unlockFundsAction(options: UnlockFundsActionOptions = {}) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	return (tx: Transaction) =>
 		tx.moveCall({
 			package: packageAddress,
@@ -48,7 +48,7 @@ export interface ClawbackFundsActionOptions {
 	arguments?: [];
 }
 export function clawbackFundsAction(options: ClawbackFundsActionOptions = {}) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	return (tx: Transaction) =>
 		tx.moveCall({
 			package: packageAddress,
@@ -61,7 +61,7 @@ export interface ActionsOptions {
 	arguments?: [];
 }
 export function actions(options: ActionsOptions = {}) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	return (tx: Transaction) =>
 		tx.moveCall({
 			package: packageAddress,
@@ -77,7 +77,7 @@ export interface IsValidActionOptions {
 	arguments: IsValidActionArguments | [action: RawTransactionArgument<string>];
 }
 export function isValidAction(options: IsValidActionOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = ['0x1::string::String'] satisfies (string | null)[];
 	const parameterNames = ['action'];
 	return (tx: Transaction) =>

@@ -58,7 +58,7 @@ const PACKAGE_CONTENT_MAP: Record<string, ContentMapping> = {
 /**
  * Build docs for a single content section into an output directory.
  *
- * @param sectionName  Name of the content section (e.g. "sui", "dapp-kit")
+ * @param sectionName  Name of the content section (e.g. "haneul", "dapp-kit")
  * @param outputDir    Absolute path to write docs into
  */
 async function buildSectionDocs(
@@ -154,8 +154,8 @@ async function buildAll(): Promise<void> {
 
 	// Generate the full combined index
 	const fullIndexLines: string[] = [
-		'# Sui TypeScript SDK Documentation',
-		'> Reference documentation for the @mysten/* TypeScript SDK packages for the Sui blockchain.',
+		'# Haneul TypeScript SDK Documentation',
+		'> Reference documentation for the @haneullabs/* TypeScript SDK packages for the Haneul blockchain.',
 		'',
 	];
 	for (const section of sections) {

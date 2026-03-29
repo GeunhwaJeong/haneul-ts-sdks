@@ -19,11 +19,11 @@ import {
 	normalizeMoveArguments,
 	type RawTransactionArgument,
 } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as vec_set from './deps/sui/vec_set.js';
-import * as _package from './deps/sui/package.js';
-import * as table from './deps/sui/table.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as vec_set from './deps/haneul/vec_set.js';
+import * as _package from './deps/haneul/package.js';
+import * as table from './deps/haneul/table.js';
 const $moduleName = '@local-pkg/walrus::upgrade';
 export const PackageDigest = new MoveTuple({
 	name: `${$moduleName}::PackageDigest`,

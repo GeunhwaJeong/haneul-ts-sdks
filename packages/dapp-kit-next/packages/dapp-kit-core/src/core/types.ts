@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithCoreApi } from '@mysten/sui/client';
+import type { ClientWithCoreApi } from '@haneullabs/haneul/client';
 import type { Networks } from '../utils/networks.js';
 import type { StateStorage } from '../utils/storage.js';
 import type { WalletInitializer } from '../wallets/index.js';
@@ -76,7 +76,7 @@ export type CreateDAppKitOptions<
 
 	/**
 	 * The key to use to store the most recently connected wallet account.
-	 * @default `mysten-dapp-kit:selected-wallet-and-address`
+	 * @default `haneullabs-dapp-kit:selected-wallet-and-address`
 	 */
 	storageKey?: string;
 

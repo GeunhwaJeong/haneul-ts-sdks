@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCurrentAccount, useCurrentClient } from '@mysten/dapp-kit-react';
+import { useCurrentAccount, useCurrentClient } from '@haneullabs/dapp-kit-react';
 import { useState, useEffect } from 'react';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { ErrorDisplay } from './components/ErrorDisplay.js';
 import { BenchmarkSettingsForm } from './components/BenchmarkSettings.js';
 import type { BenchmarkSettings } from './components/BenchmarkSettings.js';
@@ -22,7 +22,7 @@ export function BenchmarkPage() {
 	const [error, setError] = useState<string>('');
 	const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-	const suiClient = useCurrentClient();
+	const haneulClient = useCurrentClient();
 
 	const { isRunning, results, currentStatus, runBenchmark, removeResult, clearResults } =
 		useBenchmark();
@@ -66,7 +66,7 @@ export function BenchmarkPage() {
 	};
 
 	async function handleTransaction(digest: string) {
-		await suiClient.waitForTransaction({
+		await haneulClient.waitForTransaction({
 			digest,
 		});
 		setRefreshTrigger((prev) => prev + 1);

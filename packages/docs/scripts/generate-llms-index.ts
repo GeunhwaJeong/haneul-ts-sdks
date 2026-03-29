@@ -19,7 +19,7 @@ const CONTENT_DIR = path.resolve(new URL('.', import.meta.url).pathname, '..', '
 const OUTPUT_DIR = path.resolve(new URL('.', import.meta.url).pathname, '..', 'dist');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'llms-index.md');
 
-/** Return sorted list of content section directory names (e.g. ["bcs", "dapp-kit", "sui"]). */
+/** Return sorted list of content section directory names (e.g. ["bcs", "dapp-kit", "haneul"]). */
 function getContentSections(): string[] {
 	return fs
 		.readdirSync(CONTENT_DIR)
@@ -42,9 +42,9 @@ function getContentSections(): string[] {
 function generateFullIndex(sections: string[]): string {
 	const lines: string[] = [];
 
-	lines.push('# Sui TypeScript SDK Documentation');
+	lines.push('# Haneul TypeScript SDK Documentation');
 	lines.push(
-		'> Reference documentation for the @mysten/* TypeScript SDK packages for the Sui blockchain.',
+		'> Reference documentation for the @haneullabs/* TypeScript SDK packages for the Haneul blockchain.',
 	);
 	lines.push('');
 

@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { PaginationArguments } from '@mysten/sui/jsonRpc';
-import type { SuiClientTypes } from '@mysten/sui/client';
+import type { PaginationArguments } from '@haneullabs/haneul/jsonRpc';
+import type { HaneulClientTypes } from '@haneullabs/haneul/client';
 
 import {
 	FLOOR_PRICE_RULE_ADDRESS,
@@ -37,10 +37,10 @@ export type KioskExtensionOptions<Name extends string = 'kiosk'> = {
  *
  * @example
  * ```ts
- * import { SuiJsonRpcClient } from '@mysten/sui/jsonRpc';
- * import { kiosk } from '@mysten/kiosk';
+ * import { HaneulJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
+ * import { kiosk } from '@haneullabs/kiosk';
  *
- * const client = new SuiJsonRpcClient({
+ * const client = new HaneulJsonRpcClient({
  *   url: getJsonRpcFullnodeUrl('mainnet'),
  *   network: 'mainnet',
  * }).$extend(kiosk());
@@ -72,7 +72,7 @@ export function kiosk<const Name extends string = 'kiosk'>({
  */
 export class KioskClient {
 	client: KioskCompatibleClient;
-	network: SuiClientTypes.Network;
+	network: HaneulClientTypes.Network;
 	rules: TransferPolicyRule[];
 	packageIds?: BaseRulePackageIds;
 

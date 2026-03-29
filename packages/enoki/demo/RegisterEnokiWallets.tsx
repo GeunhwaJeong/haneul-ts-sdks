@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCurrentClient, useCurrentNetwork } from '@mysten/dapp-kit-react';
+import { useCurrentClient, useCurrentNetwork } from '@haneullabs/dapp-kit-react';
 import { useEffect } from 'react';
 
 import { isEnokiNetwork } from '../src/index.js';

@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs, fromHex, toHex } from '@mysten/bcs';
+import { bcs, fromHex, toHex } from '@haneullabs/bcs';
 import { assert, describe, expect, it } from 'vitest';
 
 import * as template from '../nodejs/move_bytecode_template.js';

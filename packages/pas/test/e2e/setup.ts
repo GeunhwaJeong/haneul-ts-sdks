@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import path from 'path';
-import type { ClientWithExtensions } from '@mysten/sui/client';
-import { FaucetRateLimitError, getFaucetHost, requestSuiFromFaucetV2 } from '@mysten/sui/faucet';
-import { SuiGraphQLClient } from '@mysten/sui/graphql';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import type { ClientWithExtensions } from '@haneullabs/haneul/client';
+import { FaucetRateLimitError, getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { HaneulGraphQLClient } from '@haneullabs/haneul/graphql';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import type { ContainerRuntimeClient } from 'testcontainers';
 import { getContainerRuntimeClient } from 'testcontainers';
 import { retry } from 'ts-retry-promise';
@@ -20,7 +20,7 @@ const DEFAULT_FAUCET_URL = process.env.FAUCET_URL ?? getFaucetHost('localnet');
 const DEFAULT_FULLNODE_URL = process.env.FULLNODE_URL ?? 'http://127.0.0.1:9000';
 const DEFAULT_GRAPHQL_URL = process.env.GRAPHQL_URL ?? 'http://127.0.0.1:9125/graphql';
 
-export type PASClientType = ClientWithExtensions<{ pas: PASClient }, SuiGrpcClient>;
+export type PASClientType = ClientWithExtensions<{ pas: PASClient }, HaneulGrpcClient>;
 
 export type PublishedPackage = {
 	digest: string;
@@ -54,7 +54,7 @@ export class TestToolbox {
 	}
 
 	address() {
-		return this.keypair.getPublicKey().toSuiAddress();
+		return this.keypair.getPublicKey().toHaneulAddress();
 	}
 
 	/// Publishes a package at a given path.
@@ -118,14 +118,14 @@ export class TestToolbox {
 
 	async getBalance(address: string, assetType: string) {
 		return this.client.core.getBalance({
-			owner: normalizeSuiAddress(address),
+			owner: normalizeHaneulAddress(address),
 			coinType: assetType,
 		});
 	}
 }
 
-export function getClient(): SuiGrpcClient {
-	return new SuiGrpcClient({
+export function getClient(): HaneulGrpcClient {
+	return new HaneulGrpcClient({
 		network: 'localnet',
 		baseUrl: DEFAULT_FULLNODE_URL,
 	});
@@ -133,10 +133,10 @@ export function getClient(): SuiGrpcClient {
 
 export async function setupToolbox() {
 	const keypair = Ed25519Keypair.generate();
-	const address = keypair.getPublicKey().toSuiAddress();
+	const address = keypair.getPublicKey().toHaneulAddress();
 	const baseClient = getClient();
 
-	await retry(() => requestSuiFromFaucetV2({ host: DEFAULT_FAUCET_URL, recipient: address }), {
+	await retry(() => requestHaneulFromFaucetV2({ host: DEFAULT_FAUCET_URL, recipient: address }), {
 		backoff: 'EXPONENTIAL',
 		// overall timeout in 60 seconds
 		timeout: 1000 * 60,
@@ -146,14 +146,14 @@ export async function setupToolbox() {
 	});
 
 	const configDir = path.join('/test-data', `${Math.random().toString(36).substring(2, 15)}`);
-	await execSuiTools(['mkdir', '-p', configDir]);
+	await execHaneulTools(['mkdir', '-p', configDir]);
 	const configPath = path.join(configDir, 'client.yaml');
-	await execSuiTools(['sui', 'client', '--yes', '--client.config', configPath]);
+	await execHaneulTools(['haneul', 'client', '--yes', '--client.config', configPath]);
 
 	const pubFilePath = path.join(configDir, 'publications.toml');
 
-	await execSuiTools(['sui', 'client', '--client.config', configPath, 'switch', '--env', 'local']);
-	await execSuiTools(['sui', 'client', '--client.config', configPath, 'faucet']);
+	await execHaneulTools(['haneul', 'client', '--client.config', configPath, 'switch', '--env', 'local']);
+	await execHaneulTools(['haneul', 'client', '--client.config', configPath, 'faucet']);
 
 	const publishedPackages: Record<string, PublishedPackage> = {};
 
@@ -203,8 +203,8 @@ export async function setupToolbox() {
 
 	// Link the UpgradeCap to the Namespace (required before any derived object operations).
 	// This must be done via CLI since the UpgradeCap is owned by the CLI address, not the test keypair.
-	await execSuiTools([
-		'sui',
+	await execHaneulTools([
+		'haneul',
 		'client',
 		'--client.config',
 		configPath,
@@ -222,14 +222,14 @@ export async function setupToolbox() {
 }
 
 async function getCliAddress(configPath: string): Promise<string> {
-	const result = await execSuiTools([
-		'sui',
+	const result = await execHaneulTools([
+		'haneul',
 		'client',
 		'--client.config',
 		configPath,
 		'active-address',
 	]);
-	return normalizeSuiAddress(result.stdout.trim());
+	return normalizeHaneulAddress(result.stdout.trim());
 }
 
 const DISCOVER_PAS_QUERY = `
@@ -299,7 +299,7 @@ async function discoverPasPackage(
 	senderAddress: string,
 	excludeDigest: string,
 ): Promise<{ digest: string; packageId: string; createdObjects: { id: string; type: string }[] }> {
-	const graphqlClient = new SuiGraphQLClient({
+	const graphqlClient = new HaneulGraphQLClient({
 		url: DEFAULT_GRAPHQL_URL,
 		network: 'localnet',
 	});
@@ -363,11 +363,11 @@ async function publishPackage(
 	}: {
 		configPath: string;
 		pubFilePath: string;
-		baseClient: SuiGrpcClient;
+		baseClient: HaneulGrpcClient;
 	},
 ) {
-	const result = await execSuiTools([
-		'sui',
+	const result = await execHaneulTools([
+		'haneul',
 		'client',
 		'--client.config',
 		configPath,
@@ -472,14 +472,14 @@ export async function simulateTransaction(toolbox: TestToolbox, tx: Transaction)
 }
 
 // @ts-ignore-next-line
-const SUI_TOOLS_CONTAINER_ID = inject('suiToolsContainerId');
+const HANEUL_TOOLS_CONTAINER_ID = inject('haneulToolsContainerId');
 
-export async function execSuiTools(
+export async function execHaneulTools(
 	command: string[],
 	options?: Parameters<ContainerRuntimeClient['container']['exec']>[2],
 ) {
 	const client = await getContainerRuntimeClient();
-	const container = client.container.getById(SUI_TOOLS_CONTAINER_ID);
+	const container = client.container.getById(HANEUL_TOOLS_CONTAINER_ID);
 
 	const result = await client.container.exec(container, command, options);
 

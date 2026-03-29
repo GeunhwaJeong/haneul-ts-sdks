@@ -4,7 +4,7 @@ This file provides guidance to AI agents working with code in this repository.
 
 ## Overview
 
-This is a monorepo containing TypeScript SDKs for the Sui blockchain ecosystem. It uses pnpm workspaces, turbo for build orchestration, and includes packages for core Sui functionality, dApp development, wallet integration, and various blockchain services.
+This is a monorepo containing TypeScript SDKs for the Haneul blockchain ecosystem. It uses pnpm workspaces, turbo for build orchestration, and includes packages for core Haneul functionality, dApp development, wallet integration, and various blockchain services.
 
 ## Common Commands
 
@@ -19,7 +19,7 @@ pnpm turbo build
 pnpm build
 
 # Build a specific package with dependencies
-pnpm turbo build --filter=@mysten/sui
+pnpm turbo build --filter=@haneullabs/haneul
 ```
 
 ### Testing
@@ -29,17 +29,17 @@ pnpm turbo build --filter=@mysten/sui
 pnpm test
 
 # Run unit tests for a specific package
-pnpm --filter @mysten/sui test
+pnpm --filter @haneullabs/haneul test
 
 # Run a single test file
-pnpm --filter @mysten/sui vitest run path/to/test.spec.ts
+pnpm --filter @haneullabs/haneul vitest run path/to/test.spec.ts
 
 # Run e2e tests (requires Docker for local network)
 # All e2e tests for a package:
-pnpm --filter @mysten/sui vitest run --config test/e2e/vitest.config.mts
+pnpm --filter @haneullabs/haneul vitest run --config test/e2e/vitest.config.mts
 
 # A specific e2e test file:
-pnpm --filter @mysten/sui vitest run --config test/e2e/vitest.config.mts test/e2e/clients/core/objects.test.ts
+pnpm --filter @haneullabs/haneul vitest run --config test/e2e/vitest.config.mts test/e2e/clients/core/objects.test.ts
 ```
 
 ### Linting and Formatting
@@ -71,11 +71,11 @@ pnpm changeset-version
 ### Repository Structure
 
 - **packages/** - All SDK packages organized by functionality
-  - **typescript/** - Core Sui SDK with submodules for bcs, client, cryptography, transactions, etc.
+  - **typescript/** - Core Haneul SDK with submodules for bcs, client, cryptography, transactions, etc.
   - **dapp-kit/** - React hooks and components for dApp development
   - **wallet-standard/** - Wallet adapter implementation
   - **signers/** - Various signing solutions (AWS KMS, GCP KMS, Ledger, etc.)
-  - **suins/** - Sui Name Service integration
+  - **haneulns/** - Haneul Name Service integration
   - **deepbook/** - DEX integration packages
   - **zksend/** - zkSend functionality
 
@@ -87,23 +87,23 @@ pnpm changeset-version
 
 ### Key Patterns
 
-1. **Modular exports**: Packages use subpath exports (e.g., `@mysten/sui/client`, `@mysten/sui/bcs`)
+1. **Modular exports**: Packages use subpath exports (e.g., `@haneullabs/haneul/client`, `@haneullabs/haneul/bcs`)
 2. **Shared utilities**: Common functionality in `packages/utils`
 3. **Code generation**: Some packages use GraphQL codegen and version generation scripts
 4. **Testing**: Unit tests alongside source files, e2e tests in separate directories
 5. **Type safety**: Extensive TypeScript usage with strict type checking
 
-### Sui Client Architecture (`packages/sui`)
+### Haneul Client Architecture (`packages/haneul`)
 
-The `@mysten/sui` package has a multi-transport client architecture. Understanding its layered design is critical before making changes.
+The `@haneullabs/haneul` package has a multi-transport client architecture. Understanding its layered design is critical before making changes.
 
 #### Layered Client Design
 
 The client system has three layers:
 
-1. **Public client** (`SuiGrpcClient`, `SuiGraphQLClient`, `SuiJsonRpcClient`) — what users instantiate. Provides transport-specific "Native API" access (e.g., raw gRPC service clients, raw GraphQL queries) plus the unified `client.core` property. Supports extension via `$extend`.
+1. **Public client** (`HaneulGrpcClient`, `HaneulGraphQLClient`, `HaneulJsonRpcClient`) — what users instantiate. Provides transport-specific "Native API" access (e.g., raw gRPC service clients, raw GraphQL queries) plus the unified `client.core` property. Supports extension via `$extend`.
 
-2. **Core implementation** (`GrpcCoreClient`, `GraphQLCoreClient`, `JSONRpcCoreClient`) — each extends the abstract `CoreClient` and maps protocol-specific wire data (protobuf, GraphQL fragments, JSON) into unified `SuiClientTypes`. This is where most business logic lives.
+2. **Core implementation** (`GrpcCoreClient`, `GraphQLCoreClient`, `JSONRpcCoreClient`) — each extends the abstract `CoreClient` and maps protocol-specific wire data (protobuf, GraphQL fragments, JSON) into unified `HaneulClientTypes`. This is where most business logic lives.
 
 3. **Abstract contract** (`CoreClient` in `src/client/core.ts`) — defines the "Core API" that all transports implement. Also provides transport-agnostic composed methods (e.g., `getObject` delegates to `getObjects`, `getDynamicField` uses `getObjects` + BCS parsing).
 
@@ -126,7 +126,7 @@ All three transports must produce identical results for the same Core API call. 
 
 #### Unified Type System (`src/client/types.ts`)
 
-All Core API methods return types from the `SuiClientTypes` namespace. Key design patterns:
+All Core API methods return types from the `HaneulClientTypes` namespace. Key design patterns:
 
 - **Discriminated unions with `$kind`**: All polymorphic types use a `$kind` string literal to discriminate variants. This is used for `ObjectOwner`, `TransactionResult`, `ExecutionError`, `DatatypeResponse`, and others.
   ```typescript
@@ -145,7 +145,7 @@ All Core API methods return types from the `SuiClientTypes` namespace. Key desig
 Each implementation has its own way of retrieving and transforming data:
 
 - **gRPC**: Uses `readMask.paths` arrays to request specific fields from the server. Proto-generated types live in `src/grpc/proto/`. Missing paths in the read mask mean the server won't return those fields.
-- **GraphQL**: Queries are defined in `.graphql` files in `src/graphql/queries/`, then codegen produces typed document nodes in `src/graphql/generated/queries.ts`. If you need new fields, edit the `.graphql` file and run `pnpm --filter @mysten/sui codegen:graphql`.
+- **GraphQL**: Queries are defined in `.graphql` files in `src/graphql/queries/`, then codegen produces typed document nodes in `src/graphql/generated/queries.ts`. If you need new fields, edit the `.graphql` file and run `pnpm --filter @haneullabs/haneul codegen:graphql`.
 - **JSON-RPC**: Legacy transport with the most complex mapping logic. Response shapes often differ significantly from the unified types, requiring manual BCS serialization, ID derivation, or type wrapping.
 
 #### E2E Testing for Parity
@@ -178,28 +178,28 @@ Several packages depend on external repositories and remote schemas. These are u
 
 | Path                 | Description                        | Used By                                                     |
 | -------------------- | ---------------------------------- | ----------------------------------------------------------- |
-| `../sui`             | Main Sui blockchain implementation | Reference for gRPC, GraphQL, and JSON-RPC implementations   |
-| `../sui-apis`        | Protocol buffer definitions        | `@mysten/sui` gRPC codegen (`packages/sui/src/grpc/proto/`) |
-| `../suins-contracts` | SuiNS Move contracts               | `@mysten/suins` codegen                                     |
-| `../sui-payment-kit` | Payment kit Move contracts         | `@mysten/payment-kit` codegen                               |
-| `../walrus`          | Walrus storage contracts           | `@mysten/walrus` codegen                                    |
-| `../deepbookv3`      | DeepBook v3 DEX contracts          | `@mysten/deepbook-v3` codegen                               |
-| `../apps/kiosk`      | Kiosk Move contracts (optional)    | `@mysten/kiosk` codegen                                     |
+| `../haneul`             | Main Haneul blockchain implementation | Reference for gRPC, GraphQL, and JSON-RPC implementations   |
+| `../haneul-apis`        | Protocol buffer definitions        | `@haneullabs/haneul` gRPC codegen (`packages/haneul/src/grpc/proto/`) |
+| `../haneulns-contracts` | HaneulNS Move contracts               | `@haneullabs/haneulns` codegen                                     |
+| `../haneul-payment-kit` | Payment kit Move contracts         | `@haneullabs/payment-kit` codegen                               |
+| `../walrus`          | Walrus storage contracts           | `@haneullabs/walrus` codegen                                    |
+| `../deepbookv3`      | DeepBook v3 DEX contracts          | `@haneullabs/deepbook-v3` codegen                               |
+| `../apps/kiosk`      | Kiosk Move contracts (optional)    | `@haneullabs/kiosk` codegen                                     |
 
 ### Remote Resources (fetched from GitHub)
 
 | URL                                                         | Description           | Used By                                |
 | ----------------------------------------------------------- | --------------------- | -------------------------------------- |
-| `MystenLabs/sui/.../sui-indexer-alt-graphql/schema.graphql` | GraphQL schema        | `@mysten/sui` GraphQL codegen          |
-| `MystenLabs/sui/.../sui-open-rpc/spec/openrpc.json`         | JSON-RPC OpenRPC spec | `@mysten/sui` JSON-RPC type generation |
-| `MystenLabs/sui/Cargo.toml`                                 | Sui version info      | `@mysten/sui` version generation       |
+| `HaneulLabs/haneul/.../haneul-indexer-alt-graphql/schema.graphql` | GraphQL schema        | `@haneullabs/haneul` GraphQL codegen          |
+| `HaneulLabs/haneul/.../haneul-open-rpc/spec/openrpc.json`         | JSON-RPC OpenRPC spec | `@haneullabs/haneul` JSON-RPC type generation |
+| `HaneulLabs/haneul/Cargo.toml`                                 | Haneul version info      | `@haneullabs/haneul` version generation       |
 
 ### On-chain Resources
 
-Some packages fetch contract ABIs directly from Sui networks:
+Some packages fetch contract ABIs directly from Haneul networks:
 
-- `@mysten/kiosk`: Sui framework kiosk types (0x2) from testnet
-- `@mysten/deepbook-v3`: Pyth oracle package from testnet
+- `@haneullabs/kiosk`: Haneul framework kiosk types (0x2) from testnet
+- `@haneullabs/deepbook-v3`: Pyth oracle package from testnet
 
 ### Pull Requests
 
@@ -211,18 +211,18 @@ When creating PRs, follow the template in `.github/PULL_REQUEST_TEMPLATE.md`:
 ### Codegen Commands
 
 ```bash
-# Generate gRPC types from ../sui-apis proto files
-pnpm --filter @mysten/sui codegen:grpc
+# Generate gRPC types from ../haneul-apis proto files
+pnpm --filter @haneullabs/haneul codegen:grpc
 
 # Fetch latest GraphQL schema from remote (updates schema.graphql)
-pnpm --filter @mysten/sui update-graphql-schema
+pnpm --filter @haneullabs/haneul update-graphql-schema
 
 # Generate GraphQL types from schema (updates queries.ts)
-pnpm --filter @mysten/sui codegen:graphql
+pnpm --filter @haneullabs/haneul codegen:graphql
 
 # Generate Move contract bindings (various packages)
-pnpm --filter @mysten/payment-kit codegen
-pnpm --filter @mysten/walrus codegen
-pnpm --filter @mysten/deepbook-v3 codegen
-pnpm --filter @mysten/kiosk codegen
+pnpm --filter @haneullabs/payment-kit codegen
+pnpm --filter @haneullabs/walrus codegen
+pnpm --filter @haneullabs/deepbook-v3 codegen
+pnpm --filter @haneullabs/kiosk codegen
 ```

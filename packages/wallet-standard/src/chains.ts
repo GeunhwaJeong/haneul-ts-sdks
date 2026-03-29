@@ -3,31 +3,31 @@
 
 import type { IdentifierString } from '@wallet-standard/core';
 
-/** Sui Devnet */
-export const SUI_DEVNET_CHAIN = 'sui:devnet';
+/** Haneul Devnet */
+export const HANEUL_DEVNET_CHAIN = 'haneul:devnet';
 
-/** Sui Testnet */
-export const SUI_TESTNET_CHAIN = 'sui:testnet';
+/** Haneul Testnet */
+export const HANEUL_TESTNET_CHAIN = 'haneul:testnet';
 
-/** Sui Localnet */
-export const SUI_LOCALNET_CHAIN = 'sui:localnet';
+/** Haneul Localnet */
+export const HANEUL_LOCALNET_CHAIN = 'haneul:localnet';
 
-/** Sui Mainnet */
-export const SUI_MAINNET_CHAIN = 'sui:mainnet';
+/** Haneul Mainnet */
+export const HANEUL_MAINNET_CHAIN = 'haneul:mainnet';
 
-export const SUI_CHAINS = [
-	SUI_DEVNET_CHAIN,
-	SUI_TESTNET_CHAIN,
-	SUI_LOCALNET_CHAIN,
-	SUI_MAINNET_CHAIN,
+export const HANEUL_CHAINS = [
+	HANEUL_DEVNET_CHAIN,
+	HANEUL_TESTNET_CHAIN,
+	HANEUL_LOCALNET_CHAIN,
+	HANEUL_MAINNET_CHAIN,
 ] as const;
 
-export type SuiChain = (typeof SUI_CHAINS)[number];
+export type HaneulChain = (typeof HANEUL_CHAINS)[number];
 
 /**
- * Utility that returns whether or not a chain identifier is a valid Sui chain.
+ * Utility that returns whether or not a chain identifier is a valid Haneul chain.
  * @param chain a chain identifier in the form of `${string}:{$string}`
  */
-export function isSuiChain(chain: IdentifierString): chain is SuiChain {
-	return SUI_CHAINS.includes(chain as SuiChain);
+export function isHaneulChain(chain: IdentifierString): chain is HaneulChain {
+	return HANEUL_CHAINS.includes(chain as HaneulChain);
 }

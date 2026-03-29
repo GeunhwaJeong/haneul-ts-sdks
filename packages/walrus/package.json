@@ -1,10 +1,10 @@
 {
-	"name": "@mysten/walrus",
+	"name": "@haneullabs/walrus",
 	"version": "1.1.0",
 	"private": false,
 	"description": "Walrus SDK",
 	"license": "Apache-2.0",
-	"author": "Mysten Labs <build@mystenlabs.com>",
+	"author": "Haneul Labs <build@haneul-labs.com>",
 	"type": "module",
 	"main": "./dist/index.mjs",
 	"types": "./dist/index.d.mts",
@@ -27,7 +27,7 @@
 		"build:docs": "tsx ../docs/scripts/build-docs.ts",
 		"test": "pnpm test:examples && NODE_OPTIONS='--expose-gc' vitest run",
 		"test:examples": "tsc --project examples/tsconfig.json --noEmit",
-		"codegen": "sui-ts-codegen generate && pnpm lint:fix",
+		"codegen": "haneul-ts-codegen generate && pnpm lint:fix",
 		"prettier:check": "prettier -c --ignore-unknown .",
 		"prettier:fix": "prettier -w --ignore-unknown .",
 		"oxlint:check": "oxlint  .",
@@ -39,18 +39,18 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/mystenlabs/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
 	},
-	"homepage": "https://sdk.mystenlabs.com/walrus",
+	"homepage": "https://sdk.haneul-labs.com/walrus",
 	"devDependencies": {
 		"@hono/node-server": "^1.19.11",
-		"@mysten/codegen": "workspace:^",
-		"@mysten/dapp-kit-core": "workspace:^",
-		"@mysten/dapp-kit-react": "workspace:^",
-		"@mysten/sui": "workspace:^",
+		"@haneullabs/codegen": "workspace:^",
+		"@haneullabs/dapp-kit-core": "workspace:^",
+		"@haneullabs/dapp-kit-react": "workspace:^",
+		"@haneullabs/haneul": "workspace:^",
 		"@tanstack/react-query": "^5.90.16",
 		"@types/node": "^25.0.8",
 		"@types/react": "^19.2.8",
@@ -65,12 +65,12 @@
 		"vitest": "^4.0.17"
 	},
 	"dependencies": {
-		"@mysten/bcs": "workspace:^",
-		"@mysten/utils": "workspace:^",
-		"@mysten/walrus-wasm": "workspace:^",
+		"@haneullabs/bcs": "workspace:^",
+		"@haneullabs/utils": "workspace:^",
+		"@haneullabs/walrus-wasm": "workspace:^",
 		"dataloader": "^2.2.3"
 	},
 	"peerDependencies": {
-		"@mysten/sui": "workspace:^"
+		"@haneullabs/haneul": "workspace:^"
 	}
 }

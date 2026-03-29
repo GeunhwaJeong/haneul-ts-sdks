@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import type {
 	BorrowedShares,
@@ -34,7 +34,7 @@ export class MarginManagerQueries {
 		});
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
-		return normalizeSuiAddress(bcs.Address.parse(bytes));
+		return normalizeHaneulAddress(bcs.Address.parse(bytes));
 	}
 
 	async getMarginManagerDeepbookPool(marginManagerKey: string): Promise<string> {
@@ -48,7 +48,7 @@ export class MarginManagerQueries {
 		});
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
-		return normalizeSuiAddress(bcs.Address.parse(bytes));
+		return normalizeHaneulAddress(bcs.Address.parse(bytes));
 	}
 
 	async getMarginManagerMarginPoolId(marginManagerKey: string): Promise<string | null> {
@@ -63,7 +63,7 @@ export class MarginManagerQueries {
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const option = bcs.option(bcs.Address).parse(bytes);
-		return option ? normalizeSuiAddress(option) : null;
+		return option ? normalizeHaneulAddress(option) : null;
 	}
 
 	async getMarginManagerBorrowedShares(marginManagerKey: string): Promise<BorrowedShares> {
@@ -145,7 +145,7 @@ export class MarginManagerQueries {
 		});
 
 		const parsed = MarginManagerBalanceManagerId.parse(res.object.content);
-		return normalizeSuiAddress(parsed.balance_manager_id);
+		return normalizeHaneulAddress(parsed.balance_manager_id);
 	}
 
 	async getMarginManagerAssets(
@@ -250,10 +250,10 @@ export class MarginManagerQueries {
 		const baseCoin = this.#ctx.config.getCoin(pool.baseCoin);
 		const quoteCoin = this.#ctx.config.getCoin(pool.quoteCoin);
 
-		const managerId = normalizeSuiAddress(
+		const managerId = normalizeHaneulAddress(
 			bcs.Address.parse(res.commandResults[0].returnValues[0].bcs),
 		);
-		const deepbookPoolId = normalizeSuiAddress(
+		const deepbookPoolId = normalizeHaneulAddress(
 			bcs.Address.parse(res.commandResults[0].returnValues[1].bcs),
 		);
 		const riskRatio =
@@ -355,8 +355,8 @@ export class MarginManagerQueries {
 			const baseCoin = this.#ctx.config.getCoin(pool.baseCoin);
 			const quoteCoin = this.#ctx.config.getCoin(pool.quoteCoin);
 
-			const managerId = normalizeSuiAddress(bcs.Address.parse(commandResult.returnValues[0].bcs));
-			const deepbookPoolId = normalizeSuiAddress(
+			const managerId = normalizeHaneulAddress(bcs.Address.parse(commandResult.returnValues[0].bcs));
+			const deepbookPoolId = normalizeHaneulAddress(
 				bcs.Address.parse(commandResult.returnValues[1].bcs),
 			);
 			const riskRatio = Number(bcs.U64.parse(commandResult.returnValues[2].bcs)) / FLOAT_SCALAR;

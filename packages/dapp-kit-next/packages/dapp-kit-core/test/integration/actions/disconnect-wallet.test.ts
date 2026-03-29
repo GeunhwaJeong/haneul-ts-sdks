@@ -10,8 +10,8 @@ import {
 } from '../../test-utils.js';
 import { createMockWallets, MockWallet } from '../../mocks/mock-wallet.js';
 import { createDAppKit, DAppKit } from '../../../src/index.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { getWallets } from '@mysten/wallet-standard';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { getWallets } from '@haneullabs/wallet-standard';
 import { createMockAccount } from '../../mocks/mock-account.js';
 import { UiWallet } from '@wallet-standard/ui';
 
@@ -29,7 +29,7 @@ describe('[Integration] disconnectWallet action', () => {
 			networks: TEST_NETWORKS,
 			defaultNetwork: TEST_DEFAULT_NETWORK,
 			createClient(network) {
-				return new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] });
+				return new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] });
 			},
 			walletInitializers: [
 				{

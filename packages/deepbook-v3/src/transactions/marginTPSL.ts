@@ -1,6 +1,6 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import type { Transaction } from '@mysten/sui/transactions';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 
 import type { DeepBookConfig } from '../utils/config.js';
 import type {
@@ -201,7 +201,7 @@ export class MarginTPSLContract {
 	 * @description Execute conditional orders that have been triggered
 	 * This is a permissionless function that can be called by anyone
 	 * @param {string} managerAddress The address of the margin manager
-	 * @param {string} poolKey The key to identify the pool (e.g., 'SUI_USDC')
+	 * @param {string} poolKey The key to identify the pool (e.g., 'HANEUL_USDC')
 	 * @param {number} maxOrdersToExecute Maximum number of orders to execute in this call
 	 * @returns A function that takes a Transaction object
 	 */

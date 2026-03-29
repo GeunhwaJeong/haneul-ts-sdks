@@ -1,12 +1,12 @@
 /**************************************************************
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
-import { type BcsType } from '@mysten/sui/bcs';
+import { type BcsType } from '@haneullabs/haneul/bcs';
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as vec_set from './deps/sui/vec_set.js';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as vec_set from './deps/haneul/vec_set.js';
 import * as type_name from './deps/std/type_name.js';
-const $moduleName = '@mysten/pas::request';
+const $moduleName = '@haneullabs/pas::request';
 /** A base request type. Examples: `Request<SendFunds<T>>` `Request<UnlockFunds<T>>` */
 export function Request<K extends BcsType<any>>(...typeParameters: [K]) {
 	return new MoveStruct({
@@ -31,7 +31,7 @@ export interface ApproveOptions<U extends BcsType<any>> {
 }
 /** Adds an approval to a request. Can be called to resolve rules */
 export function approve<U extends BcsType<any>>(options: ApproveOptions<U>) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, `${options.typeArguments[1]}`] satisfies (string | null)[];
 	const parameterNames = ['request', 'Approval'];
 	return (tx: Transaction) =>
@@ -52,7 +52,7 @@ export interface DataOptions {
 	typeArguments: [string];
 }
 export function data(options: DataOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['request'];
 	return (tx: Transaction) =>
@@ -73,7 +73,7 @@ export interface ApprovalsOptions {
 	typeArguments: [string];
 }
 export function approvals(options: ApprovalsOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['request'];
 	return (tx: Transaction) =>

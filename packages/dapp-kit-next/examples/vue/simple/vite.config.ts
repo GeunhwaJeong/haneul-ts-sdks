@@ -11,7 +11,7 @@ export default defineConfig({
 		vue({
 			template: {
 				compilerOptions: {
-					isCustomElement: (tag) => tag.startsWith('mysten-dapp-kit-'),
+					isCustomElement: (tag) => tag.startsWith('haneullabs-dapp-kit-'),
 				},
 			},
 		}),

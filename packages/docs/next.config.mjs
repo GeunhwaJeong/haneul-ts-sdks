@@ -27,12 +27,12 @@ const config = {
 		return [
 			{
 				source: '/',
-				destination: '/sui',
+				destination: '/haneul',
 				statusCode: 302,
 			},
 			{
 				source: '/typescript/:path*',
-				destination: '/sui/:path*',
+				destination: '/haneul/:path*',
 				statusCode: 302,
 			},
 			{

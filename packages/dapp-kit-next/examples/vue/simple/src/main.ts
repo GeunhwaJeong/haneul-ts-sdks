@@ -3,7 +3,7 @@
 
 import './index.css';
 
-import '@mysten/dapp-kit-core/web';
+import '@haneullabs/dapp-kit-core/web';
 import { createApp } from 'vue';
 import App from './App.vue';
 

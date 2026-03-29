@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Transaction } from '@mysten/sui/transactions';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 
 import { PriceInfoObject } from '../contracts/pyth/price_info.js';
-import { SuiPriceServiceConnection, SuiPythClient } from '../pyth/pyth.js';
+import { HaneulPriceServiceConnection, HaneulPythClient } from '../pyth/pyth.js';
 import { PRICE_INFO_OBJECT_MAX_AGE_MS } from '../utils/config.js';
 import type { QueryContext } from './context.js';
 
@@ -30,7 +30,7 @@ export class PriceFeedQueries {
 			this.#ctx.config.network === 'testnet'
 				? 'https://hermes-beta.pyth.network'
 				: 'https://hermes.pyth.network';
-		const connection = new SuiPriceServiceConnection(endpoint);
+		const connection = new HaneulPriceServiceConnection(endpoint);
 
 		const priceIDs = [this.#ctx.config.getCoin(coinKey).feed!];
 
@@ -39,7 +39,7 @@ export class PriceFeedQueries {
 		const wormholeStateId = this.#ctx.config.pyth.wormholeStateId;
 		const pythStateId = this.#ctx.config.pyth.pythStateId;
 
-		const client = new SuiPythClient(this.#ctx.client, pythStateId, wormholeStateId);
+		const client = new HaneulPythClient(this.#ctx.client, pythStateId, wormholeStateId);
 
 		return (await client.updatePriceFeeds(tx, priceUpdateData, priceIDs))[0];
 	}
@@ -104,13 +104,13 @@ export class PriceFeedQueries {
 			this.#ctx.config.network === 'testnet'
 				? 'https://hermes-beta.pyth.network'
 				: 'https://hermes.pyth.network';
-		const connection = new SuiPriceServiceConnection(endpoint);
+		const connection = new HaneulPriceServiceConnection(endpoint);
 
 		const priceUpdateData = await connection.getPriceFeedsUpdateData(staleFeedIds);
 
 		const wormholeStateId = this.#ctx.config.pyth.wormholeStateId;
 		const pythStateId = this.#ctx.config.pyth.pythStateId;
-		const pythClient = new SuiPythClient(this.#ctx.client, pythStateId, wormholeStateId);
+		const pythClient = new HaneulPythClient(this.#ctx.client, pythStateId, wormholeStateId);
 
 		const updatedObjectIds = await pythClient.updatePriceFeeds(tx, priceUpdateData, staleFeedIds);
 

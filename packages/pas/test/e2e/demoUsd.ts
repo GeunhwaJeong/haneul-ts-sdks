@@ -1,6 +1,6 @@
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
-import { execSuiTools, type PublishedPackage, type TestToolbox } from './setup.js';
+import { execHaneulTools, type PublishedPackage, type TestToolbox } from './setup.js';
 
 export class DemoUsdTestHelpers {
 	toolbox: TestToolbox;
@@ -29,7 +29,7 @@ export class DemoUsdTestHelpers {
 		// directory so test-publish treats it as a separate package instance.
 		let packagePath = 'demo_usd';
 		if (this.#cacheKey !== 'demo_usd') {
-			await execSuiTools(['cp', '-r', '/test-data/demo_usd', `/test-data/${this.#cacheKey}`]);
+			await execHaneulTools(['cp', '-r', '/test-data/demo_usd', `/test-data/${this.#cacheKey}`]);
 			packagePath = this.#cacheKey;
 		}
 

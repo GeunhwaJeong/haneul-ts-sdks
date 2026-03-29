@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 import { Agent, setGlobalDispatcher } from 'undici';
 
 import { WalrusClient } from '../../src/client.js';
@@ -15,14 +15,14 @@ setGlobalDispatcher(
 	}),
 );
 
-const suiClient = new SuiGrpcClient({
+const haneulClient = new HaneulGrpcClient({
 	network: 'testnet',
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 });
 
 const walrusClient = new WalrusClient({
 	network: 'testnet',
-	suiClient,
+	haneulClient,
 	storageNodeClientOptions: {
 		timeout: 60_000,
 	},

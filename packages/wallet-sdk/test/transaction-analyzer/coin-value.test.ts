@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { describe, it, expect } from 'vitest';
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 import { analyze } from '../../src/transaction-analyzer/analyzer.js';
 import { coinValues } from '../../src/transaction-analyzer/rules/coin-value.js';
-import { MockSuiClient } from '../mocks/MockSuiClient.js';
+import { MockHaneulClient } from '../mocks/MockHaneulClient.js';
 import {
 	DEFAULT_SENDER,
 	createAddressOwner,
@@ -18,9 +18,9 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	// Mock price provider function
 	const mockGetCoinPrices = async (coinTypes: string[]) => {
 		const priceMap: Record<string, { decimals: number; price: number | null }> = {
-			'0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI': {
+			'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL': {
 				decimals: 9,
-				price: 2.5, // $2.50 per SUI
+				price: 2.5, // $2.50 per HANEUL
 			},
 			'0x0000000000000000000000000000000000000000000000000000000000000a0b::usdc::USDC': {
 				decimals: 6,
@@ -45,21 +45,21 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	};
 
 	it('should calculate coin values for transactions with known prices', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
 		// Create a transaction that uses multiple coin types
-		const suiCoin = tx.object(TEST_COIN_1_ID); // 5 SUI
+		const haneulCoin = tx.object(TEST_COIN_1_ID); // 5 HANEUL
 		const usdcCoin = tx.object(TEST_USDC_COIN_ID); // 500 USDC from default mock
 		const wethCoin = tx.object(TEST_WETH_COIN_ID); // 2.5 WETH from default mock
 
-		// Transfer 1 SUI, 100 USDC, and 0.5 WETH
-		const [suiSplit] = tx.splitCoins(suiCoin, [1000000000n]); // 1 SUI
+		// Transfer 1 HANEUL, 100 USDC, and 0.5 WETH
+		const [haneulSplit] = tx.splitCoins(haneulCoin, [1000000000n]); // 1 HANEUL
 		const [usdcSplit] = tx.splitCoins(usdcCoin, [100000000n]); // 100 USDC
 		const [wethSplit] = tx.splitCoins(wethCoin, [500000000000000000n]); // 0.5 WETH
 
-		tx.transferObjects([suiSplit, usdcSplit, wethSplit], tx.pure.address('0x456'));
+		tx.transferObjects([haneulSplit, usdcSplit, wethSplit], tx.pure.address('0x456'));
 
 		const results = await analyze(
 			{ coinValues },
@@ -76,7 +76,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 			  "coinTypes": [
 			    {
 			      "amount": 1010000000n,
-			      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			      "convertedAmount": 2.525,
 			      "decimals": 9,
 			      "price": 2.5,
@@ -103,7 +103,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should handle transactions with no coin flows', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
@@ -121,7 +121,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 		expect(results.coinValues.result).toEqual({
 			coinTypes: [
 				{
-					coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
+					coinType: '0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
 					decimals: 9,
 					price: 2.5,
 					amount: 10000000n,
@@ -134,7 +134,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should handle coins without known prices', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 
 		// Add an unknown token
 		client.addCoin({
@@ -147,12 +147,12 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
-		// Transfer some SUI (known price) and unknown token (no price)
-		const suiCoin = tx.object(TEST_COIN_1_ID);
+		// Transfer some HANEUL (known price) and unknown token (no price)
+		const haneulCoin = tx.object(TEST_COIN_1_ID);
 		const unknownCoin = tx.object('0xa5c020');
 
-		const [suiSplit] = tx.splitCoins(suiCoin, [500000000n]); // 0.5 SUI
-		tx.transferObjects([suiSplit, unknownCoin], tx.pure.address('0x456'));
+		const [haneulSplit] = tx.splitCoins(haneulCoin, [500000000n]); // 0.5 HANEUL
+		tx.transferObjects([haneulSplit, unknownCoin], tx.pure.address('0x456'));
 
 		const results = await analyze(
 			{ coinValues },
@@ -170,17 +170,17 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should calculate correct USD values with proper decimals', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
 		// Create precise amounts for calculation testing
-		const suiCoin = tx.object(TEST_COIN_1_ID);
+		const haneulCoin = tx.object(TEST_COIN_1_ID);
 
-		// Split exactly 2.5 SUI (2500000000 = 2.5 * 10^9)
-		// At $2.50 per SUI, this should be $6.25 total
-		const [suiSplit] = tx.splitCoins(suiCoin, [2500000000n]);
-		tx.transferObjects([suiSplit], tx.pure.address('0x456'));
+		// Split exactly 2.5 HANEUL (2500000000 = 2.5 * 10^9)
+		// At $2.50 per HANEUL, this should be $6.25 total
+		const [haneulSplit] = tx.splitCoins(haneulCoin, [2500000000n]);
+		tx.transferObjects([haneulSplit], tx.pure.address('0x456'));
 
 		const results = await analyze(
 			{ coinValues },
@@ -196,7 +196,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 			  "coinTypes": [
 			    {
 			      "amount": 2510000000n,
-			      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+			      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			      "convertedAmount": 6.2749999999999995,
 			      "decimals": 9,
 			      "price": 2.5,
@@ -209,7 +209,7 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should handle mixed scenarios with some priced and some unpriced coins', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 
 		// Add coins with and without prices
 		client.addCoin({
@@ -223,14 +223,14 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 		tx.setSender(DEFAULT_SENDER);
 
 		// Use both types
-		const suiCoin = tx.object(TEST_COIN_1_ID); // Has price
+		const haneulCoin = tx.object(TEST_COIN_1_ID); // Has price
 		const usdcCoin = tx.object(TEST_USDC_COIN_ID); // Has price
 		const unknownCoin = tx.object('0xa5c021'); // No price
 
-		const [suiSplit] = tx.splitCoins(suiCoin, [1000000000n]); // 1 SUI = $2.50
+		const [haneulSplit] = tx.splitCoins(haneulCoin, [1000000000n]); // 1 HANEUL = $2.50
 		const [usdcSplit] = tx.splitCoins(usdcCoin, [50000000n]); // 50 USDC = $50.00
 
-		tx.transferObjects([suiSplit, usdcSplit, unknownCoin], tx.pure.address('0x456'));
+		tx.transferObjects([haneulSplit, usdcSplit, unknownCoin], tx.pure.address('0x456'));
 
 		const results = await analyze(
 			{ coinValues },
@@ -248,13 +248,13 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should handle price provider errors gracefully', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
-		const suiCoin = tx.object(TEST_COIN_1_ID);
-		const [suiSplit] = tx.splitCoins(suiCoin, [1000000000n]);
-		tx.transferObjects([suiSplit], tx.pure.address('0x456'));
+		const haneulCoin = tx.object(TEST_COIN_1_ID);
+		const [haneulSplit] = tx.splitCoins(haneulCoin, [1000000000n]);
+		tx.transferObjects([haneulSplit], tx.pure.address('0x456'));
 
 		// Price provider that throws an error
 		const errorGetCoinPrices = async () => {
@@ -283,15 +283,15 @@ describe('TransactionAnalyzer - Coin Value Rule', () => {
 	});
 
 	it('should only calculate values for outflow coins (spent coins)', async () => {
-		const client = new MockSuiClient();
+		const client = new MockHaneulClient();
 		const tx = new Transaction();
 		tx.setSender(DEFAULT_SENDER);
 
-		const suiCoin = tx.object(TEST_COIN_1_ID);
+		const haneulCoin = tx.object(TEST_COIN_1_ID);
 
 		// Split and transfer back to sender (should not create outflow)
-		const [suiSplit] = tx.splitCoins(suiCoin, [1000000000n]);
-		tx.transferObjects([suiSplit], tx.pure.address(DEFAULT_SENDER));
+		const [haneulSplit] = tx.splitCoins(haneulCoin, [1000000000n]);
+		tx.transferObjects([haneulSplit], tx.pure.address(DEFAULT_SENDER));
 
 		const results = await analyze(
 			{ coinValues },

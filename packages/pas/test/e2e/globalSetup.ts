@@ -10,12 +10,12 @@ declare module 'vitest' {
 		localnetPort: number;
 		graphqlPort: number;
 		faucetPort: number;
-		suiToolsContainerId: string;
+		haneulToolsContainerId: string;
 	}
 }
 
-const SUI_TOOLS_TAG =
-	process.env.SUI_TOOLS_TAG ||
+const HANEUL_TOOLS_TAG =
+	process.env.HANEUL_TOOLS_TAG ||
 	(process.arch === 'arm64'
 		? '951cae315d8b252131836a331bcc16b89eb340d6-arm64'
 		: '951cae315d8b252131836a331bcc16b89eb340d6');
@@ -28,7 +28,7 @@ export default async function setup(project: TestProject) {
 		.withEnvironment({
 			POSTGRES_USER: 'postgres',
 			POSTGRES_PASSWORD: 'postgrespw',
-			POSTGRES_DB: 'sui_indexer_v2',
+			POSTGRES_DB: 'haneul_indexer_v2',
 		})
 		.withCommand(['-c', 'max_connections=500'])
 		.withExposedPorts(5432)
@@ -36,14 +36,14 @@ export default async function setup(project: TestProject) {
 		.withPullPolicy(PullPolicy.alwaysPull())
 		.start();
 
-	const localnet = await new GenericContainer(`mysten/sui-tools:${SUI_TOOLS_TAG}`)
+	const localnet = await new GenericContainer(`haneullabs/haneul-tools:${HANEUL_TOOLS_TAG}`)
 		.withCommand([
-			'sui',
+			'haneul',
 			'start',
 			'--with-faucet',
 			'--force-regenesis',
 			'--with-graphql',
-			`--with-indexer=postgres://postgres:postgrespw@${pg.getIpAddress(network.getName())}:5432/sui_indexer_v2`,
+			`--with-indexer=postgres://postgres:postgrespw@${pg.getIpAddress(network.getName())}:5432/haneul_indexer_v2`,
 		])
 		.withCopyDirectoriesToContainer([{ source: resolve(__dirname, 'data'), target: '/test-data' }])
 		.withNetwork(network)
@@ -58,5 +58,5 @@ export default async function setup(project: TestProject) {
 	project.provide('faucetPort', localnet.getMappedPort(9123));
 	project.provide('localnetPort', localnet.getMappedPort(9000));
 	project.provide('graphqlPort', localnet.getMappedPort(9125));
-	project.provide('suiToolsContainerId', localnet.getId());
+	project.provide('haneulToolsContainerId', localnet.getId());
 }

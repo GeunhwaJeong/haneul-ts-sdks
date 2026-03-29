@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Signer } from '@mysten/sui/cryptography';
-import type { Transaction } from '@mysten/sui/transactions';
+import type { Signer } from '@haneullabs/haneul/cryptography';
+import type { Transaction } from '@haneullabs/haneul/transactions';
 
 import type {
 	WriteBlobFlowOptions,
@@ -108,7 +108,7 @@ export function createWriteFilesFlow(
 				signer: options.signer,
 				epochs: options.epochs,
 				deletable: options.deletable,
-				owner: options.owner ?? options.signer.toSuiAddress(),
+				owner: options.owner ?? options.signer.toHaneulAddress(),
 				attributes: {
 					_walrusBlobType: 'quilt',
 					...options.attributes,

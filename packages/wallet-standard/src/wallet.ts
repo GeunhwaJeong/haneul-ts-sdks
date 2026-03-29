@@ -1,15 +1,15 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { Transaction } from '@mysten/sui/transactions';
-import { fromBase64, toBase64 } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { fromBase64, toBase64 } from '@haneullabs/haneul/utils';
 import type { WalletWithFeatures } from '@wallet-standard/core';
 
 import type {
-	SuiSignAndExecuteTransactionInput,
-	SuiSignTransactionInput,
-	SuiWalletFeatures,
+	HaneulSignAndExecuteTransactionInput,
+	HaneulSignTransactionInput,
+	HaneulWalletFeatures,
 } from './features/index.js';
 
 declare module '@wallet-standard/core' {
@@ -30,20 +30,20 @@ declare module '@wallet-standard/core' {
 export type { Wallet } from '@wallet-standard/core';
 
 export async function signAndExecuteTransaction(
-	wallet: WalletWithFeatures<Partial<SuiWalletFeatures>>,
-	input: SuiSignAndExecuteTransactionInput,
+	wallet: WalletWithFeatures<Partial<HaneulWalletFeatures>>,
+	input: HaneulSignAndExecuteTransactionInput,
 ) {
-	if (wallet.features['sui:signAndExecuteTransaction']) {
-		return wallet.features['sui:signAndExecuteTransaction'].signAndExecuteTransaction(input);
+	if (wallet.features['haneul:signAndExecuteTransaction']) {
+		return wallet.features['haneul:signAndExecuteTransaction'].signAndExecuteTransaction(input);
 	}
 
-	if (!wallet.features['sui:signAndExecuteTransactionBlock']) {
+	if (!wallet.features['haneul:signAndExecuteTransactionBlock']) {
 		throw new Error(
 			`Provided wallet (${wallet.name}) does not support the signAndExecuteTransaction feature.`,
 		);
 	}
 
-	const { signAndExecuteTransactionBlock } = wallet.features['sui:signAndExecuteTransactionBlock'];
+	const { signAndExecuteTransactionBlock } = wallet.features['haneul:signAndExecuteTransactionBlock'];
 
 	const transactionBlock = Transaction.from(await input.transaction.toJSON());
 	const { digest, rawEffects, rawTransaction } = await signAndExecuteTransactionBlock({
@@ -74,20 +74,20 @@ export async function signAndExecuteTransaction(
 }
 
 export async function signTransaction(
-	wallet: WalletWithFeatures<Partial<SuiWalletFeatures>>,
-	input: SuiSignTransactionInput,
+	wallet: WalletWithFeatures<Partial<HaneulWalletFeatures>>,
+	input: HaneulSignTransactionInput,
 ) {
-	if (wallet.features['sui:signTransaction']) {
-		return wallet.features['sui:signTransaction'].signTransaction(input);
+	if (wallet.features['haneul:signTransaction']) {
+		return wallet.features['haneul:signTransaction'].signTransaction(input);
 	}
 
-	if (!wallet.features['sui:signTransactionBlock']) {
+	if (!wallet.features['haneul:signTransactionBlock']) {
 		throw new Error(
 			`Provided wallet (${wallet.name}) does not support the signTransaction feature.`,
 		);
 	}
 
-	const { signTransactionBlock } = wallet.features['sui:signTransactionBlock'];
+	const { signTransactionBlock } = wallet.features['haneul:signTransactionBlock'];
 
 	const transaction = Transaction.from(await input.transaction.toJSON());
 	const { transactionBlockBytes, signature } = await signTransactionBlock({

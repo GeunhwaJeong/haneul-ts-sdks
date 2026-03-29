@@ -1,0 +1,103 @@
+// Copyright (c) Mysten Labs, Inc.
+// SPDX-License-Identifier: Apache-2.0
+
+import { resolve } from 'path';
+import { GenericContainer, getContainerRuntimeClient, Network, PullPolicy } from 'testcontainers';
+import type { TestProject } from 'vitest/node';
+
+import type { PrePublishedPackage } from './prePublish.js';
+import { prePublishPackages } from './prePublish.js';
+
+declare module 'vitest' {
+	export interface ProvidedContext {
+		localnetPort: number;
+		graphqlPort: number;
+		faucetPort: number;
+		haneulToolsContainerId: string;
+		prePublishedPackages: Record<string, PrePublishedPackage>;
+	}
+}
+
+const HANEUL_TOOLS_TAG =
+	process.env.HANEUL_TOOLS_TAG ||
+	(process.arch === 'arm64'
+		? '08500756541c6fd66c81a59d1af1d819e997a189-arm64'
+		: '08500756541c6fd66c81a59d1af1d819e997a189');
+
+export default async function setup(project: TestProject) {
+	console.log('Starting test containers');
+	const network = await new Network().start();
+
+	const pg = await new GenericContainer('postgres')
+		.withEnvironment({
+			POSTGRES_USER: 'postgres',
+			POSTGRES_PASSWORD: 'postgrespw',
+			POSTGRES_DB: 'haneul_indexer_v2',
+		})
+		.withCommand(['-c', 'max_connections=500'])
+		.withExposedPorts(5432)
+		.withNetwork(network)
+		.withPullPolicy(PullPolicy.alwaysPull())
+		.start();
+
+	const localnet = await new GenericContainer(`haneullabs/haneul-tools:${HANEUL_TOOLS_TAG}`)
+		// .withPullPolicy(PullPolicy.alwaysPull())
+		.withCommand([
+			'haneul',
+			'start',
+			'--with-faucet',
+			'--force-regenesis',
+			'--with-graphql',
+			`--with-indexer=postgres://postgres:postgrespw@${pg.getIpAddress(network.getName())}:5432/haneul_indexer_v2`,
+		])
+		.withCopyDirectoriesToContainer([
+			{ source: resolve(__dirname, '../data'), target: '/test-data' },
+		])
+		.withNetwork(network)
+		.withExposedPorts(9000, 9123, 9124, 9125)
+		.withLogConsumer((stream) => {
+			stream.on('data', (data) => {
+				console.log(data.toString());
+			});
+		})
+		.start();
+
+	const faucetPort = localnet.getMappedPort(9123);
+	const localnetPort = localnet.getMappedPort(9000);
+	const graphqlPort = localnet.getMappedPort(9125);
+	const containerId = localnet.getId();
+
+	// Create default haneul config so `haneul keytool` commands work in the container.
+	// This must happen once before any tests run to avoid race conditions.
+	const runtimeClient = await getContainerRuntimeClient();
+	const container = runtimeClient.container.getById(containerId);
+	await runtimeClient.container.exec(container, ['mkdir', '-p', '/root/.haneul/haneul_config']);
+	await runtimeClient.container.exec(container, [
+		'bash',
+		'-c',
+		`echo '[]' > /root/.haneul/haneul_config/haneul.keystore && cat > /root/.haneul/haneul_config/client.yaml << 'EOF'
+---
+keystore:
+  File: /root/.haneul/haneul_config/haneul.keystore
+envs:
+  - alias: localnet
+    rpc: "http://127.0.0.1:9000"
+    ws: ~
+active_env: localnet
+active_address: "0x0000000000000000000000000000000000000000000000000000000000000000"
+EOF`,
+	]);
+
+	project.provide('faucetPort', faucetPort);
+	project.provide('localnetPort', localnetPort);
+	project.provide('graphqlPort', graphqlPort);
+	project.provide('haneulToolsContainerId', containerId);
+
+	// Pre-publish shared packages
+	const prePublished = await prePublishPackages({
+		fullnodeUrl: `http://127.0.0.1:${localnetPort}`,
+		faucetUrl: `http://127.0.0.1:${faucetPort}`,
+		containerId,
+	});
+	project.provide('prePublishedPackages', prePublished);
+}

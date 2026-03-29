@@ -12,21 +12,21 @@
  */
 
 import { execSync } from 'child_process';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { Transaction } from '@mysten/sui/transactions';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 import { deepbook, OrderType, SelfMatchingOptions } from '../src/index.js';
 
-const SUI = process.env.SUI_BINARY ?? `sui`;
+const HANEUL = process.env.HANEUL_BINARY ?? `haneul`;
 
 type Network = 'mainnet' | 'testnet';
 
 export const getActiveAddress = () => {
-	return execSync(`${SUI} client active-address`, { encoding: 'utf8' }).trim();
+	return execSync(`${HANEUL} client active-address`, { encoding: 'utf8' }).trim();
 };
 
 const getActiveNetwork = (): Network => {
-	const env = execSync(`${SUI} client active-env`, { encoding: 'utf8' }).trim();
+	const env = execSync(`${HANEUL} client active-env`, { encoding: 'utf8' }).trim();
 	if (env !== 'mainnet' && env !== 'testnet') {
 		throw new Error(`Unsupported network: ${env}. Only 'mainnet' and 'testnet' are supported.`);
 	}
@@ -34,8 +34,8 @@ const getActiveNetwork = (): Network => {
 };
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.sui.io:443',
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
 (async () => {
@@ -48,11 +48,11 @@ const GRPC_URLS = {
 	const marginManagers = {
 		MARGIN_MANAGER_1: {
 			address: '0x20f689b98e9afe22b5f4ec2e7e39a1b5fbbbb09e4f1f580a387dcc2015a9abda',
-			poolKey: 'SUI_DBUSDC',
+			poolKey: 'HANEUL_DBUSDC',
 		},
 	};
 
-	const client = new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
+	const client = new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }).$extend(
 		deepbook({
 			address: getActiveAddress(),
 			marginManagers,
@@ -117,7 +117,7 @@ const GRPC_URLS = {
 	const tx = new Transaction();
 
 	// Update Pyth price feeds (required for TPSL operations)
-	await client.deepbook.getPriceInfoObject(tx, 'SUI');
+	await client.deepbook.getPriceInfoObject(tx, 'HANEUL');
 	await client.deepbook.getPriceInfoObject(tx, 'DBUSDC');
 
 	// ----------------------------------------------------------------------------
@@ -223,7 +223,7 @@ const GRPC_URLS = {
 
 	// Execute up to 10 triggered orders for a target margin manager (permissionless - any address)
 	const targetManagerAddress = marginManagers.MARGIN_MANAGER_1.address;
-	client.deepbook.marginTPSL.executeConditionalOrders(targetManagerAddress, 'SUI_USDC', 10)(tx);
+	client.deepbook.marginTPSL.executeConditionalOrders(targetManagerAddress, 'HANEUL_USDC', 10)(tx);
 
 	// ============================================================================
 	// SECTION 3: USING HELPER FUNCTIONS DIRECTLY (Advanced Usage)
@@ -235,18 +235,18 @@ const GRPC_URLS = {
 	const tx2 = new Transaction();
 
 	// Update Pyth price feeds
-	await client.deepbook.getPriceInfoObject(tx2, 'SUI');
+	await client.deepbook.getPriceInfoObject(tx2, 'HANEUL');
 	await client.deepbook.getPriceInfoObject(tx2, 'DBUSDC');
 
 	// 3.1 Create a condition manually
 	const condition = client.deepbook.marginTPSL.newCondition(
-		'SUI_DBUSDC', // Pool key for price calculation
+		'HANEUL_DBUSDC', // Pool key for price calculation
 		true, // triggerBelowPrice
 		4.0, // triggerPrice
 	)(tx2);
 
 	// 3.2 Create a pending limit order manually
-	const pendingLimitOrder = client.deepbook.marginTPSL.newPendingLimitOrder('SUI_DBUSDC', {
+	const pendingLimitOrder = client.deepbook.marginTPSL.newPendingLimitOrder('HANEUL_DBUSDC', {
 		clientOrderId: '3001',
 		orderType: OrderType.IMMEDIATE_OR_CANCEL,
 		selfMatchingOption: SelfMatchingOptions.SELF_MATCHING_ALLOWED,
@@ -258,7 +258,7 @@ const GRPC_URLS = {
 	})(tx2);
 
 	// 3.3 Create a pending market order manually
-	const pendingMarketOrder = client.deepbook.marginTPSL.newPendingMarketOrder('SUI_DBUSDC', {
+	const pendingMarketOrder = client.deepbook.marginTPSL.newPendingMarketOrder('HANEUL_DBUSDC', {
 		clientOrderId: '3002',
 		selfMatchingOption: SelfMatchingOptions.SELF_MATCHING_ALLOWED,
 		quantity: 2,

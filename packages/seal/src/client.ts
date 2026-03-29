@@ -42,7 +42,7 @@ export function seal<Name = 'seal'>({ name = 'seal' as Name, ...options }: SealO
 		name,
 		register: (client: SealCompatibleClient) => {
 			return new SealClient({
-				suiClient: client,
+				haneulClient: client,
 				...options,
 			});
 		},
@@ -50,7 +50,7 @@ export function seal<Name = 'seal'>({ name = 'seal' as Name, ...options }: SealO
 }
 
 export class SealClient {
-	#suiClient: SealCompatibleClient;
+	#haneulClient: SealCompatibleClient;
 	#configs: Map<string, KeyServerConfig>;
 	#keyServers: Promise<Map<string, KeyServer>> | null = null;
 	#verifyKeyServers: boolean;
@@ -61,7 +61,7 @@ export class SealClient {
 	#totalWeight: number;
 
 	constructor(options: SealClientOptions) {
-		this.#suiClient = options.suiClient;
+		this.#haneulClient = options.haneulClient;
 
 		if (
 			new Set(options.serverConfigs.map((s) => s.objectId)).size !== options.serverConfigs.length
@@ -108,7 +108,7 @@ export class SealClient {
 		data,
 		aad = new Uint8Array(),
 	}: EncryptOptions) {
-		const packageObj = await this.#suiClient.core.getObject({ objectId: packageId });
+		const packageObj = await this.#haneulClient.core.getObject({ objectId: packageId });
 		if (String(packageObj.object.version) !== '1') {
 			throw new InvalidPackageError(`Package ${packageId} is not the first version`);
 		}
@@ -247,7 +247,7 @@ export class SealClient {
 			(
 				await retrieveKeyServers({
 					objectIds: missingKeyServers,
-					client: this.#suiClient,
+					client: this.#haneulClient,
 					configs: this.#configs,
 				})
 			).forEach((keyServer) =>
@@ -283,7 +283,7 @@ export class SealClient {
 	async #loadKeyServers(): Promise<Map<string, KeyServer>> {
 		const keyServers = await retrieveKeyServers({
 			objectIds: [...this.#configs.keys()],
-			client: this.#suiClient,
+			client: this.#haneulClient,
 			configs: this.#configs,
 		});
 

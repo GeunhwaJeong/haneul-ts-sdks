@@ -1,6 +1,6 @@
-import { useCurrentAccount } from "@mysten/dapp-kit-react";
-import { ConnectButton } from "@mysten/dapp-kit-react/ui";
-import { isValidSuiObjectId } from "@mysten/sui/utils";
+import { useCurrentAccount } from "@haneullabs/dapp-kit-react";
+import { ConnectButton } from "@haneullabs/dapp-kit-react/ui";
+import { isValidHaneulObjectId } from "@haneullabs/haneul/utils";
 import { useState } from "react";
 import { Counter } from "./Counter";
 import { CreateCounter } from "./CreateCounter";
@@ -11,14 +11,14 @@ function App() {
   const currentAccount = useCurrentAccount();
   const [counterId, setCounter] = useState(() => {
     const hash = window.location.hash.slice(1);
-    return isValidSuiObjectId(hash) ? hash : null;
+    return isValidHaneulObjectId(hash) ? hash : null;
   });
 
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 items-center justify-between px-4">
-          <h1 className="text-lg font-semibold">Sui Counter dApp</h1>
+          <h1 className="text-lg font-semibold">Haneul Counter dApp</h1>
           <ConnectButton />
         </div>
       </header>
@@ -47,7 +47,7 @@ function App() {
               <CardContent>
                 <p className="text-muted-foreground">
                   Connect your wallet to create and interact with counters on
-                  the Sui blockchain.
+                  the Haneul blockchain.
                 </p>
               </CardContent>
             </Card>

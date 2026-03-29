@@ -235,10 +235,10 @@ export function getPageEntries(
 export const EXCLUDED_SUBDIRS = ['dapp-kit/legacy'];
 
 /**
- * Generate a markdown index for a single content section (e.g. "sui", "dapp-kit").
+ * Generate a markdown index for a single content section (e.g. "haneul", "dapp-kit").
  *
  * @param sectionDir  Absolute path to the content section directory
- * @param basePath    Prefix for relative links (e.g. "." for per-package, "./sui" for full index)
+ * @param basePath    Prefix for relative links (e.g. "." for per-package, "./haneul" for full index)
  * @param heading     Optional heading level override (default: "##")
  */
 export function generateSectionIndex(

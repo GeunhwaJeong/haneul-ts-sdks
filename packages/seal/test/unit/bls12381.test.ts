@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import { G1Element, G2Element, Scalar } from '../../src/bls12381.js';
 import { bls12_381 } from '@noble/curves/bls12-381.js';
-import { fromHex, toHex } from '@mysten/bcs';
+import { fromHex, toHex } from '@haneullabs/bcs';
 
 describe('BLS12-381', () => {
 	it('Scalar encoding', () => {

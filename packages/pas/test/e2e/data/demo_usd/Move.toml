@@ -4,5 +4,5 @@ edition = "2024.beta"
 
 [dependencies]
 # testnet v1
-pas = { git = "https://github.com/mystenlabs/pas.git", subdir = "packages/pas", rev = "b710e43a555bb66ec6d5288441a25b41c2d339f2" }
-ptb = { git = "https://github.com/mystenlabs/pas.git", subdir = "packages/ptb", rev = "b710e43a555bb66ec6d5288441a25b41c2d339f2" }
+pas = { git = "https://github.com/GeunhwaJeong/pas.git", subdir = "packages/pas", rev = "b710e43a555bb66ec6d5288441a25b41c2d339f2" }
+ptb = { git = "https://github.com/GeunhwaJeong/pas.git", subdir = "packages/ptb", rev = "b710e43a555bb66ec6d5288441a25b41c2d339f2" }

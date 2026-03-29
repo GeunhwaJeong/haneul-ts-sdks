@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { deriveDynamicFieldID, deriveObjectID, normalizeSuiAddress } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { deriveDynamicFieldID, deriveObjectID, normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import type { PASPackageConfig } from './types.js';
 
@@ -25,7 +25,7 @@ export function deriveAccountAddress(owner: string, packageConfig: PASPackageCon
 		owner: bcs.Address,
 	});
 
-	const key = accountKeyBcs.serialize({ owner: normalizeSuiAddress(owner) }).toBytes();
+	const key = accountKeyBcs.serialize({ owner: normalizeHaneulAddress(owner) }).toBytes();
 
 	// The type tag is the AccountKey type from the PAS package
 	const typeTag = `${packageId}::keys::AccountKey`;
@@ -51,7 +51,7 @@ export interface DerivePolicyOptions {
  * By default the asset type is wrapped as `Balance<T>` to match the current
  * on-chain convention. Pass `options.wrapType` to override.
  *
- * @param assetType - The full type of the asset (e.g., "0x2::sui::SUI")
+ * @param assetType - The full type of the asset (e.g., "0x2::haneul::HANEUL")
  * @param packageConfig - PAS package configuration
  * @param options - Optional derivation options
  * @returns The derived policy object ID

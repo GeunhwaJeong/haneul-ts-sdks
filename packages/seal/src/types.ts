@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ClientWithExtensions, CoreClient } from '@mysten/sui/client';
+import type { ClientWithExtensions, CoreClient } from '@haneullabs/haneul/client';
 import type { DemType, KemType } from './encrypt.js';
 import type { SessionKey } from './session-key.js';
 
@@ -33,7 +33,7 @@ export interface KeyServerConfig {
 
 /** Configuration options for initializing a SealClient*/
 export interface SealClientOptions {
-	suiClient: SealCompatibleClient;
+	haneulClient: SealCompatibleClient;
 	/** Array of key server configs consisting of objectId, weight, optional API key name and API key */
 	serverConfigs: KeyServerConfig[];
 	/** Whether to verify the key servers' authenticity. */

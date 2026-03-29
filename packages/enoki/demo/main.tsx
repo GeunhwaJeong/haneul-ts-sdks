@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { DAppKitProvider } from '@mysten/dapp-kit-react';
+import { DAppKitProvider } from '@haneullabs/dapp-kit-react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 

@@ -5,29 +5,29 @@ import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import type { DAppKitConnectModal } from './dapp-kit-connect-modal.js';
 import { createDAppKit } from '../core/index.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 };
 
 const dAppKit = createDAppKit({
 	networks: ['testnet'],
 	createClient(network) {
-		return new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] });
+		return new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] });
 	},
 });
 
 const meta = {
 	title: 'Connect Modal',
-	component: 'mysten-dapp-kit-connect-modal',
+	component: 'haneullabs-dapp-kit-connect-modal',
 	render: (args) => html`
-		<mysten-dapp-kit-connect-modal
+		<haneullabs-dapp-kit-connect-modal
 			?open="${args['open']}"
 			.sortFn=${args['sortFn']}
 			.filterFn=${args['filterFn']}
 			.instance=${dAppKit}
-		></mysten-dapp-kit-connect-modal>
+		></haneullabs-dapp-kit-connect-modal>
 	`,
 	tags: ['autodocs'],
 } satisfies Meta;

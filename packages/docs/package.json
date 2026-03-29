@@ -1,16 +1,16 @@
 {
-	"name": "@mysten/docs",
+	"name": "@haneullabs/docs",
 	"version": "0.1.7",
-	"description": "LLM-friendly documentation for the Sui TypeScript SDK ecosystem",
+	"description": "LLM-friendly documentation for the Haneul TypeScript SDK ecosystem",
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MystenLabs/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MystenLabs/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
 	},
-	"homepage": "https://sdk.mystenlabs.com",
+	"homepage": "https://sdk.haneul-labs.com",
 	"files": [
 		"dist/"
 	],
@@ -29,24 +29,24 @@
 		"lint:fix": "pnpm run oxlint:fix && pnpm run prettier:fix"
 	},
 	"dependencies": {
-		"@mysten/bcs": "workspace:*",
-		"@mysten/dapp-kit": "workspace:*",
-		"@mysten/dapp-kit-core": "workspace:*",
-		"@mysten/dapp-kit-react": "workspace:*",
-		"@mysten/deepbook-v3": "workspace:*",
-		"@mysten/enoki": "workspace:*",
-		"@mysten/enoki-connect": "workspace:*",
-		"@mysten/kiosk": "workspace:*",
-		"@mysten/payment-kit": "workspace:*",
-		"@mysten/seal": "workspace:*",
-		"@mysten/signers": "workspace:*",
-		"@mysten/slush-wallet": "workspace:*",
-		"@mysten/sui": "workspace:*",
-		"@mysten/suins": "workspace:*",
-		"@mysten/utils": "workspace:*",
-		"@mysten/wallet-standard": "workspace:*",
-		"@mysten/walrus": "workspace:*",
-		"@mysten/zksend": "workspace:*",
+		"@haneullabs/bcs": "workspace:*",
+		"@haneullabs/dapp-kit": "workspace:*",
+		"@haneullabs/dapp-kit-core": "workspace:*",
+		"@haneullabs/dapp-kit-react": "workspace:*",
+		"@haneullabs/deepbook-v3": "workspace:*",
+		"@haneullabs/enoki": "workspace:*",
+		"@haneullabs/enoki-connect": "workspace:*",
+		"@haneullabs/kiosk": "workspace:*",
+		"@haneullabs/payment-kit": "workspace:*",
+		"@haneullabs/seal": "workspace:*",
+		"@haneullabs/signers": "workspace:*",
+		"@haneullabs/slush-wallet": "workspace:*",
+		"@haneullabs/haneul": "workspace:*",
+		"@haneullabs/haneulns": "workspace:*",
+		"@haneullabs/utils": "workspace:*",
+		"@haneullabs/wallet-standard": "workspace:*",
+		"@haneullabs/walrus": "workspace:*",
+		"@haneullabs/zksend": "workspace:*",
 		"@tanstack/react-query": "^5.90.16",
 		"fast-glob": "^3.3.3",
 		"fumadocs-core": "16.4.7",

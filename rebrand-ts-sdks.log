@@ -1,0 +1,207 @@
+[21:33:16] Haneul TypeScript SDK Rebranding Script v1.0 started
+[21:33:16] Working directory: /Users/jeong-gh/new-ts-sdk
+[21:33:16] 
+[21:33:16] ========================================
+[21:33:16]   STEP 0: Building file list
+[21:33:16] ========================================
+[21:33:16] Found 1623 text files to process
+[21:33:16] 
+[21:33:16] ========================================
+[21:33:16]   STEP 1: Protecting false-positive English words
+[21:33:16] ========================================
+[21:33:16] Inserting placeholders...
+[21:33:17] Step 1 complete
+[21:33:17] 
+[21:33:17] ========================================
+[21:33:17]   STEP 2: BIP44 coin type replacement (784 -> 8282)
+[21:33:17] ========================================
+[21:33:17] Replacing BIP44 derivation paths...
+[21:33:18] Replacing coin type in regex patterns (including escaped slashes)...
+[21:33:18] Step 2 complete
+[21:33:18] 
+[21:33:18] ========================================
+[21:33:18]   STEP 3: Domain replacements
+[21:33:18] ========================================
+[21:33:18] Replacing domains...
+[21:33:19] Step 3 complete
+[21:33:19] 
+[21:33:19] ========================================
+[21:33:19]   STEP 4: Company/org name replacements
+[21:33:19] ========================================
+[21:33:19] Replacing npm scope and company names...
+[21:33:20] Step 4 complete
+[21:33:20] 
+[21:33:20] ========================================
+[21:33:20]   STEP 5: Token unit replacements (MIST -> GEUNHWA)
+[21:33:20] ========================================
+[21:33:20] Replacing compound MIST forms...
+[21:33:20] Replacing standalone MIST...
+[21:33:21] Step 5 complete
+[21:33:21] 
+[21:33:21] ========================================
+[21:33:21]   STEP 6: Main blockchain name replacements (SUI -> HANEUL)
+[21:33:21] ========================================
+[21:33:21] Replacing ALL occurrences of SUI/Sui/sui...
+[21:33:21] Step 6 complete
+[21:33:21] 
+[21:33:21] ========================================
+[21:33:21]   STEP 7: Restoring protected English words
+[21:33:21] ========================================
+[21:33:21] Restoring placeholders...
+[21:33:22] Step 7 complete
+[21:33:22] 
+[21:33:22] ========================================
+[21:33:22]   STEP 8: Restoring copyright headers
+[21:33:22] ========================================
+[21:33:22] Restoring copyright headers to Mysten Labs...
+[21:33:23] Step 8 complete
+[21:33:23] 
+[21:33:23] ========================================
+[21:33:23]   STEP 9: Fixing GitHub URLs
+[21:33:23] ========================================
+[21:33:23] Redirecting GitHub org URLs to GeunhwaJeong...
+[21:33:23] Fixing external dependencies that should NOT be rebranded...
+[21:33:24] Fixing email addresses...
+[21:33:24] Step 9 complete
+[21:33:24] 
+[21:33:24] ========================================
+[21:33:24]   STEP 10: TypeScript SDK specific fixes
+[21:33:24] ========================================
+[21:33:24] Fixing GraphQL SuiAddress type (must match schema)...
+[21:33:24] Fixing external Rust SDK documentation URLs...
+[21:33:25] Fixing HANEUL_COIN_REGISTRY -> keeping correct name...
+[21:33:25] Fixing WalletConnect CustomCaipNetwork type assertion...
+[21:33:25]   Fixed WalletConnect type assertion in walletconnect-wallet
+[21:33:25] Step 10 complete
+[21:33:25] 
+[21:33:25] ========================================
+[21:33:25]   STEP 11: Renaming files
+[21:33:25] ========================================
+[21:33:25] Renaming files containing 'mysten'...
+[21:33:25] Renaming files containing 'sui' (skip false positives)...
+[21:33:25]   File: sui-codegen.config.ts -> haneul-codegen.config.ts
+[21:33:25]   File: suiSignTransactionBlock.ts -> haneulSignTransactionBlock.ts
+[21:33:25]   File: suiSignTransaction.ts -> haneulSignTransaction.ts
+[21:33:25]   File: suiSignPersonalMessage.ts -> haneulSignPersonalMessage.ts
+[21:33:25]   File: suiSignMessage.ts -> haneulSignMessage.ts
+[21:33:25]   File: suiSignAndExecuteTransactionBlock.ts -> haneulSignAndExecuteTransactionBlock.ts
+[21:33:25]   File: suiSignAndExecuteTransaction.ts -> haneulSignAndExecuteTransaction.ts
+[21:33:25]   File: suiGetCapabilities.ts -> haneulGetCapabilities.ts
+[21:33:25]   File: MockSuiClient.ts -> MockHaneulClient.ts
+[21:33:25]   File: sui-codegen.config.ts -> haneul-codegen.config.ts
+[21:33:25]   File: suins-transaction.ts -> haneulns-transaction.ts
+[21:33:25]   File: suins-client.ts -> haneulns-client.ts
+[21:33:25]   File: suins.ts -> haneulns.ts
+[21:33:25]   File: suins_registration.ts -> haneulns_registration.ts
+[21:33:25]   File: suins.test.ts -> haneulns.test.ts
+[21:33:25]   File: suins.ts -> haneulns.ts
+[21:33:25]   File: sui-types.ts -> haneul-types.ts
+[21:33:25]   File: sui-codegen.config.ts -> haneul-codegen.config.ts
+[21:33:25]   File: sui-codegen.config.ts -> haneul-codegen.config.ts
+[21:33:25]   File: Sui.test.ts -> Haneul.test.ts
+[21:33:25]   File: Sui.ts -> Haneul.ts
+[21:33:25]   File: sui-codegen.config.ts -> haneul-codegen.config.ts
+[21:33:25]   File: suins.mdx -> haneulns.mdx
+[21:33:25]   File: sui.mdx -> haneul.mdx
+[21:33:25]   File: sui-1.0.mdx -> haneul-1.0.mdx
+[21:33:25]   File: hello-sui.mdx -> hello-haneul.mdx
+[21:33:25]   File: sui-client-provider.mdx -> haneul-client-provider.mdx
+[21:33:25]   File: sui-codegen.config.ts -> haneul-codegen.config.ts
+[21:33:25]   File: useSuiClientQuery.test.tsx -> useHaneulClientQuery.test.tsx
+[21:33:25]   File: useSuiClientQueries.test.tsx -> useHaneulClientQueries.test.tsx
+[21:33:25]   File: useSuiClientMutation.test.tsx -> useHaneulClientMutation.test.tsx
+[21:33:25]   File: useSuiClientInfiniteQuery.test.tsx -> useHaneulClientInfiniteQuery.test.tsx
+[21:33:25]   File: useSuiClient.test.tsx -> useHaneulClient.test.tsx
+[21:33:25]   File: SuiClientProvider.test.tsx -> HaneulClientProvider.test.tsx
+[21:33:25]   File: useSuiClientQuery.ts -> useHaneulClientQuery.ts
+[21:33:25]   File: useSuiClientQueries.ts -> useHaneulClientQueries.ts
+[21:33:25]   File: useSuiClientMutation.ts -> useHaneulClientMutation.ts
+[21:33:25]   File: useSuiClientInfiniteQuery.ts -> useHaneulClientInfiniteQuery.ts
+[21:33:25]   File: useSuiClient.ts -> useHaneulClient.ts
+[21:33:25]   File: useResolveSuiNSNames.ts -> useResolveHaneulNSNames.ts
+[21:33:25]   File: SuiClientProvider.tsx -> HaneulClientProvider.tsx
+[21:33:25]   File: sui-codegen.config.ts -> haneul-codegen.config.ts
+[21:33:25]   File: sui.json -> haneul.json
+[21:33:26]   File: sui-codegen.config.ts -> haneul-codegen.config.ts
+[21:33:26] Step 11 complete
+[21:33:26] 
+[21:33:26] ========================================
+[21:33:26]   STEP 12: Renaming directories
+[21:33:26] ========================================
+[21:33:26] Renaming directories containing 'mysten'...
+[21:33:26] Renaming directories containing 'suins' -> 'haneulns'...
+[21:33:26]   Dir: suins -> haneulns
+[21:33:26]   Dir: suins_temp_subdomain_proxy -> haneulns_temp_subdomain_proxy
+[21:33:26]   Dir: suins_payments -> haneulns_payments
+[21:33:26]   Dir: suins -> haneulns
+[21:33:26]   Dir: suins_discounts -> haneulns_discounts
+[21:33:26]   Dir: suins_coupons -> haneulns_coupons
+[21:33:26]   Dir: suins -> haneulns
+[21:33:26] Renaming directories containing 'sui' (skip false positives)...
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: ledgerjs-hw-app-sui -> ledgerjs-hw-app-haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui-2.0 -> haneul-2.0
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26]   Dir: sui -> haneul
+[21:33:26] Step 12 complete
+[21:33:26] 
+[21:33:26] ========================================
+[21:33:26]   STEP 13: Post-rename safety passes
+[21:33:26] ========================================
+[21:33:26] Found 1623 text files to process
+[21:33:26] Re-restoring copyright headers...
+[21:33:27] Re-fixing GitHub URLs after renames...
+[21:33:27] Re-fixing email addresses...
+[21:33:28] Fixing external Rust SDK doc URLs (post-rename pass)...
+[21:33:28] Step 13 complete
+[21:33:28] 
+[21:33:28] ========================================
+[21:33:28]   STEP 14: Updating workspace config for renamed packages
+[21:33:28] ========================================
+[21:33:28] Updating pnpm-workspace.yaml...
+[21:33:28] Step 14 complete
+[21:33:28] 
+[21:33:28] ========================================
+[21:33:28]   STEP 15: Validation
+[21:33:28] ========================================
+[21:33:28] Checking for remaining issues...
+[21:33:28] Remaining 'sui' references (excluding English words + external): 0
+[21:33:28] Remaining '@mysten' references: 0
+[21:33:28] Damaged English words: 0
+[21:33:28] Leftover placeholders: 0
+[21:33:28] Double-rebranding: 0
+[21:33:28] Remaining BIP44 coin type 784: 1
+[21:33:28] 
+[21:33:28] ========================================
+[21:33:28]   REBRANDING COMPLETE
+[21:33:28] ========================================
+[21:33:28] 
+[21:33:28] Results:
+[21:33:28]   Remaining 'sui' refs (excl. English/external): 0
+[21:33:28]   Remaining '@mysten' refs:                      0
+[21:33:28]   Damaged English words:                         0
+[21:33:28]   Leftover placeholders:                         0
+[21:33:28]   Double-rebranding:                             0
+[21:33:28]   Remaining BIP44 784:                           1
+[21:33:28] 
+[21:33:28] POST-PROCESSING REQUIRED:
+[21:33:28]   1. Run 'pnpm install' to regenerate pnpm-lock.yaml
+[21:33:28]   2. Run 'pnpm turbo build' to verify TypeScript compilation
+[21:33:28]   3. Verify GraphQL schema matches Haneul indexer (SuiAddress -> HaneulAddress)
+[21:33:28]   4. Update .github/workflows environment names in GitHub settings
+[21:33:28]   5. Review remaining 'sui' references in validation output above
+[21:33:28]   6. Run 'pnpm lint:fix' to fix formatting
+[21:33:28] 
+[21:33:28] Rebranding script v1.0 finished!

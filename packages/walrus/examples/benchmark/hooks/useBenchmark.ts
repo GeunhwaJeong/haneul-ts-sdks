@@ -1,16 +1,16 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useCurrentAccount, useCurrentClient } from '@mysten/dapp-kit-react';
+import { useCurrentAccount, useCurrentClient } from '@haneullabs/dapp-kit-react';
 import { useState, useEffect, useCallback } from 'react';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import type { BenchmarkSettings } from '../components/BenchmarkSettings.js';
 import type { BenchmarkResult } from '../components/BenchmarkResults.js';
 import '../dapp-kit.js';
 
 export function useBenchmark() {
 	const currentAccount = useCurrentAccount();
-	const suiClient = useCurrentClient();
+	const haneulClient = useCurrentClient();
 	const [isRunning, setIsRunning] = useState(false);
 	const [results, setResults] = useState<BenchmarkResult[]>([]);
 	const [currentStatus, setCurrentStatus] = useState('');
@@ -126,8 +126,8 @@ export function useBenchmark() {
 					const data = createBlob(sizeInBytes, iteration);
 
 					const walrusClient = settings.useUploadRelay
-						? suiClient.walrusWithRelay
-						: suiClient.walrusWithoutRelay;
+						? haneulClient.walrusWithRelay
+						: haneulClient.walrusWithoutRelay;
 					const flow = walrusClient.writeBlobFlow({ blob: data });
 
 					// Step 1: Encode
@@ -141,15 +141,15 @@ export function useBenchmark() {
 					const registerTx = flow.register({
 						epochs: settings.epochs,
 						deletable: false,
-						owner: keypair.toSuiAddress(),
+						owner: keypair.toHaneulAddress(),
 					});
-					registerTx.setSender(keypair.toSuiAddress());
+					registerTx.setSender(keypair.toHaneulAddress());
 
 					// Sign transaction
 					const startRegisterTime = performance.now();
 					const registerResult = await keypair.signAndExecuteTransaction({
 						transaction: registerTx,
-						client: suiClient,
+						client: haneulClient,
 					});
 					if (registerResult.FailedTransaction) {
 						throw new Error('Register transaction failed');
@@ -168,13 +168,13 @@ export function useBenchmark() {
 					// Step 4: Certify
 					setCurrentStatus(`Iteration ${iteration}: Certifying blob on-chain...`);
 					const certifyTx = flow.certify();
-					certifyTx.setSender(keypair.toSuiAddress());
+					certifyTx.setSender(keypair.toHaneulAddress());
 
 					// Sign transaction
 					const startCertifyTime = performance.now();
 					await keypair.signAndExecuteTransaction({
 						transaction: certifyTx,
-						client: suiClient,
+						client: haneulClient,
 					});
 					const certifyTime = performance.now() - startCertifyTime;
 					const totalTime = performance.now() - encodeStart;
@@ -225,7 +225,7 @@ export function useBenchmark() {
 				setIsRunning(false);
 			}
 		},
-		[currentAccount, suiClient],
+		[currentAccount, haneulClient],
 	);
 
 	return {

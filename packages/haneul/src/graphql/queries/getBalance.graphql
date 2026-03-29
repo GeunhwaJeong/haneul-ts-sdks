@@ -1,0 +1,14 @@
+# Copyright (c) Mysten Labs, Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+query getBalance($owner: HaneulAddress!, $coinType: String = "0x2::haneul::HANEUL") {
+	address(address: $owner) {
+		balance(coinType: $coinType) {
+			coinType {
+				repr
+			}
+			totalBalance
+			addressBalance
+		}
+	}
+}

@@ -2,9 +2,9 @@ import {
   useCurrentAccount,
   useCurrentClient,
   useDAppKit,
-} from "@mysten/dapp-kit-react";
+} from "@haneullabs/dapp-kit-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Transaction } from "@mysten/sui/transactions";
+import { Transaction } from "@haneullabs/haneul/transactions";
 import {
   Counter as CounterStruct,
   increment,

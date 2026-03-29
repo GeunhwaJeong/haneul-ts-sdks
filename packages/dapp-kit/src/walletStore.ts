@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Wallet, WalletAccount, WalletWithRequiredFeatures } from '@mysten/wallet-standard';
+import type { Wallet, WalletAccount, WalletWithRequiredFeatures } from '@haneullabs/wallet-standard';
 import { createStore } from 'zustand';
 import type { StateStorage } from 'zustand/middleware';
 import { createJSONStorage, persist } from 'zustand/middleware';

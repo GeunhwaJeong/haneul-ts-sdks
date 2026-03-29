@@ -1,5 +1,5 @@
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeStructTag, normalizeSuiAddress } from '@mysten/sui/utils';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeStructTag, normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import { describe, expect, it } from 'vitest';
 
 import { DemoUsdTestHelpers } from './demoUsd.js';
@@ -25,30 +25,30 @@ async function expectBalances(
 describe.concurrent(
 	'e2e tests with isolated PAS Package (each test runs in its own PAS package)',
 	() => {
-		it('unlocks non-managed funds (e.g. SUI), but only through the unrestricted unlock flow', async () => {
+		it('unlocks non-managed funds (e.g. HANEUL), but only through the unrestricted unlock flow', async () => {
 			const toolbox = await setupToolbox();
 			const accountId = toolbox.client.pas.deriveAccountAddress(toolbox.address());
 
-			const suiTypeName = normalizeStructTag('0x2::sui::SUI').toString();
+			const haneulTypeName = normalizeStructTag('0x2::haneul::HANEUL').toString();
 
-			const { balance } = await toolbox.getBalance(accountId, suiTypeName);
+			const { balance } = await toolbox.getBalance(accountId, haneulTypeName);
 			expect(Number(balance.balance)).toBe(0);
 
-			// Transfer 1 SUI to the account.
+			// Transfer 1 HANEUL to the account.
 			const fundTransferTx = new Transaction();
-			const sui = fundTransferTx.splitCoins(fundTransferTx.gas, [
+			const haneul = fundTransferTx.splitCoins(fundTransferTx.gas, [
 				fundTransferTx.pure.u64(1_000_000_000),
 			]);
 
 			const into_balance = fundTransferTx.moveCall({
 				target: '0x2::coin::into_balance',
-				arguments: [sui],
-				typeArguments: [suiTypeName],
+				arguments: [haneul],
+				typeArguments: [haneulTypeName],
 			});
 			fundTransferTx.moveCall({
 				target: '0x2::balance::send_funds',
 				arguments: [into_balance, fundTransferTx.pure.address(accountId)],
-				typeArguments: [suiTypeName],
+				typeArguments: [haneulTypeName],
 			});
 			await toolbox.executeTransaction(fundTransferTx);
 
@@ -57,20 +57,20 @@ describe.concurrent(
 
 			const { balance: accountBalanceAfterTransfer } = await toolbox.getBalance(
 				accountId,
-				suiTypeName,
+				haneulTypeName,
 			);
 			expect(Number(accountBalanceAfterTransfer.balance)).toBe(1_000_000_000);
 
-			// try to do an unlock but it should fail because `policy` for Sui does not exist.
+			// try to do an unlock but it should fail because `policy` for Haneul does not exist.
 			const tx = new Transaction();
 			tx.add(
 				toolbox.client.pas.call.unlockBalance({
 					from: toolbox.address(),
 					amount: 1_000_000_000,
-					assetType: suiTypeName,
+					assetType: haneulTypeName,
 				}),
 			);
-			// Should fail because SUI is not a managed asset
+			// Should fail because HANEUL is not a managed asset
 			await expect(toolbox.executeTransaction(tx)).rejects.toThrowError(
 				'Policy does not exist for asset type ',
 			);
@@ -81,20 +81,20 @@ describe.concurrent(
 				toolbox.client.pas.call.unlockUnrestrictedBalance({
 					from: toolbox.address(),
 					amount: 1_000_000_000,
-					assetType: suiTypeName,
+					assetType: haneulTypeName,
 				}),
 			);
 			unlockTx.moveCall({
 				target: '0x2::balance::send_funds',
 				arguments: [withdrawal, unlockTx.pure.address(toolbox.address())],
-				typeArguments: [suiTypeName],
+				typeArguments: [haneulTypeName],
 			});
 
 			await toolbox.executeTransaction(unlockTx);
 
 			const { balance: accountBalanceAfterUnlock } = await toolbox.getBalance(
 				accountId,
-				suiTypeName,
+				haneulTypeName,
 			);
 			expect(Number(accountBalanceAfterUnlock.balance)).toBe(0);
 		});
@@ -105,7 +105,7 @@ describe.concurrent(
 			await demoUsd.createPolicy();
 
 			const from = toolbox.address();
-			const to = normalizeSuiAddress('0x2');
+			const to = normalizeHaneulAddress('0x2');
 
 			const fromAccountId = toolbox.client.pas.deriveAccountAddress(from);
 			const toAccountId = toolbox.client.pas.deriveAccountAddress(to);
@@ -150,7 +150,7 @@ describe.concurrent(
 			await demoUsd.createPolicy();
 
 			const from = toolbox.address();
-			const to = normalizeSuiAddress('0x2');
+			const to = normalizeHaneulAddress('0x2');
 
 			const fromAccountId = toolbox.client.pas.deriveAccountAddress(from);
 			const toAccountId = toolbox.client.pas.deriveAccountAddress(to);
@@ -193,7 +193,7 @@ describe.concurrent(
 			await demoUsd.createPolicy();
 
 			const from = toolbox.address();
-			const to = normalizeSuiAddress('0xB2');
+			const to = normalizeHaneulAddress('0xB2');
 
 			const fromAccountId = toolbox.client.pas.deriveAccountAddress(from);
 			const toAccountId = toolbox.client.pas.deriveAccountAddress(to);
@@ -232,7 +232,7 @@ describe.concurrent(
 
 			// Sender is the test keypair (required for Auth), receiver is fresh.
 			const sender = toolbox.address();
-			const receiver = normalizeSuiAddress('0xB2');
+			const receiver = normalizeHaneulAddress('0xB2');
 
 			const senderAccountId = toolbox.client.pas.deriveAccountAddress(sender);
 			const receiverAccountId = toolbox.client.pas.deriveAccountAddress(receiver);
@@ -314,7 +314,7 @@ describe.concurrent(
 			await demoUsd.createPolicy();
 
 			const from = toolbox.address();
-			const to = normalizeSuiAddress('0x3');
+			const to = normalizeHaneulAddress('0x3');
 			const fromAccountId = toolbox.client.pas.deriveAccountAddress(from);
 
 			await toolbox.createAccountForAddress(from);
@@ -374,7 +374,7 @@ describe.concurrent(
 			await demoUsd.createPolicy();
 
 			const from = toolbox.address();
-			const to = normalizeSuiAddress('0x2');
+			const to = normalizeHaneulAddress('0x2');
 
 			await toolbox.createAccountForAddress(from);
 			await toolbox.createAccountForAddress(to);
@@ -400,7 +400,7 @@ describe.concurrent(
 			await demoUsd.createPolicy();
 
 			const from = toolbox.address();
-			const to = normalizeSuiAddress('0x3');
+			const to = normalizeHaneulAddress('0x3');
 			const fromAccountId = toolbox.client.pas.deriveAccountAddress(from);
 
 			await toolbox.createAccountForAddress(from);
@@ -438,7 +438,7 @@ describe.concurrent(
 			await asset2.upgradeToV2();
 
 			const sender = toolbox.address();
-			const receiver = normalizeSuiAddress('0xB3');
+			const receiver = normalizeHaneulAddress('0xB3');
 			const senderAccountId = toolbox.client.pas.deriveAccountAddress(sender);
 			const receiverAccountId = toolbox.client.pas.deriveAccountAddress(receiver);
 
@@ -508,7 +508,7 @@ describe.concurrent(
 			await demoUsd.createPolicy();
 
 			const from = toolbox.address();
-			const to = normalizeSuiAddress('0x2');
+			const to = normalizeHaneulAddress('0x2');
 			const fromAccountId = toolbox.client.pas.deriveAccountAddress(from);
 
 			await toolbox.createAccountForAddress(from);

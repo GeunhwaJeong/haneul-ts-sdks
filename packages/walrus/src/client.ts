@@ -1,13 +1,13 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { InferBcsType } from '@mysten/bcs';
-import { bcs } from '@mysten/bcs';
-import type { Signer } from '@mysten/sui/cryptography';
-import type { ClientCache, ClientWithCoreApi } from '@mysten/sui/client';
-import type { TransactionObjectArgument, TransactionResult } from '@mysten/sui/transactions';
-import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
-import { normalizeStructTag, parseStructTag } from '@mysten/sui/utils';
+import type { InferBcsType } from '@haneullabs/bcs';
+import { bcs } from '@haneullabs/bcs';
+import type { Signer } from '@haneullabs/haneul/cryptography';
+import type { ClientCache, ClientWithCoreApi } from '@haneullabs/haneul/client';
+import type { TransactionObjectArgument, TransactionResult } from '@haneullabs/haneul/transactions';
+import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeStructTag, parseStructTag } from '@haneullabs/haneul/utils';
 
 import {
 	MAINNET_WALRUS_PACKAGE_CONFIG,
@@ -117,10 +117,10 @@ import {
 	toPairIndex,
 	toShardIndex,
 } from './utils/index.js';
-import { SuiObjectDataLoader } from './utils/object-loader.js';
+import { HaneulObjectDataLoader } from './utils/object-loader.js';
 import { shuffle, weightedShuffle } from './utils/randomness.js';
 import { getWasmBindings } from './wasm.js';
-import { chunk } from '@mysten/utils';
+import { chunk } from '@haneullabs/utils';
 import { UploadRelayClient } from './upload-relay/client.js';
 import { encodeQuilt, encodeQuiltPatchId, parseWalrusId } from './utils/quilts.js';
 import { BlobReader } from './files/readers/blob.js';
@@ -150,12 +150,12 @@ export function walrus<const Name = 'walrus'>({
 				packageConfig
 					? {
 							packageConfig,
-							suiClient: client,
+							haneulClient: client,
 							...options,
 						}
 					: {
 							network: walrusNetwork as 'mainnet' | 'testnet',
-							suiClient: client,
+							haneulClient: client,
 							...options,
 						},
 			);
@@ -168,8 +168,8 @@ export class WalrusClient {
 	#wasmUrl: string | undefined;
 
 	#packageConfig: WalrusPackageConfig;
-	#suiClient: ClientWithCoreApi;
-	#objectLoader: SuiObjectDataLoader;
+	#haneulClient: ClientWithCoreApi;
+	#objectLoader: HaneulObjectDataLoader;
 
 	#blobMetadataConcurrencyLimit = 10;
 	#readCommittee?: CommitteeInfo | Promise<CommitteeInfo> | null;
@@ -202,17 +202,17 @@ export class WalrusClient {
 			this.#uploadRelayClient = new UploadRelayClient(this.#uploadRelayConfig);
 		}
 
-		this.#suiClient = config.suiClient;
+		this.#haneulClient = config.haneulClient;
 
 		this.#storageNodeClient = new StorageNodeClient(config.storageNodeClientOptions);
-		this.#objectLoader = new SuiObjectDataLoader(this.#suiClient);
-		this.#cache = this.#suiClient.cache.scope('@mysten/walrus');
+		this.#objectLoader = new HaneulObjectDataLoader(this.#haneulClient);
+		this.#cache = this.#haneulClient.cache.scope('@haneullabs/walrus');
 	}
 
 	/** The Move type for a WAL coin */
 	#walType() {
 		return this.#cache.read(['walType'], async () => {
-			const stakeWithPool = await this.#suiClient.core.getMoveFunction({
+			const stakeWithPool = await this.#haneulClient.core.getMoveFunction({
 				packageId: await this.#getPackageId(),
 				moduleName: 'staking',
 				name: 'stake_with_pool',
@@ -796,7 +796,7 @@ export class WalrusClient {
 	 *
 	 * @example
 	 * ```ts
-	 * const tx = client.createStorageTransaction({ size: 1000, epochs: 3, owner: signer.toSuiAddress() });
+	 * const tx = client.createStorageTransaction({ size: 1000, epochs: 3, owner: signer.toHaneulAddress() });
 	 * ```
 	 */
 	createStorageTransaction({
@@ -828,7 +828,7 @@ export class WalrusClient {
 	}: StorageWithSizeOptions & { transaction?: Transaction; signer: Signer }) {
 		const transaction = this.createStorageTransaction({
 			...options,
-			owner: options.transaction?.getData().sender ?? signer.toSuiAddress(),
+			owner: options.transaction?.getData().sender ?? signer.toHaneulAddress(),
 		});
 		const blobType = await this.getBlobType();
 
@@ -842,16 +842,16 @@ export class WalrusClient {
 			.filter((object) => object.idOperation === 'Created')
 			.map((object) => object.objectId);
 
-		const createdObjects = await this.#suiClient.core.getObjects({
+		const createdObjects = await this.#haneulClient.core.getObjects({
 			objectIds: createdObjectIds,
 			include: { content: true },
 		});
 
-		const suiBlobObject = createdObjects.objects.find(
+		const haneulBlobObject = createdObjects.objects.find(
 			(object) => !(object instanceof Error) && object.type === blobType,
 		);
 
-		if (suiBlobObject instanceof Error || !suiBlobObject) {
+		if (haneulBlobObject instanceof Error || !haneulBlobObject) {
 			throw new WalrusClientError(
 				`Storage object not found in transaction effects for transaction (${digest})`,
 			);
@@ -859,7 +859,7 @@ export class WalrusClient {
 
 		return {
 			digest,
-			storage: Storage.parse(suiBlobObject.content),
+			storage: Storage.parse(haneulBlobObject.content),
 		};
 	}
 
@@ -1064,7 +1064,7 @@ export class WalrusClient {
 	}> {
 		const transaction = this.registerBlobTransaction({
 			...options,
-			owner: options.owner ?? options.transaction?.getData().sender ?? signer.toSuiAddress(),
+			owner: options.owner ?? options.transaction?.getData().sender ?? signer.toHaneulAddress(),
 		});
 		const blobType = await this.getBlobType();
 		const { digest, effects } = await this.#executeTransaction(
@@ -1077,16 +1077,16 @@ export class WalrusClient {
 			.filter((object) => object.idOperation === 'Created')
 			.map((object) => object.objectId);
 
-		const createdObjects = await this.#suiClient.core.getObjects({
+		const createdObjects = await this.#haneulClient.core.getObjects({
 			objectIds: createdObjectIds,
 			include: { content: true },
 		});
 
-		const suiBlobObject = createdObjects.objects.find(
+		const haneulBlobObject = createdObjects.objects.find(
 			(object) => !(object instanceof Error) && object.type === blobType,
 		);
 
-		if (suiBlobObject instanceof Error || !suiBlobObject) {
+		if (haneulBlobObject instanceof Error || !haneulBlobObject) {
 			throw new WalrusClientError(
 				`Blob object not found in transaction effects for transaction (${digest})`,
 			);
@@ -1094,13 +1094,13 @@ export class WalrusClient {
 
 		return {
 			digest,
-			blob: Blob.parse(suiBlobObject.content),
+			blob: Blob.parse(haneulBlobObject.content),
 		};
 	}
 
 	async #getCreatedBlob(digest: string) {
 		const blobType = await this.getBlobType();
-		const result = await this.#suiClient.core.waitForTransaction({
+		const result = await this.#haneulClient.core.waitForTransaction({
 			digest,
 			include: { effects: true },
 		});
@@ -1110,22 +1110,22 @@ export class WalrusClient {
 			.filter((object: { idOperation: string }) => object.idOperation === 'Created')
 			.map((object: { objectId: string }) => object.objectId);
 
-		const createdObjects = await this.#suiClient.core.getObjects({
+		const createdObjects = await this.#haneulClient.core.getObjects({
 			objectIds: createdObjectIds,
 			include: { content: true },
 		});
 
-		const suiBlobObject = createdObjects.objects.find(
+		const haneulBlobObject = createdObjects.objects.find(
 			(object) => !(object instanceof Error) && object.type === blobType,
 		);
 
-		if (suiBlobObject instanceof Error || !suiBlobObject) {
+		if (haneulBlobObject instanceof Error || !haneulBlobObject) {
 			throw new WalrusClientError(
 				`Blob object not found in transaction effects for transaction (${digest})`,
 			);
 		}
 
-		return Blob.parse(suiBlobObject.content);
+		return Blob.parse(haneulBlobObject.content);
 	}
 
 	async certificateFromConfirmations({
@@ -1343,7 +1343,7 @@ export class WalrusClient {
 			this.deleteBlobTransaction({
 				blobObjectId,
 				transaction,
-				owner: transaction.getData().sender ?? signer.toSuiAddress(),
+				owner: transaction.getData().sender ?? signer.toHaneulAddress(),
 			}),
 			signer,
 			'delete blob',
@@ -1436,7 +1436,7 @@ export class WalrusClient {
 	}: {
 		blobObjectId: string;
 	}): Promise<Record<string, string> | null> {
-		const response = await this.#suiClient.core.getDynamicField({
+		const response = await this.#haneulClient.core.getDynamicField({
 			parentId: blobObjectId,
 			name: {
 				type: 'vector<u8>',
@@ -1696,7 +1696,7 @@ export class WalrusClient {
 	}
 
 	/**
-	 * Load a parsed Blob object from chain by its Sui object ID.
+	 * Load a parsed Blob object from chain by its Haneul object ID.
 	 *
 	 * @example
 	 * ```ts
@@ -2000,7 +2000,7 @@ export class WalrusClient {
 			signer,
 			epochs,
 			deletable,
-			owner: owner ?? signer.toSuiAddress(),
+			owner: owner ?? signer.toHaneulAddress(),
 			attributes,
 			signal,
 		})) {
@@ -2063,11 +2063,11 @@ export class WalrusClient {
 	}
 
 	async #executeTransaction(transaction: Transaction, signer: Signer, action: string) {
-		transaction.setSenderIfNotSet(signer.toSuiAddress());
+		transaction.setSenderIfNotSet(signer.toHaneulAddress());
 
 		const result = await signer.signAndExecuteTransaction({
 			transaction,
-			client: this.#suiClient,
+			client: this.#haneulClient,
 		});
 
 		if (result.FailedTransaction) {
@@ -2078,7 +2078,7 @@ export class WalrusClient {
 
 		const { digest, effects } = result.Transaction;
 
-		await this.#suiClient.core.waitForTransaction({
+		await this.#haneulClient.core.waitForTransaction({
 			digest,
 		});
 
@@ -2224,7 +2224,7 @@ export class WalrusClient {
 			signer: options.signer,
 			epochs: options.epochs,
 			deletable: options.deletable,
-			owner: options.owner ?? options.signer.toSuiAddress(),
+			owner: options.owner ?? options.signer.toHaneulAddress(),
 			attributes: options.attributes,
 		})) {
 			await onStep?.(step);

@@ -7,13 +7,13 @@ import {
 	normalizeMoveArguments,
 	type RawTransactionArgument,
 } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as vec_map from './deps/sui/vec_map.js';
-import * as vec_set from './deps/sui/vec_set.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as vec_map from './deps/haneul/vec_map.js';
+import * as vec_set from './deps/haneul/vec_set.js';
 import * as type_name from './deps/std/type_name.js';
 import * as versioning from './versioning.js';
-const $moduleName = '@mysten/pas::policy';
+const $moduleName = '@haneullabs/pas::policy';
 export const Policy = new MoveStruct({
 	name: `${$moduleName}::Policy<phantom T>`,
 	fields: {
@@ -62,7 +62,7 @@ export interface NewForCurrencyOptions {
 	typeArguments: [string];
 }
 export function newForCurrency(options: NewForCurrencyOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null, 'bool'] satisfies (string | null)[];
 	const parameterNames = ['namespace', 'Cap', 'clawbackAllowed'];
 	return (tx: Transaction) =>
@@ -83,7 +83,7 @@ export interface ShareOptions {
 	typeArguments: [string];
 }
 export function share(options: ShareOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['policy'];
 	return (tx: Transaction) =>
@@ -108,7 +108,7 @@ export interface RequiredApprovalsOptions {
 }
 /** Get the set of required approvals for a given action. */
 export function requiredApprovals(options: RequiredApprovalsOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, '0x1::string::String'] satisfies (string | null)[];
 	const parameterNames = ['policy', 'actionType'];
 	return (tx: Transaction) =>
@@ -137,7 +137,7 @@ export interface SetRequiredApprovalOptions {
 	typeArguments: [string, string];
 }
 export function setRequiredApproval(options: SetRequiredApprovalOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null, '0x1::string::String'] satisfies (string | null)[];
 	const parameterNames = ['policy', 'cap', 'action'];
 	return (tx: Transaction) =>
@@ -170,7 +170,7 @@ export interface RemoveActionApprovalOptions {
  * resolve).
  */
 export function removeActionApproval(options: RemoveActionApprovalOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null, '0x1::string::String'] satisfies (string | null)[];
 	const parameterNames = ['policy', '_', 'action'];
 	return (tx: Transaction) =>
@@ -198,7 +198,7 @@ export interface SyncVersioningOptions {
  * permission-less and can be done by anyone.
  */
 export function syncVersioning(options: SyncVersioningOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null] satisfies (string | null)[];
 	const parameterNames = ['policy', 'namespace'];
 	return (tx: Transaction) =>

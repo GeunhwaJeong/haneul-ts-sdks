@@ -1,0 +1,15 @@
+---
+title: '@haneullabs/seal'
+description: Migrate @haneullabs/seal to 2.0
+---
+
+The deprecated `SealClient.asClientExtension()` static method has been removed. Use the `seal()`
+registration function instead:
+
+```diff
+- import { SealClient } from '@haneullabs/seal';
++ import { seal } from '@haneullabs/seal';
+
+- const client = haneulClient.$extend(SealClient.asClientExtension());
++ const client = haneulClient.$extend(seal());
+```

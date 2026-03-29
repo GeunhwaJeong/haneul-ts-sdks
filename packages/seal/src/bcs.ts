@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { fromHex, toHex } from '@mysten/bcs';
-import { bcs } from '@mysten/sui/bcs';
+import { fromHex, toHex } from '@haneullabs/bcs';
+import { bcs } from '@haneullabs/haneul/bcs';
 
 export const IBEEncryptions = bcs.enum('IBEEncryptions', {
 	BonehFranklinBLS12381: bcs.struct('BonehFranklinBLS12381', {

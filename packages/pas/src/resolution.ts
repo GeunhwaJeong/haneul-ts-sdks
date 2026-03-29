@@ -1,16 +1,16 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { SuiClientTypes } from '@mysten/sui/client';
-import { Inputs, TransactionCommands } from '@mysten/sui/transactions';
-import type { Argument, CallArg, Command as SdkCommand } from '@mysten/sui/transactions';
-import { normalizeStructTag } from '@mysten/sui/utils';
+import { HaneulClientTypes } from '@haneullabs/haneul/client';
+import { Inputs, TransactionCommands } from '@haneullabs/haneul/transactions';
+import type { Argument, CallArg, Command as SdkCommand } from '@haneullabs/haneul/transactions';
+import { normalizeStructTag } from '@haneullabs/haneul/utils';
 
 import { TypeName } from './contracts/pas/deps/std/type_name.js';
 import { Policy } from './contracts/pas/policy.js';
 import { Command, MoveCall } from './contracts/ptb/ptb.js';
 import { PASClientError } from './error.js';
-import { Field } from './contracts/sui/dynamic_field.js';
+import { Field } from './contracts/haneul/dynamic_field.js';
 
 const OBJECT_BY_ID_EXT = 'object_by_id';
 const OBJECT_BY_TYPE_EXT = 'object_by_type';
@@ -76,7 +76,7 @@ export type PASActionType = 'send_funds' | 'unlock_funds' | 'clawback_funds';
  * @returns The list of approval TypeName strings for the given action, or undefined if not found
  */
 export function getRequiredApprovals(
-	policyObject: SuiClientTypes.Object<{ content: true }>,
+	policyObject: HaneulClientTypes.Object<{ content: true }>,
 	actionType: PASActionType,
 ): string[] | undefined {
 	const policy = Policy.parse(policyObject.content);
@@ -99,7 +99,7 @@ export function getRequiredApprovals(
  * @returns The parsed Command, or undefined if parsing fails
  */
 export function getCommandFromTemplate(
-	template: SuiClientTypes.Object<{ content: true }>,
+	template: HaneulClientTypes.Object<{ content: true }>,
 ): ParsedTemplateCommand {
 	const df = Field(TypeName, Command).parse(template.content);
 	return parseCommand(df.value);

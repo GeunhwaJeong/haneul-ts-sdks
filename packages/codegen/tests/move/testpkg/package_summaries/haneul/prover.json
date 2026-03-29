@@ -1,0 +1,12 @@
+{
+  "id": {
+    "address": "haneul",
+    "name": "prover"
+  },
+  "doc": null,
+  "immediate_dependencies": [],
+  "attributes": [],
+  "functions": {},
+  "structs": {},
+  "enums": {}
+}

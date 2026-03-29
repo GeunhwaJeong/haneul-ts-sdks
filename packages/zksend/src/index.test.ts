@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import type { Keypair } from '@mysten/sui/cryptography';
-import { getFaucetHost, requestSuiFromFaucetV2 } from '@mysten/sui/faucet';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
-import { MIST_PER_SUI } from '@mysten/sui/utils';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import type { Keypair } from '@haneullabs/haneul/cryptography';
+import { getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { GEUNHWA_PER_HANEUL } from '@haneullabs/haneul/utils';
 import { beforeAll, describe, expect, test } from 'vitest';
 
 import { zksend } from './index.js';
@@ -16,40 +16,40 @@ export const DEMO_BEAR_CONFIG = {
 	type: '0xab8ed19f16874f9b8b66b0b6e325ee064848b1a7fdcb1c2f0478b17ad8574e65::demo_bear::DemoBear',
 };
 
-const client = new SuiGrpcClient({
-	baseUrl: 'https://fullnode.testnet.sui.io:443',
+const client = new HaneulGrpcClient({
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
 	network: 'testnet',
 }).$extend(zksend());
 
 // address:  0x8ab2b2a5cfa538db19062b79622abe28f3171c8b8048c5957b01846d57574630
 const keypair = Ed25519Keypair.fromSecretKey(
-	'suiprivkey1qz3v0pjxalg3z3p9p6lp4x84y74g0qt2y2q36amvkgfh9zzmm4q66y6ccdz',
+	'haneulprivkey1qz3v0pjxalg3z3p9p6lp4x84y74g0qt2y2q36amvkgfh9zzmm4q66y6ccdz',
 );
 
 // Automatically get gas from testnet is not working reliably, manually request gas via discord,
 // or uncomment the beforeAll and gas function below
 beforeAll(async () => {
 	const balance = await client.core.getBalance({
-		owner: keypair.toSuiAddress(),
+		owner: keypair.toHaneulAddress(),
 	});
 
-	if (Number(balance.balance.balance) < Number(MIST_PER_SUI) * 0.02) {
-		await getSuiFromFaucet(keypair);
+	if (Number(balance.balance.balance) < Number(GEUNHWA_PER_HANEUL) * 0.02) {
+		await getHaneulFromFaucet(keypair);
 	}
 }, 30_000);
 
-async function getSuiFromFaucet(keypair: Keypair) {
+async function getHaneulFromFaucet(keypair: Keypair) {
 	const faucetHost = getFaucetHost('testnet');
-	await requestSuiFromFaucetV2({
+	await requestHaneulFromFaucetV2({
 		host: faucetHost,
-		recipient: keypair.toSuiAddress(),
+		recipient: keypair.toHaneulAddress(),
 	});
 }
 
 describe('Contract links', () => {
 	test('create and claim link', async () => {
 		const link = client.zksend.linkBuilder({
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 		});
 
 		const bears = await createBears(3);
@@ -77,12 +77,12 @@ describe('Contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);
 
-		const claim = await claimLink.claimAssets(keypair.toSuiAddress());
+		const claim = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 		const res = await client.core.waitForTransaction({
 			result: claim,
@@ -108,7 +108,7 @@ describe('Contract links', () => {
 
 		const link = client.zksend.linkBuilder({
 			keypair: linkKp,
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 		});
 
 		const bears = await createBears(3);
@@ -127,11 +127,11 @@ describe('Contract links', () => {
 		await client.core.waitForTransaction({ result: createResult });
 
 		const lostLink = await client.zksend.loadLink({
-			address: linkKp.toSuiAddress(),
+			address: linkKp.toHaneulAddress(),
 		});
 
 		const { url, transaction } = await lostLink.createRegenerateTransaction(
-			keypair.toSuiAddress(),
+			keypair.toHaneulAddress(),
 			{ client },
 		);
 
@@ -149,12 +149,12 @@ describe('Contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);
 
-		const claim = await claimLink.claimAssets(keypair.toSuiAddress());
+		const claim = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 		const res = await client.core.waitForTransaction({
 			result: claim,
@@ -179,7 +179,7 @@ describe('Contract links', () => {
 
 		const link = client.zksend.linkBuilder({
 			keypair: linkKp,
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 		});
 
 		const bears = await createBears(3);
@@ -198,10 +198,10 @@ describe('Contract links', () => {
 		await client.core.waitForTransaction({ result: createResult });
 
 		const lostLink = await client.zksend.loadLink({
-			address: linkKp.toSuiAddress(),
+			address: linkKp.toHaneulAddress(),
 		});
 
-		const { Transaction: claimTx } = await lostLink.claimAssets(keypair.toSuiAddress(), {
+		const { Transaction: claimTx } = await lostLink.claimAssets(keypair.toHaneulAddress(), {
 			reclaim: true,
 			sign: async (tx) => (await keypair.signTransaction(tx)).signature,
 		});
@@ -227,7 +227,7 @@ describe('Contract links', () => {
 		const links = [];
 		for (const bear of bears) {
 			const link = client.zksend.linkBuilder({
-				sender: keypair.toSuiAddress(),
+				sender: keypair.toHaneulAddress(),
 			});
 
 			link.addClaimableMist(100n);
@@ -258,12 +258,12 @@ describe('Contract links', () => {
 					[
 					  {
 					    "amount": 100n,
-					    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+					    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 					  },
 					]
 				`);
 
-			const claim = await claimLink.claimAssets(keypair.toSuiAddress());
+			const claim = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 			const res = await client.core.waitForTransaction({
 				digest: claim.Transaction!.digest,
@@ -283,7 +283,7 @@ describe('Contract links', () => {
 
 	test('create link with minted assets', async () => {
 		const link = client.zksend.linkBuilder({
-			sender: keypair.toSuiAddress(),
+			sender: keypair.toHaneulAddress(),
 		});
 
 		const tx = new Transaction();
@@ -317,12 +317,12 @@ describe('Contract links', () => {
 				[
 				  {
 				    "amount": 100n,
-				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+				    "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 				  },
 				]
 			`);
 
-		const claim = await claimLink.claimAssets(keypair.toSuiAddress());
+		const claim = await claimLink.claimAssets(keypair.toHaneulAddress());
 
 		const res = await client.core.waitForTransaction({
 			result: claim,
@@ -357,7 +357,7 @@ async function createBears(totalBears: number) {
 		bears.push(bear);
 	}
 
-	tx.transferObjects(bears, tx.pure.address(keypair.toSuiAddress()));
+	tx.transferObjects(bears, tx.pure.address(keypair.toHaneulAddress()));
 
 	const res = await keypair.signAndExecuteTransaction({
 		transaction: tx,

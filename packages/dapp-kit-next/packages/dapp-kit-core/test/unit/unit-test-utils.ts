@@ -10,7 +10,7 @@ import {
 	TEST_NETWORKS,
 	unbindStoreListeners,
 } from '../test-utils.js';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 import type { MockWalletOptions } from '../mocks/mock-wallet.js';
 import { createMockWallets } from '../mocks/mock-wallet.js';
 import { createMockAccount } from '../mocks/mock-account.js';
@@ -23,11 +23,11 @@ export function createTestStores({
 	const clients = Object.fromEntries(
 		[...TEST_NETWORKS].map((network) => [
 			network,
-			new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
+			new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
 		]),
 	);
 
-	return createStores<typeof TEST_NETWORKS, SuiGrpcClient>({
+	return createStores<typeof TEST_NETWORKS, HaneulGrpcClient>({
 		defaultNetwork: currentNetwork,
 		getClient: (network) => clients[network as keyof typeof clients],
 	});

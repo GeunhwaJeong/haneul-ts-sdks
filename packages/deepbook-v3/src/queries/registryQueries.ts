@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import { VecSet } from '../types/bcs.js';
 import { FLOAT_SCALAR } from '../utils/config.js';
@@ -40,7 +40,7 @@ export class RegistryQueries {
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const vecSet = VecSet(bcs.Address).parse(bytes);
-		return vecSet.contents.map((id) => normalizeSuiAddress(id));
+		return vecSet.contents.map((id) => normalizeHaneulAddress(id));
 	}
 
 	async getBaseMarginPoolId(poolKey: string): Promise<string> {
@@ -166,7 +166,7 @@ export class RegistryQueries {
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const vecSet = VecSet(bcs.Address).parse(bytes);
-		return vecSet.contents.map((id) => normalizeSuiAddress(id));
+		return vecSet.contents.map((id) => normalizeHaneulAddress(id));
 	}
 
 	async getAllowedPauseCaps(): Promise<string[]> {
@@ -180,6 +180,6 @@ export class RegistryQueries {
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const vecSet = VecSet(bcs.Address).parse(bytes);
-		return vecSet.contents.map((id) => normalizeSuiAddress(id));
+		return vecSet.contents.map((id) => normalizeHaneulAddress(id));
 	}
 }

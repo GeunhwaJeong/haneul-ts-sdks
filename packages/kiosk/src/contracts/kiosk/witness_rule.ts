@@ -20,8 +20,8 @@
  */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs, type BcsType } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
+import { bcs, type BcsType } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 const $moduleName = '@local-pkg/kiosk::witness_rule';
 export const Rule = new MoveStruct({
 	name: `${$moduleName}::Rule<phantom Proof>`,

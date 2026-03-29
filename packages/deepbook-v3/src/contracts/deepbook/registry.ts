@@ -5,11 +5,11 @@
 /** Registry holds all created pools. */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as versioned from './deps/sui/versioned.js';
-import * as vec_set from './deps/sui/vec_set.js';
-import * as bag from './deps/sui/bag.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as versioned from './deps/haneul/versioned.js';
+import * as vec_set from './deps/haneul/vec_set.js';
+import * as bag from './deps/haneul/bag.js';
 import * as type_name from './deps/std/type_name.js';
 const $moduleName = '@deepbook/core::registry';
 export const REGISTRY = new MoveStruct({

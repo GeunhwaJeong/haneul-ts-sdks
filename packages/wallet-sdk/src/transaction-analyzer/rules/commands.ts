@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Argument, Command } from '@mysten/sui/transactions';
-import type { SuiClientTypes } from '@mysten/sui/client';
+import type { Argument, Command } from '@haneullabs/haneul/transactions';
+import type { HaneulClientTypes } from '@haneullabs/haneul/client';
 import { inputs } from './inputs.js';
 import type { AnalyzedCommandInput } from './inputs.js';
 import type { TransactionAnalysisIssue } from '../analyzer.js';
@@ -31,7 +31,7 @@ export type AnalyzedCommand =
 			$kind: 'MoveCall';
 			index: number;
 			arguments: AnalyzedCommandArgument[];
-			function: SuiClientTypes.FunctionResponse;
+			function: HaneulClientTypes.FunctionResponse;
 			command: Extract<Command, { $kind: 'MoveCall' }>['MoveCall'];
 	  }
 	| {

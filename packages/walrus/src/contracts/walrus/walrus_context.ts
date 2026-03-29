@@ -13,8 +13,8 @@
  */
 
 import { MoveStruct } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import * as vec_map from './deps/sui/vec_map.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import * as vec_map from './deps/haneul/vec_map.js';
 const $moduleName = '@local-pkg/walrus::walrus_context';
 export const WalrusContext = new MoveStruct({
 	name: `${$moduleName}::WalrusContext`,

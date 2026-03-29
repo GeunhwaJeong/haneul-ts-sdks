@@ -5,9 +5,9 @@
 /** Metadata that describes a Storage Node. Attached to the `StakingPool` */
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { bcs } from '@mysten/sui/bcs';
-import { type Transaction } from '@mysten/sui/transactions';
-import * as vec_map from './deps/sui/vec_map.js';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+import * as vec_map from './deps/haneul/vec_map.js';
 const $moduleName = '@local-pkg/walrus::node_metadata';
 export const NodeMetadata = new MoveStruct({
 	name: `${$moduleName}::NodeMetadata`,

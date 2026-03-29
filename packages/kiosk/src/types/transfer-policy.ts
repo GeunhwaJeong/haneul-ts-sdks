@@ -1,16 +1,16 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ObjectOwner } from '@mysten/sui/jsonRpc';
-import type { Transaction, TransactionObjectArgument } from '@mysten/sui/transactions';
+import type { ObjectOwner } from '@haneullabs/haneul/jsonRpc';
+import type { Transaction, TransactionObjectArgument } from '@haneullabs/haneul/transactions';
 
 import type { KioskClient } from '../client/kiosk-client.js';
 import type { ObjectArgument } from './index.js';
 
-import { SUI_FRAMEWORK_ADDRESS } from '@mysten/sui/utils';
+import { HANEUL_FRAMEWORK_ADDRESS } from '@haneullabs/haneul/utils';
 
 /** The Transfer Policy module. */
-export const TRANSFER_POLICY_MODULE = `${SUI_FRAMEWORK_ADDRESS}::transfer_policy`;
+export const TRANSFER_POLICY_MODULE = `${HANEUL_FRAMEWORK_ADDRESS}::transfer_policy`;
 
 /** Name of the event emitted when a TransferPolicy for T is created. */
 export const TRANSFER_POLICY_CREATED_EVENT = `${TRANSFER_POLICY_MODULE}::TransferPolicyCreated`;

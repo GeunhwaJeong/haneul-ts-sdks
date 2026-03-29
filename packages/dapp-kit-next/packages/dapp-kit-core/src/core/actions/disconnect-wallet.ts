@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { StandardDisconnectFeature, StandardDisconnectMethod } from '@mysten/wallet-standard';
-import { StandardDisconnect } from '@mysten/wallet-standard';
+import type { StandardDisconnectFeature, StandardDisconnectMethod } from '@haneullabs/wallet-standard';
+import { StandardDisconnect } from '@haneullabs/wallet-standard';
 import type { DAppKitStores } from '../store.js';
 import { task } from 'nanostores';
 import { getWalletFeature } from '@wallet-standard/ui';

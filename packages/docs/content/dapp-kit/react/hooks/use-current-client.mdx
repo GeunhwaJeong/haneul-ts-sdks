@@ -1,14 +1,14 @@
 ---
 title: useCurrentClient
-description: React hook to get the current Sui client instance
+description: React hook to get the current Haneul client instance
 ---
 
 The `useCurrentClient` hook provides access to the blockchain client instance for the current
 network.
 
 <Callout type="info">
-	By default, this returns a `SuiClient` instance when using the standard setup. However, the dApp
-	Kit supports any client that implements the Sui core API, making it flexible for different
+	By default, this returns a `HaneulClient` instance when using the standard setup. However, the dApp
+	Kit supports any client that implements the Haneul core API, making it flexible for different
 	blockchain implementations.
 </Callout>
 
@@ -20,7 +20,7 @@ network.
 ## Usage
 
 ```tsx
-import { useCurrentClient } from '@mysten/dapp-kit-react';
+import { useCurrentClient } from '@haneullabs/dapp-kit-react';
 
 export function MyComponent() {
 	const client = useCurrentClient();
@@ -39,5 +39,5 @@ export function MyComponent() {
 ## Return Value
 
 ```tsx
-SuiClient;
+HaneulClient;
 ```

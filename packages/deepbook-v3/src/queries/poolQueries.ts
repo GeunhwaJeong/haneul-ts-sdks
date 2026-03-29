@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import type {
 	CanPlaceLimitOrderParams,
@@ -204,7 +204,7 @@ export class PoolQueries {
 		});
 
 		const bytes = res.commandResults![0].returnValues[0].bcs;
-		return normalizeSuiAddress(bcs.Address.parse(bytes));
+		return normalizeHaneulAddress(bcs.Address.parse(bytes));
 	}
 
 	async canPlaceLimitOrder(params: CanPlaceLimitOrderParams): Promise<boolean> {

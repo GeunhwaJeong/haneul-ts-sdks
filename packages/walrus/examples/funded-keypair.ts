@@ -1,46 +1,46 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { getFaucetHost, requestSuiFromFaucetV2 } from '@mysten/sui/faucet';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
-import { MIST_PER_SUI, parseStructTag } from '@mysten/sui/utils';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
+import { GEUNHWA_PER_HANEUL, parseStructTag } from '@haneullabs/haneul/utils';
 
 import { TESTNET_WALRUS_PACKAGE_CONFIG } from '../src/index.js';
 
 export async function getFundedKeypair() {
-	const suiClient = new SuiGrpcClient({
+	const haneulClient = new HaneulGrpcClient({
 		network: 'testnet',
-		baseUrl: 'https://fullnode.testnet.sui.io:443',
+		baseUrl: 'https://fullnode.testnet.haneul.io:443',
 	});
 
 	const keypair = Ed25519Keypair.fromSecretKey(
-		'suiprivkey1qzmcxscyglnl9hnq82crqsuns0q33frkseks5jw0fye3tuh83l7e6ajfhxx',
+		'haneulprivkey1qzmcxscyglnl9hnq82crqsuns0q33frkseks5jw0fye3tuh83l7e6ajfhxx',
 	);
-	console.log(keypair.toSuiAddress());
+	console.log(keypair.toHaneulAddress());
 
-	const { balance } = await suiClient.getBalance({
-		owner: keypair.toSuiAddress(),
+	const { balance } = await haneulClient.getBalance({
+		owner: keypair.toHaneulAddress(),
 	});
 
-	if (BigInt(balance.balance) < MIST_PER_SUI) {
-		await requestSuiFromFaucetV2({
+	if (BigInt(balance.balance) < GEUNHWA_PER_HANEUL) {
+		await requestHaneulFromFaucetV2({
 			host: getFaucetHost('testnet'),
-			recipient: keypair.toSuiAddress(),
+			recipient: keypair.toHaneulAddress(),
 		});
 	}
 
-	const walBalance = await suiClient.getBalance({
-		owner: keypair.toSuiAddress(),
+	const walBalance = await haneulClient.getBalance({
+		owner: keypair.toHaneulAddress(),
 		coinType: `0x8270feb7375eee355e64fdb69c50abb6b5f9393a722883c1cf45f8e26048810a::wal::WAL`,
 	});
 	console.log('wal balance:', walBalance.balance);
 
-	if (Number(walBalance.balance) < Number(MIST_PER_SUI) / 2) {
+	if (Number(walBalance.balance) < Number(GEUNHWA_PER_HANEUL) / 2) {
 		const tx = new Transaction();
 
-		const exchange = await suiClient.getObject({
+		const exchange = await haneulClient.getObject({
 			objectId: TESTNET_WALRUS_PACKAGE_CONFIG.exchangeIds[0],
 		});
 
@@ -54,19 +54,19 @@ export async function getFundedKeypair() {
 			arguments: [
 				tx.object(TESTNET_WALRUS_PACKAGE_CONFIG.exchangeIds[0]),
 				coinWithBalance({
-					balance: MIST_PER_SUI / 2n,
+					balance: GEUNHWA_PER_HANEUL / 2n,
 				}),
 			],
 		});
 
-		tx.transferObjects([wal], keypair.toSuiAddress());
+		tx.transferObjects([wal], keypair.toHaneulAddress());
 
-		const result = await suiClient.signAndExecuteTransaction({
+		const result = await haneulClient.signAndExecuteTransaction({
 			transaction: tx,
 			signer: keypair,
 		});
 
-		await suiClient.waitForTransaction({
+		await haneulClient.waitForTransaction({
 			digest: (result.Transaction ?? result.FailedTransaction).digest,
 		});
 

@@ -1,0 +1,42 @@
+---
+title: '@haneullabs/walrus'
+description: Migrate @haneullabs/walrus to 2.0
+---
+
+## Breaking Changes
+
+- **Client required**: `WalrusClient` can no longer be created with just an RPC URL. You must pass a
+  Haneul client.
+- **Network from client**: The `network` parameter has been removed from `walrus()`. The network is
+  now inferred from the client.
+- **Removed deprecated method**: `WalrusClient.experimental_asClientExtension()` has been removed.
+  Use the `walrus()` function instead.
+
+## Updated Usage
+
+If you were creating `WalrusClient` directly:
+
+```diff
+- import { WalrusClient } from '@haneullabs/walrus';
++ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc'; // or HaneulJsonRpcClient, HaneulGraphQLClient
++ import { walrus } from '@haneullabs/walrus';
+
+- const walrusClient = new WalrusClient({
+-   haneulRpcUrl: 'https://fullnode.testnet.haneul.io:443',
+-   network: 'testnet',
+- });
++ const client = new HaneulGrpcClient({
++   baseUrl: 'https://fullnode.testnet.haneul.io:443',
++   network: 'testnet',
++ }).$extend(walrus());
+
+- await walrusClient.getBlob(blobId);
++ await client.walrus.getBlob(blobId);
+```
+
+If you were passing `network` to `walrus()`, remove it:
+
+```diff
+- client.$extend(walrus({ network: 'testnet' }));
++ client.$extend(walrus());
+```

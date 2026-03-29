@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useDAppKit, useCurrentClient } from '@mysten/dapp-kit-react';
+import { useDAppKit, useCurrentClient } from '@haneullabs/dapp-kit-react';
 import { useState, useEffect, useCallback } from 'react';
-import { MIST_PER_SUI, parseStructTag } from '@mysten/sui/utils';
-import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
+import { GEUNHWA_PER_HANEUL, parseStructTag } from '@haneullabs/haneul/utils';
+import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
 import { TESTNET_WALRUS_PACKAGE_CONFIG } from '../../../src/index.js';
-import type { Signer } from '@mysten/sui/cryptography';
+import type { Signer } from '@haneullabs/haneul/cryptography';
 
 interface WalletBalancesProps {
 	onError: (error: string) => void;
@@ -27,12 +27,12 @@ export function WalletBalances({
 	refreshTrigger,
 }: WalletBalancesProps) {
 	const dAppKit = useDAppKit();
-	const suiClient = useCurrentClient();
+	const haneulClient = useCurrentClient();
 	const [isFunding, setIsFunding] = useState(false);
 	const [isReturning, setIsReturning] = useState(false);
 	const [isSwapping, setIsSwapping] = useState(false);
 	const [walBalance, setWalBalance] = useState<string>('0');
-	const [suiBalance, setSuiBalance] = useState<string>('0');
+	const [haneulBalance, setHaneulBalance] = useState<string>('0');
 
 	const formatBalance = (balance: string, decimals: number = 9): string => {
 		const num = Number(balance) / Math.pow(10, decimals);
@@ -41,23 +41,23 @@ export function WalletBalances({
 
 	useEffect(() => {
 		async function fetchBalances() {
-			const addressToCheck = signer?.toSuiAddress();
+			const addressToCheck = signer?.toHaneulAddress();
 			if (!addressToCheck) return;
 
-			const [suiBal, walBal] = await Promise.all([
-				suiClient.getBalance({ owner: addressToCheck, coinType: '0x2::sui::SUI' }),
-				suiClient.getBalance({
+			const [haneulBal, walBal] = await Promise.all([
+				haneulClient.getBalance({ owner: addressToCheck, coinType: '0x2::haneul::HANEUL' }),
+				haneulClient.getBalance({
 					owner: addressToCheck,
 					coinType: TESTNET_WAL_COIN_TYPE,
 				}),
 			]);
 
-			setSuiBalance(suiBal.balance.balance.toString());
+			setHaneulBalance(haneulBal.balance.balance.toString());
 			setWalBalance(walBal.balance.balance.toString());
 		}
 
 		fetchBalances().catch(onError);
-	}, [refreshTrigger, signer, suiClient, onError]);
+	}, [refreshTrigger, signer, haneulClient, onError]);
 
 	const fundKeypair = useCallback(async () => {
 		if (!signer) return;
@@ -65,10 +65,10 @@ export function WalletBalances({
 		setIsFunding(true);
 
 		try {
-			// Create a transaction to send 1 SUI to the keypair
+			// Create a transaction to send 1 HANEUL to the keypair
 			const tx = new Transaction();
-			const [coin] = tx.splitCoins(tx.gas, [1n * MIST_PER_SUI]);
-			tx.transferObjects([coin], signer.toSuiAddress());
+			const [coin] = tx.splitCoins(tx.gas, [1n * GEUNHWA_PER_HANEUL]);
+			tx.transferObjects([coin], signer.toHaneulAddress());
 
 			// Sign and execute the transaction
 			const result = await dAppKit.signAndExecuteTransaction({ transaction: tx });
@@ -92,12 +92,12 @@ export function WalletBalances({
 		setIsReturning(true);
 
 		try {
-			const address = signer.toSuiAddress();
+			const address = signer.toHaneulAddress();
 			const tx = new Transaction();
 			tx.setSender(address);
 
-			const coins = await suiClient.listCoins({
-				owner: signer.toSuiAddress(),
+			const coins = await haneulClient.listCoins({
+				owner: signer.toHaneulAddress(),
 				coinType: TESTNET_WAL_COIN_TYPE,
 			});
 
@@ -113,7 +113,7 @@ export function WalletBalances({
 
 			const result = await signer.signAndExecuteTransaction({
 				transaction: tx,
-				client: suiClient,
+				client: haneulClient,
 			});
 
 			const digest = result.Transaction?.digest ?? result.FailedTransaction?.digest;
@@ -122,7 +122,7 @@ export function WalletBalances({
 			}
 
 			// Wait for transaction to be processed
-			await suiClient.waitForTransaction({ result });
+			await haneulClient.waitForTransaction({ result });
 
 			onTransaction(digest);
 		} catch (error) {
@@ -132,19 +132,19 @@ export function WalletBalances({
 		} finally {
 			setIsReturning(false);
 		}
-	}, [signer, suiClient, onError, onTransaction]);
+	}, [signer, haneulClient, onError, onTransaction]);
 
-	const swapSuiForWal = useCallback(async () => {
+	const swapHaneulForWal = useCallback(async () => {
 		if (!signer) return;
 
 		setIsSwapping(true);
 
 		try {
-			const address = signer.toSuiAddress();
+			const address = signer.toHaneulAddress();
 			const tx = new Transaction();
 			tx.setSender(address);
 
-			const { object: exchange } = await suiClient.getObject({
+			const { object: exchange } = await haneulClient.getObject({
 				objectId: TESTNET_WALRUS_PACKAGE_CONFIG.exchangeIds[0],
 			});
 
@@ -156,7 +156,7 @@ export function WalletBalances({
 				arguments: [
 					tx.object(TESTNET_WALRUS_PACKAGE_CONFIG.exchangeIds[0]),
 					coinWithBalance({
-						balance: MIST_PER_SUI / 2n,
+						balance: GEUNHWA_PER_HANEUL / 2n,
 					}),
 				],
 			});
@@ -164,9 +164,9 @@ export function WalletBalances({
 			tx.transferObjects([wal], address);
 
 			// Sign and execute with the keypair
-			const txBytes = await tx.build({ client: suiClient });
+			const txBytes = await tx.build({ client: haneulClient });
 			const signedTx = await signer.signTransaction(txBytes);
-			const result = await suiClient.executeTransaction({
+			const result = await haneulClient.executeTransaction({
 				transaction: txBytes,
 				signatures: [signedTx.signature],
 			});
@@ -182,13 +182,13 @@ export function WalletBalances({
 		} finally {
 			setIsSwapping(false);
 		}
-	}, [signer, suiClient, onError, onTransaction]);
+	}, [signer, haneulClient, onError, onTransaction]);
 
 	return (
 		<div style={{ marginBottom: '15px' }}>
 			<h3 style={{ margin: '0 0 10px 0' }}>Keypair Balances</h3>
 			<div style={{ marginBottom: '10px' }}>
-				<strong>SUI:</strong> {formatBalance(suiBalance)} SUI
+				<strong>HANEUL:</strong> {formatBalance(haneulBalance)} HANEUL
 				<span style={{ margin: '0 15px' }}>•</span>
 				<strong>WAL:</strong> {formatBalance(walBalance)} WAL
 			</div>
@@ -207,12 +207,12 @@ export function WalletBalances({
 						fontSize: '14px',
 					}}
 				>
-					{isFunding ? 'Funding...' : 'Fund with 1 SUI'}
+					{isFunding ? 'Funding...' : 'Fund with 1 HANEUL'}
 				</button>
 
 				<button
 					type="button"
-					onClick={swapSuiForWal}
+					onClick={swapHaneulForWal}
 					disabled={isSwapping || isDisabled || !signer}
 					style={{
 						padding: '8px 16px',
@@ -224,7 +224,7 @@ export function WalletBalances({
 						fontSize: '14px',
 					}}
 				>
-					{isSwapping ? 'Swapping...' : 'Swap 0.5 SUI for WAL'}
+					{isSwapping ? 'Swapping...' : 'Swap 0.5 HANEUL for WAL'}
 				</button>
 
 				<button

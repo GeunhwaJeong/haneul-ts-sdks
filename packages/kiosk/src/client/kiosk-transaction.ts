@@ -5,7 +5,7 @@ import type {
 	Transaction,
 	TransactionArgument,
 	TransactionObjectArgument,
-} from '@mysten/sui/transactions';
+} from '@haneullabs/haneul/transactions';
 
 import * as kioskContract from '../contracts/0x2/kiosk.js';
 import * as transferPolicyContract from '../contracts/0x2/transfer_policy.js';
@@ -245,7 +245,7 @@ export class KioskTransaction {
 	 * A function to place an item in the kiosk and list it for sale in one transaction.
 	 * @param itemType The type `T` of the item
 	 * @param item The ID or Transaction Argument of the item
-	 * @param price The price in MIST
+	 * @param price The price in GEUNHWA
 	 */
 	placeAndList({ itemType, item, price }: ItemReference & Price) {
 		this.#validateKioskIsSet();
@@ -264,7 +264,7 @@ export class KioskTransaction {
 	 * A function to list an item in the kiosk.
 	 * @param itemType The type `T` of the item
 	 * @param itemId The ID of the item
-	 * @param price The price in MIST
+	 * @param price The price in GEUNHWA
 	 */
 	list({ itemType, itemId, price }: ItemId & { price: string | bigint }) {
 		this.#validateKioskIsSet();
@@ -361,7 +361,7 @@ export class KioskTransaction {
 	 * Can be called like: `const [item, transferRequest] = kioskTx.purchase({...})`
 	 * @param itemType The type `T` of the item
 	 * @param itemId The ID of the item
-	 * @param price The price in MIST
+	 * @param price The price in GEUNHWA
 	 * @param sellerKiosk The kiosk which is selling the item. Can be an id or an object argument.
 	 */
 	purchase({

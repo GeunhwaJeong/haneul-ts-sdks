@@ -1,0 +1,9 @@
+[package]
+name = "test_data"
+edition = "2024.beta"
+
+[dependencies]
+Haneul = { git = "https://github.com/GeunhwaJeong/haneul.git", subdir = "crates/haneul-framework/packages/haneul-framework", rev = "framework/testnet" }
+
+[addresses]
+test_data = "0x0"

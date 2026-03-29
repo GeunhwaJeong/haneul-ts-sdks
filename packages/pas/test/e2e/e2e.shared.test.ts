@@ -1,6 +1,6 @@
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { Account } from '../../src/contracts/pas/account.js';
@@ -20,7 +20,7 @@ describe('e2e tests with shared PAS package (all tests run in the same PAS packa
 
 	it('Should not be able to unlock restricted funds (e.g. DEMO_USD).', async () => {
 		const keypair = Ed25519Keypair.generate();
-		const address = keypair.getPublicKey().toSuiAddress();
+		const address = keypair.getPublicKey().toHaneulAddress();
 
 		await toolbox.createAccountForAddress(address);
 		const accountId = toolbox.client.pas.deriveAccountAddress(address);
@@ -58,7 +58,7 @@ describe('e2e tests with shared PAS package (all tests run in the same PAS packa
 		expect(accountObject).toBeDefined();
 
 		const parsed = Account.parse(accountObject.content!);
-		expect(normalizeSuiAddress(parsed.owner)).toBe(normalizeSuiAddress(toolbox.address()));
+		expect(normalizeHaneulAddress(parsed.owner)).toBe(normalizeHaneulAddress(toolbox.address()));
 		expect(accountObject.type).toBe(
 			`${toolbox.client.pas.getPackageConfig().packageId}::account::Account`,
 		);

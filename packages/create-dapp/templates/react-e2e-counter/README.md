@@ -1,6 +1,6 @@
-# Sui dApp Starter Template
+# Haneul dApp Starter Template
 
-This dApp was created using `@mysten/create-dapp` that sets up a basic React
+This dApp was created using `@haneullabs/create-dapp` that sets up a basic React
 Client dApp using the following tools:
 
 - [React](https://react.dev/) as the UI framework
@@ -8,14 +8,14 @@ Client dApp using the following tools:
 - [Vite](https://vitejs.dev/) for build tooling
 - [Tailwind CSS v4](https://tailwindcss.com/) for styling
 - [Lucide React](https://lucide.dev/) for icons
-- [`@mysten/dapp-kit-react`](https://sdk.mystenlabs.com/dapp-kit) for connecting
+- [`@haneullabs/dapp-kit-react`](https://sdk.haneul-labs.com/dapp-kit) for connecting
   to wallets and loading data
-- [`@mysten/codegen`](https://sdk.mystenlabs.com/codegen) for generating
+- [`@haneullabs/codegen`](https://sdk.haneul-labs.com/codegen) for generating
   TypeScript bindings from Move code
 - [pnpm](https://pnpm.io/) for package management
 
 For a full guide on how to build this dApp from scratch, visit this
-[guide](http://docs.sui.io/guides/developer/app-examples/e2e-counter#frontend).
+[guide](http://docs.haneul.io/guides/developer/app-examples/e2e-counter#frontend).
 
 ## Project Structure
 
@@ -34,25 +34,25 @@ src/
 
 ## Deploying your Move code
 
-### Install Sui cli
+### Install Haneul cli
 
-Before deploying your move code, ensure that you have installed the Sui CLI. You
-can follow the [Sui installation instruction](https://docs.sui.io/build/install)
+Before deploying your move code, ensure that you have installed the Haneul CLI. You
+can follow the [Haneul installation instruction](https://docs.haneul.io/build/install)
 to get everything set up.
 
 This template uses `testnet` by default, so we'll need to set up a testnet
 environment in the CLI:
 
 ```bash
-sui client new-env --alias testnet --rpc https://fullnode.testnet.sui.io:443
-sui client switch --env testnet
+haneul client new-env --alias testnet --rpc https://fullnode.testnet.haneul.io:443
+haneul client switch --env testnet
 ```
 
-If you haven't set up an address in the sui client yet, you can use the
+If you haven't set up an address in the haneul client yet, you can use the
 following command to get a new address:
 
 ```bash
-sui client new-address secp256k1
+haneul client new-address secp256k1
 ```
 
 This well generate a new address and recover phrase for you. You can mark a
@@ -60,20 +60,20 @@ newly created address as you active address by running the following command
 with your new address:
 
 ```bash
-sui client switch --address 0xYOUR_ADDRESS...
+haneul client switch --address 0xYOUR_ADDRESS...
 ```
 
-We can ensure we have some Sui in our new wallet by requesting Sui from the
-faucet `https://faucet.sui.io`.
+We can ensure we have some Haneul in our new wallet by requesting Haneul from the
+faucet `https://faucet.haneul.io`.
 
 ### Publishing the move package
 
 The move code for this template is located in the `move` directory. To publish
-it, you can enter the `move` directory, and publish it with the Sui CLI:
+it, you can enter the `move` directory, and publish it with the Haneul CLI:
 
 ```bash
 cd move
-sui client publish --gas-budget 100000000 counter
+haneul client publish --gas-budget 100000000 counter
 ```
 
 In the output there will be an object with a `"packageId"` property. You'll want

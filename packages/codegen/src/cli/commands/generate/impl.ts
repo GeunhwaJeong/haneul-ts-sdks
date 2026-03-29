@@ -4,7 +4,7 @@
 import type { LocalContext } from '../../context.js';
 import { generateFromPackageSummary } from '../../../index.js';
 import { loadConfig, type GenerateBase, type PackageGenerate } from '../../../config.js';
-import { isValidNamedPackage, isValidSuiObjectId } from '@mysten/sui/utils';
+import { isValidNamedPackage, isValidHaneulObjectId } from '@haneullabs/haneul/utils';
 import { execSync } from 'node:child_process';
 import { existsSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -33,12 +33,12 @@ export default async function generate(
 		packages.length > 0
 			? packages.map((p) => {
 					const trimmed = p.trim();
-					if (isValidSuiObjectId(trimmed) || isValidNamedPackage(trimmed)) {
+					if (isValidHaneulObjectId(trimmed) || isValidNamedPackage(trimmed)) {
 						return {
 							network: flags.network ?? 'testnet',
-							packageName: isValidSuiObjectId(trimmed) ? trimmed : trimmed.split('/')[1],
+							packageName: isValidHaneulObjectId(trimmed) ? trimmed : trimmed.split('/')[1],
 							package: trimmed,
-							packageId: isValidSuiObjectId(trimmed) ? trimmed : undefined,
+							packageId: isValidHaneulObjectId(trimmed) ? trimmed : undefined,
 						};
 					} else {
 						return {
@@ -90,10 +90,10 @@ export default async function generate(
 		// Generate summaries for on-chain packages using --package-id
 		if (isOnChainPackage) {
 			const packageId = 'packageId' in pkg ? pkg.packageId : pkg.package;
-			const tempDir = mkdtempSync(join(tmpdir(), 'sui-codegen-'));
+			const tempDir = mkdtempSync(join(tmpdir(), 'haneul-codegen-'));
 			console.log(`Generating summary for on-chain package ${packageId} to ${tempDir}`);
 
-			execSync(`sui move summary --package-id ${packageId} --output-directory ${tempDir}`, {
+			execSync(`haneul move summary --package-id ${packageId} --output-directory ${tempDir}`, {
 				stdio: 'inherit',
 			});
 
@@ -104,7 +104,7 @@ export default async function generate(
 				throw new Error(`Package path does not exist: ${pkg.path}`);
 			}
 
-			execSync('sui move summary', {
+			execSync('haneul move summary', {
 				cwd: pkg.path,
 				stdio: 'inherit',
 			});

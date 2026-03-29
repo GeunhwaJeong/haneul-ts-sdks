@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Transaction } from '@mysten/sui/transactions';
-import { TransactionDataBuilder } from '@mysten/sui/transactions';
-import type { ClientWithCoreApi, SuiClientTypes } from '@mysten/sui/client';
+import type { Transaction } from '@haneullabs/haneul/transactions';
+import { TransactionDataBuilder } from '@haneullabs/haneul/transactions';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
 import type { AnalyzerResult } from '../analyzer.js';
 import { createAnalyzer } from '../analyzer.js';
 
@@ -42,8 +42,8 @@ export const transactionResponse = createAnalyzer({
 	cacheKey: 'transactionResponse@1.0.0',
 	dependencies: { bytes },
 	analyze:
-		(options: { client: ClientWithCoreApi; transactionResponse?: SuiClientTypes.Transaction }) =>
-		async ({ bytes }): Promise<AnalyzerResult<SuiClientTypes.Transaction>> => {
+		(options: { client: ClientWithCoreApi; transactionResponse?: HaneulClientTypes.Transaction }) =>
+		async ({ bytes }): Promise<AnalyzerResult<HaneulClientTypes.Transaction>> => {
 			try {
 				const result = await options.client.core.simulateTransaction({ transaction: bytes });
 				return {

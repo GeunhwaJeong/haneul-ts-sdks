@@ -1,7 +1,7 @@
 /**************************************************************
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
-import { type Transaction } from '@mysten/sui/transactions';
+import { type Transaction } from '@haneullabs/haneul/transactions';
 import { normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
 export interface InitPythOptions {
 	package?: string;

@@ -1,7 +1,7 @@
-# @mysten/pas
+# @haneullabs/pas
 
-TypeScript SDK for the [Permissioned Assets Standard](https://github.com/MystenLabs/pas) (PAS) on
-Sui.
+TypeScript SDK for the [Permissioned Assets Standard](https://github.com/GeunhwaJeong/pas) (PAS) on
+Haneul.
 
 PAS lets asset issuers define transfer policies that are enforced on-chain. The SDK handles policy
 resolution, account derivation, and transaction building so callers work with a simple intent-based
@@ -10,18 +10,18 @@ API.
 ## Installation
 
 ```bash
-npm install @mysten/pas
+npm install @haneullabs/pas
 ```
 
 ## Setup
 
-The PAS client plugs into any Sui client via the `$extend` pattern:
+The PAS client plugs into any Haneul client via the `$extend` pattern:
 
 ```typescript
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { pas } from '@mysten/pas';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { pas } from '@haneullabs/pas';
 
-const client = new SuiGrpcClient({ network: 'testnet' }).$extend(pas());
+const client = new HaneulGrpcClient({ network: 'testnet' }).$extend(pas());
 ```
 
 The client auto-selects the correct on-chain package config for the connected network (mainnet or
@@ -29,7 +29,7 @@ testnet). For custom deployments (e.g. during localnet / CI testing) you can pas
 explicitly:
 
 ```typescript
-const client = new SuiGrpcClient({ network: 'testnet' }).$extend(
+const client = new HaneulGrpcClient({ network: 'testnet' }).$extend(
 	pas({
 		packageConfig: {
 			packageId: '0x...',
@@ -42,7 +42,7 @@ const client = new SuiGrpcClient({ network: 'testnet' }).$extend(
 ## Reading data
 
 Every PAS user has a deterministic **Account** address derived from their wallet address. You can
-derive it locally — no network call needed — and then use regular Sui queries against it:
+derive it locally — no network call needed — and then use regular Haneul queries against it:
 
 ```typescript
 const accountAddress = client.pas.deriveAccountAddress(ownerAddress);
@@ -75,7 +75,7 @@ at build time — fetching policies, approval templates, and creating accounts a
 ### Transferring a permissioned asset
 
 ```typescript
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const DEMO_USD = '0xabc...::demo_usd::DEMO_USD';
 
@@ -102,6 +102,6 @@ Under the hood, `sendBalance` will:
 
 ## More resources
 
-- [PAS repository](https://github.com/MystenLabs/pas) — Move contracts, architecture docs, and a
+- [PAS repository](https://github.com/GeunhwaJeong/pas) — Move contracts, architecture docs, and a
   full working example app
-- [`@mysten/pas` on npm](https://www.npmjs.com/package/@mysten/pas)
+- [`@haneullabs/pas` on npm](https://www.npmjs.com/package/@haneullabs/pas)

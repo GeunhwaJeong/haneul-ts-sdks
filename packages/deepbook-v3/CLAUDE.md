@@ -8,7 +8,7 @@ while working in this package. This helps future sessions avoid repeating the sa
 
 ## Overview
 
-DeepBook V3 is a decentralized exchange (DEX) SDK for Sui blockchain. It provides client extensions
+DeepBook V3 is a decentralized exchange (DEX) SDK for Haneul blockchain. It provides client extensions
 for interacting with DeepBook pools, margin managers, and flash loans.
 
 ## Package Structure
@@ -48,13 +48,13 @@ packages/deepbook-v3/
 
 ### Client Extension Pattern
 
-DeepBook uses the Sui client extension pattern via `$extend()`:
+DeepBook uses the Haneul client extension pattern via `$extend()`:
 
 ```typescript
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { deepbook } from '@mysten/deepbook-v3';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { deepbook } from '@haneullabs/deepbook-v3';
 
-const client = new SuiGrpcClient({ network: 'mainnet', baseUrl: '...' }).$extend(
+const client = new HaneulGrpcClient({ network: 'mainnet', baseUrl: '...' }).$extend(
   deepbook({
     address: '0x...', // User's address
     pools: { ... },   // Optional: custom pool config
@@ -63,7 +63,7 @@ const client = new SuiGrpcClient({ network: 'mainnet', baseUrl: '...' }).$extend
 );
 
 // Access DeepBook methods via client.deepbook.*
-await client.deepbook.getLevel2Range('SUI_USDC', ...);
+await client.deepbook.getLevel2Range('HANEUL_USDC', ...);
 ```
 
 ### Move Abilities and PTB Limitations
@@ -109,7 +109,7 @@ Fetches state for multiple margin managers in a single transaction.
 
 ```typescript
 const states = await client.deepbook.getMarginManagerStates({
-	'0x206037...': 'SUI_USDC',
+	'0x206037...': 'HANEUL_USDC',
 	'0x14218d...': 'DEEP_USDC',
 });
 ```
@@ -133,7 +133,7 @@ Configured via `PRICE_INFO_OBJECT_MAX_AGE_MS` in `src/utils/config.ts`.
 ```typescript
 const priceUpdateTx = new Transaction();
 const priceInfoObjects = await client.deepbook.getPriceInfoObjects(priceUpdateTx, [
-	'SUI',
+	'HANEUL',
 	'USDC',
 	'DEEP',
 	'WBTC',
@@ -147,7 +147,7 @@ const priceInfoObjects = await client.deepbook.getPriceInfoObjects(priceUpdateTx
 Gets order book depth for a price range. Uses vectors internally but works because the Move function
 handles vector creation on-chain, not in PTB.
 
-## SuiGrpcClient API Notes
+## HaneulGrpcClient API Notes
 
 When using the new gRPC client (replacing JSON-RPC):
 
@@ -164,10 +164,10 @@ When using the new gRPC client (replacing JSON-RPC):
 
 ```bash
 # Run tests
-pnpm --filter @mysten/deepbook-v3 test
+pnpm --filter @haneullabs/deepbook-v3 test
 
 # Run codegen (requires ../deepbookv3 sibling repo)
-pnpm --filter @mysten/deepbook-v3 codegen
+pnpm --filter @haneullabs/deepbook-v3 codegen
 ```
 
 ## Formatting
@@ -200,12 +200,12 @@ The file defines parallel testnet/mainnet maps for each entity type:
 
 | Map                  | Type                 | Key convention           | Example key    |
 | -------------------- | -------------------- | ------------------------ | -------------- |
-| `testnetCoins`       | `CoinMap`            | Uppercase coin symbol    | `DEEP`, `SUI`  |
+| `testnetCoins`       | `CoinMap`            | Uppercase coin symbol    | `DEEP`, `HANEUL`  |
 | `mainnetCoins`       | `CoinMap`            | Uppercase coin symbol    | `USDC`, `XBTC` |
-| `testnetPools`       | `PoolMap`            | `BASE_QUOTE` (uppercase) | `DEEP_SUI`     |
-| `mainnetPools`       | `PoolMap`            | `BASE_QUOTE` (uppercase) | `SUI_USDC`     |
-| `testnetMarginPools` | `MarginPoolMap`      | Uppercase coin symbol    | `SUI`, `DEEP`  |
-| `mainnetMarginPools` | `MarginPoolMap`      | Uppercase coin symbol    | `SUI`, `USDC`  |
+| `testnetPools`       | `PoolMap`            | `BASE_QUOTE` (uppercase) | `DEEP_HANEUL`     |
+| `mainnetPools`       | `PoolMap`            | `BASE_QUOTE` (uppercase) | `HANEUL_USDC`     |
+| `testnetMarginPools` | `MarginPoolMap`      | Uppercase coin symbol    | `HANEUL`, `DEEP`  |
+| `mainnetMarginPools` | `MarginPoolMap`      | Uppercase coin symbol    | `HANEUL`, `USDC`  |
 | `testnetPackageIds`  | `DeepbookPackageIds` | Fixed keys               | —              |
 | `mainnetPackageIds`  | `DeepbookPackageIds` | Fixed keys               | —              |
 
@@ -251,8 +251,8 @@ SYMBOL: {
 
 ### Conventions
 
-- Coin keys are always UPPERCASE symbols (e.g., `XBTC`, `USDC`, `SUIUSDE`)
-- Pool keys are `BASE_QUOTE` format (e.g., `SUI_USDC`, `XBTC_USDC`)
+- Coin keys are always UPPERCASE symbols (e.g., `XBTC`, `USDC`, `HANEULUSDE`)
+- Pool keys are `BASE_QUOTE` format (e.g., `HANEUL_USDC`, `XBTC_USDC`)
 - The `type` field in margin pools should match the corresponding coin's `type` in the coins map
 - Use backtick template literals for addresses in coins/pools, single quotes in margin pools (follow
   existing style)
@@ -262,7 +262,7 @@ SYMBOL: {
 ### Query module pattern (`src/queries/`)
 
 Read-only methods live in domain-specific query classes (e.g., `PoolQueries`, `OrderQueries`). Each
-class receives a `QueryContext` via constructor — this provides access to the Sui client, config,
+class receives a `QueryContext` via constructor — this provides access to the Haneul client, config,
 contract builders, and the user's address. `DeepBookClient` delegates to these modules:
 
 ```typescript
@@ -284,7 +284,7 @@ All financial parameters accept `number | bigint`. Three conversion functions ha
 - `convertPrice(value, floatScalar, quoteScalar, baseScalar)` — for prices
 - `convertRate(value, floatScalar)` — for fee rates and percentages
 
-**Semantics**: `number` = human-readable value (e.g., `1.5` SUI), SDK applies
+**Semantics**: `number` = human-readable value (e.g., `1.5` HANEUL), SDK applies
 `BigInt(Math.round(value * scalar))`. `bigint` = raw on-chain u64 value (e.g., `1500000000n`), SDK
 passes through directly.
 
@@ -299,7 +299,7 @@ returning anonymous objects.
 
 ## Dependencies
 
-- `@mysten/sui` - Core Sui SDK
+- `@haneullabs/haneul` - Core Haneul SDK
 - Requires sibling repo `../deepbookv3` for codegen
 
 ## NPM Package Change Summary Format
@@ -307,7 +307,7 @@ returning anonymous objects.
 When asked for a summary of changes for the npm package, use this format:
 
 ```
-## @mysten/deepbook-v3 Changes Summary
+## @haneullabs/deepbook-v3 Changes Summary
 
 ### New Features
 

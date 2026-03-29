@@ -4,9 +4,9 @@
 import type { DAppKitStores } from '../store.js';
 import { task } from 'nanostores';
 import type { UiWallet, UiWalletAccount } from '@wallet-standard/ui';
-import type { StandardConnectInput, SuiWalletFeatures } from '@mysten/wallet-standard';
-import type { StandardConnectFeature } from '@mysten/wallet-standard';
-import { StandardConnect } from '@mysten/wallet-standard';
+import type { StandardConnectInput, HaneulWalletFeatures } from '@haneullabs/wallet-standard';
+import type { StandardConnectFeature } from '@haneullabs/wallet-standard';
+import { StandardConnect } from '@haneullabs/wallet-standard';
 import { getWalletFeature, uiWalletAccountBelongsToUiWallet } from '@wallet-standard/ui';
 import {
 	getOrCreateUiWalletAccountForStandardWalletAccount_DO_NOT_USE_OR_YOU_WILL_BE_FIRED as getOrCreateUiWalletAccountForStandardWalletAccount,
@@ -46,13 +46,13 @@ export function connectWalletCreator(
 			try {
 				$baseConnection.setKey('status', isAlreadyConnected ? 'reconnecting' : 'connecting');
 
-				const { accounts: suiAccounts, supportedIntents } = await internalConnectWallet(
+				const { accounts: haneulAccounts, supportedIntents } = await internalConnectWallet(
 					wallet,
 					supportedNetworks,
 					standardConnectArgs,
 				);
 
-				if (!isAlreadyConnected && suiAccounts.length === 0) {
+				if (!isAlreadyConnected && haneulAccounts.length === 0) {
 					throw new WalletNoAccountsConnectedError('No accounts were authorized.');
 				}
 
@@ -64,11 +64,11 @@ export function connectWalletCreator(
 
 				$baseConnection.set({
 					status: 'connected',
-					currentAccount: account ?? suiAccounts[0],
+					currentAccount: account ?? haneulAccounts[0],
 					supportedIntents: supportedIntents ?? [],
 				});
 
-				return { accounts: suiAccounts };
+				return { accounts: haneulAccounts };
 			} catch (error) {
 				$baseConnection.setKey('status', isAlreadyConnected ? 'connected' : 'disconnected');
 				throw error;
@@ -104,14 +104,14 @@ export async function internalConnectWallet(
 }
 
 export async function getSupportedIntentsFromFeature(wallet: UiWallet) {
-	if (!wallet.features.includes('sui:getCapabilities')) {
+	if (!wallet.features.includes('haneul:getCapabilities')) {
 		return [];
 	}
 
 	const getCapabilitiesFeature = getWalletFeature(
 		wallet,
-		'sui:getCapabilities',
-	) as SuiWalletFeatures['sui:getCapabilities'];
+		'haneul:getCapabilities',
+	) as HaneulWalletFeatures['haneul:getCapabilities'];
 
 	return (await getCapabilitiesFeature?.getCapabilities())?.supportedIntents ?? [];
 }

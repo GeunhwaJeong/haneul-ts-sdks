@@ -60,8 +60,8 @@ describe('PAS Object Derivation', () => {
 	});
 
 	describe('derivePolicyAddress', () => {
-		it('should derive policy address for SUI (Balance-wrapped)', () => {
-			const policyId = derivePolicyAddress('0x2::sui::SUI', packageConfig);
+		it('should derive policy address for HANEUL (Balance-wrapped)', () => {
+			const policyId = derivePolicyAddress('0x2::haneul::HANEUL', packageConfig);
 			expect(policyId).toMatchInlineSnapshot(
 				`"0xafc3922318beb884092ce0349fae45b00cc46913dfd72247c48ad1ca890734ab"`,
 			);
@@ -86,7 +86,7 @@ describe('PAS Object Derivation', () => {
 
 		it('should derive policy address for different namespace', () => {
 			const config = { ...packageConfig, namespaceId: '0xdef' };
-			const policyId = derivePolicyAddress('0x2::sui::SUI', config);
+			const policyId = derivePolicyAddress('0x2::haneul::HANEUL', config);
 			expect(policyId).toMatchInlineSnapshot(
 				`"0x182cd5446391f7a5be59e6f79beb0c0ed1e3532543f82d37d8a41f13c6dae130"`,
 			);
@@ -104,7 +104,7 @@ describe('PAS Object Derivation', () => {
 
 		it('should handle nested generics (Balance-wrapped)', () => {
 			const policyId = derivePolicyAddress(
-				'0x1::option::Option<0x2::coin::Coin<0x2::sui::SUI>>',
+				'0x1::option::Option<0x2::coin::Coin<0x2::haneul::HANEUL>>',
 				packageConfig,
 			);
 			expect(policyId).toMatchInlineSnapshot(
@@ -113,7 +113,7 @@ describe('PAS Object Derivation', () => {
 		});
 
 		it('should allow raw derivation via wrapType identity', () => {
-			const policyId = derivePolicyAddress('0x2::sui::SUI', packageConfig, {
+			const policyId = derivePolicyAddress('0x2::haneul::HANEUL', packageConfig, {
 				wrapType: (t) => t,
 			});
 			expect(policyId).toMatchInlineSnapshot(

@@ -3,8 +3,8 @@ title: DApp Kit Instance
 description: Create and configure a DAppKit instance for wallet and client management
 ---
 
-The `createDAppKit` function is the foundation of your Sui dApp. It creates an instance that manages
-wallet connections, network configuration, and provides access to the Sui client.
+The `createDAppKit` function is the foundation of your Haneul dApp. It creates an instance that manages
+wallet connections, network configuration, and provides access to the Haneul client.
 
 ## Creating a dApp Kit Instance
 
@@ -12,16 +12,16 @@ The core of the dApp Kit SDK is the `createDAppKit` function, which creates an i
 all dApp functionality:
 
 ```typescript
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 };
 
 export const dAppKit = createDAppKit({
 	networks: ['testnet'],
-	createClient: (network) => new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
+	createClient: (network) => new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
 });
 ```
 
@@ -51,7 +51,7 @@ This instance provides:
 - **storage** (optional) - Configures how the most recently connected to wallet account is stored
   (default: `localStorage`, set to `null` to disable)
 - **storageKey** (optional) - The key to use to store the most recently connected wallet account
-  (default: `'mysten-dapp-kit:selected-wallet-and-address'`)
+  (default: `'haneullabs-dapp-kit:selected-wallet-and-address'`)
 - **walletInitializers** (optional) - A list of wallet initializers used for registering additional
   wallet standard wallets.
 - **slushWalletConfig** (optional) - Configuration for Slush wallet (set to `null` to disable the
@@ -88,22 +88,22 @@ Read more about [actions](./actions/connect-wallet) and [stores](./state).
 
 ```ts
 // dapp-kit.ts
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	testnet: 'https://fullnode.testnet.sui.io:443',
+	testnet: 'https://fullnode.testnet.haneul.io:443',
 };
 
 export const dAppKit = createDAppKit({
 	networks: ['testnet'],
-	createClient: (network) => new SuiGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
+	createClient: (network) => new HaneulGrpcClient({ network, baseUrl: GRPC_URLS[network] }),
 });
 ```
 
 ```ts
 // connect-wallet-and-log.ts
-import type { UiWallet, UiWalletAccount } from '@mysten/dapp-kit-core';
+import type { UiWallet, UiWalletAccount } from '@haneullabs/dapp-kit-core';
 import { dAppKit } from './dapp-kit.ts';
 
 export async function connectWalletAndLog({
@@ -131,13 +131,13 @@ export async function connectWalletAndLog({
 For development environments, enable the burner wallet:
 
 ```typescript
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 export const dAppKit = createDAppKit({
 	networks: ['localnet'],
 	defaultNetwork: 'localnet',
-	createClient: () => new SuiGrpcClient({ network: 'localnet', baseUrl: 'http://127.0.0.1:9000' }),
+	createClient: () => new HaneulGrpcClient({ network: 'localnet', baseUrl: 'http://127.0.0.1:9000' }),
 	enableBurnerWallet: true, // Dev-only feature
 });
 ```
@@ -149,13 +149,13 @@ By default, dApp Kit automatically reconnects to the previously connected wallet
 ### Disabling Auto-Connect
 
 ```typescript
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 export const dAppKit = createDAppKit({
 	networks: ['mainnet'],
 	createClient: () =>
-		new SuiGrpcClient({ network: 'mainnet', baseUrl: 'https://fullnode.mainnet.sui.io:443' }),
+		new HaneulGrpcClient({ network: 'mainnet', baseUrl: 'https://fullnode.mainnet.haneul.io:443' }),
 	autoConnect: false,
 });
 ```
@@ -165,15 +165,15 @@ export const dAppKit = createDAppKit({
 Add support for custom wallets using wallet initializers:
 
 ```typescript
-import { createDAppKit } from '@mysten/dapp-kit-core';
-import { SuiGrpcClient } from '@mysten/sui/grpc';
-import { getWallets } from '@mysten/wallet-standard';
+import { createDAppKit } from '@haneullabs/dapp-kit-core';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { getWallets } from '@haneullabs/wallet-standard';
 import { CustomWallet } from './custom-wallet.js'; // import your custom wallet class
 
 export const dAppKit = createDAppKit({
 	networks: ['mainnet'],
 	createClient: () =>
-		new SuiGrpcClient({ network: 'mainnet', baseUrl: 'https://fullnode.mainnet.sui.io:443' }),
+		new HaneulGrpcClient({ network: 'mainnet', baseUrl: 'https://fullnode.mainnet.haneul.io:443' }),
 	walletInitializers: [
 		{
 			id: 'Custom Wallets',

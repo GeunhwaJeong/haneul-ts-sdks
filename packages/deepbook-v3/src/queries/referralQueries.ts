@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { bcs } from '@mysten/sui/bcs';
-import { Transaction } from '@mysten/sui/transactions';
-import { normalizeSuiAddress } from '@mysten/sui/utils';
+import { bcs } from '@haneullabs/haneul/bcs';
+import { Transaction } from '@haneullabs/haneul/transactions';
+import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 
 import type { ReferralBalances } from '../types/index.js';
 import { DEEP_SCALAR, FLOAT_SCALAR } from '../utils/config.js';
@@ -70,7 +70,7 @@ export class ReferralQueries {
 		const bytes = res.commandResults![0].returnValues[0].bcs;
 		const poolId = bcs.Address.parse(bytes);
 
-		return normalizeSuiAddress(poolId);
+		return normalizeHaneulAddress(poolId);
 	}
 
 	async poolReferralMultiplier(poolKey: string, referral: string): Promise<number> {
@@ -104,7 +104,7 @@ export class ReferralQueries {
 			if (optionId === null) {
 				return null;
 			}
-			return normalizeSuiAddress(optionId);
+			return normalizeHaneulAddress(optionId);
 		} catch {
 			return null;
 		}

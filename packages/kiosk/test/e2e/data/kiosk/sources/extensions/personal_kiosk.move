@@ -7,11 +7,11 @@
 ///
 module kiosk::personal_kiosk {
     use std::option::{Self, Option};
-    use sui::transfer;
-    use sui::kiosk::{Self, Kiosk, KioskOwnerCap};
-    use sui::object::{Self, ID, UID};
-    use sui::tx_context::{sender, TxContext};
-    use sui::dynamic_field as df;
+    use haneul::transfer;
+    use haneul::kiosk::{Self, Kiosk, KioskOwnerCap};
+    use haneul::object::{Self, ID, UID};
+    use haneul::tx_context::{sender, TxContext};
+    use haneul::dynamic_field as df;
 
     /// Trying to return the Cap / Borrow to a wrong PersonalKioskCap object.
     const EIncorrectCapObject: u64 = 0;
@@ -83,7 +83,7 @@ module kiosk::personal_kiosk {
             owner
         );
 
-        sui::event::emit(NewPersonalKiosk {
+        haneul::event::emit(NewPersonalKiosk {
             kiosk_id: object::id(kiosk)
         });
 

@@ -1,10 +1,10 @@
 /**************************************************************
  * THIS FILE IS GENERATED AND SHOULD NOT BE MANUALLY MODIFIED *
  **************************************************************/
-import { type BcsType, bcs } from '@mysten/sui/bcs';
+import { type BcsType, bcs } from '@haneullabs/haneul/bcs';
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
-import { type Transaction } from '@mysten/sui/transactions';
-const $moduleName = '@mysten/pas::unlock_funds';
+import { type Transaction } from '@haneullabs/haneul/transactions';
+const $moduleName = '@haneullabs/pas::unlock_funds';
 /**
  * An unlock funds request that is generated once a Permissioned Funds Transfer is
  * initiated.
@@ -39,7 +39,7 @@ export interface OwnerOptions {
 	typeArguments: [string];
 }
 export function owner(options: OwnerOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['request'];
 	return (tx: Transaction) =>
@@ -60,7 +60,7 @@ export interface AccountIdOptions {
 	typeArguments: [string];
 }
 export function accountId(options: AccountIdOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['request'];
 	return (tx: Transaction) =>
@@ -81,7 +81,7 @@ export interface FundsOptions {
 	typeArguments: [string];
 }
 export function funds(options: FundsOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null] satisfies (string | null)[];
 	const parameterNames = ['request'];
 	return (tx: Transaction) =>
@@ -109,11 +109,11 @@ export interface ResolveUnrestrictedBalanceOptions {
  * system. If a `Policy<T>` exists, they can only be resolved from within the
  * system.
  *
- * For example, `SUI` will never be a managed asset, so the owner needs to be able
+ * For example, `HANEUL` will never be a managed asset, so the owner needs to be able
  * to withdraw if anyone transfers some to their account.
  */
 export function resolveUnrestrictedBalance(options: ResolveUnrestrictedBalanceOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null] satisfies (string | null)[];
 	const parameterNames = ['request', 'namespace'];
 	return (tx: Transaction) =>
@@ -141,7 +141,7 @@ export interface ResolveOptions {
  * are enough valid approvals.
  */
 export function resolve(options: ResolveOptions) {
-	const packageAddress = options.package ?? '@mysten/pas';
+	const packageAddress = options.package ?? '@haneullabs/pas';
 	const argumentsTypes = [null, null] satisfies (string | null)[];
 	const parameterNames = ['request', 'policy'];
 	return (tx: Transaction) =>
