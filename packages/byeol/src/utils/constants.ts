@@ -1,0 +1,188 @@
+// Copyright (c) Mysten Labs, Inc.
+// SPDX-License-Identifier: Apache-2.0
+
+import type { Coin, Pool, MarginPool } from '../types/index.js';
+
+export type CoinMap = Record<string, Coin>;
+export type PoolMap = Record<string, Pool>;
+export type MarginPoolMap = Record<string, MarginPool>;
+export interface ByeolPackageIds {
+	BYEOL_PACKAGE_ID?: string;
+	REGISTRY_ID?: string;
+	BYL_TREASURY_ID?: string;
+	MARGIN_PACKAGE_ID?: string;
+	MARGIN_V1?: string;
+	MARGIN_REGISTRY_ID?: string;
+	LIQUIDATION_PACKAGE_ID?: string;
+}
+
+export const testnetPackageIds = {
+	BYEOL_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	REGISTRY_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	BYL_TREASURY_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	MARGIN_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	MARGIN_V1: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	MARGIN_REGISTRY_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	LIQUIDATION_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+} satisfies ByeolPackageIds;
+
+export const mainnetPackageIds = {
+	BYEOL_PACKAGE_ID: '0xfa6cb7b6b0116d552e70cc83f293456502ebf7c37485762570077fde11a7cda8',
+	REGISTRY_ID: '0xed6388354d0d6708573104f98885fadd95727d8c24c4f0d110bdf2412777b2eb',
+	BYL_TREASURY_ID: '0x1033499ad60f51cc3c552f04088980cea99f44f043747a3e30eabc342fd5446c',
+	MARGIN_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	MARGIN_V1: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	MARGIN_REGISTRY_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	LIQUIDATION_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+} satisfies ByeolPackageIds;
+
+export const testnetCoins: CoinMap = {
+	BYL: {
+		address: `0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8`,
+		type: `0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8::byl::BYL`,
+		scalar: 1000000,
+		feed: '0x99137a18354efa7fb6840889d059fdb04c46a6ce21be97ab60d9ad93e91ac758', // BYL uses HFT feed on testnet
+		currencyId: '0xbf1b77e244f649c736a44898585cc8ac939fbb0bbdf1d8d2a183978cc312e613',
+		priceInfoObjectId: '0x3d52fffa2cd9e54b39bb36d282bdda560b15b8b4fdf4766a3c58499ef172bafc',
+	},
+	HANEUL: {
+		address: `0x0000000000000000000000000000000000000000000000000000000000000002`,
+		type: `0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL`,
+		scalar: 1000000000,
+		feed: '0x50c67b3fd225db8912a424dd4baed60ffdde625ed2feaaf283724f9608fea266',
+		currencyId: '0xf256d3fb6a50eaa748d94335b34f2982fbc3b63ceec78cafaa29ebc9ebaf2bbc',
+		priceInfoObjectId: '0x1ebb295c789cc42b3b2a1606482cd1c7124076a0f5676718501fda8c7fd075a0',
+	},
+	DBUSDC: {
+		address: `0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7`,
+		type: `0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7::DBUSDC::DBUSDC`,
+		scalar: 1000000,
+		feed: '0x41f3625971ca2ed2263e78573fe5ce23e13d2558ed3f2e47ab0f84fb9e7ae722',
+		currencyId: '0x509db0f9283c9ee4fdc5b99028a439d3639f49e9709e3d7a6de14b3bfdb0c784',
+		priceInfoObjectId: '0x9c4dd4008297ffa5e480684b8100ec21cc934405ed9a25d4e4d7b6259aad9c81',
+	},
+	DBTC: {
+		address: `0x6502dae813dbe5e42643c119a6450a518481f03063febc7e20238e43b6ea9e86`,
+		type: `0x6502dae813dbe5e42643c119a6450a518481f03063febc7e20238e43b6ea9e86::dbtc::DBTC`,
+		scalar: 100000000,
+		feed: '0xf9c0172ba10dfa4d19088d94f5bf61d3b54d5bd7483a322a982e1373ee8ea31b',
+		currencyId: '0x3ef2afa2126704bf721b9c8495d94288f6bd090fc454fe3e1613eb765a8a348f',
+		priceInfoObjectId: '0x72431a238277695d3f31e4425225a4462674ee6cceeea9d66447b210755fffba',
+	},
+	DBUSDT: {
+		address: `0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7`,
+		type: `0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7::DBUSDT::DBUSDT`,
+		scalar: 1000000,
+	},
+	WAL: {
+		address: `0x9ef7676a9f81937a52ae4b2af8d511a28a0b080477c0c2db40b0ab8882240d76`,
+		type: `0x9ef7676a9f81937a52ae4b2af8d511a28a0b080477c0c2db40b0ab8882240d76::wal::WAL`,
+		scalar: 1000000000,
+	},
+};
+
+export const mainnetCoins: CoinMap = {
+	BYL: {
+		address: `0xedcf12e21f1c6fbfd8fa8fa831a53868cefad279f1d164825e0a5acf09e5ee78`,
+		type: `0xedcf12e21f1c6fbfd8fa8fa831a53868cefad279f1d164825e0a5acf09e5ee78::byl::BYL`,
+		scalar: 1000000,
+		feed: '',
+		currencyId: '',
+		priceInfoObjectId: '',
+	},
+	HANEUL: {
+		address: `0x0000000000000000000000000000000000000000000000000000000000000002`,
+		type: `0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL`,
+		scalar: 1000000000,
+		feed: '',
+		currencyId: '',
+		priceInfoObjectId: '',
+	},
+	USDC: {
+		address: `0x6b7638d3d91245229f51f48d5c39bcb6ff7023ff022954a0bd94441d8ee20b4a`,
+		type: `0x6b7638d3d91245229f51f48d5c39bcb6ff7023ff022954a0bd94441d8ee20b4a::usdc::USDC`,
+		scalar: 1000000,
+		feed: '',
+		currencyId: '',
+		priceInfoObjectId: '',
+	},
+};
+
+export const testnetPools: PoolMap = {
+	BYL_HANEUL: {
+		address: `0x48c95963e9eac37a316b7ae04a0deb761bcdcc2b67912374d6036e7f0e9bae9f`,
+		baseCoin: 'BYL',
+		quoteCoin: 'HANEUL',
+	},
+	HANEUL_DBUSDC: {
+		address: `0x1c19362ca52b8ffd7a33cee805a67d40f31e6ba303753fd3a4cfdfacea7163a5`,
+		baseCoin: 'HANEUL',
+		quoteCoin: 'DBUSDC',
+	},
+	BYL_DBUSDC: {
+		address: `0xe86b991f8632217505fd859445f9803967ac84a9d4a1219065bf191fcb74b622`,
+		baseCoin: 'BYL',
+		quoteCoin: 'DBUSDC',
+	},
+	DBUSDT_DBUSDC: {
+		address: `0x83970bb02e3636efdff8c141ab06af5e3c9a22e2f74d7f02a9c3430d0d10c1ca`,
+		baseCoin: 'DBUSDT',
+		quoteCoin: 'DBUSDC',
+	},
+	WAL_DBUSDC: {
+		address: `0xeb524b6aea0ec4b494878582e0b78924208339d360b62aec4a8ecd4031520dbb`,
+		baseCoin: 'WAL',
+		quoteCoin: 'DBUSDC',
+	},
+	WAL_HANEUL: {
+		address: `0x8c1c1b186c4fddab1ebd53e0895a36c1d1b3b9a77cd34e607bef49a38af0150a`,
+		baseCoin: 'WAL',
+		quoteCoin: 'HANEUL',
+	},
+	DBTC_DBUSDC: {
+		address: `0x0dce0aa771074eb83d1f4a29d48be8248d4d2190976a5241f66b43ec18fa34de`,
+		baseCoin: 'DBTC',
+		quoteCoin: 'DBUSDC',
+	},
+};
+
+export const mainnetPools: PoolMap = {
+	HANEUL_USDC: {
+		address: `0xba20cefb68684d17a38945c8f96b87a08ed79c95ac6894cced657331f4381370`,
+		baseCoin: 'HANEUL',
+		quoteCoin: 'USDC',
+	},
+};
+
+export const testnetMarginPools = {
+	HANEUL: {
+		address: '0xcdbbe6a72e639b647296788e2e4b1cac5cea4246028ba388ba1332ff9a382eea',
+		type: '0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
+	},
+	DBUSDC: {
+		address: '0xf08568da93834e1ee04f09902ac7b1e78d3fdf113ab4d2106c7265e95318b14d',
+		type: '0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7::DBUSDC::DBUSDC',
+	},
+	BYL: {
+		address: '0x610640613f21d9e688d6f8103d17df22315c32e0c80590ce64951a1991378b55',
+		type: '0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8::byl::BYL',
+	},
+	DBTC: {
+		address: '0xf3440b4aafcc8b12fc4b242e9590c52873b8238a0d0e52fbf9dae61d2970796a',
+		type: '0x6502dae813dbe5e42643c119a6450a518481f03063febc7e20238e43b6ea9e86::dbtc::DBTC',
+	},
+};
+
+export const mainnetMarginPools = {
+
+};
+
+export const testnetPythConfigs = {
+	pythStateId: '0x243759059f4c3111179da5878c12f68d612c21a8d54d85edc86164bb18be1c7c',
+	wormholeStateId: '0x31358d198147da50db32eda2562951d53973a0c0ad5ed738e9b17d88b213d790',
+};
+
+export const mainnetPythConfigs = {
+	pythStateId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	wormholeStateId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+};

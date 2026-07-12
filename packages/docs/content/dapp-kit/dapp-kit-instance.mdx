@@ -3,13 +3,13 @@ title: DApp Kit Instance
 description: Create and configure a DAppKit instance for wallet and client management
 ---
 
-The `createDAppKit` function is the foundation of your Haneul dApp. It creates an instance that manages
+The `createDAppKit` function is the foundation of your Haneul app. It creates an instance that manages
 wallet connections, network configuration, and provides access to the Haneul client.
 
-## Creating a dApp Kit Instance
+## Creating a dApp Kit instance
 
 The core of the dApp Kit SDK is the `createDAppKit` function, which creates an instance that manages
-all dApp functionality:
+all app functionality:
 
 ```typescript
 import { createDAppKit } from '@haneullabs/dapp-kit-core';
@@ -28,7 +28,7 @@ export const dAppKit = createDAppKit({
 <Callout type="info">
 	If you use the React bindings, there are two ways to ensure type safety with hooks:
 
-    1. [Register the global dAppKit type](./getting-started/react#1-create-a-dapp-kit-instance) once, and all hooks will be properly typed
+    1. [Register the global dAppKit type](./getting-started/react#step-1-create-a-dapp-kit-instance) once, and all hooks will be properly typed
     2. Pass the dAppKit instance explicitly to each hook: `useWalletConnection({ dAppKit })`
 
 </Callout>
@@ -42,22 +42,23 @@ This instance provides:
 
 ## Parameters
 
-- **autoConnect** (optional) - Enables automatically connecting to the most recently used wallet
+- **autoConnect** (optional): Enables automatically connecting to the most recently used wallet
   account (default: `true`)
-- **networks** - A list of networks supported by the application (e.g. `['mainnet', 'testnet']`)
-- **defaultNetwork** (optional) - Initial network to use (default: first network in the array)
-- **createClient** - Creates a new client instance for the given network
-- **enableBurnerWallet** (optional) - Enable development-only burner wallet (default: `false`)
-- **storage** (optional) - Configures how the most recently connected to wallet account is stored
+- **networks:** A list of networks supported by the application (for example,
+  `['mainnet', 'testnet']`)
+- **defaultNetwork** (optional): Initial network to use (default: first network in the array)
+- **createClient:** Creates a new client instance for the given network
+- **enableBurnerWallet** (optional): Enable development-only burner wallet (default: `false`)
+- **storage** (optional): Configures how the most recently connected to wallet account is stored
   (default: `localStorage`, set to `null` to disable)
-- **storageKey** (optional) - The key to use to store the most recently connected wallet account
+- **storageKey** (optional): The key to use to store the most recently connected wallet account
   (default: `'haneullabs-dapp-kit:selected-wallet-and-address'`)
-- **walletInitializers** (optional) - A list of wallet initializers used for registering additional
+- **walletInitializers** (optional): A list of wallet initializers used for registering additional
   wallet standard wallets.
-- **slushWalletConfig** (optional) - Configuration for Slush wallet (set to `null` to disable the
+- **slushWalletConfig** (optional): Configuration for Slush wallet (set to `null` to disable the
   wallet)
 
-## Return Value
+## Return value
 
 ```ts
 {
@@ -84,7 +85,7 @@ This instance provides:
 
 Read more about [actions](./actions/connect-wallet) and [stores](./state).
 
-## Basic Usage
+## Basic usage
 
 ```ts
 // dapp-kit.ts
@@ -126,7 +127,7 @@ export async function connectWalletAndLog({
 	[DAppKitProvider](./react/dapp-kit-provider).
 </Callout>
 
-## Development Configuration
+## Development configuration
 
 For development environments, enable the burner wallet:
 
@@ -142,11 +143,11 @@ export const dAppKit = createDAppKit({
 });
 ```
 
-## Auto-Connect Behavior
+## Auto-connect behavior
 
 By default, dApp Kit automatically reconnects to the previously connected wallet.
 
-### Disabling Auto-Connect
+### Disabling auto-connect
 
 ```typescript
 import { createDAppKit } from '@haneullabs/dapp-kit-core';
@@ -155,12 +156,12 @@ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 export const dAppKit = createDAppKit({
 	networks: ['mainnet'],
 	createClient: () =>
-		new HaneulGrpcClient({ network: 'mainnet', baseUrl: 'https://fullnode.mainnet.haneul.io:443' }),
+		new HaneulGrpcClient({ network: 'mainnet', baseUrl: 'http://158.69.54.239:9000' }),
 	autoConnect: false,
 });
 ```
 
-## Custom Wallet Integration
+## Custom wallet integration
 
 Add support for custom wallets using wallet initializers:
 
@@ -173,7 +174,7 @@ import { CustomWallet } from './custom-wallet.js'; // import your custom wallet 
 export const dAppKit = createDAppKit({
 	networks: ['mainnet'],
 	createClient: () =>
-		new HaneulGrpcClient({ network: 'mainnet', baseUrl: 'https://fullnode.mainnet.haneul.io:443' }),
+		new HaneulGrpcClient({ network: 'mainnet', baseUrl: 'http://158.69.54.239:9000' }),
 	walletInitializers: [
 		{
 			id: 'Custom Wallets',

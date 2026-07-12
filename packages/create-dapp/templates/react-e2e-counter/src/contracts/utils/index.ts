@@ -1,15 +1,15 @@
 import {
   bcs,
-  BcsType,
-  TypeTag,
+  type BcsType,
+  type TypeTag,
   TypeTagSerializer,
   BcsStruct,
   BcsEnum,
   BcsTuple,
 } from "@haneullabs/haneul/bcs";
 import { normalizeHaneulAddress } from "@haneullabs/haneul/utils";
-import { TransactionArgument, isArgument } from "@haneullabs/haneul/transactions";
-import { ClientWithCoreApi, HaneulClientTypes } from "@haneullabs/haneul/client";
+import { type TransactionArgument, isArgument } from "@haneullabs/haneul/transactions";
+import { type ClientWithCoreApi, type HaneulClientTypes } from "@haneullabs/haneul/client";
 
 const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress("0x1");
 const HANEUL_FRAMEWORK_ADDRESS = normalizeHaneulAddress("0x2");

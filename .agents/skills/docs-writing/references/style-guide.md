@@ -6,7 +6,7 @@ Every MDX file must have YAML frontmatter with `title` and `description`:
 
 ```mdx
 ---
-title: Sui Programmable Transaction Basics
+title: Haneul Programmable Transaction Basics
 description: Construct programmable transaction blocks with the Transaction API
 ---
 ```
@@ -21,7 +21,7 @@ Rules:
 
 ### Audience
 
-SDK developers building Sui applications in TypeScript. Assume familiarity with TypeScript and npm/pnpm but not with Sui-specific concepts.
+SDK developers building Haneul applications in TypeScript. Assume familiarity with TypeScript and npm/pnpm but not with Haneul-specific concepts.
 
 ### Tone
 
@@ -44,7 +44,7 @@ Use fenced code blocks with `tsx` or `typescript` language tag:
 
 ````mdx
 ```tsx
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 const tx = new Transaction();
 const [coin] = tx.splitCoins(tx.gas, [1_000_000_000]);
@@ -55,7 +55,7 @@ tx.transferObjects([coin], recipientAddress);
 Rules for code examples:
 
 - Always show imports — readers copy-paste
-- Use public API paths: `@mysten/sui/transactions`, not `../src/transactions`
+- Use public API paths: `@haneullabs/haneul/transactions`, not `../src/transactions`
 - Include type annotations when they clarify usage
 - Use meaningful variable names (`tx`, `client`, `keypair`, not `a`, `b`, `c`)
 - Show the happy path first, then error handling
@@ -81,7 +81,7 @@ See [Transaction Building](../transaction-building/basics.mdx) for more details.
 Link to API types inline:
 
 ```mdx
-The `ClientWithCoreApi` type from `@mysten/sui/client` provides...
+The `ClientWithCoreApi` type from `@haneullabs/haneul/client` provides...
 ```
 
 ### Tables
@@ -114,7 +114,7 @@ Use fumadocs callout syntax for warnings and notes:
 The docs use `fumadocs-typescript` for auto-generated type tables. When documenting a TypeScript interface, use the `<AutoTypeTable>` component:
 
 ```mdx
-<AutoTypeTable path="@mysten/sui" name="TransactionOptions" />
+<AutoTypeTable path="@haneullabs/haneul" name="TransactionOptions" />
 ```
 
 ### Tabs
@@ -134,7 +134,7 @@ For showing multiple approaches:
 ```mdx
 ---
 title: Payment Kit
-description: Accept payments in any coin type on Sui
+description: Accept payments in any coin type on Haneul
 ---
 
 Brief overview of what the package does (2-3 sentences).
@@ -142,7 +142,7 @@ Brief overview of what the package does (2-3 sentences).
 ## Installation
 
 \`\`\`npm
-pnpm add @mysten/payment-kit
+pnpm add @haneullabs/payment-kit
 \`\`\`
 
 ## Quick Start

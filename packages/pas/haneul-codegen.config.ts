@@ -5,13 +5,17 @@ import type { HaneulCodegenConfig } from '@haneullabs/codegen';
 
 const config: HaneulCodegenConfig = {
 	output: './src/contracts',
+	errorClass: {
+		name: 'PASClientError',
+		source: '../../error.js',
+	},
 	packages: [
 		{
-			package: '@haneullabs/pas',
+			package: '@pas/pas',
 			path: '../../../pas/packages/pas',
 		},
 		{
-			package: '@haneullabs/ptb',
+			package: '@pas/ptb',
 			path: '../../../pas/packages/ptb',
 		},
 		{

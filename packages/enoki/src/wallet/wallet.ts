@@ -41,8 +41,8 @@ import type {
 import { EnokiGetMetadata, EnokiGetSession } from './features.js';
 import type { HaneulClientTypes } from '@haneullabs/haneul/client';
 import { decodeJwt } from '@haneullabs/haneul/zklogin';
-import type { ExportedWebCryptoKeypair } from '@haneullabs/signers/webcrypto';
-import { WebCryptoSigner } from '@haneullabs/signers/webcrypto';
+import type { ExportedWebCryptoKeypair } from '@haneullabs/webcrypto-signer';
+import { WebCryptoSigner } from '@haneullabs/webcrypto-signer';
 import { get, set } from 'idb-keyval';
 
 import { EnokiClient } from '../EnokiClient/index.js';
@@ -203,8 +203,6 @@ export class EnokiWallet implements Wallet {
 
 		const { client, keypair } = await this.#getSignerContext(chain);
 		const parsedTransaction = Transaction.from(await transaction.toJSON());
-		const bytes = await parsedTransaction.build({ client });
-
 		const haneulAddress = keypair.toHaneulAddress();
 
 		if (haneulAddress !== account.address) {
@@ -214,6 +212,7 @@ export class EnokiWallet implements Wallet {
 		}
 
 		parsedTransaction.setSenderIfNotSet(haneulAddress);
+		const bytes = await parsedTransaction.build({ client });
 
 		const result = await keypair.signAndExecuteTransaction({
 			transaction: parsedTransaction,
@@ -458,7 +457,7 @@ export class EnokiWallet implements Wallet {
 				oauthUrl = `https://id.twitch.tv/oauth2/authorize?${params}`;
 				break;
 			case 'onefc':
-				oauthUrl = `https://login.onepassport.onefc.com/de3ee5c1-5644-4113-922d-e8336569a462/b2c_1a_prod_signupsignin_onehaneulzklogin/oauth2/v2.0/authorize?${params}`;
+				oauthUrl = `https://login.onepassport.onefc.com/de3ee5c1-5644-4113-922d-e8336569a462/b2c_1a_prod_signupsignin_onesuizklogin/oauth2/v2.0/authorize?${params}`;
 				break;
 			case 'playtron':
 				oauthUrl = `https://oauth2.playtron.one/oauth2/auth?${params}`;

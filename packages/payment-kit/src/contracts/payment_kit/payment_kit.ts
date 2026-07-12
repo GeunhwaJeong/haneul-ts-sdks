@@ -9,7 +9,7 @@ import {
 	type RawTransactionArgument,
 } from '../utils/index.js';
 import { bcs } from '@haneullabs/haneul/bcs';
-import { type Transaction } from '@haneullabs/haneul/transactions';
+import { type Transaction, type TransactionArgument } from '@haneullabs/haneul/transactions';
 import * as vec_map from './deps/haneul/vec_map.js';
 import * as config from './config.js';
 const $moduleName = '@haneullabs/payment-kit::payment_kit';
@@ -216,13 +216,13 @@ export function withdrawFromRegistry(options: WithdrawFromRegistryOptions) {
 }
 export interface DeletePaymentRecordArguments {
 	registry: RawTransactionArgument<string>;
-	paymentKey: RawTransactionArgument<string>;
+	paymentKey: TransactionArgument;
 }
 export interface DeletePaymentRecordOptions {
 	package?: string;
 	arguments:
 		| DeletePaymentRecordArguments
-		| [registry: RawTransactionArgument<string>, paymentKey: RawTransactionArgument<string>];
+		| [registry: RawTransactionArgument<string>, paymentKey: TransactionArgument];
 	typeArguments: [string];
 }
 /** Removes an expired Payment Record from the Registry. */

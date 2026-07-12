@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/move-bytecode-template",
-	"version": "0.3.1",
+	"version": "0.4.0",
 	"description": "Move Binary Format implementation in WASM",
 	"main": "index.js",
 	"types": "./index.d.mts",
@@ -29,10 +29,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues/new"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues/new"
 	},
 	"scripts": {
 		"build:wasm": "pnpm build:nodejs && pnpm build:web",
@@ -44,7 +44,7 @@
 	"license": "Apache-2.0",
 	"devDependencies": {
 		"@haneullabs/bcs": "workspace:^",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.8"
 	}
 }

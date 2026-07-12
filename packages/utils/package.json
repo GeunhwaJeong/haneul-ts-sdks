@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/utils",
-	"version": "0.3.2",
+	"version": "0.4.0",
 	"description": "Shared utilities for @haneullabs/* packages",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",
@@ -32,20 +32,20 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"keywords": [
 		"utils"
 	],
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
-	"homepage": "https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/utils#readme",
+	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/tree/main/packages/utils#readme",
 	"devDependencies": {
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.8"
 	},
 	"dependencies": {
-		"@scure/base": "^2.0.0"
+		"@scure/base": "^2.2.0"
 	}
 }

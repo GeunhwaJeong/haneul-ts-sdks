@@ -17,7 +17,7 @@ const queryClient = new QueryClient();
 
 const GRPC_URLS = {
   testnet: "https://fullnode.testnet.haneul.io:443",
-  mainnet: "https://fullnode.mainnet.haneul.io:443",
+  mainnet: "http://158.69.54.239:9000",
   devnet: "https://fullnode.devnet.haneul.io:443",
   localnet: "http://127.0.0.1:9000",
 } as const;

@@ -1,6 +1,18 @@
 ---
 title: The `@haneullabs/haneul/utils` package
-description: 'Utility functions for addresses, coins, and common operations'
+description:
+  'Utility functions for addresses, coins, and common operations in the Haneul TypeScript SDK.'
+keywords:
+  [
+    utils,
+    utility functions,
+    GEUNHWA_PER_HANEUL,
+    address validation,
+    coin formatting,
+    '@haneullabs/haneul/utils',
+    constants,
+    Haneul,
+  ]
 ---
 
 This package contains some utilities that simplify common operations when working with the Haneul
@@ -31,6 +43,13 @@ You can use the following helpers to format various values:
 - `normalizeHaneulObjectId`
 - `normalizeHaneulNSName`
 - `normalizeHaneulNSName`
+
+## Parsers
+
+You can use the following helpers to parse decimal strings into smallest-unit bigints:
+
+- `parseToUnits`: Parse a decimal string into a `bigint`, given a coin's `decimals`
+- `parseToMist`: Parse a HANEUL decimal string into GEUNHWA (9 decimals)
 
 ## Validators
 

@@ -9,7 +9,7 @@ available in both Browser and NodeJS environments in a type-safe way.`
 To install, add the [`@haneullabs/bcs`](https://www.npmjs.com/package/@haneullabs/bcs) package to your
 project:
 
-```sh npm2yarn
+```npm
 npm i @haneullabs/bcs
 ```
 

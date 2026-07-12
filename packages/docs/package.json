@@ -1,26 +1,30 @@
 {
 	"name": "@haneullabs/docs",
-	"version": "0.1.7",
+	"version": "0.1.36",
 	"description": "LLM-friendly documentation for the Haneul TypeScript SDK ecosystem",
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
 	"homepage": "https://sdk.haneul-labs.com",
 	"files": [
 		"dist/"
 	],
+	"engines": {
+		"node": ">=24"
+	},
 	"scripts": {
 		"build": "typedoc && next build && pnpm run build:docs",
-		"build:docs": "tsx scripts/build-docs.ts --all",
+		"build:docs": "node scripts/build-docs.ts --all",
 		"dev": "next dev",
 		"start": "next start",
 		"postinstall": "fumadocs-mdx",
-		"validate-docs": "tsx scripts/validate-llm-docs.ts",
+		"test": "node scripts/validate-llm-docs.ts",
+		"validate-docs": "node scripts/validate-llm-docs.ts",
 		"prettier:check": "prettier -c --ignore-unknown .",
 		"prettier:fix": "prettier -w --ignore-unknown .",
 		"oxlint:check": "oxlint  .",
@@ -29,14 +33,17 @@
 		"lint:fix": "pnpm run oxlint:fix && pnpm run prettier:fix"
 	},
 	"dependencies": {
+		"@haneullabs/aws-kms-signer": "workspace:*",
 		"@haneullabs/bcs": "workspace:*",
 		"@haneullabs/dapp-kit": "workspace:*",
 		"@haneullabs/dapp-kit-core": "workspace:*",
 		"@haneullabs/dapp-kit-react": "workspace:*",
-		"@haneullabs/deepbook-v3": "workspace:*",
+		"@haneullabs/byeol": "workspace:*",
 		"@haneullabs/enoki": "workspace:*",
 		"@haneullabs/enoki-connect": "workspace:*",
+		"@haneullabs/gcp-kms-signer": "workspace:*",
 		"@haneullabs/kiosk": "workspace:*",
+		"@haneullabs/ledger-signer": "workspace:*",
 		"@haneullabs/payment-kit": "workspace:*",
 		"@haneullabs/seal": "workspace:*",
 		"@haneullabs/signers": "workspace:*",
@@ -46,29 +53,29 @@
 		"@haneullabs/utils": "workspace:*",
 		"@haneullabs/wallet-standard": "workspace:*",
 		"@haneullabs/walrus": "workspace:*",
+		"@haneullabs/webcrypto-signer": "workspace:*",
 		"@haneullabs/zksend": "workspace:*",
-		"@tanstack/react-query": "^5.90.16",
+		"@tanstack/react-query": "^5.101.0",
 		"fast-glob": "^3.3.3",
-		"fumadocs-core": "16.4.7",
-		"fumadocs-docgen": "^3.0.5",
-		"fumadocs-mdx": "14.2.5",
-		"fumadocs-typescript": "^5.2.0",
-		"fumadocs-ui": "16.4.7",
-		"gray-matter": "^4.0.3",
-		"next": "^16.1.7",
-		"react": "^19.2.3",
-		"react-dom": "^19.2.3"
+		"fumadocs-core": "16.10.2",
+		"fumadocs-docgen": "^3.0.10",
+		"fumadocs-mdx": "15.0.12",
+		"fumadocs-typescript": "^5.2.6",
+		"fumadocs-ui": "16.10.2",
+		"next": "^16.2.9",
+		"react": "^19.2.7",
+		"react-dom": "^19.2.7"
 	},
 	"devDependencies": {
-		"@tailwindcss/postcss": "^4.1.18",
-		"@types/mdx": "^2.0.13",
-		"@types/node": "^25.0.8",
-		"@types/react": "^19.2.8",
+		"@tailwindcss/postcss": "^4.3.1",
+		"@types/mdx": "^2.0.14",
+		"@types/node": "^25.9.3",
+		"@types/react": "^19.2.17",
 		"@types/react-dom": "^19.2.3",
-		"postcss": "^8.5.6",
-		"tailwindcss": "^4.1.18",
-		"typedoc": "^0.28.16",
+		"postcss": ">=8.5.10",
+		"tailwindcss": "^4.3.1",
+		"typedoc": "^0.28.19",
 		"typedoc-plugin-mermaid": "^1.12.0",
-		"typescript": "^5.9.3"
+		"typescript": "^6.0.3"
 	}
 }

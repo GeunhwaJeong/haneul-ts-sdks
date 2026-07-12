@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/bcs",
-	"version": "2.0.3",
+	"version": "2.1.0",
 	"description": "BCS - Canonical Binary Serialization implementation for JavaScript",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",
@@ -24,7 +24,7 @@
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
 		"build": "rm -rf dist && tsc --noEmit && tsdown",
-		"build:docs": "tsx ../docs/scripts/build-docs.ts",
+		"build:docs": "node ../docs/scripts/build-docs.ts",
 		"test": "vitest run --typecheck",
 		"test:watch": "vitest --typecheck",
 		"prettier:check": "prettier -c --ignore-unknown .",
@@ -36,7 +36,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"keywords": [
 		"bcs",
@@ -47,7 +47,7 @@
 		"serde"
 	],
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
 	"size-limit": [
 		{
@@ -57,13 +57,13 @@
 	],
 	"homepage": "https://sdk.haneul-labs.com/bcs",
 	"devDependencies": {
-		"@size-limit/preset-small-lib": "^12.0.0",
-		"size-limit": "^12.0.0",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"@size-limit/preset-small-lib": "^12.1.0",
+		"size-limit": "^12.1.0",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.8"
 	},
 	"dependencies": {
 		"@haneullabs/utils": "workspace:^",
-		"@scure/base": "^2.0.0"
+		"@scure/base": "^2.2.0"
 	}
 }

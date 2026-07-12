@@ -15,7 +15,7 @@ import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from 
 import { bcs } from '@haneullabs/haneul/bcs';
 import { type Transaction } from '@haneullabs/haneul/transactions';
 import * as versioning from './versioning.js';
-const $moduleName = '@haneullabs/pas::namespace';
+const $moduleName = '@pas/pas::namespace';
 export const Namespace = new MoveStruct({
 	name: `${$moduleName}::Namespace`,
 	fields: {

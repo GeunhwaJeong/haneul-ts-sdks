@@ -1,23 +1,24 @@
 ---
 title: Kiosk SDK
-description: TypeScript SDK for interacting with Haneul Kiosk on-chain commerce
+description: TypeScript SDK for interacting with Haneul Kiosk onchain commerce.
+keywords: [Kiosk SDK, Haneul, onchain commerce, NFT, marketplace, TypeScript, haneullabs/kiosk]
 ---
 
-Kiosk SDK is a tool to interact with Haneul/Haneullabs Kiosk. You can use it to query kiosk related data,
-build transactions to interact, and extend Kiosk to support custom rules.
+Kiosk SDK is a tool to interact with Haneul and Haneullabs Kiosk. You can use it to query kiosk related
+data, build transactions to interact, and extend Kiosk to support custom rules.
 
 ## Installation
 
-```sh npm2yarn
+```npm
 npm i @haneullabs/kiosk
 ```
 
 ## About
 
 The Kiosk SDK exports a client extension that integrates with Haneul clients. Add it to your client
-using `$extend(kiosk())` to access kiosk functionality via `client.kiosk`.
+using `$extend(kiosk())` to access kiosk functionality through `client.kiosk`.
 
-> **Note:** The Kiosk SDK requires `HaneulJsonRpcClient` or `HaneulGraphQLClient`. It does not work with
+> The Kiosk SDK requires `HaneulJsonRpcClient` or `HaneulGraphQLClient`. It does not work with
 > `HaneulGrpcClient` because it uses event queries that are not available in gRPC.
 
 - [Read more about setting up the Kiosk client extension](/kiosk/kiosk-client/introduction)

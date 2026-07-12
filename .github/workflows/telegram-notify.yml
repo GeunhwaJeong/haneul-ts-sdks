@@ -19,7 +19,7 @@ jobs:
           CUTOFF=$(date -u -d '10 minutes ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -v-10M '+%Y-%m-%dT%H:%M:%SZ')
 
           RELEASE=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 20 --json tagName,createdAt \
-            --jq "[.[] | select(.tagName | startswith(\"@mysten/deepbook-v3@\")) | select(.createdAt > \"$CUTOFF\")] | first")
+            --jq "[.[] | select(.tagName | startswith(\"@haneullabs/byeol@\")) | select(.createdAt > \"$CUTOFF\")] | first")
 
           if [ -z "$RELEASE" ] || [ "$RELEASE" = "null" ]; then
             echo "No recent deepbook-v3 release found, skipping"
@@ -27,10 +27,10 @@ jobs:
           fi
 
           TAG=$(echo "$RELEASE" | jq -r '.tagName')
-          VERSION="${TAG#@mysten/deepbook-v3@}"
+          VERSION="${TAG#@haneullabs/byeol@}"
           URL="https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
 
-          MESSAGE="@mysten/deepbook-v3 v${VERSION} has been published to npm.
+          MESSAGE="@haneullabs/byeol v${VERSION} has been published to npm.
 
           ${URL}"
 

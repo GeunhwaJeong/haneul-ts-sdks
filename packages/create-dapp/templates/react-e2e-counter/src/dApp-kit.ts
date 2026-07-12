@@ -7,7 +7,7 @@ import {
 } from "./constants.ts";
 
 const GRPC_URLS = {
-  mainnet: "https://fullnode.mainnet.haneul.io:443",
+  mainnet: "http://158.69.54.239:9000",
   testnet: "https://fullnode.testnet.haneul.io:443",
   devnet: "https://fullnode.devnet.haneul.io:443",
 };

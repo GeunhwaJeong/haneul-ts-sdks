@@ -3,7 +3,7 @@
 	"author": "Haneul Labs <build@haneul-labs.com>",
 	"description": "The static generation tool for Move Registry (mvr)",
 	"homepage": "https://sdk.haneul-labs.com",
-	"version": "0.3.2",
+	"version": "0.4.5",
 	"license": "Apache-2.0",
 	"files": [
 		"CHANGELOG.md",
@@ -35,7 +35,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
 		"url": "https://github.com/GeunhwaJeong/mvr/issues/new"
@@ -44,15 +44,15 @@
 		"access": "public"
 	},
 	"devDependencies": {
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.8"
 	},
 	"dependencies": {
 		"@haneullabs/haneul": "workspace:^",
-		"@types/node": "^25.0.8",
+		"@types/node": "^25.9.3",
 		"enquirer": "^2.4.1",
 		"glob": "^13.0.0",
-		"prettier": "^3.7.4"
+		"prettier": "^3.8.4"
 	},
 	"sideEffects": false,
 	"bin": "./bin/parser.js"

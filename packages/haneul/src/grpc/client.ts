@@ -17,6 +17,7 @@ import { DynamicField_DynamicFieldKind } from './proto/haneul/rpc/v2/state_servi
 import { normalizeStructTag } from '../utils/haneul-types.js';
 import { fromBase64, toBase64 } from '@haneullabs/utils';
 import { NameServiceClient } from './proto/haneul/rpc/v2/name_service.client.js';
+import { ForkingServiceClient } from './proto/haneul/forking/v1alpha/forking_service.client.js';
 import type { TransactionPlugin } from '../transactions/index.js';
 
 interface HaneulGrpcTransportOptions extends GrpcWebOptions {
@@ -68,6 +69,7 @@ export class HaneulGrpcClient extends BaseClient implements HaneulClientTypes.Tr
 	movePackageService: MovePackageServiceClient;
 	signatureVerificationService: SignatureVerificationServiceClient;
 	nameService: NameServiceClient;
+	forkingService: ForkingServiceClient;
 
 	get [HANEUL_CLIENT_BRAND]() {
 		return true;
@@ -85,6 +87,7 @@ export class HaneulGrpcClient extends BaseClient implements HaneulClientTypes.Tr
 		this.movePackageService = new MovePackageServiceClient(transport);
 		this.signatureVerificationService = new SignatureVerificationServiceClient(transport);
 		this.nameService = new NameServiceClient(transport);
+		this.forkingService = new ForkingServiceClient(transport);
 
 		this.core = new GrpcCoreClient({
 			client: this,

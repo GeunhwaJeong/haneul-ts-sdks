@@ -1,32 +1,26 @@
 import {
 	bcs,
-	BcsType,
-	TypeTag,
+	type BcsType,
+	type TypeTag,
 	TypeTagSerializer,
 	BcsStruct,
 	BcsEnum,
 	BcsTuple,
 } from '@haneullabs/haneul/bcs';
-import { normalizeHaneulAddress } from '@haneullabs/haneul/utils';
-import { TransactionArgument, isArgument } from '@haneullabs/haneul/transactions';
-import { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
+import { normalizeStructTag, normalizeHaneulAddress } from '@haneullabs/haneul/utils';
+import { type TransactionArgument, isArgument } from '@haneullabs/haneul/transactions';
+import { type ClientWithCoreApi, type HaneulClientTypes } from '@haneullabs/haneul/client';
 
 const MOVE_STDLIB_ADDRESS = normalizeHaneulAddress('0x1');
 const HANEUL_FRAMEWORK_ADDRESS = normalizeHaneulAddress('0x2');
 
 export type RawTransactionArgument<T> = T | TransactionArgument;
 
-export interface GetOptions<
-	Include extends Omit<HaneulClientTypes.ObjectInclude, 'content'> = {},
-> extends HaneulClientTypes.GetObjectOptions<Include> {
-	client: ClientWithCoreApi;
-}
+export type GetOptions<Include extends Omit<HaneulClientTypes.ObjectInclude, 'content'> = {}> =
+	HaneulClientTypes.GetObjectOptions<Include> & { client: ClientWithCoreApi };
 
-export interface GetManyOptions<
-	Include extends Omit<HaneulClientTypes.ObjectInclude, 'content'> = {},
-> extends HaneulClientTypes.GetObjectsOptions<Include> {
-	client: ClientWithCoreApi;
-}
+export type GetManyOptions<Include extends Omit<HaneulClientTypes.ObjectInclude, 'content'> = {}> =
+	HaneulClientTypes.GetObjectsOptions<Include> & { client: ClientWithCoreApi };
 
 export function getPureBcsSchema(typeTag: string | TypeTag): BcsType<any> | null {
 	const parsedTag = typeof typeTag === 'string' ? TypeTagSerializer.parseFromStr(typeTag) : typeTag;
@@ -63,7 +57,8 @@ export function getPureBcsSchema(typeTag: string | TypeTag): BcsType<any> | null
 			}
 
 			if (structTag.module === 'option' && structTag.name === 'Option') {
-				const type = getPureBcsSchema(structTag.typeParams[0]);
+				const inner = structTag.typeParams[0];
+				const type = inner ? getPureBcsSchema(inner) : null;
 				return type ? bcs.option(type) : null;
 			}
 		}
@@ -95,7 +90,7 @@ export function normalizeMoveArguments(
 	const normalizedArgs: TransactionArgument[] = [];
 
 	let index = 0;
-	for (const [i, argType] of argTypes.entries()) {
+	for (const argType of argTypes) {
 		if (argType === '0x2::clock::Clock') {
 			normalizedArgs.push((tx) => tx.object.clock());
 			continue;
@@ -143,28 +138,162 @@ export function normalizeMoveArguments(
 			continue;
 		}
 
-		const type = argTypes[i];
-		const bcsType = type === null ? null : getPureBcsSchema(type);
+		const bcsType = argType === null ? null : getPureBcsSchema(argType);
 
 		if (bcsType) {
 			const bytes = bcsType.serialize(arg as never);
 			normalizedArgs.push((tx) => tx.pure(bytes));
 			continue;
-		} else if (typeof arg === 'string') {
+		}
+
+		if (typeof arg === 'string') {
 			normalizedArgs.push((tx) => tx.object(arg));
 			continue;
 		}
 
-		throw new Error(`Invalid argument ${stringify(arg)} for type ${type}`);
+		throw new Error(`Invalid argument ${stringify(arg)} for type ${argType}`);
 	}
 
 	return normalizedArgs;
+}
+
+/* -------------------------- Move type tags -------------------------- */
+
+/** A type argument: a type tag string, or a BCS type whose name is a Move type. */
+export type TypeArgument = string | BcsType<any>;
+
+export interface TypeTagOptions {
+	package?: string;
+	typeArguments?: readonly TypeArgument[];
+}
+
+/**
+ * `typeArguments` is required when the type's name contains unfilled
+ * `phantom X` parameters (at any depth). Everything else — argument arity,
+ * position contents, and tag validity — is validated at runtime.
+ */
+type TypeTagParams<Name extends string> = Name extends `${string}phantom ${string}`
+	? [options: TypeTagOptions & { typeArguments: readonly TypeArgument[] }]
+	: [options?: TypeTagOptions];
+
+type ResolveTypeTagOptions<Name extends string> = {
+	client: ClientWithCoreApi;
+} & (Name extends `${string}phantom ${string}`
+	? TypeTagOptions & { typeArguments: readonly TypeArgument[] }
+	: TypeTagOptions);
+
+const HAS_PHANTOM_REGEX = /phantom [A-Za-z_$][A-Za-z0-9_$]*/;
+
+function splitTopLevelTypeArgs(inner: string): string[] {
+	const parts: string[] = [];
+	let depth = 0;
+	let current = '';
+	for (const char of inner) {
+		if (char === ',' && depth === 0) {
+			parts.push(current.trim());
+			current = '';
+			continue;
+		}
+		if (char === '<') depth++;
+		if (char === '>') depth--;
+		current += char;
+	}
+	if (current) parts.push(current.trim());
+	return parts;
+}
+
+function buildTypeTag(name: string, options: TypeTagOptions | undefined): string {
+	const lt = name.indexOf('<');
+	const base = lt === -1 ? name : name.slice(0, lt);
+
+	if (base.split('::').length !== 3) {
+		throw new Error(`${name} is not a top-level Move type`);
+	}
+
+	let result = name;
+
+	if (options?.typeArguments) {
+		const baked = lt === -1 ? [] : splitTopLevelTypeArgs(name.slice(lt + 1, -1));
+		const supplied = options.typeArguments.map((arg) => {
+			if (typeof arg === 'string') {
+				return arg;
+			}
+			if (arg && typeof arg.serialize === 'function' && typeof arg.name === 'string') {
+				return arg.name;
+			}
+			throw new Error(`Invalid type argument ${stringify(arg)}`);
+		});
+
+		if (supplied.length !== baked.length) {
+			throw new Error(
+				`Expected ${baked.length} type arguments for ${base}, got ${supplied.length}`,
+			);
+		}
+
+		result = supplied.length === 0 ? base : `${base}<${supplied.join(', ')}>`;
+	}
+
+	if (HAS_PHANTOM_REGEX.test(result)) {
+		throw new Error(
+			options?.typeArguments
+				? `A type argument contains an unfilled phantom parameter in ${result}`
+				: `Missing type arguments for ${result}`,
+		);
+	}
+
+	if (options?.package) {
+		const [, ...rest] = result.split('::');
+		result = [options.package, ...rest].join('::');
+	}
+
+	// fully validate address-only tags (MVR names can't be parsed as type tags)
+	if (!HAS_PHANTOM_REGEX.test(result) && !/[@/]/.test(result)) {
+		TypeTagSerializer.parseFromStr(result);
+	}
+
+	return result;
+}
+
+async function resolveBuiltTypeTag(
+	name: string,
+	options: { client: ClientWithCoreApi } & TypeTagOptions,
+): Promise<string> {
+	const { client, ...rest } = options;
+	const { type } = await client.core.mvr.resolveType({
+		type: buildTypeTag(name, rest),
+	});
+	return normalizeStructTag(type);
 }
 
 export class MoveStruct<
 	T extends Record<string, BcsType<any>>,
 	const Name extends string = string,
 > extends BcsStruct<T, Name> {
+	/**
+	 * Build the type tag for this struct.
+	 *
+	 * `typeArguments` is the full positional list, in Move declaration order, and
+	 * is required when the struct has unfilled phantom parameters. The result may
+	 * contain MVR names: those are valid in transaction `typeArguments`, but for
+	 * queries or comparisons against on-chain data use `resolveTypeTag` instead.
+	 */
+	typeTag(...args: TypeTagParams<Name>): string {
+		return buildTypeTag(this.name, args[0] as TypeTagOptions | undefined);
+	}
+
+	/**
+	 * Build the type tag for this struct, then resolve any MVR names through the
+	 * client (using its configured overrides and the MVR API) and return the
+	 * normalized, address-only form suitable for queries and comparisons against
+	 * on-chain data.
+	 */
+	async resolveTypeTag(options: ResolveTypeTagOptions<Name>): Promise<string> {
+		return resolveBuiltTypeTag(
+			this.name,
+			options as { client: ClientWithCoreApi } & TypeTagOptions,
+		);
+	}
+
 	async get<Include extends Omit<HaneulClientTypes.ObjectInclude, 'content' | 'json'> = {}>({
 		objectId,
 		...options
@@ -177,6 +306,10 @@ export class MoveStruct<
 			...options,
 			objectIds: [objectId],
 		});
+
+		if (!res) {
+			throw new Error(`No object found for id ${objectId}`);
+		}
 
 		return res;
 	}
@@ -215,16 +348,44 @@ export class MoveStruct<
 export class MoveEnum<
 	T extends Record<string, BcsType<any> | null>,
 	const Name extends string,
-> extends BcsEnum<T, Name> {}
+> extends BcsEnum<T, Name> {
+	/** Build the type tag for this enum. See `MoveStruct.typeTag` for semantics. */
+	typeTag(...args: TypeTagParams<Name>): string {
+		return buildTypeTag(this.name, args[0] as TypeTagOptions | undefined);
+	}
+
+	/** Build and resolve the type tag for this enum. See `MoveStruct.resolveTypeTag`. */
+	async resolveTypeTag(options: ResolveTypeTagOptions<Name>): Promise<string> {
+		return resolveBuiltTypeTag(
+			this.name,
+			options as { client: ClientWithCoreApi } & TypeTagOptions,
+		);
+	}
+}
 
 export class MoveTuple<
 	const T extends readonly BcsType<any>[],
 	const Name extends string,
-> extends BcsTuple<T, Name> {}
+> extends BcsTuple<T, Name> {
+	/** Build the type tag for this struct. See `MoveStruct.typeTag` for semantics. */
+	typeTag(...args: TypeTagParams<Name>): string {
+		return buildTypeTag(this.name, args[0] as TypeTagOptions | undefined);
+	}
+
+	/** Build and resolve the type tag for this struct. See `MoveStruct.resolveTypeTag`. */
+	async resolveTypeTag(options: ResolveTypeTagOptions<Name>): Promise<string> {
+		return resolveBuiltTypeTag(
+			this.name,
+			options as { client: ClientWithCoreApi } & TypeTagOptions,
+		);
+	}
+}
 
 function stringify(val: unknown) {
 	if (typeof val === 'object') {
-		return JSON.stringify(val, (val: unknown) => val);
+		return JSON.stringify(val, (_key, value) =>
+			typeof value === 'bigint' ? value.toString() : value,
+		);
 	}
 	if (typeof val === 'bigint') {
 		return val.toString();

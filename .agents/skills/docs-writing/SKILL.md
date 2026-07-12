@@ -5,7 +5,7 @@ description: 'Write and maintain SDK documentation in packages/docs/content/. Us
 
 # SDK Documentation Writing
 
-Write documentation for the Sui TypeScript SDK ecosystem in `packages/docs/content/`. All docs are MDX files organized by package, rendered by fumadocs, and exported as flat markdown for LLM consumption.
+Write documentation for the Haneul TypeScript SDK ecosystem in `packages/docs/content/`. All docs are MDX files organized by package, rendered by fumadocs, and exported as flat markdown for LLM consumption.
 
 ## Before Writing
 
@@ -30,8 +30,8 @@ Content goes here...
 
 3. Add the page name to the parent `meta.json` `pages` array in the correct order.
 4. If creating a new section directory, create a `meta.json` with `title` and `pages`.
-5. Regenerate the LLM index: `pnpm --filter @mysten/docs build:docs`
-6. Validate: `pnpm --filter @mysten/docs validate-docs`
+5. Regenerate the LLM index: `pnpm --filter @haneullabs/docs build:docs`
+6. Validate: `pnpm --filter @haneullabs/docs validate-docs`
 
 ## Adding Docs for a New Package
 
@@ -49,8 +49,8 @@ When a new SDK package needs documentation:
 2. Keep the `description` frontmatter accurate after changes.
 3. After significant structural changes, regenerate and validate:
    ```bash
-   pnpm --filter @mysten/docs build:docs
-   pnpm --filter @mysten/docs validate-docs
+   pnpm --filter @haneullabs/docs build:docs
+   pnpm --filter @haneullabs/docs validate-docs
    ```
 
 ## Key Rules
@@ -59,7 +59,7 @@ When a new SDK package needs documentation:
 2. **Descriptions under 120 characters** — used in the LLM index.
 3. **No trailing period** on descriptions.
 4. **Use code examples liberally** — show, don't tell.
-5. **Import from public API paths** — `@mysten/sui/transactions`, not internal paths.
+5. **Import from public API paths** — `@haneullabs/haneul/transactions`, not internal paths.
 6. **Use fenced code blocks** with `tsx` or `typescript` language tag.
 7. **Every new page must be in a `meta.json` `pages` array** — or it won't appear in navigation.
 8. **`dist/` and `docs/` are generated at build time** — not committed to git. Run `build:docs` to verify output locally.
@@ -83,7 +83,7 @@ When a new SDK package needs documentation:
 Always validate before committing doc changes:
 
 ```bash
-pnpm --filter @mysten/docs validate-docs
+pnpm --filter @haneullabs/docs validate-docs
 ```
 
 This checks frontmatter completeness and orphan detection. Fix any errors before committing.
@@ -92,17 +92,17 @@ This checks frontmatter completeness and orphan detection. Fix any errors before
 
 ```npm
 # Generate all docs (combined dist/ + per-section indices)
-pnpm --filter @mysten/docs build:docs
+pnpm --filter @haneullabs/docs build:docs
 
 # Generate docs for a single package (run from package dir)
-pnpm --filter @mysten/sui build:docs
+pnpm --filter @haneullabs/haneul build:docs
 
 # Build everything (includes build:docs automatically via turbo)
 pnpm turbo build
 
 # Validate frontmatter + orphan detection
-pnpm --filter @mysten/docs validate-docs
+pnpm --filter @haneullabs/docs validate-docs
 
 # Full site build (Next.js)
-pnpm --filter @mysten/docs build
+pnpm --filter @haneullabs/docs build
 ```

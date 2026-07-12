@@ -4,7 +4,7 @@
 export function getJsonRpcFullnodeUrl(network: 'mainnet' | 'testnet' | 'devnet' | 'localnet') {
 	switch (network) {
 		case 'mainnet':
-			return 'https://fullnode.mainnet.haneul.io:443';
+			return 'http://158.69.54.239:9000';
 		case 'testnet':
 			return 'https://fullnode.testnet.haneul.io:443';
 		case 'devnet':

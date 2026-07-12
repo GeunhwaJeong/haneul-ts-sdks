@@ -1,15 +1,16 @@
 ---
-title: Rpc Hooks
-description: React hooks for Haneul RPC queries
+title: RPC Hooks
+description: React hooks for querying the Haneul blockchain using JSON RPC methods.
+keywords: [RPC hooks, useHaneulClientQuery, React, JSON RPC, tanstack query, Haneul, data fetching]
 ---
 
 Haneul dApp Kit ships with hooks for each of the RPC methods defined in the
 [JSON RPC specification](https://docs.haneul.io/haneul-api-ref).
 
-## useHaneulClientQuery
+## `useHaneulClientQuery`
 
 Load data from the Haneul RPC using the `useHaneulClientQuery` hook. This hook is a wrapper around the
-[useQuery](https://tanstack.com/query/latest/docs/react/guides/queries) hook from
+[`useQuery`](https://tanstack.com/query/latest/docs/react/guides/queries) hook from
 @tanstack/react-query.
 
 The hook takes the RPC method name as the first argument and any parameters as the second argument.
@@ -41,11 +42,11 @@ function MyComponent() {
 }
 ```
 
-## useHaneulClientQueries
+## `useHaneulClientQueries`
 
 You can fetch a variable number of Haneul RPC queries using the `useHaneulClientQueries` hook. This hook
 is a wrapper around the
-[useQueries](https://tanstack.com/query/latest/docs/react/reference/useQueries) hook from
+[`useQueries`](https://tanstack.com/query/latest/docs/react/reference/useQueries) hook from
 @tanstack/react-query.
 
 The `queries` value is an array of query option objects identical to the `useHaneulClientQuery` hook.
@@ -96,7 +97,7 @@ function MyComponent() {
 }
 ```
 
-## useHaneulClientInfiniteQuery
+## `useHaneulClientInfiniteQuery`
 
 For RPC methods that support pagination, dApp Kit also implements a `useHaneulClientInfiniteQuery`
 hook. For more details check out the
@@ -123,7 +124,7 @@ function MyComponent() {
 }
 ```
 
-## useHaneulClientMutation
+## `useHaneulClientMutation`
 
 For RPC methods that mutate state, dApp Kit implements a `useHaneulClientMutation` hook. Use this hook
 with any RPC method to imperatively call the RPC method. For more details, check out the
@@ -149,7 +150,7 @@ function MyComponent() {
 }
 ```
 
-## useResolveHaneulNSName
+## `useResolveHaneulNSName`
 
 To get the HaneulNS name for a given address, use the `useResolveHaneulNSName` hook.
 

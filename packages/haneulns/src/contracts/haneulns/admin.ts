@@ -79,7 +79,7 @@ export function reserveDomain(options: ReserveDomainOptions) {
 export interface ReserveDomainsArguments {
 	_: RawTransactionArgument<string>;
 	haneulns: RawTransactionArgument<string>;
-	domains: RawTransactionArgument<string[]>;
+	domains: RawTransactionArgument<Array<string>>;
 	noYears: RawTransactionArgument<number>;
 }
 export interface ReserveDomainsOptions {
@@ -89,7 +89,7 @@ export interface ReserveDomainsOptions {
 		| [
 				_: RawTransactionArgument<string>,
 				haneulns: RawTransactionArgument<string>,
-				domains: RawTransactionArgument<string[]>,
+				domains: RawTransactionArgument<Array<string>>,
 				noYears: RawTransactionArgument<number>,
 		  ];
 }

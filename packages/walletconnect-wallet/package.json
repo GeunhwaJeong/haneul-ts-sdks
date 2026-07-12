@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/walletconnect-wallet",
-	"version": "1.0.4",
+	"version": "1.1.5",
 	"description": "Wallet adapter for WalletConnect on Haneul",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",
@@ -31,23 +31,22 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
-	"homepage": "https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/walletconnect-wallet#readme",
+	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/tree/main/packages/walletconnect-wallet#readme",
 	"devDependencies": {
-		"@haneullabs/haneul": "workspace:^",
-		"@types/node": "^25.0.8",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"@types/node": "^25.9.3",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.8"
 	},
 	"dependencies": {
 		"@haneullabs/utils": "workspace:^",
 		"@haneullabs/wallet-standard": "workspace:^",
-		"@reown/appkit-universal-connector": "1.8.16",
-		"valibot": "^1.2.0"
+		"@reown/appkit-universal-connector": "1.8.20",
+		"valibot": "^1.4.1"
 	},
 	"peerDependencies": {
 		"@haneullabs/haneul": "workspace:^"

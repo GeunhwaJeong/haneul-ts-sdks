@@ -1393,6 +1393,57 @@ describe('Core API - Transactions', () => {
 				expect(result.FailedTransaction?.status.success).toBe(false);
 			},
 		);
+
+		testWithAllClients(
+			'should not error with all includes for non-public fn with checksEnabled: false',
+			async (client) => {
+				const result = await client.core.simulateTransaction({
+					transaction: nonPublicTxBytes,
+					checksEnabled: false,
+					include: {
+						effects: true,
+						balanceChanges: true,
+						events: true,
+						objectTypes: true,
+						transaction: true,
+						bcs: true,
+						commandResults: true,
+					},
+				});
+
+				expect(result.$kind).toBe('Transaction');
+				const data = result.Transaction!;
+				expect(data.effects).toBeDefined();
+				expect(data.events).toBeDefined();
+				expect(data.transaction).toBeDefined();
+				expect(data.bcs).toBeInstanceOf(Uint8Array);
+				expect(result.commandResults).toBeDefined();
+				expect(result.commandResults!.length).toBeGreaterThan(0);
+			},
+		);
+
+		testWithAllClients(
+			'should handle unbuilt Transaction object with transaction include',
+			async (client) => {
+				const tx = new Transaction();
+				tx.moveCall({
+					target: `${packageId}::test_objects::non_public_add`,
+					arguments: [tx.pure.u64(3), tx.pure.u64(5)],
+				});
+				tx.setSender(testAddress);
+
+				const result = await client.core.simulateTransaction({
+					transaction: tx,
+					checksEnabled: false,
+					include: { effects: true, transaction: true, commandResults: true },
+				});
+
+				expect(result.$kind).toBe('Transaction');
+				expect(result.Transaction!.effects).toBeDefined();
+				expect(result.Transaction!.transaction).toBeDefined();
+				expect(result.commandResults).toBeDefined();
+			},
+		);
 	});
 
 	describe('build with onlyTransactionKind', () => {
@@ -1433,6 +1484,42 @@ describe('Core API - Transactions', () => {
 				const bytes = await tx.build({ client, onlyTransactionKind: true });
 				expect(bytes).toBeInstanceOf(Uint8Array);
 				expect(bytes.length).toBeGreaterThan(0);
+			},
+		);
+
+		testWithAllClients(
+			'should build onlyTransactionKind referencing an owned object without a sender',
+			async (client) => {
+				const createTx = new Transaction();
+				const [obj] = createTx.moveCall({
+					target: `${packageId}::test_objects::create_simple_object`,
+					arguments: [createTx.pure.u64(42)],
+				});
+				createTx.transferObjects([obj], createTx.pure.address(testAddress));
+
+				const createResult = await toolbox.jsonRpcClient.signAndExecuteTransaction({
+					transaction: createTx,
+					signer: toolbox.keypair,
+					options: { showObjectChanges: true },
+				});
+				await toolbox.waitForTransaction({ digest: createResult.digest });
+
+				const createdObject = createResult.objectChanges?.find(
+					(change) => change.type === 'created' && change.objectType.includes('SimpleObject'),
+				);
+				expect(createdObject).toBeDefined();
+				const createdObjectId = (createdObject as { objectId: string }).objectId;
+
+				const tx = new Transaction();
+				tx.moveCall({
+					target: `${packageId}::test_objects::update_value`,
+					arguments: [tx.object(createdObjectId), tx.pure.u64(43)],
+				});
+
+				const bytes = await tx.build({ client, onlyTransactionKind: true });
+				expect(bytes).toBeInstanceOf(Uint8Array);
+				expect(bytes.length).toBeGreaterThan(0);
+				expect(tx.getData().sender).toBeFalsy();
 			},
 		);
 	});

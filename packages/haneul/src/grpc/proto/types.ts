@@ -42,3 +42,4 @@ export * from './haneul/rpc/v2/subscription_service.js';
 export * from './haneul/rpc/v2/system_state.js';
 export * from './haneul/rpc/v2/transaction.js';
 export * from './haneul/rpc/v2/transaction_execution_service.js';
+export * from './haneul/forking/v1alpha/forking_service.js';

@@ -21,8 +21,8 @@ declare module 'vitest' {
 const HANEUL_TOOLS_TAG =
 	process.env.HANEUL_TOOLS_TAG ||
 	(process.arch === 'arm64'
-		? '08500756541c6fd66c81a59d1af1d819e997a189-arm64'
-		: '08500756541c6fd66c81a59d1af1d819e997a189');
+		? '53de0108098a9c041edc28ce4083f8dc9436a4d3-arm64'
+		: '53de0108098a9c041edc28ce4083f8dc9436a4d3');
 
 export default async function setup(project: TestProject) {
 	console.log('Starting test containers');
@@ -67,25 +67,15 @@ export default async function setup(project: TestProject) {
 	const graphqlPort = localnet.getMappedPort(9125);
 	const containerId = localnet.getId();
 
-	// Create default haneul config so `haneul keytool` commands work in the container.
-	// This must happen once before any tests run to avoid race conditions.
+	// Set up the default haneul config so `haneul keytool` and `haneul move build` commands work.
+	// The config file is checked in at data/localnet-client.yaml and copied into the container.
 	const runtimeClient = await getContainerRuntimeClient();
 	const container = runtimeClient.container.getById(containerId);
 	await runtimeClient.container.exec(container, ['mkdir', '-p', '/root/.haneul/haneul_config']);
 	await runtimeClient.container.exec(container, [
 		'bash',
 		'-c',
-		`echo '[]' > /root/.haneul/haneul_config/haneul.keystore && cat > /root/.haneul/haneul_config/client.yaml << 'EOF'
----
-keystore:
-  File: /root/.haneul/haneul_config/haneul.keystore
-envs:
-  - alias: localnet
-    rpc: "http://127.0.0.1:9000"
-    ws: ~
-active_env: localnet
-active_address: "0x0000000000000000000000000000000000000000000000000000000000000000"
-EOF`,
+		"echo '[]' > /root/.haneul/haneul_config/haneul.keystore && cp /test-data/localnet-client.yaml /root/.haneul/haneul_config/client.yaml",
 	]);
 
 	project.provide('faucetPort', faucetPort);

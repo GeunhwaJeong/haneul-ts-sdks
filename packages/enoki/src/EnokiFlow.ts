@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ExportedWebCryptoKeypair } from '@haneullabs/signers/webcrypto';
-import { WebCryptoSigner } from '@haneullabs/signers/webcrypto';
+import type { ExportedWebCryptoKeypair } from '@haneullabs/webcrypto-signer';
+import { WebCryptoSigner } from '@haneullabs/webcrypto-signer';
 import { decodeHaneulPrivateKey } from '@haneullabs/haneul/cryptography';
 import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { fromBase64, toBase64 } from '@haneullabs/haneul/utils';

@@ -211,6 +211,7 @@ export class GrpcCoreClient extends CoreClient {
 			owner: options.owner,
 			objectType: `0x2::coin::Coin<${(await this.mvr.resolveType({ type: coinType })).type}>`,
 			pageToken: options.cursor ? fromBase64(options.cursor) : undefined,
+			pageSize: options.limit,
 			readMask: {
 				paths,
 			},
@@ -756,6 +757,10 @@ export class GrpcCoreClient extends CoreClient {
 					doGasSelection:
 						!options.onlyTransactionKind &&
 						(snapshot.gasData.budget == null || snapshot.gasData.payment == null),
+					// Kind-only txns are never executed directly and do not have sender, so skip validation checks.
+					checks: options.onlyTransactionKind
+						? SimulateTransactionRequest_TransactionChecks.DISABLED
+						: SimulateTransactionRequest_TransactionChecks.ENABLED,
 					readMask: {
 						paths: [
 							'transaction.transaction.sender',
@@ -809,7 +814,7 @@ function mapDisplayProto(
 	return {
 		output:
 			display.output !== undefined
-				? (Value.toJson(display.output) as Record<string, string> | null)
+				? (Value.toJson(display.output) as Record<string, unknown> | null)
 				: null,
 		errors:
 			display.errors !== undefined

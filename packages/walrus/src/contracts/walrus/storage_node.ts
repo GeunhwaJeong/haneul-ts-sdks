@@ -3,7 +3,7 @@
  **************************************************************/
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
 import { bcs } from '@haneullabs/haneul/bcs';
-import { type Transaction } from '@haneullabs/haneul/transactions';
+import { type Transaction, type TransactionArgument } from '@haneullabs/haneul/transactions';
 import * as group_ops from './deps/haneul/group_ops.js';
 import * as extended_field from './extended_field.js';
 import * as event_blob from './event_blob.js';
@@ -36,11 +36,11 @@ export const StorageNodeCap = new MoveStruct({
 	},
 });
 export interface IdArguments {
-	cap: RawTransactionArgument<string>;
+	cap: TransactionArgument;
 }
 export interface IdOptions {
 	package?: string;
-	arguments: IdArguments | [cap: RawTransactionArgument<string>];
+	arguments: IdArguments | [cap: TransactionArgument];
 }
 /** Return the node ID of the storage node. */
 export function id(options: IdOptions) {

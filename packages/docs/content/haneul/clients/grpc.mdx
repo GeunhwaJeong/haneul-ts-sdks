@@ -1,12 +1,23 @@
 ---
 title: HaneulGrpcClient
-description: Connect to Haneul via gRPC with HaneulGrpcClient
+description: Connect to Haneul through gRPC with HaneulGrpcClient.
+keywords:
+  [
+    HaneulGrpcClient,
+    gRPC,
+    Haneul client,
+    full node,
+    TypeScript SDK,
+    Core API,
+    '@haneullabs/haneul',
+    protocol buffers,
+  ]
 ---
 
 The `HaneulGrpcClient` provides access to the Full Node gRPC API.
 
 For more complete details on what is available through this API see the
-[gRPC API docs](https://docs.haneul.io/concepts/data-access/grpc-overview).
+[gRPC API docs](https://docs.haneul.io/develop/accessing-data/grpc/what-is-grpc).
 
 ## Creating a gRPC client
 
@@ -30,19 +41,78 @@ const grpcClient = new HaneulGrpcClient({
 });
 ```
 
-You can also provide a custom transport for advanced use cases:
+## Transport options
+
+By default, `HaneulGrpcClient` uses `GrpcWebFetchTransport` from
+[protobuf-ts](https://github.com/timostamm/protobuf-ts), which works in browsers and Node.js through
+the Fetch API. You can also provide a custom transport for advanced use cases.
+
+The `GrpcWebFetchTransport` class, `GrpcWebOptions` type, and `RpcTransport` type are all
+re-exported from `@haneullabs/haneul/grpc` for convenience.
+
+### gRPC-web transport (default)
+
+The default transport uses the gRPC-web protocol over HTTP/1.1 or HTTP/2. You can customize it by
+passing `GrpcWebFetchTransport` options directly:
 
 ```typescript
-import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
-import { GrpcWebFetchTransport } from '@protobuf-ts/grpcweb-transport';
+import { HaneulGrpcClient, GrpcWebFetchTransport } from '@haneullabs/haneul/grpc';
 
 const transport = new GrpcWebFetchTransport({
 	baseUrl: 'https://your-custom-grpc-endpoint.com',
-	// Additional transport options
+	format: 'binary', // default is 'text' (base64-encoded)
+	// Additional transport options like fetchInit
 });
 
 const grpcClient = new HaneulGrpcClient({
 	network: 'testnet',
+	transport,
+});
+```
+
+### Native gRPC transport
+
+For server-side applications (Node.js, Bun, and others), you can use the native gRPC transport with
+`@protobuf-ts/grpc-transport` and `@grpc/grpc-js`. This uses HTTP/2 with the native gRPC protocol
+rather than the gRPC-web translation layer.
+
+Install the required packages:
+
+```bash
+npm install @protobuf-ts/grpc-transport @grpc/grpc-js
+```
+
+Then create the client with a `GrpcTransport`:
+
+```typescript
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { GrpcTransport } from '@protobuf-ts/grpc-transport';
+import { ChannelCredentials } from '@grpc/grpc-js';
+
+const transport = new GrpcTransport({
+	host: 'fullnode.testnet.haneul.io:443',
+	channelCredentials: ChannelCredentials.createSsl(),
+});
+
+const grpcClient = new HaneulGrpcClient({
+	network: 'testnet',
+	transport,
+});
+```
+
+For local development without TLS:
+
+```typescript
+import { GrpcTransport } from '@protobuf-ts/grpc-transport';
+import { ChannelCredentials } from '@grpc/grpc-js';
+
+const transport = new GrpcTransport({
+	host: '127.0.0.1:9000',
+	channelCredentials: ChannelCredentials.createInsecure(),
+});
+
+const grpcClient = new HaneulGrpcClient({
+	network: 'localnet',
 	transport,
 });
 ```
@@ -52,7 +122,7 @@ const grpcClient = new HaneulGrpcClient({
 The `HaneulGrpcClient` exposes several service clients for lower-level access to the gRPC API. These
 service clients are generated using [protobuf-ts](https://github.com/timostamm/protobuf-ts), which
 provides type-safe gRPC clients for TypeScript. For more details on how to use gRPC with Haneul, see
-the [gRPC overview](https://docs.haneul.io/concepts/data-access/grpc-overview).
+the [gRPC overview](https://docs.haneul.io/develop/accessing-data/grpc/what-is-grpc).
 
 ### With the core API
 
@@ -72,7 +142,7 @@ await grpcClient.getCoins({
 
 To query additional data not available in the core API, you can use the service clients directly:
 
-### Transaction Execution Service
+### Transaction execution service
 
 ```typescript
 const { response } = await grpcClient.transactionExecutionService.executeTransaction({
@@ -94,7 +164,7 @@ if (!response.finality?.effects?.status?.success) {
 }
 ```
 
-### Ledger Service
+### Ledger service
 
 ```typescript
 // Get transaction by digest
@@ -106,7 +176,7 @@ const { response } = await grpcClient.ledgerService.getTransaction({
 const { response: epochInfo } = await grpcClient.ledgerService.getEpoch({});
 ```
 
-### State Service
+### State service
 
 ```typescript
 // List owned objects
@@ -121,18 +191,18 @@ const { response: fields } = await grpcClient.stateService.listDynamicFields({
 });
 ```
 
-### Move Package Service
+### Move package service
 
 ```typescript
 // Get function information
 const { response } = await grpcClient.movePackageService.getFunction({
 	packageId: '0x2',
 	moduleName: 'coin',
-	name: 'transfer',
+	name: 'value',
 });
 ```
 
-### Name Service
+### Name service
 
 ```typescript
 // Reverse lookup address to get name
@@ -141,7 +211,7 @@ const { response } = await grpcClient.nameService.reverseLookupName({
 });
 ```
 
-### Signature Verification Service
+### Signature verification service
 
 ```typescript
 // Verify a signature

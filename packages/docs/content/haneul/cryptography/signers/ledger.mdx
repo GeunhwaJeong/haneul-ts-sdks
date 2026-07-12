@@ -1,0 +1,86 @@
+---
+title: Ledger Signer
+description: Sign Haneul transactions with a Ledger hardware wallet
+keywords:
+  [Ledger, signer, LedgerSigner, hardware wallet, Ed25519, derivation path, Haneul, TypeScript SDK]
+---
+
+The `LedgerSigner` signs Haneul transactions and personal messages with a
+[Ledger](https://www.ledger.com/) hardware wallet. The private key never leaves the device; you
+confirm each signature on the Ledger. The Ledger signer uses the `Ed25519` scheme.
+
+## Installation
+
+```sh npm2yarn
+npm i @haneullabs/ledger-signer @haneullabs/ledgerjs-hw-app-haneul
+```
+
+You also need a
+[Ledger transport](https://github.com/LedgerHQ/ledger-live/tree/develop/libs/ledgerjs) for your
+environment, for example `@ledgerhq/hw-transport-node-hid` in Node.js or
+`@ledgerhq/hw-transport-webhid` in the browser.
+
+## Creating a signer
+
+Open a transport, wrap it in a `HaneulLedgerClient`, then construct the signer with
+`LedgerSigner.fromDerivationPath`. This is async: it fetches the public key from the device so the
+signer can derive the Haneul address.
+
+```typescript
+import Transport from '@ledgerhq/hw-transport-node-hid';
+import HaneulLedgerClient from '@haneullabs/ledgerjs-hw-app-haneul';
+import { LedgerSigner } from '@haneullabs/ledger-signer';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+
+const transport = await Transport.open(undefined);
+const ledgerClient = new HaneulLedgerClient(transport);
+const haneulClient = new HaneulGrpcClient({
+	network: 'testnet',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
+});
+
+const signer = await LedgerSigner.fromDerivationPath(
+	"m/44'/8282'/0'/0'/0'",
+	ledgerClient,
+	haneulClient,
+);
+```
+
+### Parameters
+
+`fromDerivationPath(derivationPath, ledgerClient, haneulClient)`
+
+| Parameter        | Type                | Description                                           |
+| ---------------- | ------------------- | ----------------------------------------------------- |
+| `derivationPath` | `string`            | BIP-32 derivation path (Haneul uses coin type `784`)     |
+| `ledgerClient`   | `HaneulLedgerClient`   | A `HaneulLedgerClient` wrapping an open Ledger transport |
+| `haneulClient`      | `ClientWithCoreApi` | A Haneul client used to resolve transaction data         |
+
+## Usage
+
+Derive the address, then sign a transaction or personal message. The user confirms each signature on
+the device.
+
+```typescript
+import { Transaction } from '@haneullabs/haneul/transactions';
+
+// Derive the Haneul address
+const address = signer.toHaneulAddress();
+
+// Build and sign a transaction
+const transaction = new Transaction();
+const transactionBytes = await transaction.build({ client: haneulClient });
+const { signature } = await signer.signTransaction(transactionBytes);
+
+// Or sign a personal message
+const message = new TextEncoder().encode('Hello, Ledger Signer!');
+await signer.signPersonalMessage(message);
+```
+
+<Callout type="warn">
+	The Ledger signer supports only `signTransaction` and `signPersonalMessage`. It does not support
+	the generic `sign` and `signWithIntent` methods, which throw an error because the device only
+	signs recognized transaction and message payloads.
+</Callout>
+
+See [Cryptography](/haneul/cryptography) for the signing and verification API shared by all signers.

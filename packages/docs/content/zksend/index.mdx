@@ -1,6 +1,7 @@
 ---
 title: zkSend SDK
-description: Send Haneul assets via shareable links with zkSend
+description: Send Haneul assets through shareable claim links using the zkSend SDK.
+keywords: [zkSend, claim links, asset transfer, Haneul, TypeScript, '@haneullabs/zksend', shareable links]
 ---
 
 The zkSend SDK provides tools for interacting with the zkSend primitive. It provides functionality
@@ -8,7 +9,7 @@ to create your own zkSend Claim Links, with support for any publicly transferrab
 
 ## Installation
 
-```sh npm2yarn
+```npm
 npm i @haneullabs/zksend @haneullabs/haneul
 ```
 
@@ -22,9 +23,9 @@ import { zksend } from '@haneullabs/zksend';
 
 const client = new HaneulGrpcClient({
 	network: 'mainnet',
-	baseUrl: 'https://fullnode.mainnet.haneul.io:443',
+	baseUrl: 'http://158.69.54.239:9000',
 }).$extend(zksend());
 ```
 
-The zkSend SDK supports mainnet and testnet networks. The extension automatically configures the
+The zkSend SDK supports Mainnet and Testnet networks. The extension automatically configures the
 correct contract IDs based on the client's network.

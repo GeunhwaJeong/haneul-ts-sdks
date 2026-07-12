@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/walrus",
-	"version": "1.1.0",
+	"version": "1.2.5",
 	"private": false,
 	"description": "Walrus SDK",
 	"license": "Apache-2.0",
@@ -24,7 +24,7 @@
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
 		"build": "rm -rf dist && tsc --noEmit && tsdown",
-		"build:docs": "tsx ../docs/scripts/build-docs.ts",
+		"build:docs": "node ../docs/scripts/build-docs.ts",
 		"test": "pnpm test:examples && NODE_OPTIONS='--expose-gc' vitest run",
 		"test:examples": "tsc --project examples/tsconfig.json --noEmit",
 		"codegen": "haneul-ts-codegen generate && pnpm lint:fix",
@@ -39,30 +39,29 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
 	"homepage": "https://sdk.haneul-labs.com/walrus",
 	"devDependencies": {
-		"@hono/node-server": "^1.19.11",
+		"@hono/node-server": "^2.0.4",
 		"@haneullabs/codegen": "workspace:^",
 		"@haneullabs/dapp-kit-core": "workspace:^",
 		"@haneullabs/dapp-kit-react": "workspace:^",
-		"@haneullabs/haneul": "workspace:^",
-		"@tanstack/react-query": "^5.90.16",
-		"@types/node": "^25.0.8",
-		"@types/react": "^19.2.8",
+		"@tanstack/react-query": "^5.101.0",
+		"@types/node": "^25.9.3",
+		"@types/react": "^19.2.17",
 		"@types/react-dom": "^19.2.3",
-		"@vitejs/plugin-react": "^5.1.2",
-		"hono": "^4.12.8",
-		"react": "^19.2.3",
-		"react-dom": "^19.2.3",
-		"typescript": "^5.9.3",
-		"undici": "^7.24.4",
-		"vite": "^7.3.1",
-		"vitest": "^4.0.17"
+		"@vitejs/plugin-react": "^6.0.2",
+		"hono": ">=4.12.18",
+		"react": "^19.2.7",
+		"react-dom": "^19.2.7",
+		"typescript": "^6.0.3",
+		"undici": "^8.4.1",
+		"vite": "^8.0.16",
+		"vitest": "^4.1.8"
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:^",

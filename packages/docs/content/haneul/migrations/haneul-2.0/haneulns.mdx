@@ -1,6 +1,7 @@
 ---
 title: '@haneullabs/haneulns'
-description: Migrate @haneullabs/haneulns to 2.0
+description: Migrate @haneullabs/haneulns to 2.0 with client extension pattern.
+keywords: [migration, '@haneullabs/haneulns', HaneulNS, 2.0, client extension, name service, breaking changes]
 ---
 
 This package now exports a client extension that integrates with Haneul clients.
@@ -17,7 +18,7 @@ This package now exports a client extension that integrates with Haneul clients.
 -   network: 'mainnet',
 - });
 + const client = new HaneulGrpcClient({
-+   baseUrl: 'https://fullnode.mainnet.haneul.io:443',
++   baseUrl: 'http://158.69.54.239:9000',
 +   network: 'mainnet',
 + }).$extend(haneulns());
 
@@ -25,9 +26,10 @@ This package now exports a client extension that integrates with Haneul clients.
 + const nameRecord = await client.haneulns.getNameRecord('example.haneul');
 ```
 
-## Custom Package IDs
+## Custom package IDs
 
-For custom deployments or networks other than mainnet/testnet, you can provide custom package info:
+For custom deployments or networks other than Mainnet or Testnet, you can provide custom package
+info:
 
 ```ts
 import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';

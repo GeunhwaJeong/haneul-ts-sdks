@@ -1,14 +1,16 @@
 ---
 title: Switch Network
-description: Switch the active network for the dApp Kit instance
+description:
+  Switch the active network for the dApp Kit instance between mainnet, testnet, and other networks.
+keywords: [switch network, dApp Kit, mainnet, testnet, network configuration, Haneul, TypeScript]
 ---
 
 The `switchNetwork` action changes the currently selected network that the dApp Kit client is
 configured to use.
 
 <Callout type="info">
-	Network switching only affects your dApp's client connection. The wallet itself is not affected by
-	this change, and wallets are not notified when the network changes in the dApp.
+	Network switching only affects your app's client connection. The wallet itself is not affected by
+	this change, and wallets are not notified when the network changes in the app.
 </Callout>
 
 ## Usage
@@ -18,7 +20,7 @@ import { createDAppKit } from '@haneullabs/dapp-kit-core';
 import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 const GRPC_URLS = {
-	mainnet: 'https://fullnode.mainnet.haneul.io:443',
+	mainnet: 'http://158.69.54.239:9000',
 	testnet: 'https://fullnode.testnet.haneul.io:443',
 } as const;
 
@@ -34,9 +36,9 @@ dAppKit.switchNetwork('testnet');
 
 ## Parameters
 
-- **`network`** - `TNetworks[number]` - The network to switch to. Must be one of the networks
+- **`network`:** `TNetworks[number]`: The network to switch to. Must be one of the networks
   configured when creating the dApp Kit instance.
 
-## Return Value
+## Return value
 
 Returns `void`. The action completes synchronously and updates the network state immediately.

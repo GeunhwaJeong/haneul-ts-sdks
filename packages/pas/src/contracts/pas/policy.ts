@@ -13,7 +13,7 @@ import * as vec_map from './deps/haneul/vec_map.js';
 import * as vec_set from './deps/haneul/vec_set.js';
 import * as type_name from './deps/std/type_name.js';
 import * as versioning from './versioning.js';
-const $moduleName = '@haneullabs/pas::policy';
+const $moduleName = '@pas/pas::policy';
 export const Policy = new MoveStruct({
 	name: `${$moduleName}::Policy<phantom T>`,
 	fields: {

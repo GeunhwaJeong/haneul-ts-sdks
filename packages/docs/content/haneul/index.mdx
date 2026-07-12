@@ -1,6 +1,7 @@
 ---
-title: Haneul TypeScript SDK Quick Start
+title: Haneul TypeScript SDK
 description: TypeScript SDK for building on the Haneul blockchain
+keywords: [Haneul, TypeScript SDK, quick start, blockchain, '@haneullabs/haneul', installation, RPC, network]
 ---
 
 The Haneul TypeScript SDK is a modular library of tools for interacting with the Haneul blockchain. Use it
@@ -8,9 +9,41 @@ to send queries to RPC nodes, build and sign transactions, and interact with a H
 
 ## Installation
 
-```sh npm2yarn
+```npm
 npm i @haneullabs/haneul
 ```
+
+The SDK is published as an ESM only package. Make sure your `package.json` includes
+`"type": "module"`:
+
+```json
+{
+	"type": "module"
+}
+```
+
+If you are using TypeScript, your `tsconfig.json` should use a compatible `moduleResolution` setting
+such as `"NodeNext"`, `"Node16"`, or `"Bundler"`.
+
+## Module packages
+
+The SDK contains a set of modular packages that you can use independently or together. Import just
+what you need to keep your code light and compact.
+
+- [`@haneullabs/haneul/client`](/haneul/clients): A client for interacting with Haneul RPC nodes.
+- [`@haneullabs/haneul/bcs`](/haneul/bcs): A BCS builder with pre-defined types for Haneul.
+- [`@haneullabs/haneul/transactions`](/haneul/transactions/basics): Utilities for building and interacting
+  with transactions.
+- [`@haneullabs/haneul/keypairs/*`](/haneul/cryptography/keypairs): Modular exports for specific KeyPair
+  implementations.
+- [`@haneullabs/haneul/verify`](/haneul/cryptography#verifying-signatures): Methods for verifying transactions
+  and messages.
+- [`@haneullabs/haneul/cryptography`](/haneul/cryptography): Shared types and classes for cryptography.
+- [`@haneullabs/haneul/multisig`](/haneul/cryptography/signers/multisig): Utilities for working with multisig
+  signatures.
+- [`@haneullabs/haneul/utils`](/haneul/utils): Utilities for formatting and parsing various Haneul types.
+- [`@haneullabs/haneul/faucet`](#faucet): Methods for requesting HANEUL from a faucet.
+- [`@haneullabs/haneul/zklogin`](/haneul/zklogin): Utilities for working with zkLogin.
 
 ## Network locations
 
@@ -21,7 +54,7 @@ The following table lists the locations for Haneul networks.
 | local   | `http://127.0.0.1:9000` (default)     | `http://127.0.0.1:9123/v2/gas` (default) |
 | Devnet  | `https://fullnode.devnet.haneul.io:443`  | `https://faucet.devnet.haneul.io/v2/gas`    |
 | Testnet | `https://fullnode.testnet.haneul.io:443` | `https://faucet.testnet.haneul.io/v2/gas`   |
-| Mainnet | `https://fullnode.mainnet.haneul.io:443` | `null`                                   |
+| Mainnet | `http://158.69.54.239:9000` | `null`                                   |
 
 <Callout type="warn">
 
@@ -36,23 +69,158 @@ for Haneul on the [Haneul Dev Portal](https://haneul.io/developers#dev-tools) us
 
 </Callout>
 
-## Module packages
+## Quick start
 
-The SDK contains a set of modular packages that you can use independently or together. Import just
-what you need to keep your code light and compact.
+Get started in a few minutes. This guide walks you through creating a keypair, funding it from a
+faucet, and checking your balance.
 
-- [`@haneullabs/haneul/client`](/haneul/clients) - A client for interacting with Haneul RPC nodes.
-- [`@haneullabs/haneul/bcs`](/haneul/bcs) - A BCS builder with pre-defined types for Haneul.
-- [`@haneullabs/haneul/transactions`](/haneul/transaction-building/basics) - Utilities for building and
-  interacting with transactions.
-- [`@haneullabs/haneul/keypairs/*`](/haneul/cryptography/keypairs) - Modular exports for specific KeyPair
-  implementations.
-- [`@haneullabs/haneul/verify`](/haneul/cryptography/keypairs#verifying-signatures-without-a-key-pair) -
-  Methods for verifying transactions and messages.
-- [`@haneullabs/haneul/cryptography`](/haneul/cryptography/keypairs) - Shared types and classes for
-  cryptography.
-- [`@haneullabs/haneul/multisig`](/haneul/cryptography/multisig) - Utilities for working with multisig
-  signatures.
-- [`@haneullabs/haneul/utils`](/haneul/utils) - Utilities for formatting and parsing various Haneul types.
-- [`@haneullabs/haneul/faucet`](/haneul/faucet) - Methods for requesting HANEUL from a faucet.
-- [`@haneullabs/haneul/zklogin`](/haneul/zklogin) - Utilities for working with zkLogin.
+### Create a project
+
+```sh
+mkdir hello-haneul
+cd hello-haneul
+npm init -y
+npm pkg set type=module
+npm i @haneullabs/haneul
+```
+
+### Step 1: Create a keypair and get HANEUL
+
+Create a `setup.ts` file that generates a new keypair, requests HANEUL from the faucet, and prints your
+secret key for later use:
+
+```typescript
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
+
+// Generate a new keypair
+const keypair = new Ed25519Keypair();
+
+console.log('Address:', keypair.toHaneulAddress());
+console.log('Secret key:', keypair.getSecretKey());
+
+// Request HANEUL from the devnet faucet
+await requestHaneulFromFaucetV2({
+	host: getFaucetHost('devnet'),
+	recipient: keypair.toHaneulAddress(),
+});
+
+console.log('Faucet request sent! Save the secret key above for the next step.');
+```
+
+Run it:
+
+```sh
+node setup.ts
+```
+
+Save the secret key that gets printed; you'll use it in the next step.
+
+<Callout type="warn">
+	Logging secret keys to the console is only appropriate for quick demos like this. In real
+	applications, never log or expose secret keys. Store them securely using environment variables,
+	encrypted keystores, or a secrets manager.
+</Callout>
+
+### Step 2: Check your balance
+
+Create a `balance.ts` file that imports your keypair from the secret key and checks the balance:
+
+```typescript
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { GEUNHWA_PER_HANEUL } from '@haneullabs/haneul/utils';
+
+// Import the keypair using the secret key from step 1
+const keypair = Ed25519Keypair.fromSecretKey('haneulprivkey1...'); // paste your secret key here
+
+const grpcClient = new HaneulGrpcClient({
+	network: 'devnet',
+	baseUrl: 'https://fullnode.devnet.haneul.io:443',
+});
+
+const { balance } = await grpcClient.core.getBalance({
+	owner: keypair.toHaneulAddress(),
+});
+
+const haneul = Number(balance.balance) / Number(GEUNHWA_PER_HANEUL);
+console.log(`Address: ${keypair.toHaneulAddress()}`);
+console.log(`Balance: ${haneul} HANEUL`);
+```
+
+Run it:
+
+```sh
+node balance.ts
+```
+
+### Step 3: Transfer HANEUL
+
+Create a `transfer.ts` file that sends HANEUL to another address and logs the transaction effects:
+
+```typescript
+import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
+import { GEUNHWA_PER_HANEUL } from '@haneullabs/haneul/utils';
+
+const keypair = Ed25519Keypair.fromSecretKey('haneulprivkey1...'); // paste your secret key here
+const grpcClient = new HaneulGrpcClient({
+	network: 'devnet',
+	baseUrl: 'https://fullnode.devnet.haneul.io:443',
+});
+
+const tx = new Transaction();
+
+tx.transferObjects(
+	[coinWithBalance({ balance: BigInt(0.1 * Number(GEUNHWA_PER_HANEUL)) })],
+	'0xRecipientAddress', // replace with the recipient's address
+);
+
+const result = await keypair.signAndExecuteTransaction({
+	transaction: tx,
+	client: grpcClient,
+	include: { effects: true, balanceChanges: true },
+});
+
+if (result.$kind === 'FailedTransaction') {
+	console.error('Transaction failed:', result.FailedTransaction.status.error?.message);
+} else {
+	console.log('Transaction digest:', result.Transaction.digest);
+	console.log('Effects:', JSON.stringify(result.Transaction.effects, null, 2));
+	console.log('Balance changes:', JSON.stringify(result.Transaction.balanceChanges, null, 2));
+}
+```
+
+Run it:
+
+```sh
+node transfer.ts
+```
+
+### Faucet
+
+Devnet, Testnet, and local networks include faucets that mint HANEUL. Use `requestHaneulFromFaucetV2` to
+request HANEUL programmatically:
+
+```typescript
+import { getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
+
+await requestHaneulFromFaucetV2({
+	host: getFaucetHost('testnet'),
+	recipient: '0xYourAddress',
+});
+```
+
+<Callout type="info">
+	Faucets on Devnet and Testnet are rate limited. If you hit the limit, wait before trying again.
+	For Testnet, you can also get HANEUL through the web UI at `faucet.haneul.io` or through the [Haneul
+	Discord](https://discord.gg/haneul) faucet channels.
+</Callout>
+
+## Next steps
+
+- [Building Transactions](/haneul/transactions/basics): create and compose transactions
+- [Signing and Execution](/haneul/transactions/signing-and-execution): sign and submit transactions
+- [Coins and Balances](/haneul/transactions/coins-and-balances): work with tokens
+- [Client Setup](/haneul/clients): configure clients for different networks

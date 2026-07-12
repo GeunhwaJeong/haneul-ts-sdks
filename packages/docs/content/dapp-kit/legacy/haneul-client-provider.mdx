@@ -1,6 +1,8 @@
 ---
 title: HaneulClientProvider
-description: React provider for Haneul client configuration
+description: React provider for managing the active HaneulJsonRpcClient in legacy dApp Kit.
+keywords:
+  [HaneulClientProvider, React provider, Haneul client, JSON RPC, network config, legacy, dApp Kit]
 ---
 
 The `HaneulClientProvider` manages the active `HaneulJsonRpcClient` that hooks and components use in the
@@ -78,7 +80,7 @@ function App() {
 }
 ```
 
-## HaneulJsonRpcClient customization
+## `HaneulJsonRpcClient` customization
 
 The following example demonstrates how to create a custom `HaneulJsonRpcClient`.
 
@@ -116,7 +118,7 @@ function App() {
 }
 ```
 
-## Using the HaneulJsonRpcClient from the provider
+## Using the `HaneulJsonRpcClient` from the provider
 
 To use the `HaneulJsonRpcClient` from the provider, import the `useHaneulClient` function from the
 `@haneullabs/dapp-kit` module.
@@ -154,7 +156,7 @@ function NetworkSelector() {
 
 ## Using network specific configuration
 
-If your dApp runs on multiple networks, the IDs for packages and other configurations might change,
+If your app runs on multiple networks, the IDs for packages and other configurations might change,
 depending on which network you're using. You can use `createNetworkConfig` to create per-network
 configurations that your components can access.
 

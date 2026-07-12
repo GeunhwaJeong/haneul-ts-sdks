@@ -14,7 +14,7 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
     },
     mainnet: {
       network: "mainnet",
-      url: "https://fullnode.mainnet.haneul.io:443",
+      url: "http://158.69.54.239:9000",
     },
   });
 

@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/seal",
-	"version": "1.1.1",
+	"version": "1.3.0",
 	"description": "Seal SDK",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",
@@ -23,7 +23,7 @@
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
 		"build": "node genversion.mjs && rm -rf dist && tsc --noEmit && tsdown",
-		"build:docs": "tsx ../docs/scripts/build-docs.ts",
+		"build:docs": "node ../docs/scripts/build-docs.ts",
 		"codegen:version": "node genversion.mjs",
 		"vitest": "vitest",
 		"test": "pnpm test:typecheck && pnpm test:unit",
@@ -38,23 +38,22 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
 	"homepage": "https://github.com/GeunhwaJeong/seal#readme",
 	"devDependencies": {
-		"@hey-api/openapi-ts": "^0.90.3",
-		"@haneullabs/haneul": "workspace:^",
-		"@types/node": "^25.0.8",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"@hey-api/openapi-ts": "^0.98.2",
+		"@types/node": "^25.9.3",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.8"
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:^",
-		"@noble/curves": "^2.0.1",
-		"@noble/hashes": "^2.0.1"
+		"@noble/curves": "^2.2.0",
+		"@noble/hashes": "^2.2.0"
 	},
 	"peerDependencies": {
 		"@haneullabs/haneul": "workspace:^"

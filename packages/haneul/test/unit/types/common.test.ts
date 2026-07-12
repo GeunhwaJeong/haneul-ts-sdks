@@ -116,6 +116,18 @@ describe('parseStructTag', () => {
 		expect(() => parseStructTag('0x2::foo::Bar<vector<u8>')).toThrow('Invalid type tag');
 	});
 
+	it('rejects struct tags with empty components', () => {
+		expect(() => parseStructTag('::foo::Bar')).toThrow('Invalid struct tag');
+		expect(() => parseStructTag('0x2::::Bar')).toThrow('Invalid struct tag');
+		expect(() => parseStructTag('0x2::foo::')).toThrow('Invalid struct tag');
+	});
+
+	it('rejects struct tags with trailing content after type parameters', () => {
+		expect(() => parseStructTag('0x2::coin::Coin<u8>GARBAGE')).toThrow('Invalid struct tag');
+		expect(() => parseStructTag('0x2::foo::Bar<bool> ')).toThrow('Invalid struct tag');
+		expect(() => parseStructTag('0x2::foo::Bar<u64>xyz')).toThrow('Invalid struct tag');
+	});
+
 	it('parses named struct tags correctly', () => {
 		expect(parseStructTag('@mvr/demo::foo::bar')).toMatchInlineSnapshot(`
       {
@@ -165,6 +177,20 @@ describe('normalizeStructTag', () => {
 		expect(normalizeStructTag('0x2::foo::Bar<vector<0x2::haneul::HANEUL>>')).toEqual(
 			'0x0000000000000000000000000000000000000000000000000000000000000002::foo::Bar<vector<0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL>>',
 		);
+	});
+
+	it('rejects vector types (use normalizeTypeTag instead)', () => {
+		expect(() => normalizeStructTag('vector<0x2::haneul::HANEUL>')).toThrow(
+			'normalizeStructTag does not support vector types. Use normalizeTypeTag instead.',
+		);
+		expect(() => normalizeStructTag('vector<u8>')).toThrow(
+			'normalizeStructTag does not support vector types. Use normalizeTypeTag instead.',
+		);
+		expect(() => normalizeStructTag('vector<vector<0x2::haneul::HANEUL>>')).toThrow(
+			'normalizeStructTag does not support vector types. Use normalizeTypeTag instead.',
+		);
+		expect(() => normalizeStructTag('vector<>')).toThrow();
+		expect(() => normalizeStructTag('vector<u8')).toThrow();
 	});
 
 	it('normalizes named package addresses', () => {

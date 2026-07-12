@@ -535,7 +535,7 @@
         "fields": {
           "module_id": {
             "index": 0,
-            "doc": " Ishaneulng Nitro hypervisor module ID.",
+            "doc": " Issuing Nitro hypervisor module ID.",
             "type_": {
               "vector": "u8"
             }

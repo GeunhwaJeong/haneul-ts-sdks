@@ -16,7 +16,7 @@ describe('Core API - MVR (Move Registry)', () => {
 
 	// Named packages from Move Registry
 	const walrusPackage = '@walrus/sites';
-	const deepbookPackage = '@deepbook/core';
+	const byeolPackage = '@byeol/core';
 
 	// MVR requires testnet, so we use custom client configuration
 	const testWithAllClients = createTestWithAllClients(() => ({
@@ -49,14 +49,14 @@ describe('Core API - MVR (Move Registry)', () => {
 	describe('MVR Package Resolution', () => {
 		testWithAllClients('should resolve named package to package ID', async (client) => {
 			const result = await client.core.mvr.resolvePackage({
-				package: deepbookPackage,
+				package: byeolPackage,
 			});
 
 			expect(result.package).toBeDefined();
 			expect(typeof result.package).toBe('string');
 			expect(result.package).toMatch(/^0x[a-f0-9]+$/);
 			// Package ID should be different from the named package
-			expect(result.package).not.toBe(deepbookPackage);
+			expect(result.package).not.toBe(byeolPackage);
 		});
 
 		testWithAllClients('should handle non-existent named package', async (client) => {
@@ -72,7 +72,7 @@ describe('Core API - MVR (Move Registry)', () => {
 
 	describe('MVR Type Resolution', () => {
 		testWithAllClients('should resolve type with named package', async (client) => {
-			const typeString = `${deepbookPackage}::pool::Pool`;
+			const typeString = `${byeolPackage}::pool::Pool`;
 
 			const result = await client.core.mvr.resolveType({
 				type: typeString,
@@ -82,12 +82,12 @@ describe('Core API - MVR (Move Registry)', () => {
 			expect(typeof result.type).toBe('string');
 			// Should resolve to package ID address, not named package
 			expect(result.type).toMatch(/^0x[a-f0-9]+::/);
-			expect(result.type).not.toContain(deepbookPackage);
+			expect(result.type).not.toContain(byeolPackage);
 			expect(result.type).toContain('::pool::Pool');
 		});
 
 		testWithAllClients('should resolve generic type with named package', async (client) => {
-			const typeString = `${deepbookPackage}::pool::Pool<0x2::haneul::HANEUL>`;
+			const typeString = `${byeolPackage}::pool::Pool<0x2::haneul::HANEUL>`;
 
 			const result = await client.core.mvr.resolveType({
 				type: typeString,
@@ -95,7 +95,7 @@ describe('Core API - MVR (Move Registry)', () => {
 
 			expect(result.type).toBeDefined();
 			expect(result.type).toMatch(/^0x[a-f0-9]+::/);
-			expect(result.type).not.toContain(deepbookPackage);
+			expect(result.type).not.toContain(byeolPackage);
 			expect(result.type).toContain('::pool::Pool<');
 		});
 
@@ -115,23 +115,23 @@ describe('Core API - MVR (Move Registry)', () => {
 	describe('MVR Batch Resolution', () => {
 		testWithAllClients('should resolve multiple named packages at once', async (client) => {
 			const result = await client.core.mvr.resolve({
-				packages: [deepbookPackage, walrusPackage],
+				packages: [byeolPackage, walrusPackage],
 			});
 
 			expect(result.packages).toBeDefined();
 			expect(Object.keys(result.packages)).toHaveLength(2);
-			expect(result.packages[deepbookPackage]).toBeDefined();
-			expect(result.packages[deepbookPackage].package).toMatch(/^0x[a-f0-9]+$/);
+			expect(result.packages[byeolPackage]).toBeDefined();
+			expect(result.packages[byeolPackage].package).toMatch(/^0x[a-f0-9]+$/);
 			expect(result.packages[walrusPackage]).toBeDefined();
 			expect(result.packages[walrusPackage].package).toMatch(/^0x[a-f0-9]+$/);
 			// Should resolve to different IDs
-			expect(result.packages[deepbookPackage].package).not.toBe(
+			expect(result.packages[byeolPackage].package).not.toBe(
 				result.packages[walrusPackage].package,
 			);
 		});
 
 		testWithAllClients('should resolve multiple types at once', async (client) => {
-			const type1 = `${deepbookPackage}::pool::Pool`;
+			const type1 = `${byeolPackage}::pool::Pool`;
 			const type2 = `${walrusPackage}::site::Site`;
 
 			const result = await client.core.mvr.resolve({
@@ -147,10 +147,10 @@ describe('Core API - MVR (Move Registry)', () => {
 		});
 
 		testWithAllClients('should resolve both packages and types together', async (client) => {
-			const typeString = `${deepbookPackage}::pool::Pool`;
+			const typeString = `${byeolPackage}::pool::Pool`;
 
 			const result = await client.core.mvr.resolve({
-				packages: [deepbookPackage, walrusPackage],
+				packages: [byeolPackage, walrusPackage],
 				types: [typeString, `${walrusPackage}::site::Site`],
 			});
 

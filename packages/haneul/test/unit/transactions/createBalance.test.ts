@@ -4,6 +4,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { Transaction } from '../../../src/transactions/Transaction.js';
+import { COIN_WITH_BALANCE } from '../../../src/transactions/intents/CoinWithBalance.js';
 import { normalizeHaneulAddress, normalizeStructTag } from '../../../src/utils/index.js';
 
 const TEST_TYPE = normalizeStructTag('0x123::test::TOKEN');
@@ -237,8 +238,11 @@ describe('tx.balance', () => {
 				          {
 				            "Result": 0,
 				          },
+				          {
+				            "Input": 3,
+				          },
 				        ],
-				        "function": "destroy_zero",
+				        "function": "send_funds",
 				        "module": "coin",
 				        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 				        "typeArguments": [
@@ -272,6 +276,11 @@ describe('tx.balance', () => {
 				    {
 				      "Pure": {
 				        "bytes": "MgAAAAAAAAA=",
+				      },
+				    },
+				    {
+				      "Pure": {
+				        "bytes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASM=",
 				      },
 				    },
 				  ],
@@ -1638,8 +1647,11 @@ describe('tx.balance', () => {
 			          {
 			            "Input": 1,
 			          },
+			          {
+			            "Input": 5,
+			          },
 			        ],
-			        "function": "destroy_zero",
+			        "function": "send_funds",
 			        "module": "coin",
 			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 			        "typeArguments": [
@@ -1691,6 +1703,11 @@ describe('tx.balance', () => {
 			    {
 			      "Pure": {
 			        "bytes": "ZAAAAAAAAAA=",
+			      },
+			    },
+			    {
+			      "Pure": {
+			        "bytes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASM=",
 			      },
 			    },
 			  ],
@@ -1820,6 +1837,21 @@ describe('tx.balance', () => {
 			{
 			  "commands": [
 			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
+			            "Input": 1,
+			          },
+			        ],
+			        "function": "redeem_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
 			      "SplitCoins": {
 			        "amounts": [
 			          {
@@ -1830,19 +1862,34 @@ describe('tx.balance', () => {
 			          },
 			        ],
 			        "coin": {
-			          "Input": 1,
+			          "Result": 0,
 			        },
+			      },
+			    },
+			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
+			            "Input": 4,
+			          },
+			        ],
+			        "function": "redeem_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
+			        ],
 			      },
 			    },
 			    {
 			      "SplitCoins": {
 			        "amounts": [
 			          {
-			            "Input": 4,
+			            "Input": 5,
 			          },
 			        ],
 			        "coin": {
-			          "GasCoin": true,
+			          "Result": 2,
 			        },
 			      },
 			    },
@@ -1854,22 +1901,58 @@ describe('tx.balance', () => {
 			        "objects": [
 			          {
 			            "NestedResult": [
-			              0,
+			              1,
 			              0,
 			            ],
 			          },
 			          {
 			            "NestedResult": [
-			              0,
+			              1,
 			              1,
 			            ],
 			          },
 			          {
 			            "NestedResult": [
-			              1,
+			              3,
 			              0,
 			            ],
 			          },
+			        ],
+			      },
+			    },
+			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
+			            "Result": 0,
+			          },
+			          {
+			            "Input": 6,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
+			            "Result": 2,
+			          },
+			          {
+			            "Input": 7,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			        ],
 			      },
 			    },
@@ -1881,11 +1964,18 @@ describe('tx.balance', () => {
 			      },
 			    },
 			    {
-			      "Object": {
-			        "ImmOrOwnedObject": {
-			          "digest": "abc",
-			          "objectId": "0x0000000000000000000000000000000000000000000000000000000000000c01",
-			          "version": "1",
+			      "FundsWithdrawal": {
+			        "reservation": {
+			          "$kind": "MaxAmountU64",
+			          "MaxAmountU64": "30",
+			        },
+			        "typeArg": {
+			          "$kind": "Balance",
+			          "Balance": "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        },
+			        "withdrawFrom": {
+			          "$kind": "Sender",
+			          "Sender": true,
 			        },
 			      },
 			    },
@@ -1900,13 +1990,134 @@ describe('tx.balance', () => {
 			      },
 			    },
 			    {
+			      "FundsWithdrawal": {
+			        "reservation": {
+			          "$kind": "MaxAmountU64",
+			          "MaxAmountU64": "5",
+			        },
+			        "typeArg": {
+			          "$kind": "Balance",
+			          "Balance": "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
+			        },
+			        "withdrawFrom": {
+			          "$kind": "Sender",
+			          "Sender": true,
+			        },
+			      },
+			    },
+			    {
 			      "Pure": {
 			        "bytes": "BQAAAAAAAAA=",
+			      },
+			    },
+			    {
+			      "Pure": {
+			        "bytes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASM=",
+			      },
+			    },
+			    {
+			      "Pure": {
+			        "bytes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASM=",
 			      },
 			    },
 			  ],
 			}
 		`);
+	});
+
+	it('tx.coin with AB sufficient prefers AB over coins (Path 2 AB-only)', async () => {
+		const tx = new Transaction();
+		tx.setSenderIfNotSet(SENDER);
+		tx.transferObjects([tx.coin({ type: TEST_TYPE, balance: 50n })], RECEIVER);
+
+		const result = await resolvedData(
+			tx,
+			mockClient({
+				addressBalance: 200n,
+				coinBalance: 100n,
+				coins: [makeCoin('0xc01', '100')],
+			}),
+		);
+
+		// Should use coin::redeem_funds from AB, not the coin object
+		expect(result.commands[0].MoveCall?.function).toBe('redeem_funds');
+		expect(result.commands[0].MoveCall?.module).toBe('coin');
+		// No coin object inputs — only FundsWithdrawal and pure inputs
+		const objectInputs = result.inputs.filter((i: any) => i.Object);
+		expect(objectInputs).toHaveLength(0);
+		// FundsWithdrawal for the full totalRequired amount
+		const withdrawals = result.inputs.filter((i: any) => i.FundsWithdrawal);
+		expect(withdrawals).toHaveLength(1);
+		expect(withdrawals[0].FundsWithdrawal.reservation.MaxAmountU64).toBe('50');
+	});
+
+	it('mixed tx.coin + tx.balance with AB sufficient sources entirely from AB', async () => {
+		const tx = new Transaction();
+		tx.setSenderIfNotSet(SENDER);
+		const coin = tx.coin({ type: TEST_TYPE, balance: 30n });
+		const bal = tx.balance({ type: TEST_TYPE, balance: 20n });
+		tx.transferObjects([coin], RECEIVER);
+		tx.moveCall({
+			target: '0x2::balance::send_funds',
+			typeArguments: [TEST_TYPE],
+			arguments: [bal, tx.pure.address(RECEIVER)],
+		});
+
+		const result = await resolvedData(
+			tx,
+			mockClient({
+				addressBalance: 200n,
+				coinBalance: 100n,
+				coins: [makeCoin('0xc01', '100')],
+			}),
+		);
+
+		// Should use coin::redeem_funds from AB for the full amount
+		expect(result.commands[0].MoveCall?.function).toBe('redeem_funds');
+		expect(result.commands[0].MoveCall?.module).toBe('coin');
+		// No coin object inputs
+		const objectInputs = result.inputs.filter((i: any) => i.Object);
+		expect(objectInputs).toHaveLength(0);
+		// FundsWithdrawal for the full totalRequired (30+20=50)
+		const withdrawals = result.inputs.filter((i: any) => i.FundsWithdrawal);
+		expect(withdrawals).toHaveLength(1);
+		expect(withdrawals[0].FundsWithdrawal.reservation.MaxAmountU64).toBe('50');
+	});
+
+	it('gas type tx.coin with AB sufficient prefers AB over GasCoin', async () => {
+		const tx = new Transaction();
+		tx.setSenderIfNotSet(SENDER);
+		tx.transferObjects([tx.coin({ balance: 50n })], RECEIVER);
+
+		const result = await resolvedData(tx, mockClient({ addressBalance: 200n, coinBalance: 0n }));
+
+		// Should use coin::redeem_funds from AB, not GasCoin
+		expect(result.commands[0].MoveCall?.function).toBe('redeem_funds');
+		expect(result.commands[0].MoveCall?.module).toBe('coin');
+		// No GasCoin in any SplitCoins
+		const splitCmds = result.commands.filter((c: any) => c.SplitCoins);
+		for (const cmd of splitCmds) {
+			expect(cmd.SplitCoins.coin).not.toEqual({ GasCoin: true });
+		}
+		// FundsWithdrawal for the full amount
+		const withdrawals = result.inputs.filter((i: any) => i.FundsWithdrawal);
+		expect(withdrawals).toHaveLength(1);
+		expect(withdrawals[0].FundsWithdrawal.reservation.MaxAmountU64).toBe('50');
+	});
+
+	it('gas type tx.coin with AB insufficient falls back to GasCoin', async () => {
+		const tx = new Transaction();
+		tx.setSenderIfNotSet(SENDER);
+		tx.transferObjects([tx.coin({ balance: 50n })], RECEIVER);
+
+		const result = await resolvedData(tx, mockClient({ addressBalance: 10n, coinBalance: 90n }));
+
+		// Should use GasCoin since AB is insufficient
+		const splitCmd = result.commands.find((c: any) => c.SplitCoins);
+		expect(splitCmd.SplitCoins.coin).toEqual({ GasCoin: true });
+		// No FundsWithdrawal
+		const withdrawals = result.inputs.filter((i: any) => i.FundsWithdrawal);
+		expect(withdrawals).toHaveLength(0);
 	});
 
 	it('tx.coin with useGasCoin: false treats HANEUL as regular coin type', async () => {
@@ -1968,6 +2179,18 @@ describe('tx.balance', () => {
 		]);
 	});
 
+	it('errors when mixing gas and useGasCoin:false HANEUL intents', async () => {
+		const HANEUL_TYPE = normalizeStructTag('0x2::haneul::HANEUL');
+		const tx = new Transaction();
+		tx.setSenderIfNotSet(SENDER);
+		tx.transferObjects([tx.coin({ balance: 60n })], RECEIVER);
+		tx.transferObjects([tx.coin({ type: HANEUL_TYPE, balance: 60n, useGasCoin: false })], RECEIVER);
+
+		await expect(
+			resolvedData(tx, mockClient({ addressBalance: 100n, coinBalance: 0n })),
+		).rejects.toThrow('Cannot mix HANEUL CoinWithBalance intents');
+	});
+
 	it('two different custom types in same transaction resolve independently', async () => {
 		const tx = new Transaction();
 		tx.setSenderIfNotSet(SENDER);
@@ -1993,6 +2216,27 @@ describe('tx.balance', () => {
 		// Both transfer commands should follow
 		const transferCmds = result.commands.filter((c: any) => c.TransferObjects);
 		expect(transferCmds).toHaveLength(2);
+	});
+
+	// https://github.com/GeunhwaJeong/haneul-ts-sdks/issues/1120
+	it('resolves after a toJSON/Transaction.from round-trip with CoinWithBalance as a supported intent', async () => {
+		const tx = new Transaction();
+		tx.setSenderIfNotSet(SENDER);
+		tx.transferObjects([tx.coin({ type: TEST_TYPE, balance: 60n })], RECEIVER);
+
+		// Serialize while keeping the intent unresolved — `balance` becomes a string in JSON.
+		const json = await tx.toJSON({ supportedIntents: [COIN_WITH_BALANCE] });
+		expect(JSON.parse(json).commands.find((c: any) => c.$Intent)?.$Intent.data.balance).toBe('60');
+
+		// Deserializing keeps `balance` a string; the resolver must coerce it back to a bigint.
+		const restored = Transaction.from(json);
+		const result = await resolvedData(
+			restored,
+			mockClient({ addressBalance: 0n, coinBalance: 100n, coins: [makeCoin('0xc01', '100')] }),
+		);
+
+		const splitCmds = result.commands.filter((c: any) => c.SplitCoins);
+		expect(splitCmds).toHaveLength(1);
 	});
 });
 

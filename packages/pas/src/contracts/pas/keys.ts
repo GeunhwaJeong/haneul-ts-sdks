@@ -4,7 +4,7 @@
 import { MoveTuple, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
 import { bcs } from '@haneullabs/haneul/bcs';
 import { type Transaction } from '@haneullabs/haneul/transactions';
-const $moduleName = '@haneullabs/pas::keys';
+const $moduleName = '@pas/pas::keys';
 export const PolicyKey = new MoveTuple({
 	name: `${$moduleName}::PolicyKey<phantom T>`,
 	fields: [bcs.bool()],

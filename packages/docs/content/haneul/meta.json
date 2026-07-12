@@ -4,12 +4,9 @@
 	"description": "TypeScript interfaces for Haneul",
 	"pages": [
 		"index",
-		"install",
 		"llm-docs",
-		"hello-haneul",
-		"faucet",
 		"clients",
-		"transaction-building",
+		"transactions",
 		"cryptography",
 		"utils",
 		"bcs",

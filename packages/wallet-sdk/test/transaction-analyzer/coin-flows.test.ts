@@ -3,6 +3,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { Transaction } from '@haneullabs/haneul/transactions';
+
 import { analyze } from '../../src/transaction-analyzer/analyzer.js';
 import { coinFlows } from '../../src/transaction-analyzer/rules/coin-flows.js';
 import { MockHaneulClient } from '../mocks/MockHaneulClient.js';
@@ -108,12 +109,12 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 			250000000n,
 		]); // 1 HANEUL + 0.5 HANEUL + 0.25 HANEUL
 
-		const [toTransfer] = tx.mergeCoins(splitCoin1, [splitCoin2]); // 1.5 HANEUL
+		tx.mergeCoins(splitCoin1, [splitCoin2]); // splitCoin1 now has 1.5 HANEUL
 
 		tx.mergeCoins(coin1, [splitCoin3]); // Merge back remaining .25
 
-		// Transfer the split
-		tx.transferObjects([toTransfer], tx.pure.address('0x456'));
+		// Transfer the split (mergeCoins mutates dest in place, so transfer splitCoin1)
+		tx.transferObjects([splitCoin1], tx.pure.address('0x456'));
 
 		const results = await analyze(
 			{ coinFlows },
@@ -438,5 +439,58 @@ describe('TransactionAnalyzer - Coin Flows Rule', () => {
 				'0x0000000000000000000000000000000000000000000000000000000000000b0c::weth::WETH',
 		);
 		expect(wethFlow?.amount).toBe(2500000000000000000n); // WETH balance consumed
+	});
+
+	it('attributes budget to the sender when gas payment is empty and no explicit gas owner', async () => {
+		const client = new MockHaneulClient();
+		const tx = new Transaction();
+		tx.setSender(DEFAULT_SENDER);
+
+		const json = JSON.parse(await tx.toJSON());
+		json.gasData.payment = [];
+		json.gasData.owner = null;
+
+		const results = await analyze({ coinFlows }, { client, transaction: JSON.stringify(json) });
+
+		const haneulFlow = results.coinFlows.result?.outflows.find(
+			(f) =>
+				f.coinType ===
+				'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
+		);
+		expect(haneulFlow?.amount).toBe(10000000n);
+	});
+
+	it('attributes budget to the explicit gas payer when payment is empty but owner is set', async () => {
+		const SPONSOR = '0x00000000000000000000000000000000000000000000000000000000000005b0';
+		const client = new MockHaneulClient();
+		const tx = new Transaction();
+		tx.setSender(DEFAULT_SENDER);
+
+		const json = JSON.parse(await tx.toJSON());
+		json.gasData.payment = [];
+		json.gasData.owner = SPONSOR;
+
+		const results = await analyze({ coinFlows }, { client, transaction: JSON.stringify(json) });
+
+		const senderHaneul = results.coinFlows.result?.outflows.find(
+			(f) =>
+				f.coinType ===
+				'0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
+		);
+		expect(senderHaneul).toBeUndefined();
+	});
+
+	it('flags a split that takes more than the coin holds', async () => {
+		const client = new MockHaneulClient();
+		const tx = new Transaction();
+		tx.setSender(DEFAULT_SENDER);
+
+		const coin = tx.object(TEST_COIN_1_ID); // 5 HANEUL
+		const [splitCoin] = tx.splitCoins(coin, [10_000_000_000n]); // 10 HANEUL > 5 HANEUL
+		tx.transferObjects([splitCoin], tx.pure.address('0x456'));
+
+		const results = await analyze({ coinFlows }, { client, transaction: await tx.toJSON() });
+
+		expect(results.coinFlows.issues?.some((i) => i.message.includes('SplitCoins'))).toBe(true);
 	});
 });

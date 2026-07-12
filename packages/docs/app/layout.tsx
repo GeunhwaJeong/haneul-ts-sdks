@@ -7,6 +7,7 @@ import { RootProvider } from 'fumadocs-ui/provider/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
+import Script from 'next/script';
 import CloudFlareAnalytics from '@/components/CloudFlareAnalytics';
 
 export const metadata: Metadata = {
@@ -41,8 +42,28 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				/>
 				<meta httpEquiv="Content-Language" content="en" />
 				<meta name="algolia-site-verification" content="BCA21DA2879818D2" />
+				<Script
+					src="https://plausible.io/js/pa-T9dmzJpMQ4mBp3o0cRu9L.js"
+					strategy="afterInteractive"
+				/>
+				<Script id="plausible-init" strategy="afterInteractive">
+					{`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`}
+				</Script>
 			</head>
 			<body className="flex flex-col min-h-screen">
+				<a
+					href="/llms.txt"
+					style={{
+						position: 'absolute',
+						width: '1px',
+						height: '1px',
+						overflow: 'hidden',
+						clip: 'rect(0,0,0,0)',
+						whiteSpace: 'nowrap',
+					}}
+				>
+					llms.txt
+				</a>
 				<Banner id="sdk-2-migration">
 					@haneullabs/haneul v2.0 and a new dApp Kit are here!&nbsp;
 					<Link href="/haneul/migrations/haneul-2.0" className="underline">

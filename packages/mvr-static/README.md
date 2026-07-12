@@ -41,7 +41,7 @@ import { getMvrCache } from './mvr.ts';
 // Create a gRPC client with MVR overrides for your network
 const client = new HaneulGrpcClient({
 	network: 'mainnet',
-	baseUrl: 'https://fullnode.mainnet.haneul.io:443',
+	baseUrl: 'http://158.69.54.239:9000',
 	mvr: {
 		overrides: getMvrCache('mainnet'),
 	},

@@ -1,6 +1,17 @@
 ---
 title: Migrating from JSON-RPC
-description: Migrate from JSON-RPC to the new Core API
+description: Migrate from JSON-RPC to the new Core API using HaneulGrpcClient or HaneulGraphQLClient.
+keywords:
+  [
+    migration,
+    JSON-RPC,
+    Core API,
+    HaneulGrpcClient,
+    HaneulGraphQLClient,
+    deprecated,
+    Haneul client,
+    transport,
+  ]
 ---
 
 This guide covers migrating from `HaneulJsonRpcClient` to the new client APIs. The JSON-RPC API is
@@ -11,14 +22,14 @@ being deprecated in favor of `HaneulGrpcClient` and `HaneulGraphQLClient`.
 	like filtering transactions and events.
 </Callout>
 
-## Choosing a Client
+## Choosing a client
 
 | Client             | Best For                                                        |
 | ------------------ | --------------------------------------------------------------- |
 | `HaneulGrpcClient`    | Most operations, SDK integrations, real-time data               |
 | `HaneulGraphQLClient` | Complex queries, filtering transactions/events, historical data |
 
-## Quick Migration to gRPC
+## Quick migration to gRPC
 
 For most use cases, migrate to `HaneulGrpcClient`:
 
@@ -31,20 +42,20 @@ For most use cases, migrate to `HaneulGrpcClient`:
 -   network: 'mainnet',
 - });
 + const client = new HaneulGrpcClient({
-+   baseUrl: 'https://fullnode.mainnet.haneul.io:443',
++   baseUrl: 'http://158.69.54.239:9000',
 +   network: 'mainnet',
 + });
 ```
 
 Both clients use the same full node URLs, so you can use the same endpoint when migrating.
 
-## Core API Methods
+## Core API methods
 
 The gRPC client should work with almost all haneullabs SDKs as a drop in replacement for the JSON-RPC
 client. When using the client directly, the methods and data returned will not be exactly the same
 as what was available in JSON-RPC.
 
-## Methods Replaced by Core API
+## Methods replaced by core API
 
 These JSON-RPC methods have direct replacements in the core API:
 
@@ -91,49 +102,80 @@ These JSON-RPC methods have direct replacements in the core API:
 + });
 ```
 
-## Methods Replaced by gRPC Services
+## Methods replaced by gRPC services
 
 These JSON-RPC methods can be replaced by calling gRPC service clients directly:
 
-| JSON-RPC Method                     | gRPC Service Replacement          |
-| ----------------------------------- | --------------------------------- |
-| `getCheckpoint`                     | `ledgerService.getCheckpoint`     |
-| `getCheckpoints`                    | `ledgerService.listCheckpoints`   |
-| `getLatestCheckpointSequenceNumber` | `ledgerService.getCheckpoint`     |
-| `getEpochs`                         | `ledgerService.listEpochs`        |
-| `getCurrentEpoch`                   | `ledgerService.getEpoch`          |
-| `getLatestHaneulSystemState`           | `ledgerService.getSystemState`    |
-| `getCommitteeInfo`                  | `ledgerService.getCommittee`      |
-| `getValidatorsApy`                  | `ledgerService.getValidators`     |
-| `getProtocolConfig`                 | `ledgerService.getProtocolConfig` |
-| `getNormalizedMoveModule`           | `movePackageService.getModule`    |
-| `getNormalizedMoveModulesByPackage` | `movePackageService.getPackage`   |
-| `getNormalizedMoveStruct`           | `movePackageService.getStruct`    |
-| `resolveNameServiceAddress`         | `nameService.lookupName`          |
-| `resolveNameServiceNames`           | `nameService.reverseLookupName`   |
+| JSON-RPC Method                     | gRPC Service Replacement                                         |
+| ----------------------------------- | ---------------------------------------------------------------- |
+| `getCheckpoint`                     | `ledgerService.getCheckpoint`                                    |
+| `getLatestCheckpointSequenceNumber` | `ledgerService.getServiceInfo` (read `checkpointHeight`)         |
+| `getCurrentEpoch`                   | `ledgerService.getEpoch` (omit `epoch` for the current)          |
+| `getLatestHaneulSystemState`           | `ledgerService.getEpoch` with `system_state` in the read mask    |
+| `getCommitteeInfo`                  | `ledgerService.getEpoch` with `committee` in the read mask       |
+| `getProtocolConfig`                 | `ledgerService.getEpoch` with `protocol_config` in the read mask |
+| `getCoinMetadata`                   | `stateService.getCoinInfo` (response includes `metadata`)        |
+| `getTotalSupply`                    | `stateService.getCoinInfo` (response includes `treasury`)        |
+| `getNormalizedMoveModule`           | `movePackageService.getPackage` (response includes all modules)  |
+| `getNormalizedMoveModulesByPackage` | `movePackageService.getPackage`                                  |
+| `getNormalizedMoveStruct`           | `movePackageService.getDatatype`                                 |
+| `resolveNameServiceAddress`         | `nameService.lookupName`                                         |
+| `resolveNameServiceNames`           | `nameService.reverseLookupName`                                  |
 
-### Example: Using gRPC Service Clients
+<Callout type="warn">
+	`getCheckpoints` and `getEpochs` (paginated listings) have no gRPC equivalent — use the
+	`checkpoints` / `epochs` GraphQL queries instead. `getValidatorsApy` also has no replacement:
+	there is no canonical definition of validator APY, so it must be computed client-side from
+	validator exchange rates (see [Validator APY](#validator-apy) below).
+</Callout>
+
+### Example: using gRPC service clients
 
 ```typescript
 import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 const client = new HaneulGrpcClient({
-	baseUrl: 'https://fullnode.mainnet.haneul.io:443',
+	baseUrl: 'http://158.69.54.239:9000',
 	network: 'mainnet',
 });
 
-// Get checkpoint information
+// Get the latest checkpoint sequence number (replaces getLatestCheckpointSequenceNumber)
+const { response: info } = await client.ledgerService.getServiceInfo({});
+const latestCheckpoint = info.checkpointHeight;
+
+// Get a specific checkpoint by sequence number. `checkpointId` is required (a oneof);
+// the read mask defaults to `sequence_number,digest`, so request more fields as needed.
 const { response } = await client.ledgerService.getCheckpoint({
-	sequenceNumber: 12345n,
+	checkpointId: { oneofKind: 'sequenceNumber', sequenceNumber: latestCheckpoint },
 });
 
-// Get current epoch
-const { response: epoch } = await client.ledgerService.getEpoch({});
+// Get the current epoch (omit `epoch` for the current one). The system state,
+// committee, and protocol config are NOT returned by default — you must request
+// them via the read mask (the default mask is just `epoch`).
+const { response: epoch } = await client.ledgerService.getEpoch({
+	readMask: { paths: ['epoch', 'system_state', 'committee', 'protocol_config'] },
+});
+const systemState = epoch.epoch?.systemState;
+const committee = epoch.epoch?.committee;
+const protocolConfig = epoch.epoch?.protocolConfig;
 
-// Get Move module information
-const { response: module } = await client.movePackageService.getModule({
+// Get coin metadata and total supply in one call
+const { response: coinInfo } = await client.stateService.getCoinInfo({
+	coinType: '0x2::haneul::HANEUL',
+});
+const metadata = coinInfo.metadata;
+const totalSupply = coinInfo.treasury?.totalSupply;
+
+// Get Move package information (includes all modules)
+const { response: pkg } = await client.movePackageService.getPackage({
+	packageId: '0x2',
+});
+
+// Get a specific Move datatype (struct or enum)
+const { response: datatype } = await client.movePackageService.getDatatype({
 	packageId: '0x2',
 	moduleName: 'coin',
+	name: 'Coin',
 });
 
 // Resolve HaneulNS name
@@ -142,25 +184,27 @@ const { response: address } = await client.nameService.lookupName({
 });
 ```
 
-## Methods Requiring GraphQL
+## Methods requiring GraphQL
 
 Some JSON-RPC methods don't have gRPC equivalents and require using `HaneulGraphQLClient` instead:
 
-| JSON-RPC Method             | GraphQL Alternative                |
-| --------------------------- | ---------------------------------- |
-| `queryTransactionBlocks`    | `transactions` query               |
-| `multiGetTransactionBlocks` | `multiGetTransactionEffects` query |
-| `queryEvents`               | `events` query                     |
-| `getCoinMetadata`           | `coinMetadata` query               |
-| `getTotalSupply`            | `coinMetadata` query               |
-| `getStakes`                 | `address.stakedHaneuls` query         |
-| `getStakesByIds`            | `multiGetObjects` query            |
-| `tryGetPastObject`          | Historical object queries          |
-| `getNetworkMetrics`         | Use indexer                        |
-| `getAddressMetrics`         | Use indexer                        |
-| `getMoveCallMetrics`        | Use indexer                        |
+| JSON-RPC Method             | GraphQL Alternative                                       |
+| --------------------------- | --------------------------------------------------------- |
+| `queryTransactionBlocks`    | `transactions` query                                      |
+| `multiGetTransactionBlocks` | `multiGetTransactionEffects` query                        |
+| `queryEvents`               | `events` query                                            |
+| `getCheckpoints`            | `checkpoints` query                                       |
+| `getEpochs`                 | `epochs` query                                            |
+| `getCoinMetadata`           | `coinMetadata` query (or gRPC `stateService.getCoinInfo`) |
+| `getTotalSupply`            | `coinMetadata` query (or gRPC `stateService.getCoinInfo`) |
+| `getStakes`                 | `address.stakedHaneuls` query                                |
+| `getStakesByIds`            | `multiGetObjects` query                                   |
+| `tryGetPastObject`          | Historical object queries                                 |
+| `getNetworkMetrics`         | Use indexer                                               |
+| `getAddressMetrics`         | Use indexer                                               |
+| `getMoveCallMetrics`        | Use indexer                                               |
 
-### Setting Up GraphQL Client
+### Setting up GraphQL client
 
 ```typescript
 import { HaneulGraphQLClient } from '@haneullabs/haneul/graphql';
@@ -171,7 +215,7 @@ const graphqlClient = new HaneulGraphQLClient({
 });
 ```
 
-### Querying Transactions
+### Querying transactions
 
 Replace `queryTransactionBlocks` with a GraphQL query:
 
@@ -207,14 +251,14 @@ const result = await graphqlClient.query({
 
 **Available transaction filters:**
 
-- `sentAddress` - Filter by sender address
-- `affectedAddress` - Filter by any address involved in the transaction
-- `affectedObject` - Filter by object ID that was affected
-- `function` - Filter by Move function called (e.g., `0x2::coin::transfer`)
-- `kind` - Filter by transaction kind (`SYSTEM` or `PROGRAMMABLE`)
+- `sentAddress`: Filter by sender address
+- `affectedAddress`: Filter by any address involved in the transaction
+- `affectedObject`: Filter by object ID that was affected
+- `function`: Filter by Move function called (for example, `0x2::coin::transfer`)
+- `kind`: Filter by transaction kind (`SYSTEM` or `PROGRAMMABLE`)
 - `atCheckpoint` / `beforeCheckpoint` / `afterCheckpoint` - Filter by checkpoint
 
-### Querying Events
+### Querying events
 
 Replace `queryEvents` with a GraphQL query:
 
@@ -254,12 +298,12 @@ const result = await graphqlClient.query({
 
 **Available event filters:**
 
-- `type` - Filter by event type (package, package::module, or full type)
-- `module` - Filter by emitting module
-- `sender` - Filter by transaction sender
-- `atCheckpoint` / `beforeCheckpoint` / `afterCheckpoint` - Filter by checkpoint
+- `type`: Filter by event type (package, package::module, or full type)
+- `module`: Filter by emitting module
+- `sender`: Filter by transaction sender
+- `atCheckpoint` / `beforeCheckpoint` / `afterCheckpoint`: Filter by checkpoint
 
-### Fetching Multiple Transactions
+### Fetching multiple transactions
 
 Replace `multiGetTransactionBlocks` with a GraphQL query:
 
@@ -283,7 +327,7 @@ const result = await graphqlClient.query({
 });
 ```
 
-### Querying Historical Objects
+### Querying historical objects
 
 Replace `tryGetPastObject` with a GraphQL query specifying a version:
 
@@ -311,7 +355,7 @@ const result = await graphqlClient.query({
 });
 ```
 
-### Querying Coin Metadata
+### Querying coin metadata
 
 Replace `getCoinMetadata` and `getTotalSupply` with a GraphQL query:
 
@@ -335,7 +379,7 @@ const result = await graphqlClient.query({
 });
 ```
 
-### Querying Staked HANEUL
+### Querying staked HANEUL
 
 Replace `getStakes` with a GraphQL query:
 
@@ -363,10 +407,28 @@ const result = await graphqlClient.query({
 });
 ```
 
-## Response Format Differences
+## Validator APY
+
+There is **no replacement** for `getValidatorsApy`, and one will not be added. There is no canonical
+definition of validator APY — no other chain's core/general-purpose RPCs offer this endpoint — so it
+must be computed client-side from validator staking-pool exchange rates.
+
+The general approach: read each validator's `exchangeRates` (a table of `pool_token_amount` /
+`haneul_amount` per epoch) and estimate the annualized rate from the change in exchange rate over the
+trailing epochs. Two concrete reference implementations:
+
+- The `jsonrpc-alt` implementation in
+  [`haneul-indexer-alt-jsonrpc`](https://github.com/GeunhwaJeong/haneul/blob/31537d4d9235b9f61dc07a3a71b05ed61a2bda7b/crates/haneul-indexer-alt-jsonrpc/src/api/governance.rs#L422-L440),
+  which is compact and readable.
+- [This GraphQL approach](https://github.com/GeunhwaJeong/haneul/issues/23832#issuecomment-4437791087),
+  which fetches the precursor exchange-rate information in a single query.
+
+Treat whichever formula you adopt as _a_ definition of validator APY, not _the_ definition.
+
+## Response format differences
 
 The gRPC client uses the core API response format, which differs from JSON-RPC responses. See the
-[@haneullabs/haneul migration guide](/haneul/migrations/haneul-2.0/haneul#transaction-executors-now-accept-any-client)
+[`@haneullabs/haneul` migration guide](/haneul/migrations/haneul-2.0/haneul#transaction-executors-now-accept-any-client)
 for details on the new response format.
 
 Key differences:
@@ -382,26 +444,26 @@ Key differences:
 + { effects: true, events: true }
 ```
 
-## Client Extensions
+## Client extensions
 
 Client extensions work the same way with both clients:
 
 ```typescript
 import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
-import { deepbook } from '@haneullabs/deepbook-v3';
+import { byeol } from '@haneullabs/byeol';
 import { haneulns } from '@haneullabs/haneulns';
 
 const client = new HaneulGrpcClient({
-	baseUrl: 'https://fullnode.mainnet.haneul.io:443',
+	baseUrl: 'http://158.69.54.239:9000',
 	network: 'mainnet',
-}).$extend(deepbook({ address: myAddress }), haneulns());
+}).$extend(byeol({ address: myAddress }), haneulns());
 
 // Use extended functionality
-await client.deepbook.checkManagerBalance(manager, asset);
+await client.byeol.checkManagerBalance(manager, asset);
 await client.haneulns.getName('0xabc...');
 ```
 
-## See Also
+## See also
 
 - [HaneulGrpcClient Documentation](/haneul/clients/grpc) - Full gRPC client documentation
 - [HaneulGraphQLClient Documentation](/haneul/clients/graphql) - GraphQL client documentation

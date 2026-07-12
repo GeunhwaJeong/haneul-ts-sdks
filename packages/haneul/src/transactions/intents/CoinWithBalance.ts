@@ -2,7 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { InferInput } from 'valibot';
-import { bigint, object, optional, parse, picklist, string } from 'valibot';
+import {
+	bigint,
+	integer,
+	number,
+	object,
+	optional,
+	parse,
+	picklist,
+	pipe,
+	string,
+	transform,
+	union,
+} from 'valibot';
 
 import { bcs } from '../../bcs/index.js';
 import { normalizeStructTag } from '../../utils/haneul-types.js';
@@ -87,9 +99,15 @@ export function createBalance({
 	};
 }
 
+// `balance` is a bigint in memory, but serializing a transaction to JSON converts it to a
+// string. When that JSON is deserialized with `Transaction.from`, the value stays a string
+// (the intent `data` is opaque to the transaction schema), so coerce it back to a bigint here.
 const CoinWithBalanceData = object({
 	type: string(),
-	balance: bigint(),
+	balance: pipe(
+		union([bigint(), string(), pipe(number(), integer())]),
+		transform((value) => BigInt(value)),
+	),
 	outputKind: optional(picklist(['coin', 'balance'])),
 });
 
@@ -140,6 +158,12 @@ export async function resolveCoinBalance(
 		intentsByType.get(type)!.push({ balance, outputKind: outputKind ?? 'coin' });
 	}
 
+	if (totalByType.has('gas') && totalByType.has(HANEUL_TYPE)) {
+		throw new Error(
+			'Cannot mix HANEUL CoinWithBalance intents that use the gas coin with ones that do not (useGasCoin: false). Use one or the other.',
+		);
+	}
+
 	const usedIds = new Set<string>();
 
 	for (const input of transactionData.inputs) {
@@ -188,6 +212,7 @@ export async function resolveCoinBalance(
 
 	const mergedCoins = new Map<string, Argument>();
 	const exactBalanceByType = new Map<string, boolean>();
+	const usedAddressBalance = new Set<string>();
 
 	// Per-type state for Path 2 combined splits
 	type TypeState = { results: Argument[]; nextIntent: number };
@@ -201,10 +226,7 @@ export async function resolveCoinBalance(
 			continue;
 		}
 
-		const { type, balance } = transaction.$Intent.data as {
-			type: string;
-			balance: bigint;
-		};
+		const { type, balance } = parse(CoinWithBalanceData, transaction.$Intent.data);
 		const coinType = type === 'gas' ? HANEUL_TYPE : type;
 		const totalRequired = totalByType.get(type)!;
 		const addressBalance = addressBalanceByType.get(type) ?? 0n;
@@ -251,7 +273,31 @@ export async function resolveCoinBalance(
 				// Step 1: Build sources and merge
 				const sources: Argument[] = [];
 
-				if (type === 'gas') {
+				if (addressBalance >= totalRequired) {
+					// AB sufficient — source entirely from address balance, no coins needed.
+					usedAddressBalance.add(type);
+
+					commands.push(
+						TransactionCommands.MoveCall({
+							target: '0x2::coin::redeem_funds',
+							typeArguments: [coinType],
+							arguments: [
+								transactionData.addInput(
+									'withdrawal',
+									Inputs.FundsWithdrawal({
+										reservation: {
+											$kind: 'MaxAmountU64',
+											MaxAmountU64: String(totalRequired),
+										},
+										typeArg: { $kind: 'Balance', Balance: coinType },
+										withdrawFrom: { $kind: 'Sender', Sender: true },
+									}),
+								),
+							],
+						}),
+					);
+					sources.push({ $kind: 'Result', Result: index + commands.length - 1 });
+				} else if (type === 'gas') {
 					sources.push({ $kind: 'GasCoin', GasCoin: true });
 				} else {
 					const coins = coinsByType.get(type)!;
@@ -275,6 +321,7 @@ export async function resolveCoinBalance(
 					}
 
 					if (abNeeded > 0n) {
+						usedAddressBalance.add(type);
 						commands.push(
 							TransactionCommands.MoveCall({
 								target: '0x2::coin::redeem_funds',
@@ -363,17 +410,20 @@ export async function resolveCoinBalance(
 
 	// Step 3: Remainder handling
 	for (const [type, mergedCoin] of mergedCoins) {
-		if (type === 'gas') continue;
+		// When gas type used GasCoin (not AB), leftover stays in the gas coin — no remainder needed.
+		if (type === 'gas' && !usedAddressBalance.has(type)) continue;
 
+		const coinType = type === 'gas' ? HANEUL_TYPE : type;
 		const hasBalanceIntent = intentsByType.get(type)?.some((i) => i.outputKind === 'balance');
+		const sourcedFromAB = usedAddressBalance.has(type);
 
-		if (hasBalanceIntent) {
-			// Balance intents exist: send remainder coin back to sender's address balance.
+		if (hasBalanceIntent || sourcedFromAB) {
+			// Sourced from AB or balance intents exist: send remainder back to sender's address balance.
 			// coin::send_funds is gasless-eligible and handles zero amounts.
 			transactionData.commands.push(
 				TransactionCommands.MoveCall({
 					target: '0x2::coin::send_funds',
-					typeArguments: [type],
+					typeArguments: [coinType],
 					arguments: [
 						mergedCoin,
 						transactionData.addInput(
@@ -388,7 +438,7 @@ export async function resolveCoinBalance(
 			transactionData.commands.push(
 				TransactionCommands.MoveCall({
 					target: '0x2::coin::destroy_zero',
-					typeArguments: [type],
+					typeArguments: [coinType],
 					arguments: [mergedCoin],
 				}),
 			);

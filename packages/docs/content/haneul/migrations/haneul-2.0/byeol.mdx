@@ -1,0 +1,35 @@
+---
+title: '@haneullabs/byeol'
+description: Migrate @haneullabs/byeol to 2.0 with client extension pattern.
+keywords: [migration, '@haneullabs/byeol', Byeol, 2.0, client extension, DEX, breaking changes]
+---
+
+This package now exports a client extension that integrates with Haneul clients.
+
+```diff
+- import { HaneulClient, getFullnodeUrl } from '@haneullabs/haneul/client';
+- import { ByeolClient } from '@haneullabs/byeol';
++ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc'; // or HaneulJsonRpcClient, HaneulGraphQLClient
++ import { byeol } from '@haneullabs/byeol';
+
+- const haneulClient = new HaneulClient({ url: getFullnodeUrl('mainnet') });
+- const byeolClient = new ByeolClient({
+-   client: haneulClient,
+-   address: myAddress,
+-   env: 'mainnet',
+-   balanceManagers: { ... },
+- });
++ const client = new HaneulGrpcClient({
++   baseUrl: 'http://158.69.54.239:9000',
++   network: 'mainnet',
++ }).$extend(
++   byeol({
++     address: myAddress,
++     // network is auto-detected from the client
++     balanceManagers: { ... },
++   }),
++ );
+
+- await byeolClient.checkManagerBalance(manager, asset);
++ await client.byeol.checkManagerBalance(manager, asset);
+```

@@ -2,8 +2,8 @@
 	"entryPoints": [
 		"../bcs",
 		"../dapp-kit",
-		"../deepbook",
-		"../deepbook-v3",
+		"../byeol",
+		"../byeol",
 		"../enoki",
 		"../enoki-connect",
 		"../kiosk",

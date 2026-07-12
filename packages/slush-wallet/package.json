@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/slush-wallet",
-	"version": "1.0.3",
+	"version": "1.1.5",
 	"description": "Wallet adapter for Slush web wallet",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",
@@ -24,7 +24,7 @@
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
 		"build": "rm -rf dist && tsc --noEmit && tsdown",
-		"build:docs": "tsx ../docs/scripts/build-docs.ts",
+		"build:docs": "node ../docs/scripts/build-docs.ts",
 		"prettier:check": "prettier -c --ignore-unknown .",
 		"prettier:fix": "prettier -w --ignore-unknown .",
 		"oxlint:check": "oxlint  .",
@@ -34,23 +34,22 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
-	"homepage": "https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/slush-wallet#readme",
+	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/tree/main/packages/slush-wallet#readme",
 	"devDependencies": {
-		"@haneullabs/haneul": "workspace:^",
-		"@types/node": "^25.0.8",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"@types/node": "^25.9.3",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.8"
 	},
 	"dependencies": {
 		"@haneullabs/utils": "workspace:^",
 		"@haneullabs/wallet-standard": "workspace:^",
 		"@haneullabs/window-wallet-core": "workspace:^",
-		"valibot": "^1.2.0"
+		"valibot": "^1.4.1"
 	},
 	"peerDependencies": {
 		"@haneullabs/haneul": "workspace:^"

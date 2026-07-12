@@ -76,7 +76,7 @@ describe('PAS Object Derivation', () => {
 
 		it('should derive policy address for USDC (Balance-wrapped)', () => {
 			const policyId = derivePolicyAddress(
-				'0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC',
+				'0x6b7638d3d91245229f51f48d5c39bcb6ff7023ff022954a0bd94441d8ee20b4a::usdc::USDC',
 				packageConfig,
 			);
 			expect(policyId).toMatchInlineSnapshot(

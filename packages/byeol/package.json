@@ -1,0 +1,66 @@
+{
+	"name": "@haneullabs/byeol",
+	"author": "Haneul Labs <build@haneul-labs.com>",
+	"description": "Haneul Byeol SDK",
+	"version": "1.5.5",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./dist/index.mjs",
+	"types": "./dist/index.d.mts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.mts",
+			"import": "./dist/index.mjs",
+			"default": "./dist/index.mjs"
+		}
+	},
+	"files": [
+		"CHANGELOG.md",
+		"dist",
+		"src"
+	],
+	"engines": {
+		"node": ">=22"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues/new"
+	},
+	"scripts": {
+		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
+		"build": "rm -rf dist && tsc --noEmit && tsdown",
+		"codegen": "pnpm haneul-ts-codegen generate && pnpm lint:fix",
+		"prettier:check": "prettier -c --ignore-unknown .",
+		"prettier:fix": "prettier -w --ignore-unknown .",
+		"oxlint:check": "oxlint  .",
+		"oxlint:fix": "oxlint --fix",
+		"test": "vitest run",
+		"lint": "pnpm run oxlint:check && pnpm run prettier:check",
+		"lint:fix": "pnpm run oxlint:fix && pnpm run prettier:fix"
+	},
+	"dependencies": {
+		"@haneullabs/bcs": "workspace:^",
+		"@noble/hashes": "^2.2.0",
+		"axios": "^1.17.0",
+		"axios-retry": "^4.5.0"
+	},
+	"devDependencies": {
+		"@iarna/toml": "^2.2.5",
+		"@haneullabs/codegen": "workspace:^",
+		"@types/node": "^25.9.3",
+		"dotenv": "^17.4.2",
+		"tmp": "^0.2.7",
+		"ts-node": "^10.9.2",
+		"ts-retry-promise": "^0.8.1",
+		"typescript": "^6.0.3",
+		"vite": "^8.0.16",
+		"vitest": "^4.1.8",
+		"wait-on": "^9.0.10"
+	},
+	"peerDependencies": {
+		"@haneullabs/haneul": "workspace:^"
+	}
+}

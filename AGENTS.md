@@ -76,7 +76,7 @@ pnpm changeset-version
   - **wallet-standard/** - Wallet adapter implementation
   - **signers/** - Various signing solutions (AWS KMS, GCP KMS, Ledger, etc.)
   - **haneulns/** - Haneul Name Service integration
-  - **deepbook/** - DEX integration packages
+  - **byeol/** - DEX integration packages
   - **zksend/** - zkSend functionality
 
 ### Build System
@@ -163,6 +163,14 @@ When changing Core API behavior, use both of these to verify parity. Move test c
 - **`minor`**: New fields, methods, or types added to the public API (even if optional/additive)
 - **`major`**: Breaking changes to existing public API
 
+**Never manually edit the `version` field in any package's `package.json`.** Package versions are
+managed exclusively by changesets (`pnpm changeset` to add one, `pnpm changeset-version` to apply
+them at release time). Hand-bumping a version conflicts with the changesets workflow and breaks
+release automation. To get a package's version bumped, add a changeset describing the change — do not
+touch `version` directly. Likewise, prefer the root `pnpm.overrides` for forcing a transitive
+dependency version (for example, a security fix) rather than editing a published package's
+`dependencies`/`devDependencies`, which would change its manifest without a changeset.
+
 ### Development Workflow
 
 1. Changes require changesets for version management
@@ -183,7 +191,7 @@ Several packages depend on external repositories and remote schemas. These are u
 | `../haneulns-contracts` | HaneulNS Move contracts               | `@haneullabs/haneulns` codegen                                     |
 | `../haneul-payment-kit` | Payment kit Move contracts         | `@haneullabs/payment-kit` codegen                               |
 | `../walrus`          | Walrus storage contracts           | `@haneullabs/walrus` codegen                                    |
-| `../deepbookv3`      | DeepBook v3 DEX contracts          | `@haneullabs/deepbook-v3` codegen                               |
+| `../byeolv3`      | Byeol v3 DEX contracts          | `@haneullabs/byeol` codegen                               |
 | `../apps/kiosk`      | Kiosk Move contracts (optional)    | `@haneullabs/kiosk` codegen                                     |
 
 ### Remote Resources (fetched from GitHub)
@@ -199,7 +207,7 @@ Several packages depend on external repositories and remote schemas. These are u
 Some packages fetch contract ABIs directly from Haneul networks:
 
 - `@haneullabs/kiosk`: Haneul framework kiosk types (0x2) from testnet
-- `@haneullabs/deepbook-v3`: Pyth oracle package from testnet
+- `@haneullabs/byeol`: Pyth oracle package from testnet
 
 ### Pull Requests
 
@@ -223,6 +231,6 @@ pnpm --filter @haneullabs/haneul codegen:graphql
 # Generate Move contract bindings (various packages)
 pnpm --filter @haneullabs/payment-kit codegen
 pnpm --filter @haneullabs/walrus codegen
-pnpm --filter @haneullabs/deepbook-v3 codegen
+pnpm --filter @haneullabs/byeol codegen
 pnpm --filter @haneullabs/kiosk codegen
 ```

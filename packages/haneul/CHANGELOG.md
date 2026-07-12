@@ -1,5 +1,213 @@
 # @mysten/sui.js
 
+## 2.20.3
+
+### Patch Changes
+
+- 5028c01: Fix kind-only transaction builds (`onlyTransactionKind: true`) that reference an owned
+  object without a sender set (e.g. the seal use-case). The gRPC and GraphQL clients now disable
+  simulation validation checks when resolving kind-only builds, so a transaction that would fail to
+  simulate can still be serialized. Kind-only builds also no longer leak the dummy `0x0` sender used
+  for resolution back into the transaction data, matching the JSON-RPC client's behavior.
+
+## 2.20.2
+
+### Patch Changes
+
+- 36ab719: Fix pagination options being dropped on the unified core client.
+
+  `GraphQLCoreClient.listBalances` now forwards the `limit` and `cursor` options to the underlying
+  query (previously both were ignored, so it always returned the full, unpaginated list).
+  `GrpcCoreClient.listCoins` now forwards `limit` as the request `pageSize` (previously only
+  `cursor` was passed, so `limit` had no effect). This brings both methods in line with the other
+  transports and list methods.
+
+## 2.20.1
+
+### Patch Changes
+
+- 91c4ef5: Fix `CoinWithBalance` intent failing to build after a `toJSON`/`Transaction.from`
+  round-trip. Serializing a transaction with `CoinWithBalance` as a supported intent turns the
+  intent's `balance` into a string, which was not coerced back to a `bigint` on deserialization,
+  causing `ValiError: Invalid type: Expected bigint` when building the restored transaction.
+
+## 2.20.0
+
+### Minor Changes
+
+- 7452835: Add `ZkLoginSigner`, a transport- and provider-agnostic zkLogin signer. It wraps any
+  ephemeral `Signer` and transforms its signatures into zkLogin signatures using the supplied proof
+  `inputs` and `maxEpoch`:
+  `new ZkLoginSigner({ ephemeralSigner, maxEpoch, inputs, legacyAddress })`. The address is derived
+  from the proof; `legacyAddress` is a required boolean (consistent with `jwtToAddress`,
+  `toZkLoginPublicIdentifier`, and the other zkLogin address APIs). Optionally pass `address` to
+  validate the derived address (throws on mismatch) and `client` to make the derived public key able
+  to verify signatures. Like other composite signers (e.g. `MultiSigSigner`), calling `sign()`
+  directly throws — use `signTransaction` / `signPersonalMessage`.
+
+  Also adds a read-only `legacyAddress` getter to `ZkLoginPublicIdentifier`.
+
+## 2.19.0
+
+### Minor Changes
+
+- 2be98ce: Add `isValidSignature`, `isValidPersonalMessageSignature`, and
+  `isValidTransactionSignature` to `@mysten/sui/verify` — boolean-returning siblings of the existing
+  `verify*` functions, taking the same arguments. They return `false` for a malformed or invalid
+  signature (or one that doesn't match a supplied `address`) instead of throwing, while still
+  letting a genuine environmental failure during verification (e.g. a zkLogin JWK/epoch lookup)
+  propagate. The `verify*` functions now delegate to these.
+
+## 2.18.0
+
+### Minor Changes
+
+- b093d05: `Transaction.from` now accepts an optional `intentResolvers` option, a map of intent
+  names to resolvers. This lets you synchronously copy a transaction that still contains unresolved
+  custom intents without first awaiting `prepareForSerialization`. Built-in intents (such as
+  `CoinWithBalance`) continue to be handled automatically.
+- bbf63cb: Updated dependencies
+
+### Patch Changes
+
+- 4ca4c66: zkLogin: `genAddressSeed` now rejects key claim name, value, or aud that contain a JSON
+  escape (`"`, `\`, or a control character).
+- Updated dependencies [bbf63cb]
+  - @mysten/bcs@2.1.0
+  - @mysten/utils@0.4.0
+
+## 2.17.0
+
+### Minor Changes
+
+- 521ec28: Regenerate gRPC, GraphQL, and JSON-RPC types from upstream sources, and add a
+  `ForkingService` gRPC client for use against `sui-fork` instances.
+  - gRPC: `AccumulatorWrite` splits the old `value` field into `integerValue` / `integerTuple` /
+    `eventDigestValue` (authenticated events), with a new `EventDigestEntry` message and
+    `AccumulatorValue` enum.
+  - GraphQL: new `verifySignature` query (deprecates `verifyZkLoginSignature`), `IntentScope` enum,
+    `SignatureVerifyResult` type, `digest` arg on `Query.checkpoint`, and `version` field on
+    `TransactionEffects`.
+  - JSON-RPC: regenerated; `DisplayFieldsResponse.data` override from #993 is preserved.
+  - `SuiGrpcClient` now exposes a `forkingService` member built from
+    `sui/forking/v1alpha/forking_service.proto` (pulled from the `sui` repo, since it is not
+    mirrored in `sui-apis`). The service is admin-only and works only against `sui-fork` instances;
+    it serves on the same host/port as the regular Sui gRPC services on a fork.
+
+## 2.16.3
+
+### Patch Changes
+
+- 5900ad5: Always pass a `ValidDuring` expiration as a simulate-only override when the resolver has
+  to compute a gas budget and the caller hasn't set an expiration. The simulate inside
+  `setGasBudget` runs with `payment: []`, and the validator's replay-protection check rejects
+  payment-less transactions that lack both a `ValidDuring` expiration and an address-owned input.
+  Previously this affected gasless / free-tier PTBs over JSON-RPC ("Transactions must either have
+  address-owned inputs, or a ValidDuring expiration with at most two epochs of validity"); it also
+  affects any PTB whose only inputs are shared objects, pure args, or balance withdrawals. The
+  override is scoped to the simulate request — the final transaction's expiration is unchanged.
+
+## 2.16.2
+
+### Patch Changes
+
+- f7de3e5: Restore docs in published tarballs.
+- Updated dependencies [f7de3e5]
+  - @mysten/bcs@2.0.5
+  - @mysten/utils@0.3.3
+
+## 2.16.1
+
+### Patch Changes
+
+- 9e067cf: Validate the new per-package release flow end-to-end across every public @mysten package.
+  No functional changes — empty patch bump to force the orchestrator to dispatch every
+  release-<pkg>.yml workflow with `dry_run=false` so each package publishes via OIDC trusted
+  publishing.
+- Updated dependencies [9e067cf]
+  - @mysten/bcs@2.0.4
+  - @mysten/utils@0.3.2
+
+## 2.16.0
+
+### Minor Changes
+
+- 6adc085: Add `parseToUnits` and `parseToMist` balance parsing utilities using pure bigint
+  arithmetic.
+
+### Patch Changes
+
+- b1bf49a: Fix `extractMvrTypes` and `replaceMvrNames` to handle vector and primitive type
+  parameters. Previously, these functions passed all string type parameters directly to
+  `parseStructTag`, which produced corrupted results for vector types (e.g.,
+  `vector<@mvr/demo::baz::Qux>`) and threw on primitives (e.g., `u8`). Vector types are now
+  unwrapped and recursed into, and primitive types are passed through unchanged.
+
+## 2.15.0
+
+### Minor Changes
+
+- 43b2670: Re-export `GrpcWebFetchTransport`, `GrpcWebOptions`, and `RpcTransport` from
+  `@mysten/sui/grpc` so users can configure custom transports without adding `@protobuf-ts/*` as
+  direct dependencies.
+
+### Patch Changes
+
+- ef0b8a7: Error when mixing SUI CoinWithBalance intents that use the gas coin with ones that set
+  useGasCoin: false in the same transaction, preventing potential double-counting of address
+  balance.
+
+## 2.14.1
+
+### Patch Changes
+
+- 2d57e9c: Fix `normalizeStructTag` to reject top-level vector type strings with a clear error.
+  Previously, calling `normalizeStructTag('vector<0x2::sui::SUI>')` would produce a corrupted result
+  because the vector string was passed directly to `parseStructTag`, which misinterpreted it. The
+  function now throws an error directing callers to use `normalizeTypeTag` instead.
+- a3f2b49: Remove coin reservation feature flag check from core resolver
+
+## 2.14.0
+
+### Minor Changes
+
+- d0a401e: Update `Display.output` type from `Record<string, string>` to `Record<string, unknown>`
+  to match actual API behavior. Display v2 templates can produce structured JSON values (objects,
+  arrays) for fields that reference non-string Move types or use the `:json` transform. This affects
+  the core client type, the JSON-RPC `DisplayFieldsResponse` type, and all three transport
+  implementations (gRPC, GraphQL, JSON-RPC).
+
+## 2.13.4
+
+### Patch Changes
+
+- 2f76ba2: Revert removal of coin reservation feature flag check in core resolver
+
+## 2.13.3
+
+### Patch Changes
+
+- 3324a93: Remove `enable_coin_reservation_obj_refs` feature flag check from core resolver. Coin
+  reservation refs are now created whenever address balance is non-zero, removing the need for the
+  `getProtocolConfig` call during transaction building.
+
+## 2.13.2
+
+### Patch Changes
+
+- 0819c73: Fix JSON-RPC `defaultNameServiceName` returning `undefined` instead of `null` when no
+  name is found.
+- 8491b8e: Fix `parseStructTag` to reject malformed inputs: empty address/module/name components
+  (e.g. `::foo::Bar`) and trailing content after type parameters (e.g. `Coin<u8>GARBAGE`).
+
+## 2.13.1
+
+### Patch Changes
+
+- 82c2386: Fix JSON-RPC simulateTransaction includes when dryRun fails for non-public functions with
+  checksEnabled: false. balanceChanges and objectTypes no longer return incorrect data from failed
+  dryRun, and the transaction include no longer crashes for unbuilt Transaction objects.
+
 ## 2.13.0
 
 ### Minor Changes

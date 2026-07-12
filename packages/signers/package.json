@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/signers",
-	"version": "1.0.2",
+	"version": "1.1.5",
 	"description": "A collection of signers for various providers",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",
@@ -32,13 +32,8 @@
 		"CHANGELOG.md",
 		"LICENSE",
 		"README.md",
-		"aws",
 		"dist",
-		"gcp",
-		"ledger",
-		"src",
-		"src",
-		"webcrypto"
+		"src"
 	],
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
@@ -48,30 +43,25 @@
 		"oxlint:check": "oxlint  .",
 		"oxlint:fix": "oxlint --fix",
 		"lint": "pnpm run oxlint:check && pnpm run prettier:check",
-		"lint:fix": "pnpm run oxlint:fix && pnpm run prettier:fix",
-		"test": "vitest run"
+		"lint:fix": "pnpm run oxlint:fix && pnpm run prettier:fix"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
-	"homepage": "https://github.com/GeunhwaJeong/ts-sdks/tree/main/packages/signers#readme",
+	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/tree/main/packages/signers#readme",
 	"devDependencies": {
-		"@haneullabs/haneul": "workspace:^",
-		"@types/node": "^25.0.8",
-		"dotenv": "^17.2.3",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"@types/node": "^25.9.3",
+		"typescript": "^6.0.3"
 	},
 	"dependencies": {
-		"@google-cloud/kms": "^5.2.1",
-		"@haneullabs/ledgerjs-hw-app-haneul": "workspace:^",
-		"@noble/curves": "^2.0.1",
-		"@noble/hashes": "^2.0.1",
-		"asn1-ts": "^11.0.5"
+		"@haneullabs/aws-kms-signer": "workspace:^",
+		"@haneullabs/gcp-kms-signer": "workspace:^",
+		"@haneullabs/ledger-signer": "workspace:^",
+		"@haneullabs/webcrypto-signer": "workspace:^"
 	},
 	"engines": {
 		"node": ">=22"

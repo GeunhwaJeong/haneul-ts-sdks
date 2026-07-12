@@ -1,6 +1,7 @@
 ---
 title: Migrate to 2.0
-description: Migration guide for Haneul TypeScript SDK 2.0
+description: Migration guide for Haneul TypeScript SDK 2.0 covering all @haneullabs packages.
+keywords: [migration, 2.0, upgrade, breaking changes, gRPC, GraphQL, ESM, '@haneullabs packages']
 ---
 
 This guide covers the breaking changes across the latest release of all the `@haneullabs/*` packages.
@@ -10,24 +11,24 @@ SDKs. These releases also include removals of deprecated APIs, some renaming for
 and significant internal refactoring to improve maintainability. Starting with this release, Haneullabs
 packages will now be published as ESM only packages.
 
-## Quick Reference
+## Quick reference
 
 | Package                                                               | Key Changes                                                                              |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| [@haneullabs/haneul](/haneul/migrations/haneul-2.0/haneul)                            | Client API stabilization, HaneulClient removal, BCS schema alignment, transaction executors |
-| [@haneullabs/dapp-kit](/haneul/migrations/haneul-2.0/dapp-kit)                  | Complete rewrite with framework-agnostic core                                            |
-| [@haneullabs/kiosk](/haneul/migrations/haneul-2.0/kiosk)                        | Client extension pattern, low-level helpers removed, KioskTransaction pattern            |
-| [@haneullabs/zksend](/haneul/migrations/haneul-2.0/zksend)                      | Client extension pattern                                                                 |
-| [@haneullabs/haneulns](/haneul/migrations/haneul-2.0/haneulns)                        | Client extension pattern                                                                 |
-| [@haneullabs/deepbook-v3](/haneul/migrations/haneul-2.0/deepbook-v3)            | Client extension pattern                                                                 |
-| [@haneullabs/walrus](/haneul/migrations/haneul-2.0/walrus)                      | Client extension pattern, requires client instead of RPC URL                             |
-| [@haneullabs/seal](/haneul/migrations/haneul-2.0/seal)                          | Client extension pattern                                                                 |
-| [@haneullabs/wallet-standard](/haneul/migrations/haneul-2.0/wallet-builders)    | Removal of reportTransactionEffects, new core API response format                        |
+| [`@haneullabs/haneul`](/haneul/migrations/haneul-2.0/haneul)                          | Client API stabilization, HaneulClient removal, BCS schema alignment, transaction executors |
+| [`@haneullabs/dapp-kit`](/haneul/migrations/haneul-2.0/dapp-kit)                | Complete rewrite with framework-agnostic core                                            |
+| [`@haneullabs/kiosk`](/haneul/migrations/haneul-2.0/kiosk)                      | Client extension pattern, low-level helpers removed, KioskTransaction pattern            |
+| [`@haneullabs/zksend`](/haneul/migrations/haneul-2.0/zksend)                    | Client extension pattern                                                                 |
+| [`@haneullabs/haneulns`](/haneul/migrations/haneul-2.0/haneulns)                      | Client extension pattern                                                                 |
+| [`@haneullabs/byeol`](/haneul/migrations/haneul-2.0/byeol)          | Client extension pattern                                                                 |
+| [`@haneullabs/walrus`](/haneul/migrations/haneul-2.0/walrus)                    | Client extension pattern, requires client instead of RPC URL                             |
+| [`@haneullabs/seal`](/haneul/migrations/haneul-2.0/seal)                        | Client extension pattern                                                                 |
+| [`@haneullabs/wallet-standard`](/haneul/migrations/haneul-2.0/wallet-builders)  | Removal of reportTransactionEffects, new core API response format                        |
 | [Migrating from JSON-RPC](/haneul/migrations/haneul-2.0/json-rpc-migration) | Migrate from deprecated JSON-RPC to gRPC and GraphQL                                     |
 
-## Common Migration Patterns
+## Common migration patterns
 
-### ESM Migration
+### ESM migration
 
 All `@haneullabs/*` packages are now ESM only. If your project does not already use ESM, you will need
 to add `"type": "module"` to your `package.json`:
@@ -50,13 +51,13 @@ need to update your `tsconfig.json` to use `"NodeNext"`, `"Node16"`, or `"Bundle
 }
 ```
 
-This enables proper resolution of the SDK's subpath exports (e.g., `@haneullabs/haneul/client`,
+This enables proper resolution of the SDK's subpath exports (for example, `@haneullabs/haneul/client`,
 `@haneullabs/haneul/transactions`).
 
-If you maintain a library that depends on any of the `@haneullabs/*` packages, you may also need to
+If you maintain a library that depends on any of the `@haneullabs/*` packages, you might also need to
 update your library to be ESM only to ensure it works correctly everywhere.
 
-Applications using bundlers and recent Node.js versions (>=22) may still work when using `require`
+Applications using bundlers and recent Node.js versions (>=22) might still work when using `require`
 to load ESM packages, but we recommend migrating to ESM.
 
 **Why ESM only?** Many packages in the ecosystem (specifically critical cryptography dependencies)
@@ -64,7 +65,7 @@ are now published as ESM only. Supporting CommonJS has prevented us from using t
 of these dependencies, making our SDKs harder to maintain and risking missing critical security
 updates.
 
-### Client Migration
+### Client migration
 
 The most common change across all SDKs is migrating from `HaneulClient` to `HaneulJsonRpcClient`:
 
@@ -79,7 +80,7 @@ The most common change across all SDKs is migrating from `HaneulClient` to `Hane
 + });
 ```
 
-We also recommend moving from the deprecated JSON RPC Apis to the new gRPC API as soon as possible:
+We also recommend moving from the deprecated JSON RPC APIs to the new gRPC API as soon as possible:
 
 ```diff
 - import { HaneulJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
@@ -92,7 +93,7 @@ We also recommend moving from the deprecated JSON RPC Apis to the new gRPC API a
 The gRPC runs on full nodes so in most cases you should be able to use the same URLs when migrating
 to gRPC.
 
-### Network Parameter Required
+### Network parameter required
 
 All client constructors now require an explicit `network` parameter:
 
@@ -108,12 +109,12 @@ const graphqlClient = new HaneulGraphQLClient({
 });
 
 const grpcClient = new HaneulGrpcClient({
-	baseUrl: 'https://fullnode.mainnet.haneul.io:443',
+	baseUrl: 'http://158.69.54.239:9000',
 	network: 'mainnet', // Required
 });
 ```
 
-### ClientWithCoreApi Interface
+### `ClientWithCoreApi` Interface
 
 Many SDK methods now accept any client implementing `ClientWithCoreApi`, enabling use with JSON-RPC,
 GraphQL, or gRPC transports:
@@ -129,34 +130,47 @@ const graphqlClient = new HaneulGraphQLClient({ url, network: 'mainnet' });
 const grpcClient = new HaneulGrpcClient({ baseUrl, network: 'mainnet' });
 ```
 
-## Package-Specific Guides
+## Package-specific guides
 
 For detailed migration instructions, see the SDK-specific guides:
 
-- **[@haneullabs/haneul](/haneul/migrations/haneul-2.0/haneul)** - Core SDK changes including client API, BCS
+- **[`@haneullabs/haneul`](/haneul/migrations/haneul-2.0/haneul):** Core SDK changes including client API, BCS
   schemas, transactions, zkLogin, and GraphQL
-- **[@haneullabs/dapp-kit](/haneul/migrations/haneul-2.0/dapp-kit)** - Complete migration guide for the new
-  dApp Kit architecture
-- **[@haneullabs/kiosk](/haneul/migrations/haneul-2.0/kiosk)** - Kiosk SDK now exports a client extension,
+- **[`@haneullabs/dapp-kit`](/haneul/migrations/haneul-2.0/dapp-kit):** Complete migration guide for the new
+  dApp kit architecture
+- **[`@haneullabs/kiosk`](/haneul/migrations/haneul-2.0/kiosk):** Kiosk SDK now exports a client extension,
   low-level helpers removed
-- **[@haneullabs/zksend](/haneul/migrations/haneul-2.0/zksend)** - zkSend SDK now exports a client extension
-- **[@haneullabs/haneulns](/haneul/migrations/haneul-2.0/haneulns)** - HaneulNS now exports a client extension
-- **[@haneullabs/deepbook-v3](/haneul/migrations/haneul-2.0/deepbook-v3)** - DeepBook DEX now exports a client
+- **[`@haneullabs/zksend`](/haneul/migrations/haneul-2.0/zksend):** zkSend SDK now exports a client extension
+- **[`@haneullabs/haneulns`](/haneul/migrations/haneul-2.0/haneulns):** HaneulNS now exports a client extension
+- **[`@haneullabs/byeol`](/haneul/migrations/haneul-2.0/byeol):** Byeol DEX now exports a
+  client extension
+- **[`@haneullabs/walrus`](/haneul/migrations/haneul-2.0/walrus):** Walrus storage now exports a client
   extension
-- **[@haneullabs/walrus](/haneul/migrations/haneul-2.0/walrus)** - Walrus storage now exports a client
-  extension
-- **[@haneullabs/seal](/haneul/migrations/haneul-2.0/seal)** - Seal encryption now exports a client extension
+- **[`@haneullabs/seal`](/haneul/migrations/haneul-2.0/seal):** Seal encryption now exports a client extension
 
-## Transport Migration
+## Transport migration
 
-- **[Migrating from JSON-RPC](/haneul/migrations/haneul-2.0/json-rpc-migration)** - Migrate from the
+- **[Migrating from JSON-RPC](/haneul/migrations/haneul-2.0/json-rpc-migration):** Migrate from the
   deprecated JSON-RPC client to gRPC and GraphQL
 
-## Ecosystem Migration Guides
+## Ecosystem migration guides
 
 For wallet builders and SDK maintainers building on the Haneul ecosystem:
 
-- **[Wallet Builders](/haneul/migrations/haneul-2.0/wallet-builders)** - Guide for wallet implementations
+- **[Wallet builders](/haneul/migrations/haneul-2.0/wallet-builders):** Guide for wallet implementations
   adapting to `reportTransactionEffects` removal and new core API response format
-- **[SDK Maintainers](/haneul/migrations/haneul-2.0/sdk-maintainers)** - Guide for SDK authors migrating
-  to `ClientWithCoreApi` and the new transport-agnostic architecture
+- **[SDK maintainers](/haneul/migrations/haneul-2.0/sdk-maintainers):** Guide for SDK authors migrating to
+  `ClientWithCoreApi` and the new transport-agnostic architecture
+
+## Non-existent objects
+
+When migrating from the v1 SDK to the v2 SDK, review any code paths that read objects or dynamic
+fields that may not exist.
+
+In v1, methods such as `core.getObject` and `getDynamicField` return `null` when the requested
+object or field does not exist. In v2, the same operations throw an exception instead. Applications
+that previously relied on `null` checks should be updated to handle exceptions appropriately, either
+through try/catch blocks or by validating object existence before attempting to read it.
+
+This behavioral change may require updates to error handling logic to avoid unexpected runtime
+failures after migration.

@@ -78,7 +78,7 @@ client for all operations. The default URLs to connect with the gRPC server are:
 - local: http://127.0.0.1:9000
 - Devnet: https://fullnode.devnet.haneul.io:443
 - Testnet: https://fullnode.testnet.haneul.io:443
-- Mainnet: https://fullnode.mainnet.haneul.io:443
+- Mainnet: http://158.69.54.239:9000
 
 ```typescript
 import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';

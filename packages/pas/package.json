@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/pas",
-	"version": "0.0.2",
+	"version": "0.2.5",
 	"private": false,
 	"description": "Permissioned Assets Standard SDK",
 	"license": "Apache-2.0",
@@ -26,10 +26,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GeunhwaJeong/ts-sdks.git"
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
 	},
 	"bugs": {
-		"url": "https://github.com/GeunhwaJeong/ts-sdks/issues"
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues"
 	},
 	"scripts": {
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
@@ -48,12 +48,11 @@
 	},
 	"devDependencies": {
 		"@haneullabs/codegen": "workspace:^",
-		"@haneullabs/haneul": "workspace:^",
-		"@types/node": "^25.0.8",
+		"@types/node": "^25.9.3",
 		"ts-retry-promise": "^0.8.1",
-		"tsdown": "0.20.0-beta.1",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"tsdown": "0.22.2",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.8"
 	},
 	"peerDependencies": {
 		"@haneullabs/haneul": "workspace:^"
