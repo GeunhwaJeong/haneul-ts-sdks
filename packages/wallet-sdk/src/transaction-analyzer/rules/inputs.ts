@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { HaneulClientTypes } from '@haneullabs/haneul/client';
-import { normalizeStructTag } from '@haneullabs/haneul/utils';
+import { normalizeStructTag, normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import { createAnalyzer } from '../analyzer.js';
 import { data } from './core.js';
 import { objectsById } from './objects.js';
@@ -21,14 +21,22 @@ export type AnalyzedCommandInput =
 			object: HaneulClientTypes.Object<{ content: true }>;
 			accessLevel: 'read' | 'mutate' | 'transfer';
 	  }
-	| {
+	| ({
 			$kind: 'Withdrawal';
 			index: number;
 			amount: bigint;
 			coinType: string;
-			withdrawFrom: 'Sender' | 'Sponsor';
 			accessLevel: 'read' | 'mutate' | 'transfer';
-	  };
+	  } & (
+			| { withdrawFrom: 'Sender' | 'Sponsor' }
+			| {
+					withdrawFrom: 'SenderAllowance';
+					/** The address whose balance is debited. */
+					funder: string;
+					/** The allowance object authorizing the withdrawal. */
+					allowance: string;
+			  }
+	  ));
 
 export const inputs = createAnalyzer({
 	dependencies: { data, objectsById },
@@ -78,25 +86,33 @@ export const inputs = createAnalyzer({
 										`Unsupported FundsWithdrawal typeArg: ${JSON.stringify(typeArg)}`,
 									);
 							}
-							let withdrawFromKind: 'Sender' | 'Sponsor';
 							switch (withdrawFrom.$kind) {
 								case 'Sender':
 								case 'Sponsor':
-									withdrawFromKind = withdrawFrom.$kind;
-									break;
+									return {
+										$kind: 'Withdrawal',
+										index,
+										amount: BigInt(reservation.MaxAmountU64),
+										coinType,
+										withdrawFrom: withdrawFrom.$kind,
+										accessLevel: 'transfer',
+									};
+								case 'SenderAllowance':
+									return {
+										$kind: 'Withdrawal',
+										index,
+										amount: BigInt(reservation.MaxAmountU64),
+										coinType,
+										withdrawFrom: 'SenderAllowance',
+										funder: normalizeHaneulAddress(withdrawFrom.SenderAllowance.funder),
+										allowance: normalizeHaneulAddress(withdrawFrom.SenderAllowance.allowance),
+										accessLevel: 'transfer',
+									};
 								default:
 									throw new Error(
 										`Unsupported FundsWithdrawal source: ${JSON.stringify(withdrawFrom)}`,
 									);
 							}
-							return {
-								$kind: 'Withdrawal',
-								index,
-								amount: BigInt(reservation.MaxAmountU64),
-								coinType,
-								withdrawFrom: withdrawFromKind,
-								accessLevel: 'transfer',
-							};
 						}
 						default:
 							throw new Error(`Unknown input type: ${JSON.stringify(input)}`);

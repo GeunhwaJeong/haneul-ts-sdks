@@ -1,7 +1,35 @@
 ---
 title: LLM Documentation
 description: Give AI agents access to Haneul SDK documentation in your project.
-keywords: [LLM, AI agents, documentation, Claude Code, Cursor, Copilot, '@haneullabs', SDK docs]
+keywords:
+  - LLM
+  - AI agents
+  - documentation
+  - Claude Code
+  - Cursor
+  - Copilot
+  - '@haneullabs'
+  - SDK docs
+questions:
+  - Where are the LLM-friendly Haneul SDK docs?
+  - How do I use Haneul SDK docs with AI tools?
+answer: >-
+  LLM-friendly documentation provides plain-text versions of the Haneul SDK docs optimized for
+  consumption by AI coding assistants and language models.
+goal:
+  description: Reader understands how to access LLM-optimized documentation for the Haneul SDK
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 30
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 Every `@haneullabs/*` package ships a `docs/` directory containing flat markdown files optimized for AI

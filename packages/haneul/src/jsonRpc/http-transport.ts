@@ -6,9 +6,15 @@ import { JsonRpcError, HaneulHTTPStatusError } from './errors.js';
 
 /**
  * An object defining headers to be passed to the RPC server
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
  */
 export type HttpHeaders = { [header: string]: string };
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export interface JsonRpcHTTPTransportOptions {
 	fetch?: typeof fetch;
 	url: string;
@@ -18,24 +24,44 @@ export interface JsonRpcHTTPTransportOptions {
 	};
 }
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export interface JsonRpcTransportRequestOptions {
 	method: string;
 	params: unknown[];
 	signal?: AbortSignal;
 }
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export interface JsonRpcTransport {
 	request<T = unknown>(input: JsonRpcTransportRequestOptions): Promise<T>;
 }
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export class JsonRpcHTTPTransport implements JsonRpcTransport {
 	#requestId = 0;
 	#options: JsonRpcHTTPTransportOptions;
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	constructor(options: JsonRpcHTTPTransportOptions) {
 		this.#options = options;
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
 		const fetchFn = this.#options.fetch ?? fetch;
 
@@ -48,6 +74,10 @@ export class JsonRpcHTTPTransport implements JsonRpcTransport {
 		return fetchFn(input, init);
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async request<T>(input: JsonRpcTransportRequestOptions): Promise<T> {
 		this.#requestId += 1;
 

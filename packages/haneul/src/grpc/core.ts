@@ -2,12 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { CoreClientOptions, HaneulClientTypes } from '../client/index.js';
-import { CoreClient, formatMoveAbortMessage, SimulationError } from '../client/index.js';
+import {
+	CoreClient,
+	formatMoveAbortMessage,
+	ObjectError,
+	SimulationError,
+	TransactionError,
+} from '../client/index.js';
+import { raceSignal } from '../client/mvr.js';
 import type { HaneulGrpcClient } from './client.js';
 import type { Owner } from './proto/haneul/rpc/v2/owner.js';
 import { Owner_OwnerKind } from './proto/haneul/rpc/v2/owner.js';
 import { chunk, fromBase64, toBase64 } from '@haneullabs/utils';
-import type { ExecutedTransaction } from './proto/haneul/rpc/v2/executed_transaction.js';
 import type { TransactionEffects } from './proto/haneul/rpc/v2/effects.js';
 import {
 	UnchangedConsensusObject_UnchangedConsensusObjectKind,
@@ -43,12 +49,50 @@ import {
 	transactionToGrpcTransaction,
 	grpcTransactionToTransactionData,
 } from '../client/transaction-resolver.js';
+import { setAddressBalanceTransactionExpirationFromSimulatedEpoch } from '../client/address-balance-transaction-expiration.js';
+import { transactionBytesHaveEmptyGasPayment } from '../client/utils.js';
 import { Value } from './proto/google/protobuf/struct.js';
-import { SimulateTransactionRequest_TransactionChecks } from './proto/haneul/rpc/v2/transaction_execution_service.js';
+import { ExecutedTransaction } from './proto/haneul/rpc/v2/executed_transaction.js';
+import {
+	SimulateTransactionRequest_TransactionChecks,
+	SimulateTransactionResponse,
+} from './proto/haneul/rpc/v2/transaction_execution_service.js';
+import type { QueryEnd, QueryOptions } from './proto/haneul/rpc/v2/query_options.js';
+import { Ordering, QueryEndReason } from './proto/haneul/rpc/v2/query_options.js';
+import type { ResolvedPagination } from '../client/query-filters.js';
+import { RpcError } from '@protobuf-ts/runtime-rpc';
+import { GrpcStatusCode } from '@protobuf-ts/grpcweb-transport';
+import {
+	resolveEventFilter,
+	resolvePagination,
+	resolveTransactionFilter,
+	validateTransactionQuery,
+} from '../client/query-filters.js';
+import { toGrpcEventFilter, toGrpcTransactionFilter } from './filters.js';
+import { hasDecodedStatusMessage } from './transport.js';
 
 export interface GrpcCoreClientOptions extends CoreClientOptions {
 	client: HaneulGrpcClient;
 }
+
+function isNameServiceResolutionMiss(error: unknown): boolean {
+	// Read by shape, so an error from another copy of runtime-rpc is still recognised.
+	if (typeof error !== 'object' || error === null) return false;
+
+	const { code, message } = error as { code?: unknown; message?: unknown };
+	if (typeof code !== 'string' || typeof message !== 'string') return false;
+
+	if (code === GrpcStatusCode[GrpcStatusCode.NOT_FOUND]) return true;
+	if (code !== GrpcStatusCode[GrpcStatusCode.RESOURCE_EXHAUSTED]) return false;
+
+	// The service reports an expired name as RESOURCE_EXHAUSTED with no structured reason, so match
+	// the status text and leave other RESOURCE_EXHAUSTED failures alone. A transport this package did
+	// not build leaves `grpc-message` encoded, hence the second form.
+	if (message === 'name has expired') return true;
+
+	return !hasDecodedStatusMessage(error) && message === 'name%20has%20expired';
+}
+
 export class GrpcCoreClient extends CoreClient {
 	#client: HaneulGrpcClient;
 	constructor({ client, ...options }: GrpcCoreClientOptions) {
@@ -80,59 +124,84 @@ export class GrpcCoreClient extends CoreClient {
 		}
 
 		for (const batch of batches) {
-			const response = await this.#client.ledgerService.batchGetObjects({
-				requests: batch.map((id) => ({ objectId: id })),
-				readMask: {
-					paths,
+			const response = await this.#client.ledgerService.batchGetObjects(
+				{
+					requests: batch.map((id) => ({ objectId: id })),
+					readMask: {
+						paths,
+					},
 				},
-			});
+				{ abort: options.signal },
+			);
 
 			results.push(
-				...response.response.objects.map((object): HaneulClientTypes.Object<Include> | Error => {
-					if (object.result.oneofKind === 'error') {
-						// TODO: improve error handling
-						return new Error(object.result.error.message);
-					}
+				...response.response.objects.map(
+					(object, index): HaneulClientTypes.Object<Include> | ObjectError => {
+						if (object.result.oneofKind === 'error') {
+							const error = object.result.error;
+							if (error.code === GrpcStatusCode.NOT_FOUND) {
+								// Special case for backwards compatibility: missing objects reuse
+								// the long-standing JSON-RPC `notExists` code instead of the gRPC
+								// status name, so handlers written against earlier releases keep
+								// working.
+								return new ObjectError('notExists', error.message, {
+									cause: error,
+									reason: 'notFound',
+									objectId: batch[index],
+								});
+							}
+							// Other statuses use the gRPC status name (for example `INTERNAL`),
+							// never the raw status number.
+							return new ObjectError(GrpcStatusCode[error.code] ?? 'unknown', error.message, {
+								cause: error,
+								reason: 'unknown',
+								objectId: batch[index],
+							});
+						}
 
-					if (object.result.oneofKind !== 'object') {
-						return new Error('Unexpected result type');
-					}
+						if (object.result.oneofKind !== 'object') {
+							return new ObjectError('unknown', 'Unexpected result type', {
+								reason: 'unknown',
+								objectId: batch[index],
+							});
+						}
 
-					const bcsContent = object.result.object.contents?.value ?? undefined;
-					const objectBcs = object.result.object.bcs?.value ?? undefined;
+						const bcsContent = object.result.object.contents?.value ?? undefined;
+						const objectBcs = object.result.object.bcs?.value ?? undefined;
 
-					// Package objects have type "package" which is not a struct tag, so don't normalize it
-					const objectType = object.result.object.objectType;
-					const type =
-						objectType && objectType.includes('::')
-							? normalizeStructTag(objectType)
-							: (objectType ?? '');
+						// Package objects have type "package" which is not a struct tag, so don't normalize it
+						const objectType = object.result.object.objectType;
+						const type =
+							objectType && objectType.includes('::')
+								? normalizeStructTag(objectType)
+								: (objectType ?? '');
 
-					const jsonContent = options.include?.json
-						? object.result.object.json
-							? (Value.toJson(object.result.object.json) as Record<string, unknown>)
-							: null
-						: undefined;
+						const jsonContent = options.include?.json
+							? object.result.object.json
+								? (Value.toJson(object.result.object.json) as Record<string, unknown>)
+								: null
+							: undefined;
 
-					const displayData = mapDisplayProto(
-						options.include?.display,
-						object.result.object.display,
-					);
+						const displayData = mapDisplayProto(
+							options.include?.display,
+							object.result.object.display,
+						);
 
-					return {
-						objectId: object.result.object.objectId!,
-						version: object.result.object.version?.toString()!,
-						digest: object.result.object.digest!,
-						content: bcsContent as HaneulClientTypes.Object<Include>['content'],
-						owner: mapOwner(object.result.object.owner)!,
-						type,
-						previousTransaction: (object.result.object.previousTransaction ??
-							undefined) as HaneulClientTypes.Object<Include>['previousTransaction'],
-						objectBcs: objectBcs as HaneulClientTypes.Object<Include>['objectBcs'],
-						json: jsonContent as HaneulClientTypes.Object<Include>['json'],
-						display: displayData as HaneulClientTypes.Object<Include>['display'],
-					};
-				}),
+						return {
+							objectId: object.result.object.objectId!,
+							version: object.result.object.version?.toString()!,
+							digest: object.result.object.digest!,
+							content: bcsContent as HaneulClientTypes.Object<Include>['content'],
+							owner: mapOwner(object.result.object.owner)!,
+							type,
+							previousTransaction: (object.result.object.previousTransaction ??
+								undefined) as HaneulClientTypes.Object<Include>['previousTransaction'],
+							objectBcs: objectBcs as HaneulClientTypes.Object<Include>['objectBcs'],
+							json: jsonContent as HaneulClientTypes.Object<Include>['json'],
+							display: displayData as HaneulClientTypes.Object<Include>['display'],
+						};
+					},
+				),
 			);
 		}
 
@@ -160,40 +229,41 @@ export class GrpcCoreClient extends CoreClient {
 			paths.push('display');
 		}
 
-		const response = await this.#client.stateService.listOwnedObjects({
-			owner: options.owner,
-			objectType: options.type
-				? (await this.mvr.resolveType({ type: options.type })).type
-				: undefined,
-			pageToken: options.cursor ? fromBase64(options.cursor) : undefined,
-			pageSize: options.limit,
-			readMask: {
-				paths,
+		const response = await this.#client.stateService.listOwnedObjects(
+			{
+				owner: options.owner,
+				objectType: options.type
+					? (await this.mvr.resolveType({ type: options.type, signal: options.signal })).type
+					: undefined,
+				pageToken: options.cursor ? fromBase64(options.cursor) : undefined,
+				pageSize: options.limit,
+				readMask: {
+					paths,
+				},
 			},
-		});
-
-		const objects = response.response.objects.map(
-			(object): HaneulClientTypes.Object<Include> => ({
-				objectId: object.objectId!,
-				version: object.version?.toString()!,
-				digest: object.digest!,
-				content: object.contents?.value as HaneulClientTypes.Object<Include>['content'],
-				owner: mapOwner(object.owner)!,
-				type: object.objectType!,
-				previousTransaction: (object.previousTransaction ??
-					undefined) as HaneulClientTypes.Object<Include>['previousTransaction'],
-				objectBcs: object.bcs?.value as HaneulClientTypes.Object<Include>['objectBcs'],
-				json: (options.include?.json
-					? object.json
-						? (Value.toJson(object.json) as Record<string, unknown>)
-						: null
-					: undefined) as HaneulClientTypes.Object<Include>['json'],
-				display: mapDisplayProto(
-					options.include?.display,
-					object.display,
-				) as HaneulClientTypes.Object<Include>['display'],
-			}),
+			{ abort: options.signal },
 		);
+
+		const objects = response.response.objects.map((object): HaneulClientTypes.Object<Include> => ({
+			objectId: object.objectId!,
+			version: object.version?.toString()!,
+			digest: object.digest!,
+			content: object.contents?.value as HaneulClientTypes.Object<Include>['content'],
+			owner: mapOwner(object.owner)!,
+			type: object.objectType!,
+			previousTransaction: (object.previousTransaction ??
+				undefined) as HaneulClientTypes.Object<Include>['previousTransaction'],
+			objectBcs: object.bcs?.value as HaneulClientTypes.Object<Include>['objectBcs'],
+			json: (options.include?.json
+				? object.json
+					? (Value.toJson(object.json) as Record<string, unknown>)
+					: null
+				: undefined) as HaneulClientTypes.Object<Include>['json'],
+			display: mapDisplayProto(
+				options.include?.display,
+				object.display,
+			) as HaneulClientTypes.Object<Include>['display'],
+		}));
 
 		return {
 			objects,
@@ -207,27 +277,28 @@ export class GrpcCoreClient extends CoreClient {
 		const paths = ['owner', 'object_type', 'digest', 'version', 'object_id', 'balance'];
 		const coinType = options.coinType ?? HANEUL_TYPE_ARG;
 
-		const response = await this.#client.stateService.listOwnedObjects({
-			owner: options.owner,
-			objectType: `0x2::coin::Coin<${(await this.mvr.resolveType({ type: coinType })).type}>`,
-			pageToken: options.cursor ? fromBase64(options.cursor) : undefined,
-			pageSize: options.limit,
-			readMask: {
-				paths,
+		const response = await this.#client.stateService.listOwnedObjects(
+			{
+				owner: options.owner,
+				objectType: `0x2::coin::Coin<${(await this.mvr.resolveType({ type: coinType, signal: options.signal })).type}>`,
+				pageToken: options.cursor ? fromBase64(options.cursor) : undefined,
+				pageSize: options.limit,
+				readMask: {
+					paths,
+				},
 			},
-		});
+			{ abort: options.signal },
+		);
 
 		return {
-			objects: response.response.objects.map(
-				(object): HaneulClientTypes.Coin => ({
-					objectId: object.objectId!,
-					version: object.version?.toString()!,
-					digest: object.digest!,
-					owner: mapOwner(object.owner)!,
-					type: object.objectType!,
-					balance: object.balance?.toString()!,
-				}),
-			),
+			objects: response.response.objects.map((object): HaneulClientTypes.Coin => ({
+				objectId: object.objectId!,
+				version: object.version?.toString()!,
+				digest: object.digest!,
+				owner: mapOwner(object.owner)!,
+				type: object.objectType!,
+				balance: object.balance?.toString()!,
+			})),
 			cursor: response.response.nextPageToken ? toBase64(response.response.nextPageToken) : null,
 			hasNextPage: response.response.nextPageToken !== undefined,
 		};
@@ -237,10 +308,13 @@ export class GrpcCoreClient extends CoreClient {
 		options: HaneulClientTypes.GetBalanceOptions,
 	): Promise<HaneulClientTypes.GetBalanceResponse> {
 		const coinType = options.coinType ?? HANEUL_TYPE_ARG;
-		const result = await this.#client.stateService.getBalance({
-			owner: options.owner,
-			coinType: (await this.mvr.resolveType({ type: coinType })).type,
-		});
+		const result = await this.#client.stateService.getBalance(
+			{
+				owner: options.owner,
+				coinType: (await this.mvr.resolveType({ type: coinType, signal: options.signal })).type,
+			},
+			{ abort: options.signal },
+		);
 
 		return {
 			balance: {
@@ -255,14 +329,23 @@ export class GrpcCoreClient extends CoreClient {
 	async getCoinMetadata(
 		options: HaneulClientTypes.GetCoinMetadataOptions,
 	): Promise<HaneulClientTypes.GetCoinMetadataResponse> {
-		const coinType = (await this.mvr.resolveType({ type: options.coinType })).type;
+		const coinType = (
+			await this.mvr.resolveType({ type: options.coinType, signal: options.signal })
+		).type;
 
 		let response;
 		try {
-			({ response } = await this.#client.stateService.getCoinInfo({
-				coinType,
-			}));
-		} catch {
+			({ response } = await this.#client.stateService.getCoinInfo(
+				{
+					coinType,
+				},
+				{ abort: options.signal },
+			));
+		} catch (error) {
+			// Don't swallow cancellation — only treat the coin as missing on real errors.
+			if (options.signal?.aborted) {
+				throw error;
+			}
 			return { coinMetadata: null };
 		}
 
@@ -285,11 +368,14 @@ export class GrpcCoreClient extends CoreClient {
 	async listBalances(
 		options: HaneulClientTypes.ListBalancesOptions,
 	): Promise<HaneulClientTypes.ListBalancesResponse> {
-		const result = await this.#client.stateService.listBalances({
-			owner: options.owner,
-			pageToken: options.cursor ? fromBase64(options.cursor) : undefined,
-			pageSize: options.limit,
-		});
+		const result = await this.#client.stateService.listBalances(
+			{
+				owner: options.owner,
+				pageToken: options.cursor ? fromBase64(options.cursor) : undefined,
+				pageSize: options.limit,
+			},
+			{ abort: options.signal },
+		);
 
 		return {
 			hasNextPage: !!result.response.nextPageToken,
@@ -305,129 +391,69 @@ export class GrpcCoreClient extends CoreClient {
 	async getTransaction<Include extends HaneulClientTypes.TransactionInclude = {}>(
 		options: HaneulClientTypes.GetTransactionOptions<Include>,
 	): Promise<HaneulClientTypes.TransactionResult<Include>> {
-		const paths = ['digest', 'transaction.digest', 'signatures', 'effects.status'];
-		if (options.include?.transaction) {
-			paths.push(
-				'transaction.sender',
-				'transaction.gas_payment',
-				'transaction.expiration',
-				'transaction.kind',
+		try {
+			const { response } = await this.#client.ledgerService.getTransaction(
+				{
+					digest: options.digest,
+					readMask: {
+						paths: transactionReadMaskPaths(options.include),
+					},
+				},
+				{ abort: options.signal },
 			);
-		}
-		if (options.include?.bcs) {
-			paths.push('transaction.bcs');
-		}
-		if (options.include?.balanceChanges) {
-			paths.push('balance_changes');
-		}
-		if (options.include?.effects) {
-			paths.push('effects');
-		}
-		if (options.include?.events) {
-			paths.push('events');
-		}
-		if (options.include?.objectTypes) {
-			paths.push('effects.changed_objects.object_type');
-			paths.push('effects.changed_objects.object_id');
-		}
 
-		const { response } = await this.#client.ledgerService.getTransaction({
-			digest: options.digest,
-			readMask: {
-				paths,
-			},
-		});
+			if (!response.transaction) {
+				throw new TransactionError('notFound', options.digest);
+			}
 
-		if (!response.transaction) {
-			throw new Error(`Transaction ${options.digest} not found`);
+			return withProtoJson(
+				parseGrpcTransactionResponse(response.transaction, { include: options.include }),
+				options.include,
+				() => ExecutedTransaction.toJson(response.transaction!),
+			);
+		} catch (error) {
+			if (error instanceof RpcError && error.code === GrpcStatusCode[GrpcStatusCode.NOT_FOUND]) {
+				throw new TransactionError('notFound', options.digest, { cause: error });
+			}
+			throw error;
 		}
-
-		return parseTransaction(response.transaction, options.include);
 	}
 	async executeTransaction<Include extends HaneulClientTypes.TransactionInclude = {}>(
 		options: HaneulClientTypes.ExecuteTransactionOptions<Include>,
 	): Promise<HaneulClientTypes.TransactionResult<Include>> {
-		const paths = ['digest', 'transaction.digest', 'signatures', 'effects.status'];
-		if (options.include?.transaction) {
-			paths.push(
-				'transaction.sender',
-				'transaction.gas_payment',
-				'transaction.expiration',
-				'transaction.kind',
-			);
-		}
-		if (options.include?.bcs) {
-			paths.push('transaction.bcs');
-		}
-		if (options.include?.balanceChanges) {
-			paths.push('balance_changes');
-		}
-		if (options.include?.effects) {
-			paths.push('effects');
-		}
-		if (options.include?.events) {
-			paths.push('events');
-		}
-		if (options.include?.objectTypes) {
-			paths.push('effects.changed_objects.object_type');
-			paths.push('effects.changed_objects.object_id');
-		}
-
-		const { response } = await this.#client.transactionExecutionService.executeTransaction({
-			transaction: {
-				bcs: {
-					value: options.transaction,
+		const { response } = await this.#client.transactionExecutionService.executeTransaction(
+			{
+				transaction: {
+					bcs: {
+						value: options.transaction,
+					},
+				},
+				signatures: options.signatures.map((signature) => ({
+					bcs: {
+						value: fromBase64(signature),
+					},
+					signature: {
+						oneofKind: undefined,
+					},
+				})),
+				readMask: {
+					paths: transactionReadMaskPaths(options.include),
 				},
 			},
-			signatures: options.signatures.map((signature) => ({
-				bcs: {
-					value: fromBase64(signature),
-				},
-				signature: {
-					oneofKind: undefined,
-				},
-			})),
-			readMask: {
-				paths,
-			},
-		});
+			{ abort: options.signal },
+		);
 
-		return parseTransaction(response.transaction!, options.include);
+		return withProtoJson(
+			parseGrpcTransactionResponse(response.transaction!, { include: options.include }),
+			options.include,
+			() => ExecutedTransaction.toJson(response.transaction!),
+		);
 	}
 	async simulateTransaction<Include extends HaneulClientTypes.SimulateTransactionInclude = {}>(
-		options: HaneulClientTypes.SimulateTransactionOptions<Include>,
+		options: HaneulClientTypes.SimulateTransactionOptions<Include> & { doGasSelection?: boolean },
 	): Promise<HaneulClientTypes.SimulateTransactionResult<Include>> {
-		const paths = [
-			'transaction.digest',
-			'transaction.transaction.digest',
-			'transaction.signatures',
-			'transaction.effects.status',
-		];
-		if (options.include?.transaction) {
-			paths.push(
-				'transaction.transaction.sender',
-				'transaction.transaction.gas_payment',
-				'transaction.transaction.expiration',
-				'transaction.transaction.kind',
-			);
-		}
-		if (options.include?.bcs) {
-			paths.push('transaction.transaction.bcs');
-		}
-		if (options.include?.balanceChanges) {
-			paths.push('transaction.balance_changes');
-		}
-		if (options.include?.effects) {
-			paths.push('transaction.effects');
-		}
-		if (options.include?.events) {
-			paths.push('transaction.events');
-		}
-		if (options.include?.objectTypes) {
-			// Use effects.changed_objects to match JSON-RPC behavior (which uses objectChanges)
-			paths.push('transaction.effects.changed_objects.object_type');
-			paths.push('transaction.effects.changed_objects.object_id');
-		}
+		// The simulated transaction is nested one level deeper in the response
+		const paths = transactionReadMaskPaths(options.include, 'transaction.');
 		if (options.include?.commandResults) {
 			paths.push('command_outputs');
 		}
@@ -436,72 +462,69 @@ export class GrpcCoreClient extends CoreClient {
 			await options.transaction.prepareForSerialization({ client: this });
 		}
 
-		const { response } = await this.#client.transactionExecutionService.simulateTransaction({
-			transaction:
-				options.transaction instanceof Uint8Array
-					? {
-							bcs: {
-								value: options.transaction,
-							},
-						}
-					: transactionToGrpcTransaction(options.transaction),
-			readMask: {
-				paths,
+		// A gas payment explicitly set to an empty list means gas is paid from the sender's
+		// address balance, so the server needs to perform gas selection rather than simulating
+		// with a mocked gas coin.
+		const doGasSelection =
+			options.doGasSelection ??
+			(options.transaction instanceof Uint8Array
+				? transactionBytesHaveEmptyGasPayment(options.transaction)
+				: options.transaction.getData().gasData.payment?.length === 0);
+
+		const { response } = await this.#client.transactionExecutionService.simulateTransaction(
+			{
+				transaction:
+					options.transaction instanceof Uint8Array
+						? {
+								bcs: {
+									value: options.transaction,
+								},
+							}
+						: transactionToGrpcTransaction(options.transaction),
+				readMask: {
+					paths,
+				},
+				doGasSelection,
+				checks:
+					options.checksEnabled === false
+						? SimulateTransactionRequest_TransactionChecks.DISABLED
+						: SimulateTransactionRequest_TransactionChecks.ENABLED,
 			},
-			doGasSelection: false,
-			checks:
-				options.checksEnabled === false
-					? SimulateTransactionRequest_TransactionChecks.DISABLED
-					: SimulateTransactionRequest_TransactionChecks.ENABLED,
-		});
+			{ abort: options.signal },
+		);
 
-		const transactionResult = parseTransaction(response.transaction!, options.include);
-
-		// Add command results if requested
-		const commandResults =
-			options.include?.commandResults && response.commandOutputs
-				? response.commandOutputs.map((output) => ({
-						returnValues: (output.returnValues ?? []).map((rv) => ({
-							bcs: rv.value?.value ?? null,
-						})),
-						mutatedReferences: (output.mutatedByRef ?? []).map((mr) => ({
-							bcs: mr.value?.value ?? null,
-						})),
-					}))
-				: undefined;
-
-		if (transactionResult.$kind === 'Transaction') {
-			return {
-				$kind: 'Transaction',
-				Transaction: transactionResult.Transaction,
-				commandResults:
-					commandResults as HaneulClientTypes.SimulateTransactionResult<Include>['commandResults'],
-			};
-		} else {
-			return {
-				$kind: 'FailedTransaction',
-				FailedTransaction: transactionResult.FailedTransaction,
-				commandResults:
-					commandResults as HaneulClientTypes.SimulateTransactionResult<Include>['commandResults'],
-			};
-		}
+		return withProtoJson(
+			parseGrpcSimulateTransactionResponse(response, { include: options.include }),
+			options.include,
+			() => SimulateTransactionResponse.toJson(response),
+		);
 	}
-	async getReferenceGasPrice(): Promise<HaneulClientTypes.GetReferenceGasPriceResponse> {
-		const response = await this.#client.ledgerService.getEpoch({
-			readMask: {
-				paths: ['reference_gas_price'],
+	async getReferenceGasPrice(
+		options?: HaneulClientTypes.GetReferenceGasPriceOptions,
+	): Promise<HaneulClientTypes.GetReferenceGasPriceResponse> {
+		const response = await this.#client.ledgerService.getEpoch(
+			{
+				readMask: {
+					paths: ['reference_gas_price'],
+				},
 			},
-		});
+			{ abort: options?.signal },
+		);
 
 		return {
 			referenceGasPrice: response.response.epoch?.referenceGasPrice?.toString() ?? '',
 		};
 	}
 
-	async getProtocolConfig(): Promise<HaneulClientTypes.GetProtocolConfigResponse> {
-		const response = await this.#client.ledgerService.getEpoch({
-			readMask: { paths: ['protocol_config'] },
-		});
+	async getProtocolConfig(
+		options?: HaneulClientTypes.GetProtocolConfigOptions,
+	): Promise<HaneulClientTypes.GetProtocolConfigResponse> {
+		const response = await this.#client.ledgerService.getEpoch(
+			{
+				readMask: { paths: ['protocol_config'] },
+			},
+			{ abort: options?.signal },
+		);
 
 		const protocolConfig = response.response.epoch?.protocolConfig;
 		if (!protocolConfig) {
@@ -525,26 +548,31 @@ export class GrpcCoreClient extends CoreClient {
 		};
 	}
 
-	async getCurrentSystemState(): Promise<HaneulClientTypes.GetCurrentSystemStateResponse> {
-		const response = await this.#client.ledgerService.getEpoch({
-			readMask: {
-				paths: [
-					'system_state.version',
-					'system_state.epoch',
-					'system_state.protocol_version',
-					'system_state.reference_gas_price',
-					'system_state.epoch_start_timestamp_ms',
-					'system_state.safe_mode',
-					'system_state.safe_mode_storage_rewards',
-					'system_state.safe_mode_computation_rewards',
-					'system_state.safe_mode_storage_rebates',
-					'system_state.safe_mode_non_refundable_storage_fee',
-					'system_state.parameters',
-					'system_state.storage_fund',
-					'system_state.stake_subsidy',
-				],
+	async getCurrentSystemState(
+		options?: HaneulClientTypes.GetCurrentSystemStateOptions,
+	): Promise<HaneulClientTypes.GetCurrentSystemStateResponse> {
+		const response = await this.#client.ledgerService.getEpoch(
+			{
+				readMask: {
+					paths: [
+						'system_state.version',
+						'system_state.epoch',
+						'system_state.protocol_version',
+						'system_state.reference_gas_price',
+						'system_state.epoch_start_timestamp_ms',
+						'system_state.safe_mode',
+						'system_state.safe_mode_storage_rewards',
+						'system_state.safe_mode_computation_rewards',
+						'system_state.safe_mode_storage_rebates',
+						'system_state.safe_mode_non_refundable_storage_fee',
+						'system_state.parameters',
+						'system_state.storage_fund',
+						'system_state.stake_subsidy',
+					],
+				},
 			},
-		});
+			{ abort: options?.signal },
+		);
 
 		const epoch = response.response.epoch;
 		const systemState = epoch?.systemState;
@@ -612,6 +640,158 @@ export class GrpcCoreClient extends CoreClient {
 		return this.#client.listDynamicFields(options);
 	}
 
+	async listTransactions<Include extends HaneulClientTypes.TransactionInclude = {}>(
+		options: HaneulClientTypes.ListTransactionsOptions<Include>,
+	): Promise<HaneulClientTypes.ListTransactionsResponse<Include>> {
+		const paths = transactionReadMaskPaths(options.include);
+
+		const filter = options.filter
+			? await resolveTransactionFilter(this.mvr, options.filter, options.signal)
+			: undefined;
+		const pagination = resolvePagination(options);
+		validateTransactionQuery(filter, pagination);
+
+		const call = this.#client.ledgerService.listTransactions(
+			{
+				readMask: { paths },
+				filter: filter && toGrpcTransactionFilter(filter),
+				// Request one extra item as lookahead: the server reports its item limit as reached
+				// without scanning past it, so an exact-limit final page is otherwise
+				// indistinguishable from one with more results
+				options: toGrpcQueryOptions(pagination, pagination.limit + 1),
+			},
+			{ abort: options.signal },
+		);
+
+		const transactions: HaneulClientTypes.TransactionResult<Include>[] = [];
+		let startCursor: string | null = null;
+		let endCursor: string | null = null;
+		let frontier: string | null = null;
+		let end: QueryEnd | undefined;
+		let sawLookaheadItem = false;
+
+		for await (const frame of call.responses) {
+			if (frame.watermark?.cursor) {
+				frontier = toBase64(frame.watermark.cursor);
+			}
+			if (frame.transaction) {
+				if (transactions.length >= pagination.limit) {
+					sawLookaheadItem = true;
+				} else {
+					startCursor ??= frontier;
+					endCursor = frontier;
+					transactions.push(
+						parseGrpcTransactionResponse(frame.transaction, { include: options.include }),
+					);
+				}
+			}
+			if (frame.end) {
+				end = frame.end;
+			}
+		}
+
+		// ITEM_LIMIT without the lookahead item means the server clamped the requested limit to
+		// its own maximum, so the filled page is still evidence of a possible next page
+		const hasNextPage =
+			sawLookaheadItem ||
+			end?.reason === QueryEndReason.SCAN_LIMIT ||
+			end?.reason === QueryEndReason.ITEM_LIMIT;
+
+		return {
+			transactions,
+			hasNextPage,
+			startCursor,
+			// Scans that stopped early without filling the page continue from the scan frontier
+			// (so already-scanned positions are not revisited), full pages continue after the last
+			// returned item, and terminal pages have no positions to continue from
+			endCursor: sawLookaheadItem ? endCursor : hasNextPage ? (frontier ?? endCursor) : endCursor,
+		};
+	}
+
+	async listEvents(
+		options: HaneulClientTypes.ListEventsOptions,
+	): Promise<HaneulClientTypes.ListEventsResponse> {
+		const pagination = resolvePagination(options);
+		const call = this.#client.ledgerService.listEvents(
+			{
+				readMask: {
+					paths: [
+						'package_id',
+						'module',
+						'sender',
+						'event_type',
+						'contents',
+						'json',
+						'checkpoint',
+						'transaction_digest',
+						'event_index',
+					],
+				},
+				filter: options.filter
+					? toGrpcEventFilter(await resolveEventFilter(this.mvr, options.filter, options.signal))
+					: undefined,
+				// Request one extra item as lookahead: the server reports its item limit as reached
+				// without scanning past it, so an exact-limit final page is otherwise
+				// indistinguishable from one with more results
+				options: toGrpcQueryOptions(pagination, pagination.limit + 1),
+			},
+			{ abort: options.signal },
+		);
+
+		const events: HaneulClientTypes.EventEntry[] = [];
+		let startCursor: string | null = null;
+		let endCursor: string | null = null;
+		let frontier: string | null = null;
+		let end: QueryEnd | undefined;
+		let sawLookaheadItem = false;
+
+		for await (const frame of call.responses) {
+			if (frame.watermark?.cursor) {
+				frontier = toBase64(frame.watermark.cursor);
+			}
+			if (frame.event) {
+				if (events.length >= pagination.limit) {
+					sawLookaheadItem = true;
+				} else {
+					startCursor ??= frontier;
+					endCursor = frontier;
+					const event = frame.event;
+					events.push({
+						packageId: normalizeHaneulAddress(event.packageId!),
+						module: event.module!,
+						sender: normalizeHaneulAddress(event.sender!),
+						eventType: normalizeStructTag(event.eventType!),
+						bcs: event.contents?.value ?? new Uint8Array(),
+						json: event.json ? (Value.toJson(event.json) as Record<string, unknown>) : null,
+						checkpoint: event.checkpoint?.toString() ?? null,
+						transactionDigest: event.transactionDigest!,
+						eventIndex: event.eventIndex!,
+					});
+				}
+			}
+			if (frame.end) {
+				end = frame.end;
+			}
+		}
+
+		// ITEM_LIMIT without the lookahead item means the server clamped the requested limit to
+		// its own maximum, so the filled page is still evidence of a possible next page
+		const hasNextPage =
+			sawLookaheadItem ||
+			end?.reason === QueryEndReason.SCAN_LIMIT ||
+			end?.reason === QueryEndReason.ITEM_LIMIT;
+
+		return {
+			events,
+			hasNextPage,
+			startCursor,
+			// Scans that stopped early without filling the page continue from the scan frontier
+			// (so already-scanned positions are not revisited), full pages continue after the last
+			// returned item, and terminal pages have no positions to continue from
+			endCursor: sawLookaheadItem ? endCursor : hasNextPage ? (frontier ?? endCursor) : endCursor,
+		};
+	}
+
 	async verifyZkLoginSignature(
 		options: HaneulClientTypes.VerifyZkLoginSignatureOptions,
 	): Promise<HaneulClientTypes.ZkLoginVerifyResponse> {
@@ -624,22 +804,25 @@ export class GrpcCoreClient extends CoreClient {
 				? bcs.byteVector().serialize(messageBytes).toBytes()
 				: messageBytes;
 
-		const { response } = await this.#client.signatureVerificationService.verifySignature({
-			message: {
-				name: options.intentScope,
-				value: messageValue,
-			},
-			signature: {
-				bcs: {
-					value: fromBase64(options.signature),
+		const { response } = await this.#client.signatureVerificationService.verifySignature(
+			{
+				message: {
+					name: options.intentScope,
+					value: messageValue,
 				},
 				signature: {
-					oneofKind: undefined,
+					bcs: {
+						value: fromBase64(options.signature),
+					},
+					signature: {
+						oneofKind: undefined,
+					},
 				},
+				address: options.address,
+				jwks: [],
 			},
-			address: options.address,
-			jwks: [],
-		});
+			{ abort: options.signal },
+		);
 
 		return {
 			success: response.isValid ?? false,
@@ -652,9 +835,12 @@ export class GrpcCoreClient extends CoreClient {
 	): Promise<HaneulClientTypes.DefaultNameServiceNameResponse> {
 		const name =
 			(
-				await this.#client.nameService.reverseLookupName({
-					address: options.address,
-				})
+				await this.#client.nameService.reverseLookupName(
+					{
+						address: options.address,
+					},
+					{ abort: options.signal },
+				)
 			).response.record?.name ?? null;
 		return {
 			data: {
@@ -663,16 +849,39 @@ export class GrpcCoreClient extends CoreClient {
 		};
 	}
 
+	async resolveNameServiceAddress(
+		options: HaneulClientTypes.ResolveNameServiceAddressOptions,
+	): Promise<HaneulClientTypes.ResolveNameServiceAddressResponse> {
+		try {
+			const { response } = await this.#client.nameService.lookupName(
+				{ name: options.name },
+				{ abort: options.signal },
+			);
+
+			return { address: response.record?.targetAddress ?? null };
+		} catch (error) {
+			if (isNameServiceResolutionMiss(error)) {
+				return { address: null };
+			}
+
+			throw error;
+		}
+	}
+
 	async getMoveFunction(
 		options: HaneulClientTypes.GetMoveFunctionOptions,
 	): Promise<HaneulClientTypes.GetMoveFunctionResponse> {
-		const resolvedPackageId = (await this.mvr.resolvePackage({ package: options.packageId }))
-			.package;
-		const { response } = await this.#client.movePackageService.getFunction({
-			packageId: resolvedPackageId,
-			moduleName: options.moduleName,
-			name: options.name,
-		});
+		const resolvedPackageId = (
+			await this.mvr.resolvePackage({ package: options.packageId, signal: options.signal })
+		).package;
+		const { response } = await this.#client.movePackageService.getFunction(
+			{
+				packageId: resolvedPackageId,
+				moduleName: options.moduleName,
+				name: options.name,
+			},
+			{ abort: options.signal },
+		);
 
 		let visibility: 'public' | 'private' | 'friend' | 'unknown' = 'unknown';
 
@@ -722,17 +931,24 @@ export class GrpcCoreClient extends CoreClient {
 	}
 
 	async getChainIdentifier(
-		_options?: HaneulClientTypes.GetChainIdentifierOptions,
+		options?: HaneulClientTypes.GetChainIdentifierOptions,
 	): Promise<HaneulClientTypes.GetChainIdentifierResponse> {
-		return this.cache.read(['chainIdentifier'], async () => {
-			const { response } = await this.#client.ledgerService.getServiceInfo({});
-			if (!response.chainId) {
-				throw new Error('Chain identifier not found in service info');
-			}
-			return {
-				chainIdentifier: response.chainId,
-			};
-		});
+		// The result is cached and shared across callers, so the underlying request must
+		// not carry any single caller's signal. Isolate cancellation per-caller instead.
+		return raceSignal(
+			Promise.resolve(
+				this.cache.read(['chainIdentifier'], async () => {
+					const { response } = await this.#client.ledgerService.getServiceInfo({});
+					if (!response.chainId) {
+						throw new Error('Chain identifier not found in service info');
+					}
+					return {
+						chainIdentifier: response.chainId,
+					};
+				}),
+			),
+			options?.signal,
+		);
 	}
 
 	resolveTransactionPlugin() {
@@ -749,14 +965,15 @@ export class GrpcCoreClient extends CoreClient {
 				snapshot.sender = '0x0000000000000000000000000000000000000000000000000000000000000000';
 			}
 			const grpcTransaction = transactionDataToGrpcTransaction(snapshot);
+			const doGasSelection =
+				!options.onlyTransactionKind &&
+				(snapshot.gasData.budget == null || snapshot.gasData.payment == null);
 
 			let response;
 			try {
 				const result = await client.transactionExecutionService.simulateTransaction({
 					transaction: grpcTransaction,
-					doGasSelection:
-						!options.onlyTransactionKind &&
-						(snapshot.gasData.budget == null || snapshot.gasData.payment == null),
+					doGasSelection,
 					// Kind-only txns are never executed directly and do not have sender, so skip validation checks.
 					checks: options.onlyTransactionKind
 						? SimulateTransactionRequest_TransactionChecks.DISABLED
@@ -768,14 +985,15 @@ export class GrpcCoreClient extends CoreClient {
 							'transaction.transaction.expiration',
 							'transaction.transaction.kind',
 							'transaction.effects.status',
+							'transaction.effects.epoch',
 						],
 					},
 				});
 				response = result.response;
 			} catch (error) {
-				// https://github.com/timostamm/protobuf-ts/pull/739
+				// The transport owns the status text. See ./transport.ts.
 				if (error instanceof Error && error.message) {
-					throw new SimulationError(decodeURIComponent(error.message), { cause: error });
+					throw new SimulationError(error.message, { cause: error });
 				}
 				throw error;
 			}
@@ -799,10 +1017,84 @@ export class GrpcCoreClient extends CoreClient {
 			}
 
 			applyGrpcResolvedTransaction(transactionData, response.transaction.transaction, options);
+			await setAddressBalanceTransactionExpirationFromSimulatedEpoch({
+				transactionData,
+				client,
+				epoch: response.transaction.effects?.epoch,
+				originalTransactionData: snapshot,
+				isTransactionKindOnly: !!options.onlyTransactionKind,
+				doGasSelection,
+			});
 
 			return await next();
 		};
 	}
+}
+
+function toGrpcQueryOptions(pagination: ResolvedPagination, limit: number): QueryOptions {
+	return {
+		limit,
+		ordering: pagination.descending ? Ordering.DESCENDING : Ordering.ASCENDING,
+		after: pagination.after ? fromBase64(pagination.after) : undefined,
+		before: pagination.before ? fromBase64(pagination.before) : undefined,
+	};
+}
+
+function transactionReadMaskPaths(
+	include: HaneulClientTypes.TransactionInclude | undefined,
+	prefix = '',
+): string[] {
+	const paths = [
+		'digest',
+		'transaction.digest',
+		'signatures',
+		'effects.status',
+		'timestamp',
+		'checkpoint',
+	];
+
+	if (include?.transaction) {
+		paths.push(
+			'transaction.sender',
+			'transaction.gas_payment',
+			'transaction.expiration',
+			'transaction.kind',
+		);
+	}
+	if (include?.bcs) {
+		paths.push('transaction.bcs');
+	}
+	if (include?.balanceChanges) {
+		paths.push('balance_changes');
+	}
+	if (include?.effects) {
+		paths.push('effects');
+	}
+	if (include?.events) {
+		paths.push('events');
+	}
+	if (include?.objectTypes) {
+		// Use effects.changed_objects to match JSON-RPC behavior (which uses objectChanges)
+		paths.push('effects.changed_objects.object_type');
+		paths.push('effects.changed_objects.object_id');
+	}
+
+	return prefix ? paths.map((path) => prefix + path) : paths;
+}
+
+function withProtoJson<Result>(
+	result: Result,
+	include: ({ protoJson?: boolean } & object) | undefined,
+	getProtoJson: () => unknown,
+): Result {
+	if (!include?.protoJson) {
+		return result;
+	}
+
+	return {
+		...result,
+		protoJson: getProtoJson(),
+	};
 }
 
 function mapDisplayProto(
@@ -1161,7 +1453,7 @@ export function parseTransactionEffects({
 	return {
 		bcs: effects.bcs?.value!,
 
-		version: 2,
+		version: effects.version ?? 2,
 		status: effects.status?.success
 			? {
 					success: true,
@@ -1178,18 +1470,22 @@ export function parseTransactionEffects({
 			nonRefundableStorageFee: effects.gasUsed?.nonRefundableStorageFee?.toString()!,
 		},
 		transactionDigest: effects.transactionDigest!,
-		gasObject: {
-			objectId: effects.gasObject?.objectId!,
-			inputState: mapInputObjectState(effects.gasObject?.inputState)!,
-			inputVersion: effects.gasObject?.inputVersion?.toString() ?? null,
-			inputDigest: effects.gasObject?.inputDigest ?? null,
-			inputOwner: mapOwner(effects.gasObject?.inputOwner),
-			outputState: mapOutputObjectState(effects.gasObject?.outputState)!,
-			outputVersion: effects.gasObject?.outputVersion?.toString() ?? null,
-			outputDigest: effects.gasObject?.outputDigest ?? null,
-			outputOwner: mapOwner(effects.gasObject?.outputOwner),
-			idOperation: mapIdOperation(effects.gasObject?.idOperation)!,
-		},
+		// gas_object is unset when the transaction has no gas object (system
+		// transactions, or gas paid from an address balance)
+		gasObject: effects.gasObject
+			? {
+					objectId: effects.gasObject.objectId!,
+					inputState: mapInputObjectState(effects.gasObject.inputState)!,
+					inputVersion: effects.gasObject.inputVersion?.toString() ?? null,
+					inputDigest: effects.gasObject.inputDigest ?? null,
+					inputOwner: mapOwner(effects.gasObject.inputOwner),
+					outputState: mapOutputObjectState(effects.gasObject.outputState)!,
+					outputVersion: effects.gasObject.outputVersion?.toString() ?? null,
+					outputDigest: effects.gasObject.outputDigest ?? null,
+					outputOwner: mapOwner(effects.gasObject.outputOwner),
+					idOperation: mapIdOperation(effects.gasObject.idOperation)!,
+				}
+			: null,
 		eventsDigest: effects.eventsDigest ?? null,
 		dependencies: effects.dependencies,
 		lamportVersion: effects.lamportVersion?.toString() ?? null,
@@ -1209,10 +1505,15 @@ export function parseTransactionEffects({
 	};
 }
 
-function parseTransaction<Include extends HaneulClientTypes.TransactionInclude = {}>(
+export function parseGrpcTransactionResponse<
+	Include extends HaneulClientTypes.TransactionInclude = {},
+>(
 	transaction: ExecutedTransaction,
-	include?: Include,
+	options?: {
+		include?: Include & HaneulClientTypes.TransactionInclude;
+	},
 ): HaneulClientTypes.TransactionResult<Include> {
+	const include = options?.include;
 	const objectTypes: Record<string, string> = {};
 	if (include?.objectTypes) {
 		transaction.effects?.changedObjects?.forEach((change) => {
@@ -1265,6 +1566,11 @@ function parseTransaction<Include extends HaneulClientTypes.TransactionInclude =
 	const result: HaneulClientTypes.Transaction<Include> = {
 		digest: transaction.digest!,
 		epoch: transaction.effects?.epoch?.toString() ?? null,
+		timestampMs: transaction.timestamp
+			? Number(transaction.timestamp.seconds) * 1000 +
+				Math.floor(transaction.timestamp.nanos / 1_000_000)
+			: null,
+		checkpoint: transaction.checkpoint?.toString() ?? null,
 		status,
 		effects: effects as HaneulClientTypes.Transaction<Include>['effects'],
 		objectTypes: (include?.objectTypes
@@ -1301,6 +1607,46 @@ function parseTransaction<Include extends HaneulClientTypes.TransactionInclude =
 				$kind: 'FailedTransaction',
 				FailedTransaction: result,
 			};
+}
+
+export function parseGrpcSimulateTransactionResponse<
+	Include extends HaneulClientTypes.SimulateTransactionInclude = {},
+>(
+	response: SimulateTransactionResponse,
+	options?: {
+		include?: Include & HaneulClientTypes.SimulateTransactionInclude;
+	},
+): HaneulClientTypes.SimulateTransactionResult<Include> {
+	const include = options?.include;
+	const transactionResult = parseGrpcTransactionResponse(response.transaction!, { include });
+
+	const commandResults =
+		include?.commandResults && response.commandOutputs
+			? response.commandOutputs.map((output) => ({
+					returnValues: (output.returnValues ?? []).map((rv) => ({
+						bcs: rv.value?.value ?? null,
+					})),
+					mutatedReferences: (output.mutatedByRef ?? []).map((mr) => ({
+						bcs: mr.value?.value ?? null,
+					})),
+				}))
+			: undefined;
+
+	if (transactionResult.$kind === 'Transaction') {
+		return {
+			$kind: 'Transaction',
+			Transaction: transactionResult.Transaction,
+			commandResults:
+				commandResults as HaneulClientTypes.SimulateTransactionResult<Include>['commandResults'],
+		};
+	}
+
+	return {
+		$kind: 'FailedTransaction',
+		FailedTransaction: transactionResult.FailedTransaction,
+		commandResults:
+			commandResults as HaneulClientTypes.SimulateTransactionResult<Include>['commandResults'],
+	};
 }
 
 function parseNormalizedHaneulMoveType(type: OpenSignature): HaneulClientTypes.OpenSignature {

@@ -97,6 +97,10 @@ import { isValidNamedPackage } from '../utils/move-registry.js';
 import { hasMvrName } from '../client/mvr.js';
 import { JSONRpcCoreClient } from './core.js';
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export interface PaginationArguments<Cursor> {
 	/** Optional paging cursor */
 	cursor?: Cursor;
@@ -104,6 +108,10 @@ export interface PaginationArguments<Cursor> {
 	limit?: number | null;
 }
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export interface OrderArguments {
 	order?: Order | null;
 }
@@ -111,6 +119,8 @@ export interface OrderArguments {
 /**
  * Configuration options for the HaneulJsonRpcClient
  * You must provide either a `url` or a `transport`
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
  */
 export type HaneulJsonRpcClientOptions = NetworkOrTransport & {
 	network: HaneulClientTypes.Network;
@@ -129,14 +139,30 @@ type NetworkOrTransport =
 
 const HANEUL_CLIENT_BRAND = Symbol.for('@haneullabs/HaneulJsonRpcClient') as never;
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export function isHaneulJsonRpcClient(client: unknown): client is HaneulJsonRpcClient {
 	return (
 		typeof client === 'object' && client !== null && (client as any)[HANEUL_CLIENT_BRAND] === true
 	);
 }
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export class HaneulJsonRpcClient extends BaseClient {
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	core: JSONRpcCoreClient;
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	jsonRpc = this;
 	protected transport: JsonRpcTransport;
 
@@ -148,6 +174,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 	 * Establish a connection to a Haneul RPC endpoint
 	 *
 	 * @param options configuration options for the API Client
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	constructor(options: HaneulJsonRpcClientOptions) {
 		super({ network: options.network });
@@ -158,6 +186,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async getRpcApiVersion({ signal }: { signal?: AbortSignal } = {}): Promise<string | undefined> {
 		const resp = await this.transport.request<{ info: { version: string } }>({
 			method: 'rpc.discover',
@@ -170,6 +202,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get all Coin<`coin_type`> objects owned by an address.
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getCoins({
 		coinType,
@@ -186,6 +220,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 			coinType = (
 				await this.core.mvr.resolveType({
 					type: coinType,
+					signal,
 				})
 			).type;
 		}
@@ -204,6 +239,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get all Coin objects owned by an address.
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getAllCoins(input: GetAllCoinsParams): Promise<PaginatedCoins> {
 		if (!input.owner || !isValidHaneulAddress(normalizeHaneulAddress(input.owner))) {
@@ -224,6 +261,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get the total coin balance for one coin type, owned by the address owner.
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getBalance({ owner, coinType, signal }: GetBalanceParams): Promise<CoinBalance> {
 		if (!owner || !isValidHaneulAddress(normalizeHaneulAddress(owner))) {
@@ -234,6 +273,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 			coinType = (
 				await this.core.mvr.resolveType({
 					type: coinType,
+					signal,
 				})
 			).type;
 		}
@@ -247,6 +287,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get the total coin balance for all coin types, owned by the address owner.
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getAllBalances(input: GetAllBalancesParams): Promise<CoinBalance[]> {
 		if (!input.owner || !isValidHaneulAddress(normalizeHaneulAddress(input.owner))) {
@@ -261,12 +303,15 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Fetch CoinMetadata for a given coin type
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getCoinMetadata({ coinType, signal }: GetCoinMetadataParams): Promise<CoinMetadata | null> {
 		if (coinType && hasMvrName(coinType)) {
 			coinType = (
 				await this.core.mvr.resolveType({
 					type: coinType,
+					signal,
 				})
 			).type;
 		}
@@ -280,12 +325,15 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 *  Fetch total supply for a coin
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getTotalSupply({ coinType, signal }: GetTotalSupplyParams): Promise<CoinSupply> {
 		if (coinType && hasMvrName(coinType)) {
 			coinType = (
 				await this.core.mvr.resolveType({
 					type: coinType,
+					signal,
 				})
 			).type;
 		}
@@ -301,6 +349,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 	 * Invoke any RPC method
 	 * @param method the method to be invoked
 	 * @param args the arguments to be passed to the RPC request
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async call<T = unknown>(
 		method: string,
@@ -312,6 +362,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get Move function argument types like read, write and full access
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getMoveFunctionArgTypes({
 		package: pkg,
@@ -323,6 +375,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 			pkg = (
 				await this.core.mvr.resolvePackage({
 					package: pkg,
+					signal,
 				})
 			).package;
 		}
@@ -337,6 +390,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 	/**
 	 * Get a map from module name to
 	 * structured representations of Move modules
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getNormalizedMoveModulesByPackage({
 		package: pkg,
@@ -346,6 +401,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 			pkg = (
 				await this.core.mvr.resolvePackage({
 					package: pkg,
+					signal,
 				})
 			).package;
 		}
@@ -359,6 +415,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get a structured representation of Move module
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getNormalizedMoveModule({
 		package: pkg,
@@ -369,6 +427,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 			pkg = (
 				await this.core.mvr.resolvePackage({
 					package: pkg,
+					signal,
 				})
 			).package;
 		}
@@ -382,6 +441,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get a structured representation of Move function
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getNormalizedMoveFunction({
 		package: pkg,
@@ -393,6 +454,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 			pkg = (
 				await this.core.mvr.resolvePackage({
 					package: pkg,
+					signal,
 				})
 			).package;
 		}
@@ -406,6 +468,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get a structured representation of Move struct
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getNormalizedMoveStruct({
 		package: pkg,
@@ -417,6 +481,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 			pkg = (
 				await this.core.mvr.resolvePackage({
 					package: pkg,
+					signal,
 				})
 			).package;
 		}
@@ -430,6 +495,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get all objects owned by an address
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getOwnedObjects(input: GetOwnedObjectsParams): Promise<PaginatedObjectsResponse> {
 		if (!input.owner || !isValidHaneulAddress(normalizeHaneulAddress(input.owner))) {
@@ -448,6 +515,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 				package: (
 					await this.core.mvr.resolvePackage({
 						package: filter.MoveModule.package,
+						signal: input.signal,
 					})
 				).package,
 			};
@@ -455,6 +523,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 			filter.StructType = (
 				await this.core.mvr.resolveType({
 					type: filter.StructType,
+					signal: input.signal,
 				})
 			).type;
 		}
@@ -476,6 +545,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get details about an object
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getObject(input: GetObjectParams): Promise<HaneulObjectResponse> {
 		if (!input.id || !isValidHaneulObjectId(normalizeHaneulObjectId(input.id))) {
@@ -488,6 +559,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async tryGetPastObject(input: TryGetPastObjectParams): Promise<ObjectRead> {
 		return await this.transport.request({
 			method: 'haneul_tryGetPastObject',
@@ -498,6 +573,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Batch get details about a list of objects. If any of the object ids are duplicates the call will fail
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async multiGetObjects(input: MultiGetObjectsParams): Promise<HaneulObjectResponse[]> {
 		input.ids.forEach((id) => {
@@ -519,6 +596,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get transaction blocks for a given query criteria
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async queryTransactionBlocks({
 		filter,
@@ -535,6 +614,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 					package: (
 						await this.core.mvr.resolvePackage({
 							package: filter.MoveFunction.package,
+							signal,
 						})
 					).package,
 				},
@@ -556,6 +636,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async getTransactionBlock(
 		input: GetTransactionBlockParams,
 	): Promise<HaneulTransactionBlockResponse> {
@@ -569,6 +653,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async multiGetTransactionBlocks(
 		input: MultiGetTransactionBlocksParams,
 	): Promise<HaneulTransactionBlockResponse[]> {
@@ -590,6 +678,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async executeTransactionBlock({
 		transactionBlock,
 		signature,
@@ -609,6 +701,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		return result;
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async signAndExecuteTransaction({
 		transaction,
 		signer,
@@ -642,6 +738,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 	 * Get total number of transactions
 	 */
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async getTotalTransactionBlocks({ signal }: { signal?: AbortSignal } = {}): Promise<bigint> {
 		const resp = await this.transport.request<string>({
 			method: 'haneul_getTotalTransactionBlocks',
@@ -653,6 +753,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Getting the reference gas price for the network
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getReferenceGasPrice({ signal }: GetReferenceGasPriceParams = {}): Promise<bigint> {
 		const resp = await this.transport.request<string>({
@@ -665,6 +767,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Return the delegated stakes for an address
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getStakes(input: GetStakesParams): Promise<DelegatedStake[]> {
 		if (!input.owner || !isValidHaneulAddress(normalizeHaneulAddress(input.owner))) {
@@ -679,6 +783,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Return the delegated stakes queried by id.
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getStakesByIds(input: GetStakesByIdsParams): Promise<DelegatedStake[]> {
 		input.stakedHaneulIds.forEach((id) => {
@@ -695,6 +801,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Return the latest system state content.
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getLatestHaneulSystemState({
 		signal,
@@ -708,6 +816,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get events for a given query criteria
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async queryEvents({
 		query,
@@ -722,6 +832,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 				MoveEventType: (
 					await this.core.mvr.resolveType({
 						type: query.MoveEventType,
+						signal,
 					})
 				).type,
 			};
@@ -735,6 +846,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 					package: (
 						await this.core.mvr.resolvePackage({
 							package: query.MoveEventModule.package,
+							signal,
 						})
 					).package,
 				},
@@ -749,6 +861,7 @@ export class HaneulJsonRpcClient extends BaseClient {
 					package: (
 						await this.core.mvr.resolvePackage({
 							package: query.MoveModule.package,
+							signal,
 						})
 					).package,
 				},
@@ -766,6 +879,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 	 * Runs the transaction block in dev-inspect mode. Which allows for nearly any
 	 * transaction (or Move call) with any arguments. Detailed results are
 	 * provided, including both the transaction effects and any return values.
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async devInspectTransactionBlock(
 		input: DevInspectTransactionBlockParams,
@@ -798,6 +913,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Dry run a transaction block and return the result.
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async dryRunTransactionBlock(
 		input: DryRunTransactionBlockParams,
@@ -814,6 +931,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Return the list of dynamic field objects owned by an object
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getDynamicFields(input: GetDynamicFieldsParams): Promise<DynamicFieldPage> {
 		if (!input.parentId || !isValidHaneulObjectId(normalizeHaneulObjectId(input.parentId))) {
@@ -828,6 +947,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Return the dynamic field object information for a specified object
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getDynamicFieldObject(input: GetDynamicFieldObjectParams): Promise<HaneulObjectResponse> {
 		return await this.transport.request({
@@ -839,6 +960,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Get the sequence number of the latest checkpoint that has been executed
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getLatestCheckpointSequenceNumber({
 		signal,
@@ -853,6 +976,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Returns information about a given checkpoint
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getCheckpoint(input: GetCheckpointParams): Promise<Checkpoint> {
 		return await this.transport.request({
@@ -864,6 +989,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Returns historical checkpoints paginated
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getCheckpoints(
 		input: PaginationArguments<CheckpointPage['nextCursor']> & GetCheckpointsParams,
@@ -877,6 +1004,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Return the committee information for the asked epoch
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getCommitteeInfo(input?: GetCommitteeInfoParams): Promise<CommitteeInfo> {
 		return await this.transport.request({
@@ -886,6 +1015,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async getNetworkMetrics({ signal }: { signal?: AbortSignal } = {}): Promise<NetworkMetrics> {
 		return await this.transport.request({
 			method: 'haneulx_getNetworkMetrics',
@@ -894,6 +1027,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async getAddressMetrics({ signal }: { signal?: AbortSignal } = {}): Promise<AddressMetrics> {
 		return await this.transport.request({
 			method: 'haneulx_getLatestAddressMetrics',
@@ -902,6 +1039,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async getEpochMetrics(
 		input?: {
 			descendingOrder?: boolean;
@@ -915,6 +1056,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async getAllEpochAddressMetrics(input?: {
 		descendingOrder?: boolean;
 		signal?: AbortSignal;
@@ -928,6 +1073,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Return the committee information for the asked epoch
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getEpochs(
 		input?: {
@@ -944,6 +1091,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Returns list of top move calls by usage
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getMoveCallMetrics({ signal }: { signal?: AbortSignal } = {}): Promise<MoveCallMetrics> {
 		return await this.transport.request({
@@ -955,6 +1104,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Return the committee information for the asked epoch
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getCurrentEpoch({ signal }: { signal?: AbortSignal } = {}): Promise<EpochInfo> {
 		return await this.transport.request({
@@ -966,6 +1117,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 
 	/**
 	 * Return the Validators APYs
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async getValidatorsApy({ signal }: { signal?: AbortSignal } = {}): Promise<ValidatorsApy> {
 		return await this.transport.request({
@@ -976,12 +1129,20 @@ export class HaneulJsonRpcClient extends BaseClient {
 	}
 
 	// TODO: Migrate this to `haneul_getChainIdentifier` once it is widely available.
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async getChainIdentifier({ signal }: { signal?: AbortSignal } = {}): Promise<string> {
 		const checkpoint = await this.getCheckpoint({ id: '0', signal });
 		const bytes = fromBase58(checkpoint.digest);
 		return toHex(bytes.slice(0, 4));
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async resolveNameServiceAddress(input: ResolveNameServiceAddressParams): Promise<string | null> {
 		return await this.transport.request({
 			method: 'haneulx_resolveNameServiceAddress',
@@ -990,6 +1151,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async resolveNameServiceNames({
 		format = 'dot',
 		...input
@@ -1010,6 +1175,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		};
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async getProtocolConfig(input?: GetProtocolConfigParams): Promise<ProtocolConfig> {
 		return await this.transport.request({
 			method: 'haneul_getProtocolConfig',
@@ -1018,6 +1187,10 @@ export class HaneulJsonRpcClient extends BaseClient {
 		});
 	}
 
+	/**
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+	 */
 	async verifyZkLoginSignature(input: VerifyZkLoginSignatureParams): Promise<ZkLoginVerifyResult> {
 		return await this.transport.request({
 			method: 'haneul_verifyZkLoginSignature',
@@ -1031,6 +1204,8 @@ export class HaneulJsonRpcClient extends BaseClient {
 	 * This can be used in conjunction with `executeTransactionBlock` to wait for the transaction to
 	 * be available via the API.
 	 * This currently polls the `getTransactionBlock` API to check for the transaction.
+	 * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+	 * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
 	 */
 	async waitForTransaction({
 		signal,

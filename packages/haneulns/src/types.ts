@@ -33,6 +33,7 @@ export interface PackageInfo {
 	};
 	payments: {
 		packageId: string;
+		packageIdV1: string;
 	};
 	bbb: {
 		packageId: string;
@@ -102,6 +103,8 @@ export type HaneulnsClientConfig = {
 	client: ClientWithCoreApi;
 	network?: HaneulClientTypes.Network;
 	packageInfo?: PackageInfo;
+	/** Access token for the keyed Pyth Hermes endpoint. Sent as `Authorization: Bearer <token>`. */
+	pythAccessToken?: string;
 };
 
 export type HaneulnsPriceList = Map<[number, number], number>;

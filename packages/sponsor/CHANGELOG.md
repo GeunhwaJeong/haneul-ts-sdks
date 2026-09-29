@@ -1,5 +1,82 @@
 # @mysten-incubation/sponsor
 
+## 0.3.6
+
+## 0.3.5
+
+## 0.3.4
+
+## 0.3.3
+
+## 0.3.2
+
+## 0.3.1
+
+## 0.3.0
+
+### Minor Changes
+
+- 15eb25e: Support sender allowance withdrawals while rejecting allowances funded by the gas
+  sponsor. Expose `validationPolicy` to run the sponsor's validation engine without a local signer.
+
+### Patch Changes
+
+- Updated dependencies [15eb25e]
+  - @mysten/wallet-sdk@0.9.0
+
+## 0.2.20
+
+## 0.2.19
+
+## 0.2.18
+
+### Patch Changes
+
+- 5c16cf4: Add BCS, transaction schema, and gRPC support for `Validity` transaction expirations and
+  allowed proposers. Also synchronize recently added transaction and execution error variants.
+
+  The deprecated v1 JSON transaction format now represents `ValidDuring` and `Validity` expirations
+  instead of collapsing them to `{ None: true }`. Previously a `Transaction.serialize()` ->
+  `Transaction.from()` round trip silently discarded the expiration — and, for `Validity`, the set
+  of validators allowed to propose the transaction — so the rebuilt transaction signed materially
+  broader bytes. An expiration the v1 reader does not recognize is now an error rather than a silent
+  downgrade.
+
+## 0.2.17
+
+## 0.2.16
+
+## 0.2.15
+
+## 0.2.14
+
+## 0.2.13
+
+## 0.2.12
+
+## 0.2.11
+
+## 0.2.10
+
+## 0.2.9
+
+### Patch Changes
+
+- 8c4b149: Update dependencies to versions that resolve security advisories: hono,
+  @hono/node-server, next, postcss, and valibot
+
+## 0.2.8
+
+## 0.2.7
+
+## 0.2.6
+
+## 0.2.5
+
+## 0.2.4
+
+## 0.2.3
+
 ## 0.2.2
 
 ## 0.2.1

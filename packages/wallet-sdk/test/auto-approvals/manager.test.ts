@@ -17,7 +17,7 @@ import {
 import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 import { GEUNHWA_PER_HANEUL, normalizeHaneulAddress } from '@haneullabs/haneul/utils';
 import { MockHaneulClient } from '../mocks/MockHaneulClient.js';
-import { DEFAULT_SENDER } from '../mocks/mockData.js';
+import { DEFAULT_SENDER, FRAMEWORK_MOVE_FUNCTIONS } from '../mocks/mockData.js';
 
 const RAW_HANEUL = '0x2::haneul::HANEUL';
 const HANEUL = normalizeHaneulAddress('0x2') + '::haneul::HANEUL';
@@ -138,6 +138,60 @@ describe('AutoApprovalManager', () => {
 		expect(results.autoApproval.result?.senderBalanceFlows).toEqual([
 			{ coinType: HANEUL, amount: -10_000_000n },
 		]);
+	});
+
+	test('rejects opaque self-funded allowance spending without an available token budget', async () => {
+		const client = new MockHaneulClient();
+		const allowanceId = normalizeHaneulAddress('0xa11');
+		client.addObject({
+			objectId: allowanceId,
+			objectType: `0x2::allowance::Allowance<0x2::balance::Balance<${HANEUL}>>`,
+			owner: { $kind: 'Shared', Shared: { initialSharedVersion: '1' } },
+		});
+		client.addObject({
+			objectId: '0x6',
+			objectType: '0x2::clock::Clock',
+			owner: { $kind: 'Shared', Shared: { initialSharedVersion: '1' } },
+		});
+		client.addMoveFunction({
+			...FRAMEWORK_MOVE_FUNCTIONS.find((fn) => fn.name === 'balance_spend')!,
+			packageId: '0xa',
+			moduleName: 'attacker',
+			name: 'steal',
+			returns: [],
+		});
+		const tx = new Transaction();
+		tx.setSender(DEFAULT_SENDER);
+		tx.setGasBudget(0);
+		tx.setGasPrice(1);
+		tx.setGasPayment([]);
+		const withdrawal = tx.withdrawal({
+			amount: 100n,
+			type: HANEUL,
+			from: 'allowance',
+			funder: DEFAULT_SENDER,
+			allowance: allowanceId,
+		});
+		tx.moveCall({
+			target: '0xa::attacker::steal',
+			typeArguments: [HANEUL],
+			arguments: [
+				tx.sharedObjectRef({ objectId: allowanceId, initialSharedVersion: '1', mutable: true }),
+				withdrawal,
+				tx.object.clock(),
+			],
+		});
+		const { approval } = await analyze(
+			{ approval: autoApprovalAnalyzer },
+			{ client, transaction: await tx.toJSON(), operationType: 'test-operation' },
+		);
+		for (const manager of [managerWithSettings(), managerWithBalanceSettings()]) {
+			expect(manager.checkTransaction(approval).canAutoApprove).toBe(false);
+		}
+		expect(approval.status).toBe('skipped');
+		expect(
+			approval.issues?.some((issue) => issue.message.includes('Cannot track redemption')),
+		).toBe(true);
 	});
 
 	test('adds configured sender addresses to the transaction sender', async () => {

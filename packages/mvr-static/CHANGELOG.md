@@ -1,5 +1,132 @@
 # @mysten/mvr-static
 
+## 0.4.30
+
+## 0.4.29
+
+### Patch Changes
+
+- Updated dependencies [2e9856f]
+  - @mysten/sui@2.33.0
+
+## 0.4.28
+
+### Patch Changes
+
+- Updated dependencies [4394023]
+  - @mysten/sui@2.32.0
+
+## 0.4.27
+
+## 0.4.26
+
+## 0.4.25
+
+## 0.4.24
+
+### Patch Changes
+
+- Updated dependencies [15eb25e]
+- Updated dependencies [15eb25e]
+  - @mysten/sui@2.31.0
+
+## 0.4.23
+
+### Patch Changes
+
+- Updated dependencies [cc2aec1]
+  - @mysten/sui@2.30.0
+
+## 0.4.22
+
+### Patch Changes
+
+- Updated dependencies [ee96ca4]
+  - @mysten/sui@2.29.0
+
+## 0.4.21
+
+### Patch Changes
+
+- Updated dependencies [5c16cf4]
+  - @mysten/sui@2.28.0
+
+## 0.4.20
+
+## 0.4.19
+
+### Patch Changes
+
+- Updated dependencies [7c696dc]
+  - @mysten/sui@2.27.0
+
+## 0.4.18
+
+### Patch Changes
+
+- f2f7048: Upgrade workspace dependencies, remove the legacy dapp-kit package, and migrate the
+  remaining consumers to the current gRPC-based dapp-kit. Remove the legacy API reference while
+  retaining the migration guide and deprecation notice.
+
+## 0.4.17
+
+## 0.4.16
+
+### Patch Changes
+
+- Updated dependencies [87989d5]
+  - @mysten/sui@2.26.0
+
+## 0.4.15
+
+### Patch Changes
+
+- Updated dependencies [f76883d]
+- Updated dependencies [f76883d]
+- Updated dependencies [f76883d]
+- Updated dependencies [f76883d]
+- Updated dependencies [f76883d]
+  - @mysten/sui@2.25.0
+
+## 0.4.14
+
+### Patch Changes
+
+- Updated dependencies [c5f452f]
+  - @mysten/sui@2.24.0
+
+## 0.4.13
+
+## 0.4.12
+
+## 0.4.11
+
+### Patch Changes
+
+- Updated dependencies [f9bfbbf]
+- Updated dependencies [f9bfbbf]
+  - @mysten/sui@2.23.0
+
+## 0.4.10
+
+## 0.4.9
+
+## 0.4.8
+
+### Patch Changes
+
+- Updated dependencies [899d9e3]
+  - @mysten/sui@2.22.0
+
+## 0.4.7
+
+### Patch Changes
+
+- Updated dependencies [da78e18]
+  - @mysten/sui@2.21.0
+
+## 0.4.6
+
 ## 0.4.5
 
 ## 0.4.4

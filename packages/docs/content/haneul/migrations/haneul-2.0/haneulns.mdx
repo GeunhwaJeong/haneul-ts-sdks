@@ -1,7 +1,33 @@
 ---
 title: '@haneullabs/haneulns'
-description: Migrate @haneullabs/haneulns to 2.0 with client extension pattern.
-keywords: [migration, '@haneullabs/haneulns', HaneulNS, 2.0, client extension, name service, breaking changes]
+description: Migrate @haneullabs/haneulns to 2.0 with client extension pattern
+keywords:
+  - migration
+  - '@haneullabs/haneulns'
+  - HaneulNS
+  - '2.0'
+  - client extension
+  - name service
+  - breaking changes
+questions:
+  - What changed in the @haneullabs/haneulns migration?
+  - How do I migrate to @haneullabs/haneulns?
+  - How does Custom package IDs work?
+answer: Migrate @haneullabs/haneulns to 2.0 with client extension pattern
+goal:
+  description: Reader can migrate @haneullabs/haneulns to 2.0 with client extension pattern
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 30
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 This package now exports a client extension that integrates with Haneul clients.
@@ -9,7 +35,7 @@ This package now exports a client extension that integrates with Haneul clients.
 ```diff
 - import { HaneulClient, getFullnodeUrl } from '@haneullabs/haneul/client';
 - import { HaneulnsClient } from '@haneullabs/haneulns';
-+ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc'; // or HaneulJsonRpcClient, HaneulGraphQLClient
++ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 + import { haneulns } from '@haneullabs/haneulns';
 
 - const haneulClient = new HaneulClient({ url: getFullnodeUrl('mainnet') });

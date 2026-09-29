@@ -1,63 +1,96 @@
 ---
 title: '@haneullabs/haneul'
-description: Migrate @haneullabs/haneul from 1.x to 2.0 with new client APIs and BCS changes.
+description: >-
+  Migrate @haneullabs/haneul from 1.x to 2.0 with gRPC clients, Core API, and BCS changes
 keywords:
-  [
-    migration,
-    '@haneullabs/haneul',
-    2.0,
-    HaneulClient removal,
-    BCS,
-    transaction executors,
-    gRPC,
-    breaking changes,
-  ]
+  - migration
+  - '@haneullabs/haneul'
+  - '2.0'
+  - HaneulClient removal
+  - BCS
+  - transaction executors
+  - gRPC
+  - breaking changes
+questions:
+  - What changed in the @haneullabs/haneul migration?
+  - How do I migrate to @haneullabs/haneul?
+  - How does Removal of HaneulClient exports work?
+  - How does Network parameter required work?
+answer: >-
+  Migrate @haneullabs/haneul from 1.x to 2.0 with gRPC clients, Core API, and BCS changes
+goal:
+  description: >-
+    Reader can migrate @haneullabs/haneul from 1.x to 2.0 with gRPC clients, Core API, and BCS changes
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 30
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 ## Removal of `HaneulClient` exports
 
-The `@haneullabs/haneul/client` export path has been removed. All JSON-RPC client functionality is now
-exported from `@haneullabs/haneul/jsonRpc`.
+The old `HaneulClient` export has been removed from `@haneullabs/haneul/client`. For application code, migrate
+to [`HaneulGrpcClient`](/haneul/clients/grpc) and use top-level methods such as `client.getObject()`,
+`client.listCoins()`, and `client.signAndExecuteTransaction()`.
+
+Legacy JSON-RPC functionality moved to `@haneullabs/haneul/jsonRpc`, but JSON-RPC APIs are deprecated in
+the Haneul TypeScript SDK. Use the JSON-RPC exports only when maintaining code that still needs the old
+JSON-RPC method names or response shapes during migration.
 
 **Removed exports:**
 
-- `HaneulClient` (use `HaneulJsonRpcClient` instead)
-- `HaneulClientOptions` (use `HaneulJsonRpcClientOptions` instead)
-- `isHaneulClient` (use `isHaneulJsonRpcClient` instead)
-- `HaneulTransport` (use `JsonRpcTransport` instead)
+- `HaneulClient` (use `HaneulGrpcClient`; legacy JSON-RPC code can use `HaneulJsonRpcClient`)
+- `HaneulClientOptions` (use `HaneulGrpcClientOptions`; legacy JSON-RPC code can use
+  `HaneulJsonRpcClientOptions`)
+- `isHaneulClient` (use `isHaneulGrpcClient`, `isHaneulGraphQLClient`, or legacy `isHaneulJsonRpcClient`)
+- `HaneulTransport` (legacy JSON-RPC code can use `JsonRpcTransport`)
 - `HaneulTransportRequestOptions` (use `JsonRpcTransportRequestOptions` instead)
-- `HaneulTransportSubscribeOptions` (use `JsonRpcTransportSubscribeOptions` instead)
+- `HaneulTransportSubscribeOptions` (removed; use the gRPC subscription service for streaming APIs)
 - `HaneulHTTPTransportOptions` (use `JsonRpcHTTPTransportOptions` instead)
 - `HaneulHTTPTransport` (use `JsonRpcHTTPTransport` instead)
-- `getFullnodeUrl` (use `getJsonRpcFullnodeUrl` instead)
+- `getFullnodeUrl` (pass the full node URL to `HaneulGrpcClient.baseUrl`; legacy JSON-RPC code can use
+  `getJsonRpcFullnodeUrl`)
 - All JSON-RPC types (now exported from `@haneullabs/haneul/jsonRpc`)
 
 **Migration:**
 
 ```diff
 - import { HaneulClient, getFullnodeUrl } from '@haneullabs/haneul/client';
-+ import { HaneulJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
++ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 - const client = new HaneulClient({
 -   url: getFullnodeUrl('devnet'),
-+ const client = new HaneulJsonRpcClient({
-+   url: getJsonRpcFullnodeUrl('devnet'),
++ const client = new HaneulGrpcClient({
++   baseUrl: 'https://fullnode.devnet.haneul.io:443',
     network: 'devnet',
   });
 ```
 
 ## Network parameter required
 
-When creating a new `HaneulGraphQLClient` or `HaneulJsonRpcClient`, you must now provide a `network`
-parameter:
+When creating a new `HaneulGrpcClient`, `HaneulGraphQLClient`, or legacy `HaneulJsonRpcClient`, provide a
+`network` parameter:
 
 ```ts
-const client = new HaneulGraphQLClient({
+const grpcClient = new HaneulGrpcClient({
+	baseUrl: 'https://...',
+	network: 'mainnet', // Required
+});
+
+const graphqlClient = new HaneulGraphQLClient({
 	url: 'https://...',
 	network: 'mainnet', // Required
 });
 
-const client = new HaneulJsonRpcClient({
+const jsonRpcClient = new HaneulJsonRpcClient({
 	url: 'https://...',
 	network: 'mainnet', // Required
 });
@@ -78,11 +111,12 @@ objects.
 + effects.status.Failure.error
 ```
 
-**Core API** (gRPC and GraphQL responses): Uses a simplified structure with a `success` boolean:
+**Core API and top-level client methods** (gRPC and GraphQL responses): Use a simplified structure
+with a `success` boolean:
 
 ```typescript
-// Core API returns this structure
-const result = await client.core.getTransaction({ digest, include: { effects: true } });
+// Top-level gRPC and GraphQL methods return this structure.
+const result = await client.getTransaction({ digest, include: { effects: true } });
 const tx = result.Transaction ?? result.FailedTransaction;
 
 if (tx.effects.status.success) {
@@ -235,7 +269,7 @@ resolution is now built directly into the core client.
 **How it works now:**
 
 MVR name resolution happens automatically during transaction building. The SDK detects `.move` names
-(like `@org/package::module::Type`) and resolves them using the client's MVR resolver.
+like `@org/package::module::Type` and resolves them using the client's MVR resolver.
 
 **Migration:**
 
@@ -250,11 +284,10 @@ MVR name resolution happens automatically during transaction building. The SDK d
 -   })
 - );
 
-+ import { HaneulJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
-+ import type { NamedPackagesOverrides } from '@haneullabs/haneul/client';
++ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 +
-+ const client = new HaneulJsonRpcClient({
-+   url: 'http://158.69.54.239:9000',
++ const client = new HaneulGrpcClient({
++   baseUrl: 'http://158.69.54.239:9000',
 +   network: 'mainnet',
 +   mvr: {
 +     overrides: myOverrides,
@@ -276,7 +309,8 @@ requiring `HaneulJsonRpcClient` specifically.
 **Breaking changes:**
 
 - Constructor `client` parameter type changed from `HaneulJsonRpcClient` to `ClientWithCoreApi`
-- Return type of `executeTransaction()`: `data` property renamed to `result`
+- Return type of `executeTransaction()` changed from the legacy `{ digest, effects, data }` wrapper
+  to a Core API `TransactionResult` discriminated union returned directly
 - The second parameter changed from JSON-RPC options to core API include options
 
 **Migration:**
@@ -284,7 +318,12 @@ requiring `HaneulJsonRpcClient` specifically.
 ```diff
 import { SerialTransactionExecutor } from '@haneullabs/haneul/transactions';
 - import { HaneulJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
-+ // Works with any client: HaneulJsonRpcClient, HaneulGrpcClient, or HaneulGraphQLClient
++ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+
++ const client = new HaneulGrpcClient({
++   baseUrl: 'https://fullnode.devnet.haneul.io:443',
++   network: 'devnet',
++ });
 
 const executor = new SerialTransactionExecutor({
 -   client: jsonRpcClient,
@@ -294,10 +333,10 @@ const executor = new SerialTransactionExecutor({
 
 const result = await executor.executeTransaction(tx);
 
-// Accessing the transaction result (changed)
+// Accessing the transaction result now returned directly
 - console.log(result.data.effects?.status.status);
-+ const tx = result.Transaction ?? result.FailedTransaction;
-+ console.log(tx.effects.status.success);
++ const transaction = result.Transaction ?? result.FailedTransaction;
++ console.log(transaction.effects.status.success);
 ```
 
 Include options have also changed:

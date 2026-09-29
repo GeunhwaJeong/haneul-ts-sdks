@@ -1,0 +1,68 @@
+{
+	"name": "@haneullabs/hashi",
+	"version": "0.6.22",
+	"private": false,
+	"description": "TypeScript SDK for the Hashi Haneul Move smart contracts",
+	"license": "Apache-2.0",
+	"author": "Haneul Labs <build@haneul-labs.com>",
+	"type": "module",
+	"main": "./dist/index.mjs",
+	"types": "./dist/index.d.mts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.mts",
+			"import": "./dist/index.mjs",
+			"default": "./dist/index.mjs"
+		}
+	},
+	"sideEffects": false,
+	"files": [
+		"CHANGELOG.md",
+		"dist"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GeunhwaJeong/haneul-ts-sdks.git"
+	},
+	"bugs": {
+		"url": "https://github.com/GeunhwaJeong/haneul-ts-sdks/issues/new"
+	},
+	"keywords": [
+		"haneul",
+		"hashi",
+		"bitcoin",
+		"btc",
+		"sdk",
+		"haneullabs"
+	],
+	"scripts": {
+		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
+		"build": "rm -rf dist && tsc --noEmit && tsdown",
+		"codegen": "haneul-ts-codegen generate && pnpm lint:fix",
+		"prettier:check": "prettier -c --ignore-unknown .",
+		"prettier:fix": "prettier -w --ignore-unknown .",
+		"oxlint:check": "oxlint  .",
+		"oxlint:fix": "oxlint --fix",
+		"lint": "pnpm run oxlint:check && pnpm run prettier:check",
+		"lint:fix": "pnpm run oxlint:fix && pnpm run prettier:fix",
+		"test": "pnpm test:typecheck && pnpm test:unit",
+		"test:typecheck": "tsc -p ./test",
+		"test:unit": "vitest run --project=unit",
+		"test:integration": "vitest run --project=integration",
+		"vitest": "vitest"
+	},
+	"dependencies": {
+		"@noble/curves": "^2.3.0",
+		"@noble/hashes": "^2.3.0",
+		"@scure/base": "^2.3.0"
+	},
+	"devDependencies": {
+		"@haneullabs/codegen": "workspace:^",
+		"@types/node": "^26.2.0",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
+	},
+	"peerDependencies": {
+		"@haneullabs/haneul": "workspace:^"
+	}
+}

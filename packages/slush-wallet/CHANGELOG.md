@@ -1,5 +1,106 @@
 # @mysten/slush-wallet
 
+## 1.3.0
+
+### Minor Changes
+
+- 00740a0: Preserve optional per-account chains in hosted wallet sessions and advertise only
+  supported chains included in that list. Reject signing requests for chains excluded by the signed
+  session. Older sessions that omit chains retain their existing behavior.
+
+### Patch Changes
+
+- Updated dependencies [00740a0]
+  - @mysten/window-wallet-core@0.4.0
+
+## 1.2.8
+
+## 1.2.7
+
+## 1.2.6
+
+## 1.2.5
+
+## 1.2.4
+
+## 1.2.3
+
+## 1.2.2
+
+## 1.2.1
+
+### Patch Changes
+
+- 3175d33: Exclude unit tests from the production TypeScript build so releases do not require
+  Vitest.
+
+## 1.2.0
+
+### Minor Changes
+
+- a1f4087: Preserve per-account signing features in web wallet sessions. Slush now honors an
+  explicit empty or restricted feature list, while older sessions without the field retain their
+  existing capabilities.
+
+  Enforce signed account capabilities during wallet-side request verification, advertise only
+  implemented features, and refresh account capabilities when another tab replaces the hosted
+  session.
+
+  Dispose cross-tab session listeners when unregistering the wallet. Directly constructed wallets
+  can release their listener with `dispose()`.
+
+### Patch Changes
+
+- Updated dependencies [a1f4087]
+  - @mysten/window-wallet-core@0.3.0
+
+## 1.1.24
+
+## 1.1.23
+
+## 1.1.22
+
+### Patch Changes
+
+- 331eb20: Default personal message signing requests without a chain to Sui mainnet.
+
+## 1.1.21
+
+## 1.1.20
+
+## 1.1.19
+
+## 1.1.18
+
+## 1.1.17
+
+## 1.1.16
+
+## 1.1.15
+
+## 1.1.14
+
+## 1.1.13
+
+## 1.1.12
+
+### Patch Changes
+
+- 8c4b149: Update dependencies to versions that resolve security advisories: hono,
+  @hono/node-server, next, postcss, and valibot
+
+## 1.1.11
+
+## 1.1.10
+
+## 1.1.9
+
+## 1.1.8
+
+## 1.1.7
+
+## 1.1.6
+
 ## 1.1.5
 
 ## 1.1.4

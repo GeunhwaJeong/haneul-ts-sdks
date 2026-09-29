@@ -1,7 +1,35 @@
 ---
 title: Advanced Examples
-description: Advanced Kiosk SDK usage patterns and code examples for complex scenarios.
-keywords: [Kiosk SDK, advanced examples, transfer policy, purchase, listing, Haneul, TypeScript]
+description: Advanced Kiosk SDK usage patterns and code examples for complex scenarios
+keywords:
+  - Kiosk SDK
+  - advanced examples
+  - transfer policy
+  - purchase
+  - listing
+  - Haneul
+  - TypeScript
+questions:
+  - What is Advanced Examples?
+  - How do I use Advanced Examples?
+  - How does Minting a HaneulFren work?
+  - How does Mixing two Haneulfrens work?
+answer: Advanced Kiosk SDK usage patterns and code examples for complex scenarios
+goal:
+  description: >-
+    Reader understands advanced Kiosk SDK usage patterns and code examples for complex scenarios
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 30
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 # Some extended examples
@@ -9,8 +37,9 @@ keywords: [Kiosk SDK, advanced examples, transfer policy, purchase, listing, Han
 For these examples, assume you have the following data and functions available:
 
 ```typescript
-import { kiosk, KioskTransaction } from '@haneullabs/kiosk';
-import { HaneulJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
+import { kiosk, KioskTransaction, type KioskOwnerCap } from '@haneullabs/kiosk';
+import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
+import { Transaction } from '@haneullabs/haneul/transactions';
 
 // a constant for bullshark's type.
 const bullsharkType = `${packageId}::haneulfrens::HaneulFren<${packageId}::bullshark::Bullshark>`;
@@ -18,8 +47,8 @@ const bullsharkType = `${packageId}::haneulfrens::HaneulFren<${packageId}::bulls
 const capyType = `${packageId}::haneulfrens::HaneulFren<${packageId}::capy::Capy>`;
 
 // initialize the client with the kiosk extension.
-const client = new HaneulJsonRpcClient({
-	url: getJsonRpcFullnodeUrl('mainnet'),
+const client = new HaneulGrpcClient({
+	baseUrl: 'http://158.69.54.239:9000',
 	network: 'mainnet',
 }).$extend(kiosk());
 ```

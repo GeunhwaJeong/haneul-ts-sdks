@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/wallet-standard",
-	"version": "0.21.5",
+	"version": "0.21.30",
 	"description": "A suite of standard utilities for implementing wallets based on the Wallet Standard.",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",
@@ -42,8 +42,8 @@
 		"@wallet-standard/core": "1.1.2"
 	},
 	"devDependencies": {
-		"typescript": "^6.0.3",
-		"typescript-json-schema": "^0.67.4"
+		"typescript": "^7.0.2",
+		"typescript-json-schema": "^0.68.0"
 	},
 	"peerDependencies": {
 		"@haneullabs/haneul": "workspace:^"

@@ -20,8 +20,16 @@ const CODE_TO_ERROR_TYPE: Record<number, string> = {
 	'-32002': 'TransactionExecutionClientError',
 };
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export class HaneulHTTPTransportError extends Error {}
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export class JsonRpcError extends HaneulHTTPTransportError {
 	code: number;
 	type: string;
@@ -33,6 +41,10 @@ export class JsonRpcError extends HaneulHTTPTransportError {
 	}
 }
 
+/**
+ * @deprecated JSON-RPC APIs are deprecated in the Haneul TypeScript SDK. Use `HaneulGrpcClient`
+ * from `@haneullabs/haneul/grpc` or `HaneulGraphQLClient` from `@haneullabs/haneul/graphql` instead.
+ */
 export class HaneulHTTPStatusError extends HaneulHTTPTransportError {
 	status: number;
 	statusText: string;

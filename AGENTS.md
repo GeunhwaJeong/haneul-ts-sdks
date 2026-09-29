@@ -192,6 +192,7 @@ Several packages depend on external repositories and remote schemas. These are u
 | `../haneul-payment-kit` | Payment kit Move contracts         | `@haneullabs/payment-kit` codegen                               |
 | `../walrus`          | Walrus storage contracts           | `@haneullabs/walrus` codegen                                    |
 | `../byeolv3`      | Byeol v3 DEX contracts          | `@haneullabs/byeol` codegen                               |
+| `../hashi`           | Hashi BTC-bridge Move contracts    | `@haneullabs/hashi` codegen                                     |
 | `../apps/kiosk`      | Kiosk Move contracts (optional)    | `@haneullabs/kiosk` codegen                                     |
 
 ### Remote Resources (fetched from GitHub)
@@ -232,5 +233,6 @@ pnpm --filter @haneullabs/haneul codegen:graphql
 pnpm --filter @haneullabs/payment-kit codegen
 pnpm --filter @haneullabs/walrus codegen
 pnpm --filter @haneullabs/byeol codegen
+pnpm --filter @haneullabs/hashi codegen
 pnpm --filter @haneullabs/kiosk codegen
 ```

@@ -185,13 +185,15 @@ export class MvrClient implements HaneulClientTypes.MvrMethods {
 
 	async resolvePackage({
 		package: name,
+		signal,
 	}: HaneulClientTypes.MvrResolvePackageOptions): Promise<HaneulClientTypes.MvrResolvePackageResponse> {
+		signal?.throwIfAborted();
 		if (!hasMvrName(name)) {
 			return {
 				package: name,
 			};
 		}
-		const resolved = await this.#mvrPackageDataLoader.load(name);
+		const resolved = await raceSignal(this.#mvrPackageDataLoader.load(name), signal);
 		return {
 			package: resolved,
 		};
@@ -199,7 +201,9 @@ export class MvrClient implements HaneulClientTypes.MvrMethods {
 
 	async resolveType({
 		type,
+		signal,
 	}: HaneulClientTypes.MvrResolveTypeOptions): Promise<HaneulClientTypes.MvrResolveTypeResponse> {
+		signal?.throwIfAborted();
 		if (!hasMvrName(type)) {
 			return {
 				type,
@@ -207,7 +211,7 @@ export class MvrClient implements HaneulClientTypes.MvrMethods {
 		}
 
 		const mvrTypes = [...extractMvrTypes(type)];
-		const resolvedTypes = await this.#mvrTypeDataLoader.loadMany(mvrTypes);
+		const resolvedTypes = await raceSignal(this.#mvrTypeDataLoader.loadMany(mvrTypes), signal);
 
 		const typeMap: Record<string, string> = {};
 
@@ -227,7 +231,9 @@ export class MvrClient implements HaneulClientTypes.MvrMethods {
 	async resolve({
 		types = [],
 		packages = [],
+		signal,
 	}: HaneulClientTypes.MvrResolveOptions): Promise<HaneulClientTypes.MvrResolveResponse> {
+		signal?.throwIfAborted();
 		const mvrTypes = new Set<string>();
 
 		for (const type of types ?? []) {
@@ -235,10 +241,13 @@ export class MvrClient implements HaneulClientTypes.MvrMethods {
 		}
 
 		const typesArray = [...mvrTypes];
-		const [resolvedTypes, resolvedPackages] = await Promise.all([
-			typesArray.length > 0 ? this.#mvrTypeDataLoader.loadMany(typesArray) : [],
-			packages.length > 0 ? this.#mvrPackageDataLoader.loadMany(packages) : [],
-		]);
+		const [resolvedTypes, resolvedPackages] = await raceSignal(
+			Promise.all([
+				typesArray.length > 0 ? this.#mvrTypeDataLoader.loadMany(typesArray) : [],
+				packages.length > 0 ? this.#mvrPackageDataLoader.loadMany(packages) : [],
+			]),
+			signal,
+		);
 
 		const typeMap: Record<string, string> = {
 			...this.#overrides?.types,
@@ -376,6 +385,36 @@ export function hasMvrName(nameOrType: string) {
 	return (
 		nameOrType.includes(NAME_SEPARATOR) || nameOrType.includes('@') || nameOrType.includes('.haneul')
 	);
+}
+
+/**
+ * Races a promise against an optional AbortSignal. MVR resolution batches lookups
+ * from independent callers into a single request via a shared DataLoader, so a
+ * caller's signal cannot cancel the shared network request without affecting other
+ * callers. Instead, this rejects the awaiting caller as soon as its signal aborts
+ * (the underlying request continues in the background).
+ *
+ * The same isolation applies to any shared/cached request (e.g. `cache.read`).
+ */
+export function raceSignal<T>(promise: Promise<T>, signal?: AbortSignal): Promise<T> {
+	if (!signal) {
+		return promise;
+	}
+
+	// An `abort` event is not replayed for listeners added after the fact, so a signal that was
+	// already aborted would otherwise resolve normally.
+	if (signal.aborted) {
+		return Promise.reject(signal.reason);
+	}
+
+	return new Promise<T>((resolve, reject) => {
+		const onAbort = () => reject(signal.reason);
+		signal.addEventListener('abort', onAbort, { once: true });
+
+		promise.then(resolve, reject).finally(() => {
+			signal.removeEventListener('abort', onAbort);
+		});
+	});
 }
 
 function isStructTag(type: string | StructTag): type is StructTag {

@@ -112,6 +112,14 @@ export abstract class CoreClient extends BaseClient implements HaneulClientTypes
 		options: HaneulClientTypes.ListDynamicFieldsOptions,
 	): Promise<HaneulClientTypes.ListDynamicFieldsResponse>;
 
+	abstract listTransactions<Include extends HaneulClientTypes.TransactionInclude = {}>(
+		options: HaneulClientTypes.ListTransactionsOptions<Include>,
+	): Promise<HaneulClientTypes.ListTransactionsResponse<Include>>;
+
+	abstract listEvents(
+		options: HaneulClientTypes.ListEventsOptions,
+	): Promise<HaneulClientTypes.ListEventsResponse>;
+
 	abstract resolveTransactionPlugin(): TransactionPlugin;
 
 	abstract verifyZkLoginSignature(
@@ -126,6 +134,10 @@ export abstract class CoreClient extends BaseClient implements HaneulClientTypes
 		options: HaneulClientTypes.DefaultNameServiceNameOptions,
 	): Promise<HaneulClientTypes.DefaultNameServiceNameResponse>;
 
+	abstract resolveNameServiceAddress(
+		options: HaneulClientTypes.ResolveNameServiceAddressOptions,
+	): Promise<HaneulClientTypes.ResolveNameServiceAddressResponse>;
+
 	async getDynamicField(
 		options: HaneulClientTypes.GetDynamicFieldOptions,
 	): Promise<HaneulClientTypes.GetDynamicFieldResponse> {
@@ -133,6 +145,7 @@ export abstract class CoreClient extends BaseClient implements HaneulClientTypes
 			(
 				await this.core.mvr.resolveType({
 					type: options.name.type,
+					signal: options.signal,
 				})
 			).type,
 		);
@@ -196,6 +209,7 @@ export abstract class CoreClient extends BaseClient implements HaneulClientTypes
 		const resolvedNameType = (
 			await this.core.mvr.resolveType({
 				type: options.name.type,
+				signal: options.signal,
 			})
 		).type;
 		const wrappedType = `0x2::dynamic_object_field::Wrapper<${resolvedNameType}>`;

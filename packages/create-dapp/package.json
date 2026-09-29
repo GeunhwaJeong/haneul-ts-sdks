@@ -3,7 +3,7 @@
 	"author": "Haneul Labs <build@haneul-labs.com>",
 	"description": "A CLI for creating new Haneul dApps",
 	"homepage": "https://sdk.haneul-labs.com",
-	"version": "0.7.7",
+	"version": "0.7.36",
 	"license": "Apache-2.0",
 	"files": [
 		"CHANGELOG.md",
@@ -38,13 +38,13 @@
 		"access": "public"
 	},
 	"devDependencies": {
-		"typescript": "^6.0.3"
+		"typescript": "^7.0.2"
 	},
 	"dependencies": {
 		"@haneullabs/codegen": "workspace:^",
 		"@haneullabs/dapp-kit-react": "workspace:^",
 		"@haneullabs/haneul": "workspace:^",
-		"@types/node": "^25.9.3",
+		"@types/node": "^26.2.0",
 		"enquirer": "^2.4.1"
 	},
 	"sideEffects": false,

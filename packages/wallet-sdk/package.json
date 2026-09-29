@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/wallet-sdk",
-	"version": "0.8.1",
+	"version": "0.9.6",
 	"private": false,
 	"description": "Utilities for building Haneul wallets",
 	"license": "Apache-2.0",
@@ -44,15 +44,15 @@
 	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/packages/wallet-sdk#readme",
 	"devDependencies": {
 		"@haneullabs/dapp-kit-react": "workspace:^",
-		"@types/node": "^25.9.3",
-		"msw": "^2.14.6",
-		"typescript": "^6.0.3",
-		"vitest": "^4.1.8"
+		"@types/node": "^26.2.0",
+		"msw": "^2.15.0",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:^",
 		"@haneullabs/wallet-standard": "workspace:^",
-		"valibot": "^1.4.1"
+		"valibot": "^1.4.2"
 	},
 	"peerDependencies": {
 		"@haneullabs/haneul": "workspace:^"

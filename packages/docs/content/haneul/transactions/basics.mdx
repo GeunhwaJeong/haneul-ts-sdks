@@ -1,7 +1,35 @@
 ---
 title: Building Transactions
 description: Construct programmable transaction blocks with the Transaction API
-keywords: [transactions, ptb, move call, splitCoins, transferObjects, codegen]
+keywords:
+  - transactions
+  - ptb
+  - move call
+  - splitCoins
+  - transferObjects
+  - codegen
+questions:
+  - How do I build a transaction in the Haneul SDK?
+  - How do I call a Move function from TypeScript?
+  - How do I split and transfer coins in a transaction?
+answer: >-
+  Use the Transaction class to build programmable transaction blocks: chain commands like
+  splitCoins, mergeCoins, moveCall, and transferObjects into a single atomic transaction.
+goal:
+  description: >-
+    Reader can construct programmable transaction blocks with the Transaction API
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 30
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 Every interaction with the Haneul network goes through a transaction. Haneul transactions are a sequence
@@ -133,14 +161,13 @@ incorrect target strings. See the [codegen documentation](/codegen) for setup in
 
 ### Return values
 
-Commands return results that you can use as input to subsequent commands. For example, `splitCoins`
-returns the new coins it creates:
+Helpers and commands return results that you can use as input to subsequent commands. For example,
+`tx.coin()` creates a coin with the requested balance:
 
 ```typescript
 const tx = new Transaction();
 
-// splitCoins returns one result per amount
-const [coin] = tx.splitCoins(tx.gas, [1_000_000]);
+const coin = tx.coin({ balance: 1_000_000 });
 
 // Use that result as input to another command
 tx.transferObjects([coin], '0xRecipientAddress');
@@ -266,21 +293,27 @@ libraries.
 
 ## Serializing transactions
 
-Serialize a transaction to JSON for storage, transmission, or later reconstruction:
+`build()` produces BCS bytes for signing. With a client it resolves object versions, gas, and
+intents like `tx.coin()` first. If everything is already set, no client is needed (see
+[Building Offline](./offline)):
 
 ```typescript
-// Serialize to JSON — with a client, resolves any unresolved data first
-const json = await tx.toJSON({ client: grpcClient });
+const bytes = await tx.build({ client: grpcClient });
 
-// Serialize without a client — intents like tx.coin() are preserved as-is
-const json = await tx.toJSON();
-
-// Reconstruct from JSON
-const tx = Transaction.from(json);
+// Only the inputs and commands, without sender or gas data
+const kindBytes = await tx.build({ client: grpcClient, onlyTransactionKind: true });
 ```
 
-This is useful for passing transactions between a frontend and backend, or for storing pre-built
-transactions.
+`toJSON()` produces an editable representation for storage or for passing between a frontend and
+backend. It resolves intents like `tx.coin()` but leaves sender and gas data as they are:
+
+```typescript
+const json = await tx.toJSON({ client: grpcClient });
+const restored = Transaction.from(json);
+
+// Or keep tx.coin() intents for the receiver to resolve
+const jsonWithIntents = await tx.toJSON({ supportedIntents: ['CoinWithBalance'] });
+```
 
 ## Executing transactions
 

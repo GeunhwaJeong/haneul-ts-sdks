@@ -1,7 +1,37 @@
 ---
 title: ZkLogin
 description: Zero-knowledge authentication with OAuth providers on Haneul.
-keywords: [zkLogin, zero-knowledge, authentication, OAuth, Haneul, signatures, address, '@haneullabs/haneul']
+keywords:
+  - zkLogin
+  - zero-knowledge
+  - authentication
+  - OAuth
+  - Haneul
+  - signatures
+  - address
+  - '@haneullabs/haneul'
+questions:
+  - What is zkLogin on Haneul?
+  - How do I implement zkLogin in TypeScript?
+  - How does OAuth login work with Haneul?
+answer: >-
+  zkLogin lets users authenticate with OAuth providers (Google, Facebook, etc.) and derive Haneul
+  addresses from their social accounts using zero-knowledge proofs, eliminating the need for private
+  key management.
+goal:
+  description: Reader can implement zkLogin authentication for Haneul wallets
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 30
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 Utilities for working with zkLogin. Currently contains functionality to create and parse zkLogin

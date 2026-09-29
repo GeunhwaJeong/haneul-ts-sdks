@@ -16,8 +16,11 @@ import {
 	union,
 } from 'valibot';
 
+import { ALLOWANCE_BALANCE, COIN_WITH_BALANCE } from './BalanceIntentNames.js';
+import { resolveBalances } from './ResolveBalances.js';
+
 import { bcs } from '../../bcs/index.js';
-import { normalizeStructTag } from '../../utils/haneul-types.js';
+import { normalizeStructTag, normalizeHaneulAddress } from '../../utils/haneul-types.js';
 import { TransactionCommands } from '../Commands.js';
 import type { Argument } from '../data/internal.js';
 import { Inputs } from '../Inputs.js';
@@ -26,7 +29,7 @@ import type { Transaction, TransactionResult } from '../Transaction.js';
 import type { TransactionDataBuilder } from '../TransactionData.js';
 import type { ClientWithCoreApi, HaneulClientTypes } from '../../client/index.js';
 
-export const COIN_WITH_BALANCE = 'CoinWithBalance';
+export { COIN_WITH_BALANCE } from './BalanceIntentNames.js';
 const HANEUL_TYPE = normalizeStructTag('0x2::haneul::HANEUL');
 
 export function coinWithBalance({
@@ -45,7 +48,7 @@ export function coinWithBalance({
 			return coinResult;
 		}
 
-		tx.addIntentResolver(COIN_WITH_BALANCE, resolveCoinBalance);
+		tx.addIntentResolver(COIN_WITH_BALANCE, resolveBalances);
 		const coinType = type === 'gas' ? type : normalizeStructTag(type);
 
 		coinResult = tx.add(
@@ -80,7 +83,7 @@ export function createBalance({
 			return balanceResult;
 		}
 
-		tx.addIntentResolver(COIN_WITH_BALANCE, resolveCoinBalance);
+		tx.addIntentResolver(COIN_WITH_BALANCE, resolveBalances);
 		const coinType = type === 'gas' ? type : normalizeStructTag(type);
 
 		balanceResult = tx.add(
@@ -124,6 +127,25 @@ export async function resolveCoinBalance(
 
 	if (!transactionData.sender) {
 		throw new Error('Sender must be set to resolve CoinWithBalance');
+	}
+
+	if (transactionData.commands.some((command) => command.$Intent?.name === ALLOWANCE_BALANCE)) {
+		throw new Error(
+			'Resolve AllowanceBalance together with CoinWithBalance, or preserve both intents',
+		);
+	}
+	const reservedByType = new Map<string, bigint>();
+	for (const input of transactionData.inputs) {
+		if (!input.FundsWithdrawal) continue;
+		const { withdrawFrom, typeArg, reservation } = input.FundsWithdrawal;
+		const owner =
+			withdrawFrom.SenderAllowance?.funder ??
+			(withdrawFrom.Sender
+				? transactionData.sender
+				: (transactionData.gasData.owner ?? transactionData.sender));
+		if (normalizeHaneulAddress(owner) !== normalizeHaneulAddress(transactionData.sender)) continue;
+		const type = normalizeStructTag(typeArg.Balance);
+		reservedByType.set(type, (reservedByType.get(type) ?? 0n) + BigInt(reservation.MaxAmountU64));
 	}
 
 	// First pass: scan intents, collect per-type data, and resolve zero-balance intents in place.
@@ -178,39 +200,49 @@ export async function resolveCoinBalance(
 	const coinsByType = new Map<string, HaneulClientTypes.Coin[]>();
 	const addressBalanceByType = new Map<string, bigint>();
 	const client = buildOptions.client;
+	const assumeSufficientAddressBalances = buildOptions.assumeSufficientAddressBalances;
 
-	if (!client) {
+	if (!client && !assumeSufficientAddressBalances) {
 		throw new Error(
 			'Client must be provided to build or serialize transactions with CoinWithBalance intents',
 		);
 	}
 
-	await Promise.all([
-		...[...coinTypes].map(async (coinType) => {
-			const { coins, addressBalance } = await getCoinsAndBalanceOfType({
-				coinType,
-				balance: totalByType.get(coinType)!,
-				client,
-				owner: transactionData.sender!,
-				usedIds,
-			});
+	if (assumeSufficientAddressBalances) {
+		for (const [coinType, balance] of totalByType) {
+			addressBalanceByType.set(coinType, balance);
+		}
+	} else {
+		await Promise.all([
+			...[...coinTypes].map(async (coinType) => {
+				const { coins, addressBalance } = await getCoinsAndBalanceOfType({
+					coinType,
+					balance: totalByType.get(coinType)!,
+					client: client!,
+					owner: transactionData.sender!,
+					usedIds,
+					reserved: reservedByType.get(coinType) ?? 0n,
+				});
 
-			coinsByType.set(coinType, coins);
-			addressBalanceByType.set(coinType, addressBalance);
-		}),
-		totalByType.has('gas')
-			? await client.core
-					.getBalance({
-						owner: transactionData.sender!,
-						coinType: HANEUL_TYPE,
-					})
-					.then(({ balance }) => {
-						addressBalanceByType.set('gas', BigInt(balance.addressBalance));
-					})
-			: null,
-	]);
+				coinsByType.set(coinType, coins);
+				addressBalanceByType.set(coinType, addressBalance);
+			}),
+			totalByType.has('gas')
+				? await client!.core
+						.getBalance({
+							owner: transactionData.sender!,
+							coinType: HANEUL_TYPE,
+						})
+						.then(({ balance }) => {
+							addressBalanceByType.set(
+								'gas',
+								availableAddressBalance(balance.addressBalance, reservedByType.get(HANEUL_TYPE) ?? 0n),
+							);
+						})
+				: null,
+		]);
+	}
 
-	const mergedCoins = new Map<string, Argument>();
 	const exactBalanceByType = new Map<string, boolean>();
 	const usedAddressBalance = new Set<string>();
 
@@ -351,8 +383,6 @@ export async function resolveCoinBalance(
 					commands.push(TransactionCommands.MergeCoins(baseCoin, rest.slice(i, i + 500)));
 				}
 
-				mergedCoins.set(type, baseCoin);
-
 				// Step 2: Combined SplitCoins for all intents of this type
 				const splitCmdIndex = index + commands.length;
 				commands.push(
@@ -389,6 +419,47 @@ export async function resolveCoinBalance(
 					}
 				}
 
+				// Step 3: Remainder handling
+				//
+				// Add cleanup to this replacement command list rather than appending
+				// it to the complete transaction. Appending cleanup can place it after
+				// a MoveCall that consumes Random, which Haneul rejects.
+				//
+				// When gas type used GasCoin (not AB), leftover stays in the gas coin
+				// -- no remainder handling is needed.
+				if (type !== 'gas' || usedAddressBalance.has(type)) {
+					const hasBalanceIntent = intents.some((intent) => intent.outputKind === 'balance');
+					const sourcedFromAB = usedAddressBalance.has(type);
+
+					if (hasBalanceIntent || sourcedFromAB) {
+						// Sourced from AB or balance intents exist: send remainder back to sender's address
+						// balance. `coin::send_funds` is gasless-eligible and handles zero amounts.
+						commands.push(
+							TransactionCommands.MoveCall({
+								target: '0x2::coin::send_funds',
+								typeArguments: [coinType],
+								arguments: [
+									baseCoin,
+									transactionData.addInput(
+										'pure',
+										Inputs.Pure(bcs.Address.serialize(transactionData.sender!)),
+									),
+								],
+							}),
+						);
+					} else if (exactBalanceByType.get(type)) {
+						// Coin-only with exact match: destroy the zero-value dust coin.
+						commands.push(
+							TransactionCommands.MoveCall({
+								target: '0x2::coin::destroy_zero',
+								typeArguments: [coinType],
+								arguments: [baseCoin],
+							}),
+						);
+					}
+					// Coin-only with surplus: merged coin stays with sender as an owned object.
+				}
+
 				typeState.set(type, { results, nextIntent: 0 });
 			}
 
@@ -408,44 +479,6 @@ export async function resolveCoinBalance(
 		index += commands.length;
 	}
 
-	// Step 3: Remainder handling
-	for (const [type, mergedCoin] of mergedCoins) {
-		// When gas type used GasCoin (not AB), leftover stays in the gas coin — no remainder needed.
-		if (type === 'gas' && !usedAddressBalance.has(type)) continue;
-
-		const coinType = type === 'gas' ? HANEUL_TYPE : type;
-		const hasBalanceIntent = intentsByType.get(type)?.some((i) => i.outputKind === 'balance');
-		const sourcedFromAB = usedAddressBalance.has(type);
-
-		if (hasBalanceIntent || sourcedFromAB) {
-			// Sourced from AB or balance intents exist: send remainder back to sender's address balance.
-			// coin::send_funds is gasless-eligible and handles zero amounts.
-			transactionData.commands.push(
-				TransactionCommands.MoveCall({
-					target: '0x2::coin::send_funds',
-					typeArguments: [coinType],
-					arguments: [
-						mergedCoin,
-						transactionData.addInput(
-							'pure',
-							Inputs.Pure(bcs.Address.serialize(transactionData.sender!)),
-						),
-					],
-				}),
-			);
-		} else if (exactBalanceByType.get(type)) {
-			// Coin-only with exact match: destroy the zero-value dust coin.
-			transactionData.commands.push(
-				TransactionCommands.MoveCall({
-					target: '0x2::coin::destroy_zero',
-					typeArguments: [coinType],
-					arguments: [mergedCoin],
-				}),
-			);
-		}
-		// Coin-only with surplus: merged coin stays with sender as an owned object
-	}
-
 	return next();
 }
 
@@ -455,12 +488,14 @@ async function getCoinsAndBalanceOfType({
 	client,
 	owner,
 	usedIds,
+	reserved,
 }: {
 	coinType: string;
 	balance: bigint;
 	client: ClientWithCoreApi;
 	owner: string;
 	usedIds: Set<string>;
+	reserved: bigint;
 }): Promise<{
 	coins: HaneulClientTypes.Coin[];
 	balance: bigint;
@@ -470,9 +505,14 @@ async function getCoinsAndBalanceOfType({
 	let remainingBalance = balance;
 	const coins: HaneulClientTypes.Coin[] = [];
 	const balanceRequest = client.core.getBalance({ owner, coinType }).then(({ balance }) => {
-		remainingBalance -= BigInt(balance.addressBalance);
+		const addressBalance = availableAddressBalance(balance.addressBalance, reserved);
+		remainingBalance -= addressBalance;
 
-		return balance;
+		return {
+			...balance,
+			addressBalance: String(addressBalance),
+			balance: String(BigInt(balance.balance) - reserved),
+		};
 	});
 
 	const [allCoins, balanceResponse] = await Promise.all([loadMoreCoins(), balanceRequest]);
@@ -523,4 +563,14 @@ async function getCoinsAndBalanceOfType({
 
 		return coins;
 	}
+}
+
+function availableAddressBalance(balance: string, reserved: bigint): bigint {
+	const available = BigInt(balance) - reserved;
+	if (available < 0n) {
+		throw new Error(
+			`Insufficient address balance for existing withdrawals. Required: ${reserved}, Available: ${balance}`,
+		);
+	}
+	return available;
 }

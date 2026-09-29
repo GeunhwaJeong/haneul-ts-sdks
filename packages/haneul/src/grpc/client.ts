@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { GrpcWebOptions } from '@protobuf-ts/grpcweb-transport';
-import { GrpcWebFetchTransport } from '@protobuf-ts/grpcweb-transport';
 import { TransactionExecutionServiceClient } from './proto/haneul/rpc/v2/transaction_execution_service.client.js';
 import { LedgerServiceClient } from './proto/haneul/rpc/v2/ledger_service.client.js';
 import { MovePackageServiceClient } from './proto/haneul/rpc/v2/move_package_service.client.js';
@@ -19,6 +18,7 @@ import { fromBase64, toBase64 } from '@haneullabs/utils';
 import { NameServiceClient } from './proto/haneul/rpc/v2/name_service.client.js';
 import { ForkingServiceClient } from './proto/haneul/forking/v1alpha/forking_service.client.js';
 import type { TransactionPlugin } from '../transactions/index.js';
+import { GrpcWebFetchTransport, withClientProtocolVersion } from './transport.js';
 
 interface HaneulGrpcTransportOptions extends GrpcWebOptions {
 	transport?: never;
@@ -57,6 +57,86 @@ export interface ListDynamicFieldsWithValueResponse<Include extends DynamicField
 	dynamicFields: DynamicFieldEntryWithValue<Include>[];
 }
 
+export interface GrpcTransactionInclude extends HaneulClientTypes.TransactionInclude {
+	/** Include the parsed protobuf JSON value for the gRPC transaction response. */
+	protoJson?: boolean;
+}
+
+export interface GrpcSimulateTransactionInclude extends HaneulClientTypes.SimulateTransactionInclude {
+	/** Include the parsed protobuf JSON value for the gRPC simulation response. */
+	protoJson?: boolean;
+}
+
+export type GrpcTransactionProtoJson = ReturnType<
+	typeof import('./proto/haneul/rpc/v2/executed_transaction.js').ExecutedTransaction.toJson
+>;
+
+export type GrpcSimulateTransactionProtoJson = ReturnType<
+	typeof import('./proto/haneul/rpc/v2/transaction_execution_service.js').SimulateTransactionResponse.toJson
+>;
+
+type ProtoJson<Include extends { protoJson?: boolean }, Json> = Include['protoJson'] extends true
+	? Json
+	: undefined;
+
+export type GrpcTransactionResult<Include extends GrpcTransactionInclude = {}> =
+	HaneulClientTypes.TransactionResult<Include> & {
+		protoJson: ProtoJson<Include, GrpcTransactionProtoJson>;
+	};
+
+export type GrpcSimulateTransactionResult<Include extends GrpcSimulateTransactionInclude = {}> =
+	HaneulClientTypes.SimulateTransactionResult<Include> & {
+		protoJson: ProtoJson<Include, GrpcSimulateTransactionProtoJson>;
+	};
+
+export interface GrpcGetTransactionOptions<
+	Include extends GrpcTransactionInclude = {},
+> extends HaneulClientTypes.GetTransactionOptions<Include> {
+	include?: Include & GrpcTransactionInclude;
+}
+
+export interface GrpcWaitForTransactionByDigest<
+	Include extends GrpcTransactionInclude = {},
+> extends HaneulClientTypes.WaitForTransactionByDigest<Include> {
+	include?: Include & GrpcTransactionInclude;
+}
+
+export interface GrpcWaitForTransactionByResult<
+	Include extends GrpcTransactionInclude = {},
+> extends HaneulClientTypes.WaitForTransactionByResult<Include> {
+	include?: Include & GrpcTransactionInclude;
+}
+
+export type GrpcWaitForTransactionOptions<Include extends GrpcTransactionInclude = {}> =
+	GrpcWaitForTransactionByDigest<Include> | GrpcWaitForTransactionByResult<Include>;
+
+export interface GrpcExecuteTransactionOptions<
+	Include extends GrpcTransactionInclude = {},
+> extends HaneulClientTypes.ExecuteTransactionOptions<Include> {
+	include?: Include & GrpcTransactionInclude;
+}
+
+export interface GrpcSignAndExecuteTransactionOptions<
+	Include extends GrpcTransactionInclude = {},
+> extends HaneulClientTypes.SignAndExecuteTransactionOptions<Include> {
+	include?: Include & GrpcTransactionInclude;
+}
+
+export interface GrpcSimulateTransactionOptions<
+	Include extends GrpcSimulateTransactionInclude = {},
+> extends HaneulClientTypes.SimulateTransactionOptions<Include> {
+	include?: Include & GrpcSimulateTransactionInclude;
+	/**
+	 * Overrides whether the server selects gas payment during simulation.
+	 *
+	 * When not set, gas selection is enabled only when the transaction's gas payment is explicitly
+	 * set to an empty list (`[]`), which indicates gas is paid from the sender's address balance.
+	 * Transactions with gas coins set are simulated as-is, and transactions without a gas payment
+	 * are simulated with a mocked gas coin.
+	 */
+	doGasSelection?: boolean;
+}
+
 export class HaneulGrpcClient extends BaseClient implements HaneulClientTypes.TransportMethods {
 	core: GrpcCoreClient;
 	get mvr(): HaneulClientTypes.MvrMethods {
@@ -77,9 +157,19 @@ export class HaneulGrpcClient extends BaseClient implements HaneulClientTypes.Tr
 
 	constructor(options: HaneulGrpcClientOptions) {
 		super({ network: options.network });
-		const transport =
-			options.transport ??
-			new GrpcWebFetchTransport({ baseUrl: options.baseUrl, fetchInit: options.fetchInit });
+		const {
+			network: _network,
+			mvr: _mvr,
+			// Not forwarded: every Core API call passes its own `signal`, which would overwrite it.
+			abort: _abort,
+			transport: providedTransport,
+			...transportOptions
+		} = options as HaneulGrpcClientOptions & HaneulGrpcTransportOptions & { transport?: RpcTransport };
+
+		// Add the protocol-version default for every transport, including native gRPC.
+		const transport = withClientProtocolVersion(
+			providedTransport ?? new GrpcWebFetchTransport(transportOptions),
+		);
 		this.transactionExecutionService = new TransactionExecutionServiceClient(transport);
 		this.ledgerService = new LedgerServiceClient(transport);
 		this.stateService = new StateServiceClient(transport);
@@ -135,38 +225,58 @@ export class HaneulGrpcClient extends BaseClient implements HaneulClientTypes.Tr
 		return this.core.getCoinMetadata(input);
 	}
 
-	getTransaction<Include extends HaneulClientTypes.TransactionInclude = {}>(
-		input: HaneulClientTypes.GetTransactionOptions<Include>,
-	): Promise<HaneulClientTypes.TransactionResult<Include>> {
-		return this.core.getTransaction(input);
+	getTransaction<Include extends GrpcTransactionInclude = {}>(
+		input: GrpcGetTransactionOptions<Include>,
+	): Promise<GrpcTransactionResult<Include>> {
+		return this.core.getTransaction(input) as Promise<GrpcTransactionResult<Include>>;
 	}
 
-	executeTransaction<Include extends HaneulClientTypes.TransactionInclude = {}>(
-		input: HaneulClientTypes.ExecuteTransactionOptions<Include>,
-	): Promise<HaneulClientTypes.TransactionResult<Include>> {
-		return this.core.executeTransaction(input);
+	executeTransaction<Include extends GrpcTransactionInclude = {}>(
+		input: GrpcExecuteTransactionOptions<Include>,
+	): Promise<GrpcTransactionResult<Include>> {
+		return this.core.executeTransaction(input) as Promise<GrpcTransactionResult<Include>>;
 	}
 
-	signAndExecuteTransaction<Include extends HaneulClientTypes.TransactionInclude = {}>(
-		input: HaneulClientTypes.SignAndExecuteTransactionOptions<Include>,
-	): Promise<HaneulClientTypes.TransactionResult<Include>> {
-		return this.core.signAndExecuteTransaction(input);
+	signAndExecuteTransaction<Include extends GrpcTransactionInclude = {}>(
+		input: GrpcSignAndExecuteTransactionOptions<Include>,
+	): Promise<GrpcTransactionResult<Include>> {
+		return this.core.signAndExecuteTransaction(input) as Promise<GrpcTransactionResult<Include>>;
 	}
 
-	waitForTransaction<Include extends HaneulClientTypes.TransactionInclude = {}>(
-		input: HaneulClientTypes.WaitForTransactionOptions<Include>,
-	): Promise<HaneulClientTypes.TransactionResult<Include>> {
-		return this.core.waitForTransaction(input);
+	waitForTransaction<Include extends GrpcTransactionInclude = {}>(
+		input: GrpcWaitForTransactionOptions<Include>,
+	): Promise<GrpcTransactionResult<Include>> {
+		return this.core.waitForTransaction(input) as Promise<GrpcTransactionResult<Include>>;
 	}
 
-	simulateTransaction<Include extends HaneulClientTypes.SimulateTransactionInclude = {}>(
-		input: HaneulClientTypes.SimulateTransactionOptions<Include>,
-	): Promise<HaneulClientTypes.SimulateTransactionResult<Include>> {
-		return this.core.simulateTransaction(input);
+	simulateTransaction<Include extends GrpcSimulateTransactionInclude = {}>(
+		input: GrpcSimulateTransactionOptions<Include>,
+	): Promise<GrpcSimulateTransactionResult<Include>> {
+		return this.core.simulateTransaction(input) as Promise<GrpcSimulateTransactionResult<Include>>;
 	}
 
-	getReferenceGasPrice(): Promise<HaneulClientTypes.GetReferenceGasPriceResponse> {
-		return this.core.getReferenceGasPrice();
+	getReferenceGasPrice(
+		input?: HaneulClientTypes.GetReferenceGasPriceOptions,
+	): Promise<HaneulClientTypes.GetReferenceGasPriceResponse> {
+		return this.core.getReferenceGasPrice(input);
+	}
+
+	getCurrentSystemState(
+		input?: HaneulClientTypes.GetCurrentSystemStateOptions,
+	): Promise<HaneulClientTypes.GetCurrentSystemStateResponse> {
+		return this.core.getCurrentSystemState(input);
+	}
+
+	getProtocolConfig(
+		input?: HaneulClientTypes.GetProtocolConfigOptions,
+	): Promise<HaneulClientTypes.GetProtocolConfigResponse> {
+		return this.core.getProtocolConfig(input);
+	}
+
+	getChainIdentifier(
+		input?: HaneulClientTypes.GetChainIdentifierOptions,
+	): Promise<HaneulClientTypes.GetChainIdentifierResponse> {
+		return this.core.getChainIdentifier(input);
 	}
 
 	async listDynamicFields<Include extends DynamicFieldInclude = {}>(
@@ -178,14 +288,17 @@ export class HaneulGrpcClient extends BaseClient implements HaneulClientTypes.Tr
 			paths.push('value');
 		}
 
-		const response = await this.stateService.listDynamicFields({
-			parent: input.parentId,
-			pageToken: input.cursor ? fromBase64(input.cursor) : undefined,
-			pageSize: input.limit,
-			readMask: {
-				paths,
+		const response = await this.stateService.listDynamicFields(
+			{
+				parent: input.parentId,
+				pageToken: input.cursor ? fromBase64(input.cursor) : undefined,
+				pageSize: input.limit,
+				readMask: {
+					paths,
+				},
 			},
-		});
+			{ abort: input.signal },
+		);
 
 		return {
 			dynamicFields: response.response.dynamicFields.map(
@@ -221,6 +334,22 @@ export class HaneulGrpcClient extends BaseClient implements HaneulClientTypes.Tr
 		return this.core.getDynamicField(input);
 	}
 
+	getDynamicObjectField<Include extends HaneulClientTypes.ObjectInclude = {}>(
+		input: HaneulClientTypes.GetDynamicObjectFieldOptions<Include>,
+	): Promise<HaneulClientTypes.GetDynamicObjectFieldResponse<Include>> {
+		return this.core.getDynamicObjectField(input);
+	}
+
+	listTransactions<Include extends HaneulClientTypes.TransactionInclude = {}>(
+		input: HaneulClientTypes.ListTransactionsOptions<Include>,
+	): Promise<HaneulClientTypes.ListTransactionsResponse<Include>> {
+		return this.core.listTransactions(input);
+	}
+
+	listEvents(input: HaneulClientTypes.ListEventsOptions): Promise<HaneulClientTypes.ListEventsResponse> {
+		return this.core.listEvents(input);
+	}
+
 	getMoveFunction(
 		input: HaneulClientTypes.GetMoveFunctionOptions,
 	): Promise<HaneulClientTypes.GetMoveFunctionResponse> {
@@ -241,5 +370,11 @@ export class HaneulGrpcClient extends BaseClient implements HaneulClientTypes.Tr
 		input: HaneulClientTypes.DefaultNameServiceNameOptions,
 	): Promise<HaneulClientTypes.DefaultNameServiceNameResponse> {
 		return this.core.defaultNameServiceName(input);
+	}
+
+	resolveNameServiceAddress(
+		input: HaneulClientTypes.ResolveNameServiceAddressOptions,
+	): Promise<HaneulClientTypes.ResolveNameServiceAddressResponse> {
+		return this.core.resolveNameServiceAddress(input);
 	}
 }

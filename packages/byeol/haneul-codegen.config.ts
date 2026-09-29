@@ -3,12 +3,118 @@
 
 import type { HaneulCodegenConfig } from '@haneullabs/codegen';
 
+// The `@local-pkg/*` entries are not registered on MVR, so they generate from the local Move
+// source in the sibling `byeolv3` checkout (same pattern the `@byeol/*` entries use).
+// Predict and Sessions bindings were regenerated from byeolv3 main at PR #1321
+// (abb4cfd93b2e51f7925941fe5d53b3fe70fc140c), the sources of Predict Mainnet v3 / Testnet v4
+// and Sessions v2 on both networks. Use the matching deployment manifest and Published.toml
+// records when running sync-deployment; those separate current call targets from the original
+// IDs of existing types.
+//
+// One `pnpm codegen` run regenerates EVERY entry below from whatever commit that checkout is on,
+// so check it out to the intended anchor first and diff the result — a regeneration meant for one
+// entry rewrites the rest. The `@byeol/*` margin entries are NOT on `main`: they stay pinned to
+// the deployed margin surface, because margin is live on mainnet and moving it is its own change.
+// Revert them if a Predict regeneration rewrites them. Nothing enforces any of this: no CI job runs
+// codegen, and it is recorded only here.
+//
+// `src/contracts/wormhole/**` is the exception — no entry generates it, so it is frozen at whatever
+// commit produced it. `src/pyth/pyth.ts` imports it.
+//
+// Oracle is read-only for this SDK: trade entrypoints read feeds by reference, so we deliberately
+// do NOT generate the oracle-construction packages (`block_scholes_oracle` / `pyth_lazer`) — they
+// are only needed to *produce* oracle updates, which is out of scope.
+
+// Parse `u64`/`u128`/`u256` straight to bigint rather than the decimal strings `@haneullabs/haneul/bcs`
+// yields, which every consumer immediately wrapped in `BigInt(...)`.
+//
+// Representation only — no scaling. Scale is not inferable from a field's type
+// (`order_events::OrderMinted.trading_fee` is a 1e6 amount while
+// `config_events::MarketCreated.base_fee` is a rate), and the receipts deliberately expose exact
+// bigints alongside their display numbers.
+//
+// Applied PER ENTRY, to every struct that entry renders including its own dependency modules —
+// `byeol_predict/deps/fixed_math/i64.ts` is bigint while `pyth/i64.ts` is a decimal string, from
+// the same Move type. So the rule for a new entry is about what it RENDERS, not what it depends on.
+// Depending on `account` does not by itself pull in account's structs: predict and sessions both
+// depend on it and render none of its types, because `account::Account` only ever appears as a
+// function parameter.
+const bcsOverrides = [
+	{ type: 'u64', source: './src/bcs/integers.ts#U64' },
+	{ type: 'u128', source: './src/bcs/integers.ts#U128' },
+	{ type: 'u256', source: './src/bcs/integers.ts#U256' },
+];
+
 const config: HaneulCodegenConfig = {
 	output: './src/contracts',
 	packages: [
 		{
+			package: '@local-pkg/byeol_predict',
+			path: '../../../byeolv3/packages/predict',
+			// Per-network shared singletons and the package address. Every one of these was
+			// threaded through by hand on each call site; they now come from the config object
+			// the SDK already carries. `PredictConfig` is checked against the generated
+			// `ByeolPredictConfig` interface, so a deployment id that stops matching the
+			// deployed signature is a compile error rather than a runtime abort.
+			configArguments: {
+				predictPackageId: { package: '@local-pkg/byeol_predict' },
+				protocolConfig: { type: 'protocol_config::ProtocolConfig' },
+				poolVault: { type: 'plp::PoolVault' },
+				registry: { type: 'registry::Registry' },
+				oracleRegistry: { type: '@local-pkg/propbook::registry::OracleRegistry' },
+			},
+			bcsOverrides,
+		},
+		{
+			package: '@local-pkg/propbook',
+			path: '../../../byeolv3/packages/propbook',
+			bcsOverrides,
+		},
+		{
+			// Time-limited trading sessions: an Account owner authorizes an ephemeral address
+			// to submit a bounded set of transactions on the Account's behalf until a fixed
+			// expiry. Only the lifecycle and the Predict wrappers are surfaced by the SDK;
+			// the Byeol spot wrappers additionally require `byeol_core_account`'s read
+			// surface, which is not modelled yet.
+			package: '@local-pkg/byeol_sessions',
+			path: '../../../byeolv3/packages/sessions',
+			// The package address and the shared `SessionsConfig` singleton come from a config
+			// object rather than being threaded through every call site — same pattern as the
+			// account entry. Without this the generated thunks lose their `config` option and
+			// `src/sessions.ts` stops compiling.
+			configArguments: {
+				sessionsPackageId: { package: '@local-pkg/byeol_sessions' },
+				sessionsConfig: { type: 'session_config::SessionsConfig' },
+			},
+			bcsOverrides,
+		},
+		{
+			// The shared on-chain account primitive. Both Byeol's core account wrapper and
+			// Byeol Predict build on it, so its bindings live here and are exposed on the
+			// `@haneullabs/byeol/account` subpath rather than in either consumer.
+			package: '@local-pkg/account',
+			path: '../../../byeolv3/packages/account',
+			// The package address and the per-network `AccountRegistry` singleton come from a
+			// config object instead of being threaded through every call site. The generated
+			// `AccountConfig` interface makes a deployment id that stops matching the deployed
+			// signature a compile error rather than a runtime abort.
+			configArguments: {
+				accountPackageId: { package: '@local-pkg/account' },
+				accountRegistry: { type: 'account_registry::AccountRegistry' },
+			},
+			bcsOverrides,
+		},
+		{
 			package: '@byeol/core',
-			path: '../../../byeol/packages/byeol',
+			path: '../../../byeolv3/packages/byeol',
+		},
+		{
+			package: '@byeol/margin',
+			path: '../../../byeolv3/packages/byeol_margin',
+		},
+		{
+			package: '@byeol/margin-liquidation',
+			path: '../../../byeolv3/packages/margin_liquidation',
 		},
 		{
 			package: '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837',

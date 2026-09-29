@@ -2,16 +2,36 @@
 title: Seal SDK
 description: Decentralized secrets management with threshold encryption on Haneul.
 keywords:
-  [
-    Seal,
-    encryption,
-    threshold encryption,
-    secrets management,
-    Haneul,
-    '@haneullabs/seal',
-    key server,
-    decentralized,
-  ]
+  - Seal
+  - encryption
+  - threshold encryption
+  - secrets management
+  - Haneul
+  - '@haneullabs/seal'
+  - key server
+  - decentralized
+questions:
+  - What is the Seal SDK?
+  - How do I encrypt data with Seal?
+  - How does threshold encryption work in Seal?
+answer: >-
+  The Seal SDK (@haneullabs/seal) provides decentralized secrets management with threshold encryption on
+  Haneul, letting you encrypt data with onchain access policies and decrypt through key servers.
+goal:
+  description: >-
+    Reader understands the Seal SDK and can encrypt/decrypt data with threshold encryption on Haneul
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 100
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 <Callout type="info">
@@ -52,9 +72,55 @@ const client = new HaneulGrpcClient({
 
 The `seal()` function accepts the following options:
 
-- **`serverConfigs`** (required) - Array of key server configurations with `objectId` and `weight`
+- **`serverConfigs`** (required) - Array of key server configurations (see
+  [Choosing key servers](#choosing-key-servers)). Each entry contains:
+  - **`objectId`** (required) - The key server object ID
+  - **`weight`** (required) - How many times the key server can contribute towards reaching the
+    decryption threshold
+  - **`aggregatorUrl`** (required for decentralized servers) - The aggregator endpoint URL
+  - **`apiKeyName`** and **`apiKey`** (optional) - Required if the server requires API key
+    authentication
 - **`verifyKeyServers`** (optional) - Whether to verify key server authenticity (default: `true`)
 - **`timeout`** (optional) - Timeout in milliseconds for network requests (default: `10000`)
+- **`fetch`** (optional) - Custom fetch implementation used for all key server requests (default:
+  the global `fetch`), for example to send cookies with `credentials: 'include'` or attach your own
+  headers
+
+## Choosing key servers
+
+Seal supports two server types, **independent** and **decentralized** (committee mode), which you
+can use individually or in combination. Each key server counts as one server in your threshold
+configuration. Decentralized servers require an `aggregatorUrl`, because all fetch key calls go
+through an aggregator:
+
+```ts
+const client = new HaneulGrpcClient({
+	network: 'testnet',
+	baseUrl: 'https://fullnode.testnet.haneul.io:443',
+}).$extend(
+	seal({
+		serverConfigs: [
+			// Decentralized (committee mode) server
+			{
+				objectId: '0xb012378c9f3799fb5b1a7083da74a4069e3c3f1c93de0b27212a5799ce1e1e98',
+				aggregatorUrl: 'https://seal-aggregator-testnet.haneul-labs.com',
+				weight: 1,
+			},
+			// Independent server
+			{
+				objectId: '0x73d05d62c18d9374e3ea529e8e0ed6161da1a141a94d3f76ae3fe4e99356db75',
+				weight: 1,
+			},
+		],
+	}),
+);
+```
+
+If a server requires API key authentication, include `apiKeyName` and `apiKey` in its configuration
+object. The SDK sends these as an HTTP header in the format `apiKeyName: apiKey`.
+
+For more details on server types, verified key servers, and API key authentication, see
+[Using Seal](https://seal-docs.wal.app/UsingSeal) in the main Seal documentation.
 
 ## Basic usage
 

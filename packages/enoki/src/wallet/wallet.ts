@@ -341,7 +341,7 @@ export class EnokiWallet implements Wallet {
 		const sessionContext = chain ? this.#state.getSessionContext(chain.split(':')[1]) : null;
 		if (!sessionContext) {
 			throw new Error(
-				`A valid Haneul chain identifier was not provided in the request. Please report this issue to the dApp developer. Examples of valid Haneul chain identifiers are 'haneul:testnet' and 'haneul:mainnet'. Consider using the '@haneullabs/dapp-kit' package, which provides this value automatically.`,
+				`A valid Haneul chain identifier was not provided in the request. Please report this issue to the dApp developer. Examples of valid Haneul chain identifiers are 'haneul:testnet' and 'haneul:mainnet'. Consider using the '@haneullabs/dapp-kit-react' package, which provides this value automatically.`,
 			);
 		}
 

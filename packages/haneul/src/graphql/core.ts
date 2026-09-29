@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { CoreClient } from '../client/core.js';
+import { raceSignal } from '../client/mvr.js';
 import type { HaneulClientTypes } from '../client/types.js';
 import { HANEUL_TYPE_ARG } from '../utils/constants.js';
 import type { GraphQLQueryOptions, HaneulGraphQLClient } from './client.js';
@@ -28,27 +29,43 @@ import {
 	GetOwnedObjectsDocument,
 	GetReferenceGasPriceDocument,
 	GetTransactionBlockDocument,
+	ListEventsDocument,
+	ListTransactionsDocument,
 	MultiGetObjectsDocument,
+	ResolveNameServiceAddressDocument,
 	ResolveTransactionDocument,
 	SimulateTransactionDocument,
 	VerifyZkLoginSignatureDocument,
 	ZkLoginIntentScope,
 } from './generated/queries.js';
-import { ObjectError, SimulationError } from '../client/errors.js';
+import { ObjectError, SimulationError, TransactionError } from '../client/errors.js';
 import { chunk, fromBase64, toBase64 } from '@haneullabs/utils';
-import { normalizeHaneulAddress } from '../utils/haneul-types.js';
-import { formatMoveAbortMessage, parseTransactionEffectsBcs } from '../client/utils.js';
+import { normalizeStructTag, normalizeHaneulAddress } from '../utils/haneul-types.js';
+import {
+	formatMoveAbortMessage,
+	parseTransactionEffectsBcs,
+	transactionBytesHaveEmptyGasPayment,
+} from '../client/utils.js';
 import type { OpenMoveTypeSignatureBody, OpenMoveTypeSignature } from './types.js';
 import {
 	transactionDataToGrpcTransaction,
 	transactionToGrpcJson,
 	grpcTransactionToTransactionData,
 } from '../client/transaction-resolver.js';
+import { setAddressBalanceTransactionExpirationFromSimulatedEpoch } from '../client/address-balance-transaction-expiration.js';
 import { BalanceChange as BalanceChangeType } from '../grpc/proto/haneul/rpc/v2/balance_change.js';
 import { TransactionEffects as TransactionEffectsType } from '../grpc/proto/haneul/rpc/v2/effects.js';
 import { Transaction as GrpcTransactionType } from '../grpc/proto/haneul/rpc/v2/transaction.js';
 import { TransactionDataBuilder } from '../transactions/TransactionData.js';
 import type { BuildTransactionOptions } from '../transactions/index.js';
+import {
+	resolveEventFilter,
+	resolvePagination,
+	resolveTransactionFilter,
+	validateTransactionQuery,
+} from '../client/query-filters.js';
+
+const GRAPHQL_OBJECT_BATCH_SIZE = 40;
 
 export class GraphQLCoreClient extends CoreClient {
 	#graphqlClient: HaneulGraphQLClient;
@@ -71,6 +88,7 @@ export class GraphQLCoreClient extends CoreClient {
 	>(
 		options: GraphQLQueryOptions<Result, Variables>,
 		getData?: (result: Result) => Data,
+		createMissingDataError?: () => Error,
 	): Promise<NonNullable<Data>> {
 		const { data, errors } = await this.#graphqlClient.query(options);
 
@@ -79,7 +97,7 @@ export class GraphQLCoreClient extends CoreClient {
 		const extractedData = data && (getData ? getData(data) : data);
 
 		if (extractedData == null) {
-			throw new Error('Missing response data');
+			throw createMissingDataError?.() ?? new Error('Missing response data');
 		}
 
 		return extractedData as NonNullable<Data>;
@@ -88,13 +106,14 @@ export class GraphQLCoreClient extends CoreClient {
 	async getObjects<Include extends HaneulClientTypes.ObjectInclude = {}>(
 		options: HaneulClientTypes.GetObjectsOptions<Include>,
 	): Promise<HaneulClientTypes.GetObjectsResponse<Include>> {
-		const batches = chunk(options.objectIds, 50);
+		const batches = chunk(options.objectIds, GRAPHQL_OBJECT_BATCH_SIZE);
 		const results: HaneulClientTypes.GetObjectsResponse<Include>['objects'] = [];
 
 		for (const batch of batches) {
 			const page = await this.#graphqlQuery(
 				{
 					query: MultiGetObjectsDocument,
+					signal: options.signal,
 					variables: {
 						objectKeys: batch.map((address) => ({ address })),
 						includeContent: options.include?.content ?? false,
@@ -108,11 +127,14 @@ export class GraphQLCoreClient extends CoreClient {
 			);
 			results.push(
 				...batch
-					.map((id) => normalizeHaneulAddress(id))
+					.map((objectId) => ({ objectId, normalized: normalizeHaneulAddress(objectId) }))
 					.map(
-						(id) =>
-							page.find((obj) => obj?.address === id) ??
-							new ObjectError('notFound', `Object ${id} not found`),
+						({ objectId, normalized }) =>
+							page.find((obj) => obj?.address === normalized) ??
+							new ObjectError('notFound', `Object ${normalized} not found`, {
+								reason: 'notFound',
+								objectId,
+							}),
 					)
 					.map((obj) => {
 						if (obj instanceof ObjectError) {
@@ -173,12 +195,16 @@ export class GraphQLCoreClient extends CoreClient {
 		const objects = await this.#graphqlQuery(
 			{
 				query: GetOwnedObjectsDocument,
+				signal: options.signal,
 				variables: {
 					owner: options.owner,
 					limit: options.limit,
 					cursor: options.cursor,
 					filter: options.type
-						? { type: (await this.mvr.resolveType({ type: options.type })).type }
+						? {
+								type: (await this.mvr.resolveType({ type: options.type, signal: options.signal }))
+									.type,
+							}
 						: undefined,
 					includeContent: options.include?.content ?? false,
 					includePreviousTransaction: options.include?.previousTransaction ?? false,
@@ -191,32 +217,30 @@ export class GraphQLCoreClient extends CoreClient {
 		);
 
 		return {
-			objects: objects.nodes.map(
-				(obj): HaneulClientTypes.Object<Include> => ({
-					objectId: obj.address,
-					version: obj.version?.toString()!,
-					digest: obj.digest!,
-					owner: mapOwner(obj.owner!),
-					type: obj.contents?.type?.repr!,
-					content: (obj.contents?.bcs
-						? fromBase64(obj.contents.bcs)
-						: undefined) as HaneulClientTypes.Object<Include>['content'],
-					previousTransaction: (obj.previousTransaction?.digest ??
-						undefined) as HaneulClientTypes.Object<Include>['previousTransaction'],
-					objectBcs: (obj.objectBcs
-						? fromBase64(obj.objectBcs)
-						: undefined) as HaneulClientTypes.Object<Include>['objectBcs'],
-					json: (options.include?.json
-						? obj.contents?.json
-							? (obj.contents.json as Record<string, unknown>)
-							: null
-						: undefined) as HaneulClientTypes.Object<Include>['json'],
-					display: mapDisplay(
-						options.include?.display,
-						obj.contents?.display,
-					) as HaneulClientTypes.Object<Include>['display'],
-				}),
-			),
+			objects: objects.nodes.map((obj): HaneulClientTypes.Object<Include> => ({
+				objectId: obj.address,
+				version: obj.version?.toString()!,
+				digest: obj.digest!,
+				owner: mapOwner(obj.owner!),
+				type: obj.contents?.type?.repr!,
+				content: (obj.contents?.bcs
+					? fromBase64(obj.contents.bcs)
+					: undefined) as HaneulClientTypes.Object<Include>['content'],
+				previousTransaction: (obj.previousTransaction?.digest ??
+					undefined) as HaneulClientTypes.Object<Include>['previousTransaction'],
+				objectBcs: (obj.objectBcs
+					? fromBase64(obj.objectBcs)
+					: undefined) as HaneulClientTypes.Object<Include>['objectBcs'],
+				json: (options.include?.json
+					? obj.contents?.json
+						? (obj.contents.json as Record<string, unknown>)
+						: null
+					: undefined) as HaneulClientTypes.Object<Include>['json'],
+				display: mapDisplay(
+					options.include?.display,
+					obj.contents?.display,
+				) as HaneulClientTypes.Object<Include>['display'],
+			})),
 			hasNextPage: objects.pageInfo.hasNextPage,
 			cursor: objects.pageInfo.endCursor ?? null,
 		};
@@ -228,11 +252,12 @@ export class GraphQLCoreClient extends CoreClient {
 		const coins = await this.#graphqlQuery(
 			{
 				query: GetCoinsDocument,
+				signal: options.signal,
 				variables: {
 					owner: options.owner,
 					cursor: options.cursor,
 					first: options.limit,
-					type: `0x2::coin::Coin<${(await this.mvr.resolveType({ type: coinType })).type}>`,
+					type: `0x2::coin::Coin<${(await this.mvr.resolveType({ type: coinType, signal: options.signal })).type}>`,
 				},
 			},
 			(result) => result.address?.objects,
@@ -241,16 +266,14 @@ export class GraphQLCoreClient extends CoreClient {
 		return {
 			cursor: coins.pageInfo.endCursor ?? null,
 			hasNextPage: coins.pageInfo.hasNextPage,
-			objects: coins.nodes.map(
-				(coin): HaneulClientTypes.Coin => ({
-					objectId: coin.address,
-					version: coin.version?.toString()!,
-					digest: coin.digest!,
-					owner: mapOwner(coin.owner!),
-					type: coin.contents?.type?.repr!,
-					balance: (coin.contents?.json as { balance: string })?.balance,
-				}),
-			),
+			objects: coins.nodes.map((coin): HaneulClientTypes.Coin => ({
+				objectId: coin.address,
+				version: coin.version?.toString()!,
+				digest: coin.digest!,
+				owner: mapOwner(coin.owner!),
+				type: coin.contents?.type?.repr!,
+				balance: (coin.contents?.json as { balance: string })?.balance,
+			})),
 		};
 	}
 
@@ -261,9 +284,10 @@ export class GraphQLCoreClient extends CoreClient {
 		const result = await this.#graphqlQuery(
 			{
 				query: GetBalanceDocument,
+				signal: options.signal,
 				variables: {
 					owner: options.owner,
-					coinType: (await this.mvr.resolveType({ type: coinType })).type,
+					coinType: (await this.mvr.resolveType({ type: coinType, signal: options.signal })).type,
 				},
 			},
 			(result) => result.address?.balance,
@@ -284,10 +308,13 @@ export class GraphQLCoreClient extends CoreClient {
 	async getCoinMetadata(
 		options: HaneulClientTypes.GetCoinMetadataOptions,
 	): Promise<HaneulClientTypes.GetCoinMetadataResponse> {
-		const coinType = (await this.mvr.resolveType({ type: options.coinType })).type;
+		const coinType = (
+			await this.mvr.resolveType({ type: options.coinType, signal: options.signal })
+		).type;
 
 		const { data, errors } = await this.#graphqlClient.query({
 			query: GetCoinMetadataDocument,
+			signal: options.signal,
 			variables: {
 				coinType,
 			},
@@ -317,6 +344,7 @@ export class GraphQLCoreClient extends CoreClient {
 		const balances = await this.#graphqlQuery(
 			{
 				query: GetAllBalancesDocument,
+				signal: options.signal,
 				variables: {
 					owner: options.owner,
 					limit: options.limit,
@@ -347,6 +375,7 @@ export class GraphQLCoreClient extends CoreClient {
 		const result = await this.#graphqlQuery(
 			{
 				query: GetTransactionBlockDocument,
+				signal: options.signal,
 				variables: {
 					digest: options.digest,
 					includeTransaction: options.include?.transaction ?? false,
@@ -358,6 +387,7 @@ export class GraphQLCoreClient extends CoreClient {
 				},
 			},
 			(result) => result.transaction,
+			() => new TransactionError('notFound', options.digest),
 		);
 
 		return parseTransaction(result, options.include);
@@ -368,6 +398,7 @@ export class GraphQLCoreClient extends CoreClient {
 		const result = await this.#graphqlQuery(
 			{
 				query: ExecuteTransactionDocument,
+				signal: options.signal,
 				variables: {
 					transactionDataBcs: toBase64(options.transaction),
 					signatures: options.signatures,
@@ -385,15 +416,25 @@ export class GraphQLCoreClient extends CoreClient {
 		return parseTransaction(result.effects?.transaction!, options.include);
 	}
 	async simulateTransaction<Include extends HaneulClientTypes.SimulateTransactionInclude = {}>(
-		options: HaneulClientTypes.SimulateTransactionOptions<Include>,
+		options: HaneulClientTypes.SimulateTransactionOptions<Include> & { doGasSelection?: boolean },
 	): Promise<HaneulClientTypes.SimulateTransactionResult<Include>> {
 		if (!(options.transaction instanceof Uint8Array)) {
 			await options.transaction.prepareForSerialization({ client: this });
 		}
 
+		// A gas payment explicitly set to an empty list means gas is paid from the sender's
+		// address balance, so the server needs to perform gas selection rather than simulating
+		// with a mocked gas coin.
+		const doGasSelection =
+			options.doGasSelection ??
+			(options.transaction instanceof Uint8Array
+				? transactionBytesHaveEmptyGasPayment(options.transaction)
+				: options.transaction.getData().gasData.payment?.length === 0);
+
 		const result = await this.#graphqlQuery(
 			{
 				query: SimulateTransactionDocument,
+				signal: options.signal,
 				variables: {
 					transaction:
 						options.transaction instanceof Uint8Array
@@ -410,6 +451,7 @@ export class GraphQLCoreClient extends CoreClient {
 					includeObjectTypes: options.include?.objectTypes ?? false,
 					includeCommandResults: options.include?.commandResults ?? false,
 					includeBcs: options.include?.bcs ?? false,
+					doGasSelection,
 					checksEnabled: options.checksEnabled ?? true,
 				},
 			},
@@ -446,10 +488,13 @@ export class GraphQLCoreClient extends CoreClient {
 			};
 		}
 	}
-	async getReferenceGasPrice(): Promise<HaneulClientTypes.GetReferenceGasPriceResponse> {
+	async getReferenceGasPrice(
+		options?: HaneulClientTypes.GetReferenceGasPriceOptions,
+	): Promise<HaneulClientTypes.GetReferenceGasPriceResponse> {
 		const result = await this.#graphqlQuery(
 			{
 				query: GetReferenceGasPriceDocument,
+				signal: options?.signal,
 			},
 			(result) => result.epoch?.referenceGasPrice,
 		);
@@ -459,10 +504,13 @@ export class GraphQLCoreClient extends CoreClient {
 		};
 	}
 
-	async getProtocolConfig(): Promise<HaneulClientTypes.GetProtocolConfigResponse> {
+	async getProtocolConfig(
+		options?: HaneulClientTypes.GetProtocolConfigOptions,
+	): Promise<HaneulClientTypes.GetProtocolConfigResponse> {
 		const result = await this.#graphqlQuery(
 			{
 				query: GetProtocolConfigDocument,
+				signal: options?.signal,
 			},
 			(result) => result.epoch?.protocolConfigs,
 		);
@@ -485,10 +533,13 @@ export class GraphQLCoreClient extends CoreClient {
 		};
 	}
 
-	async getCurrentSystemState(): Promise<HaneulClientTypes.GetCurrentSystemStateResponse> {
+	async getCurrentSystemState(
+		options?: HaneulClientTypes.GetCurrentSystemStateOptions,
+	): Promise<HaneulClientTypes.GetCurrentSystemStateResponse> {
 		const result = await this.#graphqlQuery(
 			{
 				query: GetCurrentSystemStateDocument,
+				signal: options?.signal,
 			},
 			(result) => result.epoch,
 		);
@@ -592,6 +643,124 @@ export class GraphQLCoreClient extends CoreClient {
 		return this.#graphqlClient.listDynamicFields(options);
 	}
 
+	async listTransactions<Include extends HaneulClientTypes.TransactionInclude = {}>(
+		options: HaneulClientTypes.ListTransactionsOptions<Include>,
+	): Promise<HaneulClientTypes.ListTransactionsResponse<Include>> {
+		const pagination = resolvePagination(options);
+		const { descending, after, before, limit } = pagination;
+		const filter = options.filter
+			? await resolveTransactionFilter(this.mvr, options.filter, options.signal)
+			: undefined;
+		validateTransactionQuery(filter, pagination);
+
+		const transactions = await this.#graphqlQuery(
+			{
+				query: ListTransactionsDocument,
+				signal: options.signal,
+				variables: {
+					filter: filter && {
+						sentAddress: filter.$kind === 'sender' ? filter.sender : undefined,
+						function:
+							filter.$kind === 'function'
+								? [filter.package, filter.module, filter.function].filter(Boolean).join('::')
+								: undefined,
+					},
+					first: descending ? undefined : limit,
+					after,
+					last: descending ? limit : undefined,
+					before,
+					includeTransaction: options.include?.transaction ?? false,
+					includeEffects: options.include?.effects ?? false,
+					includeEvents: options.include?.events ?? false,
+					includeBalanceChanges: options.include?.balanceChanges ?? false,
+					includeObjectTypes: options.include?.objectTypes ?? false,
+					includeBcs: options.include?.bcs ?? false,
+				},
+			},
+			(result) => result.transactions,
+		);
+
+		// Backwards pagination returns nodes in ascending order, so reverse them for descending reads
+		const nodes = descending ? [...transactions.nodes].reverse() : transactions.nodes;
+
+		return {
+			transactions: nodes.map((transaction) => parseTransaction(transaction, options.include)),
+			hasNextPage: descending
+				? transactions.pageInfo.hasPreviousPage
+				: transactions.pageInfo.hasNextPage,
+			startCursor:
+				(descending ? transactions.pageInfo.endCursor : transactions.pageInfo.startCursor) ?? null,
+			endCursor:
+				(descending ? transactions.pageInfo.startCursor : transactions.pageInfo.endCursor) ?? null,
+		};
+	}
+
+	async listEvents(
+		options: HaneulClientTypes.ListEventsOptions,
+	): Promise<HaneulClientTypes.ListEventsResponse> {
+		const { descending, after, before, limit } = resolvePagination(options);
+		const filter = options.filter
+			? await resolveEventFilter(this.mvr, options.filter, options.signal)
+			: undefined;
+
+		const events = await this.#graphqlQuery(
+			{
+				query: ListEventsDocument,
+				signal: options.signal,
+				variables: {
+					filter: filter && {
+						sender: filter.$kind === 'sender' ? filter.sender : undefined,
+						module:
+							filter.$kind === 'emitModule' ? `${filter.package}::${filter.module}` : undefined,
+						type:
+							filter.$kind === 'eventTypeModule'
+								? `${filter.package}::${filter.module}`
+								: filter.$kind === 'eventType'
+									? filter.eventType
+									: undefined,
+					},
+					first: descending ? undefined : limit,
+					after,
+					last: descending ? limit : undefined,
+					before,
+				},
+			},
+			(result) => result.events,
+		);
+
+		// Backwards pagination returns nodes in ascending order, so reverse them for descending reads
+		const nodes = descending ? [...events.nodes].reverse() : events.nodes;
+
+		return {
+			events: nodes.map((event): HaneulClientTypes.EventEntry => {
+				const packageId = event.transactionModule?.package?.address;
+				const module = event.transactionModule?.name;
+				const sender = event.sender?.address;
+				const eventType = event.contents?.type?.repr;
+				const transactionDigest = event.transaction?.digest;
+
+				if (!packageId || !module || !sender || !eventType || !transactionDigest) {
+					throw new Error('listEvents response is missing expected event fields');
+				}
+
+				return {
+					packageId: normalizeHaneulAddress(packageId),
+					module,
+					sender: normalizeHaneulAddress(sender),
+					eventType: normalizeStructTag(eventType),
+					bcs: event.contents?.bcs ? fromBase64(event.contents.bcs) : new Uint8Array(),
+					json: (event.contents?.json as Record<string, unknown>) ?? null,
+					checkpoint: event.transaction?.effects?.checkpoint?.sequenceNumber?.toString() ?? null,
+					transactionDigest,
+					eventIndex: event.sequenceNumber,
+				};
+			}),
+			hasNextPage: descending ? events.pageInfo.hasPreviousPage : events.pageInfo.hasNextPage,
+			startCursor: (descending ? events.pageInfo.endCursor : events.pageInfo.startCursor) ?? null,
+			endCursor: (descending ? events.pageInfo.startCursor : events.pageInfo.endCursor) ?? null,
+		};
+	}
+
 	async verifyZkLoginSignature(
 		options: HaneulClientTypes.VerifyZkLoginSignatureOptions,
 	): Promise<HaneulClientTypes.ZkLoginVerifyResponse> {
@@ -602,6 +771,7 @@ export class GraphQLCoreClient extends CoreClient {
 
 		const { data } = await this.#graphqlClient.query({
 			query: VerifyZkLoginSignatureDocument,
+			signal: options.signal,
 			variables: {
 				bytes: options.bytes,
 				signature: options.signature,
@@ -635,14 +805,31 @@ export class GraphQLCoreClient extends CoreClient {
 		};
 	}
 
+	async resolveNameServiceAddress(
+		options: HaneulClientTypes.ResolveNameServiceAddressOptions,
+	): Promise<HaneulClientTypes.ResolveNameServiceAddressResponse> {
+		const { data, errors } = await this.#graphqlClient.query({
+			query: ResolveNameServiceAddressDocument,
+			signal: options.signal,
+			variables: { name: options.name },
+		});
+
+		handleGraphQLErrors(errors);
+
+		return { address: data?.address?.address ?? null };
+	}
+
 	async getMoveFunction(
 		options: HaneulClientTypes.GetMoveFunctionOptions,
 	): Promise<HaneulClientTypes.GetMoveFunctionResponse> {
 		const moveFunction = await this.#graphqlQuery(
 			{
 				query: GetMoveFunctionDocument,
+				signal: options.signal,
 				variables: {
-					package: (await this.mvr.resolvePackage({ package: options.packageId })).package,
+					package: (
+						await this.mvr.resolvePackage({ package: options.packageId, signal: options.signal })
+					).package,
 					module: options.moduleName,
 					function: options.name,
 				},
@@ -700,9 +887,11 @@ export class GraphQLCoreClient extends CoreClient {
 	}
 
 	async getChainIdentifier(
-		_options?: HaneulClientTypes.GetChainIdentifierOptions,
+		options?: HaneulClientTypes.GetChainIdentifierOptions,
 	): Promise<HaneulClientTypes.GetChainIdentifierResponse> {
-		return this.cache.read(['chainIdentifier'], async () => {
+		// The result is cached and shared across callers, so the underlying request must
+		// not carry any single caller's signal. Isolate cancellation per-caller instead.
+		const cached = this.cache.read(['chainIdentifier'], async () => {
 			const checkpoint = await this.#graphqlQuery(
 				{
 					query: GetChainIdentifierDocument,
@@ -716,6 +905,8 @@ export class GraphQLCoreClient extends CoreClient {
 				chainIdentifier: checkpoint.digest,
 			};
 		});
+
+		return raceSignal(Promise.resolve(cached), options?.signal);
 	}
 
 	resolveTransactionPlugin() {
@@ -732,14 +923,15 @@ export class GraphQLCoreClient extends CoreClient {
 			}
 			const grpcTransaction = transactionDataToGrpcTransaction(snapshot);
 			const transactionJson = GrpcTransactionType.toJson(grpcTransaction);
+			const doGasSelection =
+				!options.onlyTransactionKind &&
+				(snapshot.gasData.budget == null || snapshot.gasData.payment == null);
 
 			const { data, errors } = await graphqlClient.query({
 				query: ResolveTransactionDocument,
 				variables: {
 					transaction: transactionJson,
-					doGasSelection:
-						!options.onlyTransactionKind &&
-						(snapshot.gasData.budget == null || snapshot.gasData.payment == null),
+					doGasSelection,
 					checksEnabled: !options.onlyTransactionKind,
 				},
 			});
@@ -780,6 +972,14 @@ export class GraphQLCoreClient extends CoreClient {
 			} else {
 				transactionData.applyResolvedData(resolved);
 			}
+			await setAddressBalanceTransactionExpirationFromSimulatedEpoch({
+				transactionData,
+				client: graphqlClient,
+				epoch: transactionEffects?.epoch?.epochId,
+				originalTransactionData: snapshot,
+				isTransactionKindOnly: !!options.onlyTransactionKind,
+				doGasSelection,
+			});
 
 			return await next();
 		};
@@ -924,6 +1124,9 @@ function parseTransaction<Include extends HaneulClientTypes.TransactionInclude =
 
 	const bcsBytes =
 		include?.bcs && transaction.transactionBcs ? fromBase64(transaction.transactionBcs) : undefined;
+	const timestampMs = transaction.effects?.timestamp
+		? Date.parse(transaction.effects.timestamp)
+		: null;
 
 	const result: HaneulClientTypes.Transaction<Include> = {
 		digest: transaction.digest!,
@@ -932,6 +1135,8 @@ function parseTransaction<Include extends HaneulClientTypes.TransactionInclude =
 			? parseTransactionEffectsBcs(fromBase64(transaction.effects?.effectsBcs!))
 			: undefined) as HaneulClientTypes.Transaction<Include>['effects'],
 		epoch: transaction.effects?.epoch?.epochId?.toString() ?? null,
+		timestampMs: timestampMs !== null && !Number.isNaN(timestampMs) ? timestampMs : null,
+		checkpoint: transaction.effects?.checkpoint?.sequenceNumber?.toString() ?? null,
 		objectTypes: (include?.objectTypes
 			? objectTypes
 			: undefined) as HaneulClientTypes.Transaction<Include>['objectTypes'],

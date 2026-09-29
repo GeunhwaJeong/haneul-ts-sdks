@@ -1,4 +1,4 @@
-name: Telegram Notify - DeepBook v3
+name: Telegram Notify - Byeol v3
 
 on:
   workflow_run:
@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
     steps:
-      - name: Check for new deepbook-v3 release and notify
+      - name: Check for new byeol release and notify
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.DEEPBOOK_TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.DEEPBOOK_TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.BYEOL_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.BYEOL_TELEGRAM_CHAT_ID }}
         run: |
           CUTOFF=$(date -u -d '10 minutes ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -v-10M '+%Y-%m-%dT%H:%M:%SZ')
 
@@ -22,7 +22,7 @@ jobs:
             --jq "[.[] | select(.tagName | startswith(\"@haneullabs/byeol@\")) | select(.createdAt > \"$CUTOFF\")] | first")
 
           if [ -z "$RELEASE" ] || [ "$RELEASE" = "null" ]; then
-            echo "No recent deepbook-v3 release found, skipping"
+            echo "No recent byeol release found, skipping"
             exit 0
           fi
 

@@ -2,16 +2,35 @@
 title: BCS
 description: Binary Canonical Serialization for encoding Haneul Move types.
 keywords:
-  [
-    BCS,
-    binary canonical serialization,
-    Haneul,
-    '@haneullabs/haneul/bcs',
-    encoding,
-    Move types,
-    schemas,
-    TypeScript,
-  ]
+  - BCS
+  - binary canonical serialization
+  - Haneul
+  - '@haneullabs/haneul/bcs'
+  - encoding
+  - Move types
+  - schemas
+  - TypeScript
+questions:
+  - How do I use BCS in the Haneul SDK?
+  - How do I serialize transaction data?
+  - What BCS types are built into @haneullabs/haneul?
+answer: >-
+  The @haneullabs/haneul package re-exports BCS utilities for serializing and deserializing Haneul-specific
+  types like addresses, objects, and transaction data.
+goal:
+  description: Reader can use the BCS module in @haneullabs/haneul for serialization
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 30
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 The `@haneullabs/haneul/bcs` package extends `@haneullabs/bcs` with Haneul specific scheme definitions.
@@ -128,8 +147,8 @@ const serialized = bcs.Object.serialize({
 
 <Callout type="warn">
 	Do not pass `objectBcs` bytes to a Move struct parser. It contains wrapping metadata that will
-	cause parsing to fail. Use `content` for parsing Move struct fields. See the [Core API
-	docs](/haneul/clients/core#objectbcs) for details.
+	cause parsing to fail. Use `content` for parsing Move struct fields, as described under
+	[objectBcs](/haneul/clients/querying#objectbcs).
 </Callout>
 
 ## Working with transaction effects

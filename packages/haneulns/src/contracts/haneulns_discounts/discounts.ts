@@ -47,8 +47,7 @@ export function applyPercentageDiscount<T extends BcsType<any>>(
 ) {
 	const packageAddress = options.package ?? '@haneulns/discounts';
 	const argumentsTypes = [null, null, null, `${options.typeArguments[0]}`] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'intent', 'haneulns', '_'];
 	return (tx: Transaction) =>

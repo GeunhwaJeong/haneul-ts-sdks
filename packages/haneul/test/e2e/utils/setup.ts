@@ -41,8 +41,7 @@ export const DEFAULT_GAS_BUDGET = 10000000;
 export const DEFAULT_SEND_AMOUNT = 1000;
 
 const prePublishedPackages = inject('prePublishedPackages') as
-	| Record<string, PrePublishedPackage>
-	| undefined;
+	Record<string, PrePublishedPackage> | undefined;
 
 export interface SignerConfig {
 	coins?: bigint[];
@@ -229,30 +228,55 @@ export class TestToolbox {
 	 *
 	 * @param queryFn - Function that takes a client and returns a promise with the query result
 	 * @param normalize - Optional function to normalize results before comparison (e.g., to ignore cursor differences)
-	 * @param options - Options to skip the test entirely
+	 * @param options - Options to skip the test entirely, or to refetch on mismatch: for queries of
+	 *   live chain state (e.g. system state around a localnet epoch boundary), the state can advance
+	 *   between the three transport reads, so a strict single-shot comparison is flaky. `attempts`
+	 *   refetches the whole read set until the transports agree; a genuine transport inconsistency
+	 *   still fails on every attempt.
 	 */
 	async expectAllClientsReturnSameData<T, N = T>(
 		queryFn: (client: ClientWithCoreApi, kind: 'jsonrpc' | 'grpc' | 'graphql') => Promise<T>,
 		normalize?: (result: T) => N,
-		options?: { skip?: boolean },
+		options?: {
+			skip?: boolean;
+			attempts?: number;
+			exclude?: Array<'jsonrpc' | 'grpc' | 'graphql'>;
+		},
 	) {
 		if (options?.skip) {
 			test.skip('all clients return same data', () => {});
 			return;
 		}
 
-		const [jsonRpcResult, grpcResult, graphqlResult] = await Promise.all([
-			queryFn(this.jsonRpcClient, 'jsonrpc'),
-			queryFn(this.grpcClient, 'grpc'),
-			queryFn(this.graphqlClient, 'graphql'),
-		]);
+		const clients = (
+			[
+				['jsonrpc', this.jsonRpcClient],
+				['grpc', this.grpcClient],
+				['graphql', this.graphqlClient],
+			] as const
+		).filter(([kind]) => !options?.exclude?.includes(kind));
 
-		const normalizedJson = normalize ? normalize(jsonRpcResult) : jsonRpcResult;
-		const normalizedGrpc = normalize ? normalize(grpcResult) : grpcResult;
-		const normalizedGraphql = normalize ? normalize(graphqlResult) : graphqlResult;
+		const attempts = options?.attempts ?? 1;
+		for (let attempt = 1; ; attempt++) {
+			const results = await Promise.all(
+				clients.map(async ([kind, client]) => {
+					const result = await queryFn(client, kind);
+					return [kind, normalize ? normalize(result) : result] as const;
+				}),
+			);
 
-		expect(normalizedJson).toEqual(normalizedGrpc);
-		expect(normalizedJson).toEqual(normalizedGraphql);
+			try {
+				const [[, first]] = results;
+				for (const [, result] of results.slice(1)) {
+					expect(result).toEqual(first);
+				}
+				return;
+			} catch (error) {
+				if (attempt >= attempts) throw error;
+				// Let the chain settle before refetching all transports.
+				await new Promise((resolve) => setTimeout(resolve, 500));
+			}
+		}
 	}
 }
 

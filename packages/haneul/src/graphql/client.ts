@@ -5,6 +5,10 @@ import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import type { TadaDocumentNode } from 'gql.tada';
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
+import {
+	CLIENT_PROTOCOL_VERSION_HEADER,
+	MAX_PROTOCOL_VERSION,
+} from '../client/protocol-version.js';
 import { BaseClient } from '../client/index.js';
 import type { HaneulClientTypes } from '../client/index.js';
 import { GraphQLCoreClient } from './core.js';
@@ -15,10 +19,7 @@ import { normalizeStructTag } from '../utils/haneul-types.js';
 import { deriveDynamicFieldID } from '../utils/dynamic-fields.js';
 import type { TransactionPlugin } from '../transactions/index.js';
 
-export type GraphQLDocument<
-	Result = Record<string, unknown>,
-	Variables = Record<string, unknown>,
-> =
+export type GraphQLDocument<Result = Record<string, unknown>, Variables = Record<string, unknown>> =
 	| string
 	| DocumentNode
 	| TypedDocumentString<Result, Variables>
@@ -68,6 +69,20 @@ export function isHaneulGraphQLClient(client: unknown): client is HaneulGraphQLC
 	return (
 		typeof client === 'object' && client !== null && (client as any)[HANEUL_CLIENT_BRAND] === true
 	);
+}
+
+export interface GraphQLSimulateTransactionOptions<
+	Include extends HaneulClientTypes.SimulateTransactionInclude = {},
+> extends HaneulClientTypes.SimulateTransactionOptions<Include> {
+	/**
+	 * Overrides whether the server selects gas payment during simulation.
+	 *
+	 * When not set, gas selection is enabled only when the transaction's gas payment is explicitly
+	 * set to an empty list (`[]`), which indicates gas is paid from the sender's address balance.
+	 * Transactions with gas coins set are simulated as-is, and transactions without a gas payment
+	 * are simulated with a mocked gas coin.
+	 */
+	doGasSelection?: boolean;
 }
 
 export interface DynamicFieldInclude {
@@ -126,12 +141,17 @@ export class HaneulGraphQLClient<Queries extends Record<string, GraphQLDocument>
 	async query<Result = Record<string, unknown>, Variables = Record<string, unknown>>(
 		options: GraphQLQueryOptions<Result, Variables>,
 	): Promise<GraphQLQueryResult<Result>> {
+		const headers = new Headers({
+			'Content-Type': 'application/json',
+			...this.#headers,
+		});
+		if (!headers.has(CLIENT_PROTOCOL_VERSION_HEADER)) {
+			headers.set(CLIENT_PROTOCOL_VERSION_HEADER, String(MAX_PROTOCOL_VERSION));
+		}
+
 		const res = await this.#fetch(this.#url, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				...this.#headers,
-			},
+			headers,
 			body: JSON.stringify({
 				query:
 					typeof options.query === 'string' || options.query instanceof String
@@ -230,13 +250,33 @@ export class HaneulGraphQLClient<Queries extends Record<string, GraphQLDocument>
 	}
 
 	simulateTransaction<Include extends HaneulClientTypes.SimulateTransactionInclude = {}>(
-		input: HaneulClientTypes.SimulateTransactionOptions<Include>,
+		input: GraphQLSimulateTransactionOptions<Include>,
 	): Promise<HaneulClientTypes.SimulateTransactionResult<Include>> {
 		return this.core.simulateTransaction(input);
 	}
 
-	getReferenceGasPrice(): Promise<HaneulClientTypes.GetReferenceGasPriceResponse> {
-		return this.core.getReferenceGasPrice();
+	getReferenceGasPrice(
+		input?: HaneulClientTypes.GetReferenceGasPriceOptions,
+	): Promise<HaneulClientTypes.GetReferenceGasPriceResponse> {
+		return this.core.getReferenceGasPrice(input);
+	}
+
+	getCurrentSystemState(
+		input?: HaneulClientTypes.GetCurrentSystemStateOptions,
+	): Promise<HaneulClientTypes.GetCurrentSystemStateResponse> {
+		return this.core.getCurrentSystemState(input);
+	}
+
+	getProtocolConfig(
+		input?: HaneulClientTypes.GetProtocolConfigOptions,
+	): Promise<HaneulClientTypes.GetProtocolConfigResponse> {
+		return this.core.getProtocolConfig(input);
+	}
+
+	getChainIdentifier(
+		input?: HaneulClientTypes.GetChainIdentifierOptions,
+	): Promise<HaneulClientTypes.GetChainIdentifierResponse> {
+		return this.core.getChainIdentifier(input);
 	}
 
 	async listDynamicFields<Include extends DynamicFieldInclude = {}>(
@@ -246,6 +286,7 @@ export class HaneulGraphQLClient<Queries extends Record<string, GraphQLDocument>
 
 		const { data, errors } = await this.query({
 			query: GetDynamicFieldsDocument,
+			signal: input.signal,
 			variables: {
 				parentId: input.parentId,
 				first: input.limit,
@@ -324,6 +365,22 @@ export class HaneulGraphQLClient<Queries extends Record<string, GraphQLDocument>
 		return this.core.getDynamicField(input);
 	}
 
+	getDynamicObjectField<Include extends HaneulClientTypes.ObjectInclude = {}>(
+		input: HaneulClientTypes.GetDynamicObjectFieldOptions<Include>,
+	): Promise<HaneulClientTypes.GetDynamicObjectFieldResponse<Include>> {
+		return this.core.getDynamicObjectField(input);
+	}
+
+	listTransactions<Include extends HaneulClientTypes.TransactionInclude = {}>(
+		input: HaneulClientTypes.ListTransactionsOptions<Include>,
+	): Promise<HaneulClientTypes.ListTransactionsResponse<Include>> {
+		return this.core.listTransactions(input);
+	}
+
+	listEvents(input: HaneulClientTypes.ListEventsOptions): Promise<HaneulClientTypes.ListEventsResponse> {
+		return this.core.listEvents(input);
+	}
+
 	getMoveFunction(
 		input: HaneulClientTypes.GetMoveFunctionOptions,
 	): Promise<HaneulClientTypes.GetMoveFunctionResponse> {
@@ -344,5 +401,11 @@ export class HaneulGraphQLClient<Queries extends Record<string, GraphQLDocument>
 		input: HaneulClientTypes.DefaultNameServiceNameOptions,
 	): Promise<HaneulClientTypes.DefaultNameServiceNameResponse> {
 		return this.core.defaultNameServiceName(input);
+	}
+
+	resolveNameServiceAddress(
+		input: HaneulClientTypes.ResolveNameServiceAddressOptions,
+	): Promise<HaneulClientTypes.ResolveNameServiceAddressResponse> {
+		return this.core.resolveNameServiceAddress(input);
 	}
 }

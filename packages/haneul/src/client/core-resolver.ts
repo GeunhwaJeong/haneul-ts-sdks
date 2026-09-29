@@ -17,9 +17,13 @@ import { getPureBcsSchema, isTxContext } from '../transactions/serializer.js';
 import type { TransactionDataBuilder } from '../transactions/TransactionData.js';
 import { chunk } from '@haneullabs/utils';
 import type { BuildTransactionOptions } from '../transactions/index.js';
+import { transactionUsesGasCoin } from '../transactions/resolution-utils.js';
 
 // The maximum objects that can be fetched at once using multiGetObjects.
 const MAX_OBJECTS_PER_FETCH = 50;
+
+// The gas payment limit is inclusive as of protocol version 96.
+const MAX_GAS_PAYMENT_OBJECTS = 256;
 
 // An amount of gas (in gas units) that is added to transactions as an overhead to ensure transactions do not fail.
 const GAS_SAFE_OVERHEAD = 1000n;
@@ -54,27 +58,23 @@ export async function coreClientResolveTransactionPlugin(
 	next: () => Promise<void>,
 ) {
 	const client = getClient(options);
-
 	const needsGasPrice = !options.onlyTransactionKind && !transactionData.gasData.price;
 	const needsPayment = !options.onlyTransactionKind && !transactionData.gasData.payment;
 	const gasPayer = transactionData.gasData.owner ?? transactionData.sender;
 
-	let usesGasCoin = false;
+	const usesGasCoin = transactionUsesGasCoin(transactionData);
 	let withdrawals = 0n;
-
-	transactionData.mapArguments((arg) => {
-		if (arg.$kind === 'GasCoin') usesGasCoin = true;
-		return arg;
-	});
 
 	const normalizedGasPayer = gasPayer ? normalizeHaneulAddress(gasPayer) : null;
 	for (const input of transactionData.inputs) {
 		if (input.$kind !== 'FundsWithdrawal' || !normalizedGasPayer) continue;
 		if (normalizeStructTag(input.FundsWithdrawal.typeArg.Balance) !== HANEUL_TYPE_ARG) continue;
-
-		const withdrawalOwner = input.FundsWithdrawal.withdrawFrom.Sender
-			? transactionData.sender
-			: gasPayer;
+		const source = input.FundsWithdrawal.withdrawFrom;
+		const withdrawalOwner = source.SenderAllowance
+			? source.SenderAllowance.funder
+			: source.Sender
+				? transactionData.sender
+				: gasPayer;
 		if (
 			withdrawalOwner &&
 			normalizeHaneulAddress(withdrawalOwner) === normalizedGasPayer &&
@@ -169,7 +169,11 @@ async function setGasBudget(
 			},
 		}),
 		include: { effects: true },
-	});
+		// The empty payment above is a placeholder for budget estimation, not a real address
+		// balance payment, so the server must simulate with a mocked gas coin rather than
+		// selecting gas. gRPC and GraphQL support this option, and JSON-RPC always mocks gas.
+		doGasSelection: false,
+	} as HaneulClientTypes.SimulateTransactionOptions<{ effects: true }> & { doGasSelection: boolean });
 
 	if (simulateResult.$kind === 'FailedTransaction') {
 		const executionError = simulateResult.FailedTransaction.status.error ?? undefined;
@@ -236,12 +240,13 @@ function setGasPayment({
 	if (usesGasCoin && reservationAmount > 0n && chainIdentifier && epoch) {
 		transactionData.gasData.payment = [
 			createCoinReservationRef(reservationAmount, gasPayer, chainIdentifier, epoch),
-			...paymentCoins,
+			// The reservation occupies one entry in the gas payment limit.
+			...paymentCoins.slice(0, MAX_GAS_PAYMENT_OBJECTS - 1),
 		];
 	} else if (!filteredCoins.length) {
 		throw new Error('No valid gas coins found for the transaction.');
 	} else {
-		transactionData.gasData.payment = paymentCoins;
+		transactionData.gasData.payment = paymentCoins.slice(0, MAX_GAS_PAYMENT_OBJECTS);
 	}
 }
 

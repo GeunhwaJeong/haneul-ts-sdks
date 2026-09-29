@@ -10,7 +10,7 @@ import { ALLOWED_METADATA, HaneulnsTransaction, haneulns } from '../src/index.js
 
 export const e2eLiveNetworkDryRunFlow = async (network: 'mainnet' | 'testnet') => {
 	const client = new HaneulGrpcClient({ baseUrl: getJsonRpcFullnodeUrl(network), network }).$extend(
-		haneulns(),
+		haneulns({ pythAccessToken: process.env.VITE_PYTH_ACCESS_TOKEN }),
 	);
 
 	const sender = normalizeHaneulAddress('0x2');
@@ -59,8 +59,8 @@ export const e2eLiveNetworkDryRunFlow = async (network: 'mainnet' | 'testnet') =
 	const tx = new Transaction();
 	const coinConfig = client.haneulns.config.coins.HANEUL; // Specify the coin type used for the transaction
 
-	// Split coins for registration and Pyth fee upfront
-	const [coinInput, pythFeeCoin] = tx.splitCoins(tx.gas, [10n * GEUNHWA_PER_HANEUL, GEUNHWA_PER_HANEUL]);
+	// Keep enough headroom for the USD-denominated registration price as the HANEUL price fluctuates.
+	const [coinInput, pythFeeCoin] = tx.splitCoins(tx.gas, [100n * GEUNHWA_PER_HANEUL, GEUNHWA_PER_HANEUL]);
 
 	const priceInfoObjectId =
 		coinConfig !== client.haneulns.config.coins.USDC

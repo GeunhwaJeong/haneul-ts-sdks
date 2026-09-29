@@ -1,5 +1,73 @@
 # @mysten/suins
 
+## 2.0.12
+
+## 2.0.11
+
+## 2.0.10
+
+## 2.0.9
+
+## 2.0.8
+
+## 2.0.7
+
+## 2.0.6
+
+## 2.0.5
+
+## 2.0.4
+
+## 2.0.3
+
+## 2.0.2
+
+## 2.0.1
+
+## 2.0.0
+
+### Major Changes
+
+- f88da86: Pyth price fetching now uses the keyed Pyth Pro Hermes endpoint and requires a
+  `pythAccessToken` (via `SuinsClient` or the `suins()` extension) for non-base-currency
+  registrations and renewals.
+
+## 1.2.18
+
+### Patch Changes
+
+- f2f7048: Upgrade workspace dependencies, remove the legacy dapp-kit package, and migrate the
+  remaining consumers to the current gRPC-based dapp-kit. Remove the legacy API reference while
+  retaining the migration guide and deprecation notice.
+
+## 1.2.17
+
+## 1.2.16
+
+## 1.2.15
+
+### Patch Changes
+
+- 19e85a3: Regenerate contract bindings with the latest codegen utils template
+
+## 1.2.14
+
+## 1.2.13
+
+## 1.2.12
+
+## 1.2.11
+
+## 1.2.10
+
+## 1.2.9
+
+## 1.2.8
+
+## 1.2.7
+
+## 1.2.6
+
 ## 1.2.5
 
 ## 1.2.4

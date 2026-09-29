@@ -58,6 +58,25 @@ export class WalletPostMessageChannel {
 			throw new Error('Requested account not found in session');
 		}
 
+		if (
+			addressInSession.chains !== undefined &&
+			!addressInSession.chains.includes(this.#request.payload.chain)
+		) {
+			throw new Error('Requested chain not authorized by session');
+		}
+
+		const requiredFeatures = {
+			'sign-transaction': ['haneul:signTransaction', 'haneul:signTransactionBlock'],
+			'sign-and-execute-transaction': ['haneul:signAndExecuteTransaction'],
+			'sign-personal-message': ['haneul:signPersonalMessage'],
+		}[this.#request.payload.type];
+		if (
+			addressInSession.features !== undefined &&
+			!requiredFeatures.some((feature) => addressInSession.features!.includes(feature))
+		) {
+			throw new Error('Requested operation not authorized by session');
+		}
+
 		return session;
 	}
 

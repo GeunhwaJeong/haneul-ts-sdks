@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/utils",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"description": "Shared utilities for @haneullabs/* packages",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",
@@ -42,10 +42,10 @@
 	},
 	"homepage": "https://github.com/GeunhwaJeong/haneul-ts-sdks/tree/main/packages/utils#readme",
 	"devDependencies": {
-		"typescript": "^6.0.3",
-		"vitest": "^4.1.8"
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
 	},
 	"dependencies": {
-		"@scure/base": "^2.2.0"
+		"@scure/base": "^2.3.0"
 	}
 }

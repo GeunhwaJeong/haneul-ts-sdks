@@ -1,5 +1,309 @@
 # @mysten/sui.js
 
+## 2.33.1
+
+## 2.33.0
+
+### Minor Changes
+
+- 2e9856f: Add `getData()` to `TransactionDataBuilder` so `Transaction.from` can create a
+  `Transaction` from a `TransactionDataBuilder` instance
+
+## 2.32.0
+
+### Minor Changes
+
+- 4394023: `SuiGrpcClient`, `GrpcWebFetchTransport`, and `SuiGraphQLClient` now send an
+  `x-sui-client-protocol-version` header with the highest protocol version whose types the SDK can
+  decode. `SuiGrpcClient` adds the header for custom transports too, including native gRPC, while
+  preserving explicit transport and per-call metadata overrides.
+
+## 2.31.3
+
+### Patch Changes
+
+- 59dedfe: Report unsupported enum variants and their expected values when parsing transaction data.
+
+## 2.31.2
+
+### Patch Changes
+
+- 8508156: Break the circular dependency between struct-tag and named-package utilities to prevent
+  initialization errors in Next.js Turbopack production builds.
+
+## 2.31.1
+
+### Patch Changes
+
+- c3966e2: Limit automatic gas selection in the JSON-RPC transaction resolver to 256 payment
+  entries, including any address-balance reservation. Preserve the existing single-page coin fetch
+  and its default limit, then truncate the filtered coins without enforcing a combined transaction
+  input limit.
+
+## 2.31.0
+
+### Minor Changes
+
+- 15eb25e: Add wire-level support for `SenderAllowance` funds withdrawals (`sui::allowance`,
+  protocol v137). `bcs.WithdrawFrom`, the transaction input schema, and `Inputs.FundsWithdrawal`
+  accept `{ $kind: 'SenderAllowance', SenderAllowance: { funder, allowance } }`, and the gRPC,
+  GraphQL, and JSON-RPC clients decode and encode the new source when reading, simulating, and
+  resolving transactions.
+
+  Add `tx.balance({ allowance, balance, type })` and `tx.coin({ allowance, balance, type })` to
+  resolve allowance IDs and redeem their withdrawals automatically. A known `{ objectId, funder }`
+  reference skips metadata lookup. Allowance spends never fall back to the sender's funds. A shared
+  resolver handles the separate allowance and coin intents, reserving allowance withdrawals before
+  ordinary coin selection. Both helpers accept decimal strings for `balance`. App-bound allowances
+  accept `{ objectId, app: { type, permit }, funder? }` with a `SpendPermit<A>` from an app
+  authorization call.
+
+  Account for allowance reservations when selecting ordinary coins and gas, including transactions
+  where the sender or gas sponsor is also the allowance's funder.
+
+  Resolve MVR coin and app types before allowance metadata checks. Require decimal digits in string
+  amounts, rejecting empty or whitespace-only values. Upgrade read-only allowance inputs to mutable
+  when spending, including with a known funder.
+
+  Add `tx.withdrawal({ amount, type, from: 'allowance', allowance, funder })` and `from: 'sponsor'`.
+  Omitting `from` defaults to the sender. Export `WithdrawalOptions` with required allowance and
+  funder fields only for allowance withdrawals.
+
+### Patch Changes
+
+- 15eb25e: `SuiJsonRpcClient` core transaction reads now report the genesis transaction's
+  placeholder signature, matching gRPC and GraphQL, instead of an empty signature list.
+
+## 2.30.0
+
+### Minor Changes
+
+- cc2aec1: Add `assumeSufficientAddressBalances` build option to resolve `tx.coin()` and
+  `tx.balance()` from address balance without a client. On a full build that needs no other
+  resolution, doesn't use `tx.gas`, and already has a `ValidDuring` or `Validity` expiration, it
+  also sets an unset gas payment to `[]`
+
+## 2.29.0
+
+### Minor Changes
+
+- ee96ca4: `GrpcWebFetchTransport` exported from `@mysten/sui/grpc` is now a subclass of the
+  transport of the same name from `@protobuf-ts/grpcweb-transport`, fixing two defects in it. Status
+  messages are decoded instead of arriving percent-encoded as `Object%20not%20found:%200x1`. A call
+  ended by an abort takes its status from the reason: `DEADLINE_EXCEEDED` for an
+  `AbortSignal.timeout`, the status a reason carrying one gives, and `CANCELLED` for anything else,
+  where upstream reports all but a standard `AbortError` as `INTERNAL`.
+
+  `@mysten/sui/grpc` also exports the `RpcError` class and the `GrpcStatusCode` enum, so the errors
+  gRPC calls produce can be narrowed and coded without a direct `@protobuf-ts/*` dependency.
+
+  `SuiGrpcClient` builds one of these by default and now forwards the rest of `GrpcWebOptions`
+  (`fetch`, `format`, `meta`, `timeout`, `interceptors`, `jsonOptions`, `binaryOptions`) to it,
+  which were previously accepted and ignored. A transport passed in by the caller is used as given.
+
+## 2.28.0
+
+### Minor Changes
+
+- 5c16cf4: Add BCS, transaction schema, and gRPC support for `Validity` transaction expirations and
+  allowed proposers. Also synchronize recently added transaction and execution error variants.
+
+  The deprecated v1 JSON transaction format now represents `ValidDuring` and `Validity` expirations
+  instead of collapsing them to `{ None: true }`. Previously a `Transaction.serialize()` ->
+  `Transaction.from()` round trip silently discarded the expiration — and, for `Validity`, the set
+  of validators allowed to propose the transaction — so the rebuilt transaction signed materially
+  broader bytes. An expiration the v1 reader does not recognize is now an error rather than a silent
+  downgrade.
+
+## 2.27.1
+
+### Patch Changes
+
+- 52d0c93: Reduce GraphQL object batch sizes to stay below the service request payload limit.
+
+## 2.27.0
+
+### Minor Changes
+
+- 7c696dc: Add transaction checkpoint and timestamp metadata to the Core API, and support parsing V1
+  transaction effects.
+
+## 2.26.2
+
+### Patch Changes
+
+- f2f7048: Upgrade workspace dependencies, remove the legacy dapp-kit package, and migrate the
+  remaining consumers to the current gRPC-based dapp-kit. Remove the legacy API reference while
+  retaining the migration guide and deprecation notice.
+
+## 2.26.1
+
+### Patch Changes
+
+- c8d3046: Restore backwards-compatible `ObjectError.code` values for gRPC object lookups. Missing
+  objects now report the long-standing `notExists` code (instead of the raw gRPC status number `'5'`
+  introduced in 2.26.0), so handlers written against earlier releases keep working on every
+  transport. Other gRPC statuses use the status name (for example `'INTERNAL'`) as the code, and
+  unrecognized statuses map to `'unknown'`. The transport-neutral `reason` field is unchanged and
+  remains the preferred way to detect missing objects.
+
+## 2.26.0
+
+### Minor Changes
+
+- 87989d5: Add transport-neutral `ObjectError` and `TransactionError` lookup details across the Core
+  API clients. The existing transport-specific `ObjectError.code` field and `(code, message)`
+  constructor remain supported; the transport-neutral `reason`, resource identity, and `cause`
+  fields are additive.
+
+## 2.25.0
+
+### Minor Changes
+
+- f76883d: Forward the last four Core API methods to the top-level clients. `getCurrentSystemState`,
+  `getProtocolConfig`, `getChainIdentifier`, and `getDynamicObjectField` were reachable only through
+  `client.core`, so `SuiGrpcClient` and `SuiGraphQLClient` now expose the complete Core API surface
+  as top-level methods.
+
+  Also fixes `GraphQLCoreClient.getCurrentSystemState` and `getProtocolConfig`, which declared no
+  parameters and so silently dropped the `signal` option the contract and the gRPC implementation
+  both accept. Both now forward `signal` to the underlying query.
+
+### Patch Changes
+
+- f76883d: Forward `signal` through every GraphQL client method. Twelve methods on
+  `GraphQLCoreClient` accepted an options object carrying `signal` but never passed it to the
+  underlying query, so `AbortSignal` was silently ignored on `getObjects`, `listOwnedObjects`,
+  `listCoins`, `getBalance`, `listBalances`, `getCoinMetadata`, `getTransaction`,
+  `executeTransaction`, `simulateTransaction`, `getMoveFunction`, `verifyZkLoginSignature`, and
+  `SuiGraphQLClient.listDynamicFields`.
+
+  `getReferenceGasPrice` now accepts options on `GraphQLCoreClient` and on both top-level clients;
+  it previously took no arguments at all, so callers had no way to pass a signal.
+
+  `GraphQLCoreClient.getChainIdentifier` now races the caller's signal against its cached read, the
+  same way the gRPC implementation does. The cached request itself stays uncancelled, since it is
+  shared between callers, but each caller can stop waiting independently.
+
+- f76883d: Fix cancellation for signals that were already aborted, and forward the caller's signal
+  into MVR name resolution.
+
+  `raceSignal` registered an `abort` listener without first checking `signal.aborted`. An `abort`
+  event is not replayed for listeners added afterwards, so passing an already-aborted signal
+  resolved normally instead of rejecting. This affected every cached read that races a signal,
+  including `getChainIdentifier` on the gRPC and GraphQL clients.
+
+  Methods that resolve an MVR name before querying now pass the caller's signal into that lookup, so
+  aborting takes effect during name resolution rather than only afterwards. This covers
+  `listOwnedObjects`, `listCoins`, `getBalance`, `getCoinMetadata`, and `getMoveFunction` on the
+  GraphQL client, and `getCoinMetadata` and `getMoveFunction` on the deprecated JSON-RPC client.
+
+- f76883d: Forward the caller's `signal` into MVR name resolution and the remaining request paths.
+  `CoreClient.getDynamicObjectField` now passes it into the type resolution it performs before
+  reading the field, matching the sibling `getDynamicField` path.
+
+  On the deprecated JSON-RPC client, `listDynamicFields`, `verifyZkLoginSignature`, and
+  `getMoveFunction` forward the signal to their underlying requests, `simulateTransaction` forwards
+  it to the reference gas price lookup it performs while building, and `getChainIdentifier` races
+  the signal against its cached read the way the gRPC and GraphQL clients do. Fifteen MVR lookups in
+  `jsonRpc/client.ts` also went unsignalled, including the ones the Core `listCoins`, `getBalance`,
+  and `listOwnedObjects` paths reach, so a stalled resolution delayed cancellation on those methods.
+
+  One MVR call remains unsignalled by design: the named-packages transaction plugin, since
+  `BuildTransactionOptions` carries no signal to forward.
+
+- f76883d: Regenerate the GraphQL schema and `gql.tada` introspection types from upstream, picking
+  up the new `ForwardingAddressRegistryCreateTransaction` system transaction variant on the
+  `EndOfEpochTransactionKind` union. gRPC proto types were also regenerated and are unchanged.
+
+## 2.24.0
+
+### Minor Changes
+
+- c5f452f: Add `resolveNameServiceAddress` to the Core, gRPC, and GraphQL client APIs for
+  transport-agnostic SuiNS name-to-address resolution.
+
+## 2.23.2
+
+### Patch Changes
+
+- dda3746: Fix `effects.gasObject` being populated with an invalid all-null object for transactions
+  that have no gas object (system transactions, or transactions paying gas from an address balance).
+  The gRPC transport and the JSON-RPC simulation path now return `null`, matching the declared
+  `TransactionEffects` type and the BCS-based effects parsing used by the other code paths.
+
+## 2.23.1
+
+### Patch Changes
+
+- 8c4b149: Update dependencies to versions that resolve security advisories: hono,
+  @hono/node-server, next, postcss, and valibot
+
+## 2.23.0
+
+### Minor Changes
+
+- f9bfbbf: Add `listTransactions` and `listEvents` core API methods for querying transactions and
+  events with filters, pagination, and ordering. The methods behave identically across the gRPC,
+  GraphQL, and JSON-RPC transports. The regenerated gRPC protos also add the new
+  `SubscribeTransactions` and `SubscribeEvents` subscription APIs.
+
+  The `TransactionKind` BCS schema exported from `@mysten/sui/bcs` now fully parses system
+  transactions: the previously-unparseable placeholder variants (`ChangeEpoch`, `Genesis`,
+  `ConsensusCommitPrologue`) have typed payloads, and the missing system variants
+  (`AuthenticatorStateUpdate`, `EndOfEpochTransaction`, `RandomnessStateUpdate`,
+  `ConsensusCommitPrologueV2`–`V4`, and `ProgrammableSystemTransaction`) were added. JSON-RPC
+  `getTransaction` also no longer reports the genesis transaction's placeholder signature, matching
+  the other transports.
+
+- f9bfbbf: Enable gas selection in `core.simulateTransaction` for the gRPC and GraphQL clients when
+  the transaction's gas payment is explicitly set to an empty list (`[]`). This ensures transactions
+  paying gas from the sender's address balance are simulated with real gas selection rather than a
+  mocked gas coin. Transactions with gas coins set are simulated as-is, and transactions without a
+  gas payment keep the mocked gas coin behavior. The default can be overridden by passing
+  `doGasSelection` to `simulateTransaction` on `SuiGrpcClient` and `SuiGraphQLClient`.
+
+## 2.22.2
+
+### Patch Changes
+
+- c6e06f6: Resolve `tx.coin` and `tx.balance` cleanup before later transaction commands so coin
+  intents remain compatible with Random-consuming Move calls.
+
+## 2.22.1
+
+### Patch Changes
+
+- 5c0fa85: Set `ValidDuring` expiration when resolving transactions that explicitly use
+  address-balance gas with an empty gas payment and preset gas budget.
+- e890999: Extend zkLogin Poseidon hashing to support up to 64 inputs.
+- e2dca59: Update zkLogin JWT length validation limit.
+
+## 2.22.0
+
+### Minor Changes
+
+- 899d9e3: Add gRPC client transaction results that include protobuf JSON with
+  `include: { protoJson: true }`.
+
+## 2.21.0
+
+### Minor Changes
+
+- da78e18: Expose gRPC transaction response parsers for converting protobuf transaction responses
+  into SDK Core transaction result shapes.
+
+## 2.20.4
+
+### Patch Changes
+
+- 7333638: Deprecate JSON-RPC client APIs, transport APIs, and JSON-RPC-specific types. Migrate to
+  `SuiGrpcClient` or `SuiGraphQLClient`.
+- e77aa8d: Forward `AbortSignal` from `SuiGrpcClient` method options to the underlying gRPC
+  requests. Previously methods like `listOwnedObjects` accepted a `signal` but never passed it
+  through, so passing `signal` did not cancel the request. MVR
+  (`resolveType`/`resolvePackage`/`resolve`) resolution is now also cancellable via the same signal.
+
 ## 2.20.3
 
 ### Patch Changes

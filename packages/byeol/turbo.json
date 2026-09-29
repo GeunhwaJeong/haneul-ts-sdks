@@ -3,6 +3,10 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build", "build:docs", "@haneullabs/haneul#build"]
+		},
+		"test": {
+			"dependsOn": ["^build", "build"],
+			"env": ["PREDICT_SDK_TESTNET"]
 		}
 	}
 }

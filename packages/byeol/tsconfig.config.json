@@ -1,0 +1,7 @@
+{
+	"extends": "../../tsconfig.shared.json",
+	"include": ["*.config.ts", "*.config.mts", "scripts"],
+	"compilerOptions": {
+		"noEmit": true
+	}
+}

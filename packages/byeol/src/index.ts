@@ -23,8 +23,14 @@ export { MarginTPSLContract } from './transactions/marginTPSL.js';
 
 // Pyth price feed integration
 export { HaneulPythClient, HaneulPriceServiceConnection } from './pyth/pyth.js';
+export type { PriceServiceConnectionConfig } from './pyth/PriceServiceConnection.js';
 
 // BCS types for parsing on-chain data
+// NOTE: `Account` here is `@byeol/core::account::Account` — the per-pool trading
+// account. The shared account primitive exports a DIFFERENT `Account` with an
+// unrelated layout; it is reachable only via the `/account` subpath and must never be
+// re-exported here, or `import { Account } from '@haneullabs/byeol'` silently changes
+// meaning for every existing consumer.
 export { Account, Balances, Order, OrderBylPrice, VecSet } from './types/bcs.js';
 
 // TypeScript interfaces and types
@@ -34,6 +40,7 @@ export type {
 	Pool,
 	MarginManager,
 	MarginPool,
+	PythConfig,
 	Config,
 } from './types/index.js';
 
@@ -106,6 +113,8 @@ export {
 	testnetPackageIds,
 	mainnetPythConfigs,
 	testnetPythConfigs,
+	PYTH_UPGRADED_HERMES,
+	BYEOL_HERMES_PROXY,
 } from './utils/constants.js';
 export {
 	BYL_SCALAR,

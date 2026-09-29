@@ -22,7 +22,12 @@ import type {
 	Wallet,
 	WalletIcon,
 } from '@haneullabs/wallet-standard';
-import { getWallets, ReadonlyWalletAccount, HANEUL_CHAINS } from '@haneullabs/wallet-standard';
+import {
+	getWallets,
+	ReadonlyWalletAccount,
+	HANEUL_CHAINS,
+	HANEUL_MAINNET_CHAIN,
+} from '@haneullabs/wallet-standard';
 import { mitt, type Emitter } from '@haneullabs/utils';
 import type { InferOutput } from 'valibot';
 import { boolean, object, parse, string } from 'valibot';
@@ -78,7 +83,6 @@ const walletAccountFeatures = [
 	'haneul:signAndExecuteTransaction',
 	'haneul:signPersonalMessage',
 	'haneul:signTransactionBlock',
-	'haneul:signAndExecuteTransactionBlock',
 ] as const;
 
 function getAccountsFromSession(session: string) {
@@ -86,8 +90,13 @@ function getAccountsFromSession(session: string) {
 	return payload.accounts.map((account) => {
 		return new ReadonlyWalletAccount({
 			address: account.address,
-			chains: HANEUL_CHAINS,
-			features: walletAccountFeatures,
+			chains: account.chains
+				? HANEUL_CHAINS.filter((chain) => account.chains?.includes(chain))
+				: HANEUL_CHAINS,
+			// Older wallet sessions omit capabilities; an explicit empty list is watch-only.
+			features: account.features
+				? walletAccountFeatures.filter((feature) => account.features?.includes(feature))
+				: walletAccountFeatures,
 			publicKey: fromBase64(account.publicKey),
 		});
 	});
@@ -102,6 +111,7 @@ export class SlushWallet implements Wallet {
 	#walletName: string;
 	#icon: WalletIcon;
 	#name: string;
+	#removeStorageListener: (() => void) | null = null;
 
 	get name() {
 		return this.#walletName;
@@ -183,6 +193,25 @@ export class SlushWallet implements Wallet {
 		this.#name = name;
 		this.#walletName = metadata.walletName;
 		this.#icon = metadata.icon as WalletIcon;
+		if (typeof window !== 'undefined') {
+			const target = window;
+			const onStorage = (event: StorageEvent) => {
+				if (
+					event.storageArea !== localStorage ||
+					(event.key !== SLUSH_SESSION_KEY && event.key !== null)
+				)
+					return;
+				this.#setAccounts(this.#getPreviouslyAuthorizedAccounts());
+			};
+			target.addEventListener('storage', onStorage);
+			this.#removeStorageListener = () => target.removeEventListener('storage', onStorage);
+		}
+	}
+
+	/** Stop observing cross-tab session changes. Registered wallets dispose on unregister. */
+	dispose() {
+		this.#removeStorageListener?.();
+		this.#removeStorageListener = null;
 	}
 
 	#signTransactionBlock: HaneulSignTransactionBlockMethod = async ({
@@ -252,13 +281,19 @@ export class SlushWallet implements Wallet {
 	};
 
 	#signPersonalMessage: HaneulSignPersonalMessageMethod = async ({ message, account, chain }) => {
+		const selectedChain =
+			chain ??
+			(account.chains.includes(HANEUL_MAINNET_CHAIN)
+				? HANEUL_MAINNET_CHAIN
+				: HANEUL_CHAINS.find((supported) => account.chains.includes(supported)));
+		if (!selectedChain) throw new Error('Account has no supported chain');
 		const popup = this.#getNewPopupChannel();
 
 		const response = await popup.send({
 			type: 'sign-personal-message',
 			message: toBase64(message),
 			address: account.address,
-			chain: chain ?? account.chains[0],
+			chain: selectedChain,
 			session: getSessionFromStorage(),
 		});
 
@@ -342,17 +377,7 @@ export function registerSlushWallet(
 ) {
 	const wallets = getWallets();
 
-	let unregister: (() => void) | null = null;
-
-	// listen for wallet registration
-	wallets.on('register', (wallet) => {
-		if (wallet.id === HANEUL_WALLET_EXTENSION_ID) {
-			unregister?.();
-		}
-	});
-
-	const extension = wallets.get().find((wallet) => wallet.id === HANEUL_WALLET_EXTENSION_ID);
-	if (extension) {
+	if (wallets.get().some((wallet) => wallet.id === HANEUL_WALLET_EXTENSION_ID)) {
 		return;
 	}
 
@@ -361,13 +386,27 @@ export function registerSlushWallet(
 		origin,
 		metadata: FALLBACK_METADATA,
 	});
-	unregister = wallets.register(slushWalletInstance);
+	const unregisterWallet = wallets.register(slushWalletInstance);
+	let unregistered = false;
+	const unregister = () => {
+		if (unregistered) return;
+		unregistered = true;
+		slushWalletInstance.dispose();
+		stopRegistrationListener();
+		unregisterWallet();
+	};
+	const stopRegistrationListener = wallets.on('register', (wallet) => {
+		if (wallet.id === HANEUL_WALLET_EXTENSION_ID) unregister();
+	});
+	// Another registration listener may have installed the extension synchronously.
+	if (wallets.get().some((wallet) => wallet.id === HANEUL_WALLET_EXTENSION_ID)) unregister();
 
 	fetchMetadata(metadataApiUrl)
 		.then((metadata) => {
+			if (unregistered) return;
 			if (!metadata.enabled) {
 				console.log('Slush wallet is not currently enabled.');
-				unregister?.();
+				unregister();
 				return;
 			}
 			slushWalletInstance.updateMetadata(metadata);

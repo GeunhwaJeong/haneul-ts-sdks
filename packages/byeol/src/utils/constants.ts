@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Coin, Pool, MarginPool } from '../types/index.js';
+import type { Coin, Pool, MarginPool, PythConfig } from '../types/index.js';
 
 export type CoinMap = Record<string, Coin>;
 export type PoolMap = Record<string, Pool>;
@@ -20,9 +20,11 @@ export const testnetPackageIds = {
 	BYEOL_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
 	REGISTRY_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
 	BYL_TREASURY_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	// byeol_margin v16 — the first testnet package carrying the upgraded-Pyth modules.
 	MARGIN_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
 	MARGIN_V1: '0x0000000000000000000000000000000000000000000000000000000000000000',
 	MARGIN_REGISTRY_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	// margin_liquidation v4 — carries liquidate_base_upgraded / liquidate_quote_upgraded.
 	LIQUIDATION_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
 } satisfies ByeolPackageIds;
 
@@ -30,44 +32,65 @@ export const mainnetPackageIds = {
 	BYEOL_PACKAGE_ID: '0xfa6cb7b6b0116d552e70cc83f293456502ebf7c37485762570077fde11a7cda8',
 	REGISTRY_ID: '0xed6388354d0d6708573104f98885fadd95727d8c24c4f0d110bdf2412777b2eb',
 	BYL_TREASURY_ID: '0x1033499ad60f51cc3c552f04088980cea99f44f043747a3e30eabc342fd5446c',
+	// byeol_margin v7 — the first mainnet package carrying the upgraded-Pyth modules.
+	// Its gate constant is `MARGIN_VERSION = 7`, and every entrypoint asserts the registry
+	// allows that version, so this id only works once `enable_version(7)` has run on the
+	// mainnet MarginRegistry. Until then v7 flows abort `EPackageVersionDisabled`.
 	MARGIN_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
 	MARGIN_V1: '0x0000000000000000000000000000000000000000000000000000000000000000',
 	MARGIN_REGISTRY_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
 	LIQUIDATION_PACKAGE_ID: '0x0000000000000000000000000000000000000000000000000000000000000000',
 } satisfies ByeolPackageIds;
 
+/**
+ * Feed ids and price objects on Pyth's upgraded Core, the only deployment this SDK targets.
+ *
+ * The testnet `MarginRegistry` was migrated (2026-08-11) off Pyth's beta feed ids and onto
+ * the ids upgraded testnet Core carries, which are the mainnet-style ids — the beta ids
+ * have no upgraded price objects and the upgraded Hermes does not serve them.
+ *
+ * DBTC is testnet's wrapped BTC and takes Crypto.XBTC/USD — the same feed mainnet XBTC
+ * uses. The upgraded deployment carries no distinct DBTC feed. Plain Crypto.BTC/USD is
+ * NOT an accepted substitute for either: XBTC is a distinct asset with its own peg and
+ * redemption risk, so pricing it off BTC would misstate collateral in exactly the stress
+ * where the two diverge.
+ */
 export const testnetCoins: CoinMap = {
 	BYL: {
 		address: `0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8`,
 		type: `0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8::byl::BYL`,
 		scalar: 1000000,
-		feed: '0x99137a18354efa7fb6840889d059fdb04c46a6ce21be97ab60d9ad93e91ac758', // BYL uses HFT feed on testnet
+		feed: '0x29bdd5248234e33bd93d3b81100b5fa32eaa5997843847e2c2cb16d7c6d9f7ff',
 		currencyId: '0xbf1b77e244f649c736a44898585cc8ac939fbb0bbdf1d8d2a183978cc312e613',
-		priceInfoObjectId: '0x3d52fffa2cd9e54b39bb36d282bdda560b15b8b4fdf4766a3c58499ef172bafc',
+		priceInfoObjectId: '0x27882b43c2cc62bbd8fb5f4ebc20be004b14454b2c98755033f5446d35474339',
 	},
 	HANEUL: {
 		address: `0x0000000000000000000000000000000000000000000000000000000000000002`,
 		type: `0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL`,
 		scalar: 1000000000,
-		feed: '0x50c67b3fd225db8912a424dd4baed60ffdde625ed2feaaf283724f9608fea266',
+		feed: '0x0000000000000000000000000000000000000000000000000000000000000000',
 		currencyId: '0xf256d3fb6a50eaa748d94335b34f2982fbc3b63ceec78cafaa29ebc9ebaf2bbc',
-		priceInfoObjectId: '0x1ebb295c789cc42b3b2a1606482cd1c7124076a0f5676718501fda8c7fd075a0',
+		priceInfoObjectId: '0x867877562b5d8ac262d93b02062e04b428a2f9bfbb2f05b8af52e04cd98bd241',
 	},
 	DBUSDC: {
 		address: `0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7`,
 		type: `0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7::DBUSDC::DBUSDC`,
 		scalar: 1000000,
-		feed: '0x41f3625971ca2ed2263e78573fe5ce23e13d2558ed3f2e47ab0f84fb9e7ae722',
+		feed: '0xeaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a',
 		currencyId: '0x509db0f9283c9ee4fdc5b99028a439d3639f49e9709e3d7a6de14b3bfdb0c784',
-		priceInfoObjectId: '0x9c4dd4008297ffa5e480684b8100ec21cc934405ed9a25d4e4d7b6259aad9c81',
+		priceInfoObjectId: '0x17de8d80e8efedfd1053c46fb921e51824479ed32c6aded5f7279995bb84db05',
 	},
 	DBTC: {
 		address: `0x6502dae813dbe5e42643c119a6450a518481f03063febc7e20238e43b6ea9e86`,
 		type: `0x6502dae813dbe5e42643c119a6450a518481f03063febc7e20238e43b6ea9e86::dbtc::DBTC`,
 		scalar: 100000000,
-		feed: '0xf9c0172ba10dfa4d19088d94f5bf61d3b54d5bd7483a322a982e1373ee8ea31b',
+		// Crypto.XBTC/USD — DBTC is testnet's wrapped BTC, so it takes the same feed mainnet
+		// XBTC does. Never plain BTC/USD: that is a different asset, and standing it in
+		// would misprice DBTC collateral whenever XBTC's peg moves. Object created on
+		// upgraded testnet Core 2026-08-11.
+		feed: '0xae8f269ed9c4bed616c99a98cf6dfe562bd3202e7f91821a471ff854713851b4',
 		currencyId: '0x3ef2afa2126704bf721b9c8495d94288f6bd090fc454fe3e1613eb765a8a348f',
-		priceInfoObjectId: '0x72431a238277695d3f31e4425225a4462674ee6cceeea9d66447b210755fffba',
+		priceInfoObjectId: '0x88387b85b9a53c4365219aee4d77e62213877f110eb859d8e03812a5bea0d1f7',
 	},
 	DBUSDT: {
 		address: `0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7`,
@@ -178,11 +201,31 @@ export const mainnetMarginPools = {
 };
 
 export const testnetPythConfigs = {
-	pythStateId: '0x243759059f4c3111179da5878c12f68d612c21a8d54d85edc86164bb18be1c7c',
-	wormholeStateId: '0x31358d198147da50db32eda2562951d53973a0c0ad5ed738e9b17d88b213d790',
-};
+	pythStateId: '0x3c48fe392912de6c18087a2b3f5fdbfbfdb4598e180947feff1f12f8e9ea073e',
+	wormholeStateId: '0x750da8e6d16b6a363a39fe2eaa8295ac224a1e6fce4e47b58845e2e8746164f0',
+} satisfies PythConfig;
 
 export const mainnetPythConfigs = {
 	pythStateId: '0x0000000000000000000000000000000000000000000000000000000000000000',
 	wormholeStateId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-};
+} satisfies PythConfig;
+
+/**
+ * Hermes serving Pyth's upgraded Core. Requires an `Authorization: Bearer <token>` header
+ * and answers 401 without one. Note that from the Core cutover this also becomes true of
+ * legacy Hermes, so an unauthenticated price push has no long-term path.
+ */
+export const PYTH_UPGRADED_HERMES = 'https://pyth.dourolabs.app/hermes';
+
+/**
+ * Byeol-operated Hermes proxy: forwards to {@link PYTH_UPGRADED_HERMES} supplying
+ * credentials server-side, so consumers without their own Pyth plan can still push price
+ * updates. Used only when no `accessToken` is configured — bring your own token and the
+ * SDK talks to Pyth directly, with no Byeol infrastructure in the path.
+ *
+ * `undefined` until the proxy is deployed. It must stay `undefined` rather than a
+ * placeholder URL: it is the default endpoint whenever a consumer supplies no credentials,
+ * so a non-resolving value here surfaces as an opaque `Invalid URL`/DNS error from inside
+ * axios instead of a configuration error naming the field to set.
+ */
+export const BYEOL_HERMES_PROXY: string | undefined = undefined;

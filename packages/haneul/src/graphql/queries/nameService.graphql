@@ -8,3 +8,9 @@ query defaultHaneulnsName($address: HaneulAddress!) {
 		}
 	}
 }
+
+query resolveNameServiceAddress($name: String!) {
+	address(name: $name) {
+		address
+	}
+}

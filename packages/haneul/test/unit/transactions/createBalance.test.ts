@@ -9,8 +9,127 @@ import { normalizeHaneulAddress, normalizeStructTag } from '../../../src/utils/i
 
 const TEST_TYPE = normalizeStructTag('0x123::test::TOKEN');
 const TEST_TYPE_2 = normalizeStructTag('0x789::other::COIN');
+const HANEUL_TYPE = normalizeStructTag('0x2::haneul::HANEUL');
 const SENDER = normalizeHaneulAddress('0x123');
 const RECEIVER = normalizeHaneulAddress('0x456');
+
+describe('assumeSufficientAddressBalances', () => {
+	it('resolves a coin from address balance without a client', async () => {
+		const tx = new Transaction();
+		tx.setSender(SENDER);
+		tx.transferObjects([tx.coin({ type: TEST_TYPE, balance: 50n })], RECEIVER);
+
+		const result = await resolvedData(tx, undefined, {
+			assumeSufficientAddressBalances: true,
+		});
+
+		expect(result.inputs).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					FundsWithdrawal: expect.objectContaining({
+						reservation: expect.objectContaining({ MaxAmountU64: '50' }),
+						typeArg: expect.objectContaining({ Balance: TEST_TYPE }),
+						withdrawFrom: expect.objectContaining({ Sender: true }),
+					}),
+				}),
+			]),
+		);
+		expect(
+			result.commands.some(
+				(command: any) =>
+					command.MoveCall?.module === 'coin' && command.MoveCall?.function === 'redeem_funds',
+			),
+		).toBe(true);
+	});
+
+	it('resolves a balance from address balance without a client', async () => {
+		const tx = new Transaction();
+		tx.setSender(SENDER);
+		const balance = tx.balance({ type: TEST_TYPE, balance: 50n });
+		tx.moveCall({
+			target: '0x2::balance::send_funds',
+			typeArguments: [TEST_TYPE],
+			arguments: [balance, tx.pure.address(RECEIVER)],
+		});
+
+		const result = await resolvedData(tx, undefined, {
+			assumeSufficientAddressBalances: true,
+		});
+
+		expect(result.commands[0].MoveCall).toMatchObject({
+			module: 'balance',
+			function: 'redeem_funds',
+		});
+	});
+
+	it('uses address balance for HANEUL when the gas coin is not otherwise referenced', async () => {
+		const tx = new Transaction();
+		tx.setSender(SENDER);
+		tx.transferObjects([tx.coin({ balance: 50n })], RECEIVER);
+
+		const result = await resolvedData(tx, undefined, {
+			assumeSufficientAddressBalances: true,
+		});
+
+		expect(result.inputs).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					FundsWithdrawal: expect.objectContaining({
+						reservation: expect.objectContaining({ MaxAmountU64: '50' }),
+						typeArg: expect.objectContaining({ Balance: HANEUL_TYPE }),
+						withdrawFrom: expect.objectContaining({ Sender: true }),
+					}),
+				}),
+			]),
+		);
+	});
+
+	it('uses address balance for HANEUL even when the gas coin is otherwise referenced', async () => {
+		const tx = new Transaction();
+		tx.setSender(SENDER);
+		tx.splitCoins(tx.gas, [1]);
+		tx.transferObjects([tx.coin({ balance: 50n })], RECEIVER);
+
+		const result = await resolvedData(tx, undefined, {
+			assumeSufficientAddressBalances: true,
+		});
+
+		expect(result.inputs.some((input: any) => input.FundsWithdrawal)).toBe(true);
+		expect(
+			result.commands.filter((command: any) => command.SplitCoins?.coin?.GasCoin),
+		).toHaveLength(1);
+	});
+
+	it('honors useGasCoin false when the gas coin is otherwise referenced', async () => {
+		const tx = new Transaction();
+		tx.setSender(SENDER);
+		tx.splitCoins(tx.gas, [1]);
+		tx.transferObjects([tx.coin({ balance: 50n, useGasCoin: false })], RECEIVER);
+
+		const result = await resolvedData(tx, undefined, {
+			assumeSufficientAddressBalances: true,
+		});
+
+		expect(result.inputs.some((input: any) => input.FundsWithdrawal)).toBe(true);
+		expect(
+			result.commands.filter((command: any) => command.SplitCoins?.coin?.GasCoin),
+		).toHaveLength(1);
+	});
+
+	it('rejects mixed HANEUL source preferences when balances are assumed', async () => {
+		const tx = new Transaction();
+		tx.setSender(SENDER);
+		tx.splitCoins(tx.gas, [1]);
+		tx.transferObjects(
+			[tx.coin({ balance: 25n }), tx.coin({ balance: 25n, useGasCoin: false })],
+			RECEIVER,
+		);
+
+		await expect(
+			resolvedData(tx, undefined, { assumeSufficientAddressBalances: true }),
+		).rejects.toThrow('Cannot mix HANEUL CoinWithBalance intents');
+	});
+});
 
 describe('tx.balance', () => {
 	it('tx.balance zero balance resolves to balance::zero', async () => {
@@ -218,21 +337,6 @@ describe('tx.balance', () => {
 				      },
 				    },
 				    {
-				      "TransferObjects": {
-				        "address": {
-				          "Input": 0,
-				        },
-				        "objects": [
-				          {
-				            "NestedResult": [
-				              1,
-				              0,
-				            ],
-				          },
-				        ],
-				      },
-				    },
-				    {
 				      "MoveCall": {
 				        "arguments": [
 				          {
@@ -247,6 +351,21 @@ describe('tx.balance', () => {
 				        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 				        "typeArguments": [
 				          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+				        ],
+				      },
+				    },
+				    {
+				      "TransferObjects": {
+				        "address": {
+				          "Input": 0,
+				        },
+				        "objects": [
+				          {
+				            "NestedResult": [
+				              1,
+				              0,
+				            ],
+				          },
 				        ],
 				      },
 				    },
@@ -340,6 +459,24 @@ describe('tx.balance', () => {
 			      "MoveCall": {
 			        "arguments": [
 			          {
+			            "Input": 1,
+			          },
+			          {
+			            "Input": 3,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
 			            "NestedResult": [
 			              1,
 			              0,
@@ -351,24 +488,6 @@ describe('tx.balance', () => {
 			        ],
 			        "function": "send_funds",
 			        "module": "balance",
-			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
-			        "typeArguments": [
-			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
-			        ],
-			      },
-			    },
-			    {
-			      "MoveCall": {
-			        "arguments": [
-			          {
-			            "Input": 1,
-			          },
-			          {
-			            "Input": 3,
-			          },
-			        ],
-			        "function": "send_funds",
-			        "module": "coin",
 			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 			        "typeArguments": [
 			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
@@ -604,6 +723,24 @@ describe('tx.balance', () => {
 			      },
 			    },
 			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
+			            "Input": 2,
+			          },
+			          {
+			            "Input": 5,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
 			      "TransferObjects": {
 			        "address": {
 			          "Input": 0,
@@ -633,24 +770,6 @@ describe('tx.balance', () => {
 			        ],
 			        "function": "send_funds",
 			        "module": "balance",
-			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
-			        "typeArguments": [
-			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
-			        ],
-			      },
-			    },
-			    {
-			      "MoveCall": {
-			        "arguments": [
-			          {
-			            "Input": 2,
-			          },
-			          {
-			            "Input": 5,
-			          },
-			        ],
-			        "function": "send_funds",
-			        "module": "coin",
 			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 			        "typeArguments": [
 			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
@@ -754,6 +873,24 @@ describe('tx.balance', () => {
 			      "MoveCall": {
 			        "arguments": [
 			          {
+			            "Input": 1,
+			          },
+			          {
+			            "Input": 3,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
 			            "NestedResult": [
 			              1,
 			              0,
@@ -765,24 +902,6 @@ describe('tx.balance', () => {
 			        ],
 			        "function": "send_funds",
 			        "module": "balance",
-			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
-			        "typeArguments": [
-			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
-			        ],
-			      },
-			    },
-			    {
-			      "MoveCall": {
-			        "arguments": [
-			          {
-			            "Input": 1,
-			          },
-			          {
-			            "Input": 3,
-			          },
-			        ],
-			        "function": "send_funds",
-			        "module": "coin",
 			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 			        "typeArguments": [
 			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
@@ -958,6 +1077,24 @@ describe('tx.balance', () => {
 			      "MoveCall": {
 			        "arguments": [
 			          {
+			            "Input": 1,
+			          },
+			          {
+			            "Input": 4,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
 			            "NestedResult": [
 			              2,
 			              0,
@@ -969,24 +1106,6 @@ describe('tx.balance', () => {
 			        ],
 			        "function": "send_funds",
 			        "module": "balance",
-			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
-			        "typeArguments": [
-			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
-			        ],
-			      },
-			    },
-			    {
-			      "MoveCall": {
-			        "arguments": [
-			          {
-			            "Input": 1,
-			          },
-			          {
-			            "Input": 4,
-			          },
-			        ],
-			        "function": "send_funds",
-			        "module": "coin",
 			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 			        "typeArguments": [
 			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
@@ -1091,6 +1210,24 @@ describe('tx.balance', () => {
 			      },
 			    },
 			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
+			            "Input": 2,
+			          },
+			          {
+			            "Input": 5,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
 			      "TransferObjects": {
 			        "address": {
 			          "Input": 0,
@@ -1120,24 +1257,6 @@ describe('tx.balance', () => {
 			        ],
 			        "function": "send_funds",
 			        "module": "balance",
-			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
-			        "typeArguments": [
-			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
-			        ],
-			      },
-			    },
-			    {
-			      "MoveCall": {
-			        "arguments": [
-			          {
-			            "Input": 2,
-			          },
-			          {
-			            "Input": 5,
-			          },
-			        ],
-			        "function": "send_funds",
-			        "module": "coin",
 			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 			        "typeArguments": [
 			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
@@ -1268,6 +1387,24 @@ describe('tx.balance', () => {
 			      "MoveCall": {
 			        "arguments": [
 			          {
+			            "Input": 1,
+			          },
+			          {
+			            "Input": 4,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
 			            "NestedResult": [
 			              3,
 			              0,
@@ -1279,24 +1416,6 @@ describe('tx.balance', () => {
 			        ],
 			        "function": "send_funds",
 			        "module": "balance",
-			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
-			        "typeArguments": [
-			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
-			        ],
-			      },
-			    },
-			    {
-			      "MoveCall": {
-			        "arguments": [
-			          {
-			            "Input": 1,
-			          },
-			          {
-			            "Input": 4,
-			          },
-			        ],
-			        "function": "send_funds",
-			        "module": "coin",
 			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 			        "typeArguments": [
 			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
@@ -1503,21 +1622,6 @@ describe('tx.balance', () => {
 			      },
 			    },
 			    {
-			      "TransferObjects": {
-			        "address": {
-			          "Input": 0,
-			        },
-			        "objects": [
-			          {
-			            "NestedResult": [
-			              1,
-			              0,
-			            ],
-			          },
-			        ],
-			      },
-			    },
-			    {
 			      "MoveCall": {
 			        "arguments": [
 			          {
@@ -1529,6 +1633,21 @@ describe('tx.balance', () => {
 			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 			        "typeArguments": [
 			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
+			      "TransferObjects": {
+			        "address": {
+			          "Input": 0,
+			        },
+			        "objects": [
+			          {
+			            "NestedResult": [
+			              1,
+			              0,
+			            ],
+			          },
 			        ],
 			      },
 			    },
@@ -1627,21 +1746,6 @@ describe('tx.balance', () => {
 			      },
 			    },
 			    {
-			      "TransferObjects": {
-			        "address": {
-			          "Input": 0,
-			        },
-			        "objects": [
-			          {
-			            "NestedResult": [
-			              2,
-			              0,
-			            ],
-			          },
-			        ],
-			      },
-			    },
-			    {
 			      "MoveCall": {
 			        "arguments": [
 			          {
@@ -1656,6 +1760,21 @@ describe('tx.balance', () => {
 			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
 			        "typeArguments": [
 			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
+			      "TransferObjects": {
+			        "address": {
+			          "Input": 0,
+			        },
+			        "objects": [
+			          {
+			            "NestedResult": [
+			              2,
+			              0,
+			            ],
+			          },
 			        ],
 			      },
 			    },
@@ -1870,7 +1989,25 @@ describe('tx.balance', () => {
 			      "MoveCall": {
 			        "arguments": [
 			          {
+			            "Result": 0,
+			          },
+			          {
 			            "Input": 4,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
+			        ],
+			      },
+			    },
+			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
+			            "Input": 5,
 			          },
 			        ],
 			        "function": "redeem_funds",
@@ -1885,12 +2022,30 @@ describe('tx.balance', () => {
 			      "SplitCoins": {
 			        "amounts": [
 			          {
-			            "Input": 5,
+			            "Input": 6,
 			          },
 			        ],
 			        "coin": {
-			          "Result": 2,
+			          "Result": 3,
 			        },
+			      },
+			    },
+			    {
+			      "MoveCall": {
+			        "arguments": [
+			          {
+			            "Result": 3,
+			          },
+			          {
+			            "Input": 7,
+			          },
+			        ],
+			        "function": "send_funds",
+			        "module": "coin",
+			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
+			        "typeArguments": [
+			          "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
+			        ],
 			      },
 			    },
 			    {
@@ -1913,46 +2068,10 @@ describe('tx.balance', () => {
 			          },
 			          {
 			            "NestedResult": [
-			              3,
+			              4,
 			              0,
 			            ],
 			          },
-			        ],
-			      },
-			    },
-			    {
-			      "MoveCall": {
-			        "arguments": [
-			          {
-			            "Result": 0,
-			          },
-			          {
-			            "Input": 6,
-			          },
-			        ],
-			        "function": "send_funds",
-			        "module": "coin",
-			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
-			        "typeArguments": [
-			          "0x0000000000000000000000000000000000000000000000000000000000000123::test::TOKEN",
-			        ],
-			      },
-			    },
-			    {
-			      "MoveCall": {
-			        "arguments": [
-			          {
-			            "Result": 2,
-			          },
-			          {
-			            "Input": 7,
-			          },
-			        ],
-			        "function": "send_funds",
-			        "module": "coin",
-			        "package": "0x0000000000000000000000000000000000000000000000000000000000000002",
-			        "typeArguments": [
-			          "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
 			        ],
 			      },
 			    },
@@ -1990,6 +2109,11 @@ describe('tx.balance', () => {
 			      },
 			    },
 			    {
+			      "Pure": {
+			        "bytes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASM=",
+			      },
+			    },
+			    {
 			      "FundsWithdrawal": {
 			        "reservation": {
 			          "$kind": "MaxAmountU64",
@@ -2008,11 +2132,6 @@ describe('tx.balance', () => {
 			    {
 			      "Pure": {
 			        "bytes": "BQAAAAAAAAA=",
-			      },
-			    },
-			    {
-			      "Pure": {
-			        "bytes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASM=",
 			      },
 			    },
 			    {
@@ -2240,8 +2359,12 @@ describe('tx.balance', () => {
 	});
 });
 
-async function resolvedData(tx: Transaction, client: any) {
-	const resolved = JSON.parse(await tx.toJSON({ supportedIntents: [], client }));
+async function resolvedData(
+	tx: Transaction,
+	client: any,
+	options: { assumeSufficientAddressBalances?: boolean } = {},
+) {
+	const resolved = JSON.parse(await tx.toJSON({ supportedIntents: [], client, ...options }));
 	return { commands: resolved.commands, inputs: resolved.inputs };
 }
 

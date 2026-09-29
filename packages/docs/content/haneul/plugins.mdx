@@ -2,16 +2,35 @@
 title: Transaction Plugins
 description: Extend transaction building with reusable plugins.
 keywords:
-  [
-    transaction plugins,
-    plugin API,
-    Transaction builder,
-    Haneul,
-    intents,
-    serialization,
-    middleware,
-    extensibility,
-  ]
+  - transaction plugins
+  - plugin API
+  - Transaction builder
+  - Haneul
+  - intents
+  - serialization
+  - middleware
+  - extensibility
+questions:
+  - What are Haneul SDK plugins?
+  - How do I add middleware to a Haneul client?
+  - How do I extend Haneul client functionality?
+answer: >-
+  Plugins let you extend Haneul client behavior with middleware-style interceptors for logging,
+  caching, retry logic, and custom transformations on requests and responses.
+goal:
+  description: Reader can extend Haneul client behavior with plugins
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 30
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 <Callout type="warn">

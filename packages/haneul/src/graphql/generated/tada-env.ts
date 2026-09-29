@@ -254,6 +254,23 @@ const introspection = {
             "isDeprecated": false
           },
           {
+            "name": "asTransactionObject",
+            "type": {
+              "kind": "UNION",
+              "name": "TransactionObject"
+            },
+            "args": [
+              {
+                "name": "transactionDigest",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String"
+                }
+              }
+            ],
+            "isDeprecated": false
+          },
+          {
             "name": "balance",
             "type": {
               "kind": "OBJECT",
@@ -1084,9 +1101,54 @@ const introspection = {
         "interfaces": []
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "BalanceKey",
+        "inputFields": [
+          {
+            "name": "address",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "HaneulAddress"
+              }
+            }
+          },
+          {
+            "name": "coinType",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String"
+              }
+            }
+          }
+        ],
+        "isOneOf": false
+      },
+      {
         "kind": "OBJECT",
         "name": "BalanceWithdraw",
         "fields": [
+          {
+            "name": "allowance",
+            "type": {
+              "kind": "OBJECT",
+              "name": "Address"
+            },
+            "args": [],
+            "isDeprecated": false
+          },
+          {
+            "name": "funder",
+            "type": {
+              "kind": "OBJECT",
+              "name": "Address"
+            },
+            "args": [],
+            "isDeprecated": false
+          },
           {
             "name": "reservation",
             "type": {
@@ -1737,6 +1799,23 @@ const introspection = {
               "name": "Boolean"
             },
             "args": [],
+            "isDeprecated": false
+          },
+          {
+            "name": "asTransactionObject",
+            "type": {
+              "kind": "UNION",
+              "name": "TransactionObject"
+            },
+            "args": [
+              {
+                "name": "transactionDigest",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String"
+                }
+              }
+            ],
             "isDeprecated": false
           },
           {
@@ -2806,6 +2885,23 @@ const introspection = {
             "isDeprecated": false
           },
           {
+            "name": "asTransactionObject",
+            "type": {
+              "kind": "UNION",
+              "name": "TransactionObject"
+            },
+            "args": [
+              {
+                "name": "transactionDigest",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String"
+                }
+              }
+            ],
+            "isDeprecated": false
+          },
+          {
             "name": "balance",
             "type": {
               "kind": "OBJECT",
@@ -3645,6 +3741,10 @@ const introspection = {
           {
             "kind": "OBJECT",
             "name": "DisplayRegistryCreateTransaction"
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ForwardingAddressRegistryCreateTransaction"
           },
           {
             "kind": "OBJECT",
@@ -4502,6 +4602,22 @@ const introspection = {
       },
       {
         "kind": "OBJECT",
+        "name": "ForwardingAddressRegistryCreateTransaction",
+        "fields": [
+          {
+            "name": "_",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean"
+            },
+            "args": [],
+            "isDeprecated": false
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
         "name": "GasCoin",
         "fields": [
           {
@@ -4736,6 +4852,23 @@ const introspection = {
                 "type": {
                   "kind": "SCALAR",
                   "name": "UInt53"
+                }
+              }
+            ],
+            "isDeprecated": false
+          },
+          {
+            "name": "asTransactionObject",
+            "type": {
+              "kind": "UNION",
+              "name": "TransactionObject"
+            },
+            "args": [
+              {
+                "name": "transactionDigest",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String"
                 }
               }
             ],
@@ -6809,6 +6942,23 @@ const introspection = {
             "isDeprecated": false
           },
           {
+            "name": "asTransactionObject",
+            "type": {
+              "kind": "UNION",
+              "name": "TransactionObject"
+            },
+            "args": [
+              {
+                "name": "transactionDigest",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String"
+                }
+              }
+            ],
+            "isDeprecated": false
+          },
+          {
             "name": "balance",
             "type": {
               "kind": "OBJECT",
@@ -7494,6 +7644,23 @@ const introspection = {
                 "type": {
                   "kind": "SCALAR",
                   "name": "UInt53"
+                }
+              }
+            ],
+            "isDeprecated": false
+          },
+          {
+            "name": "asTransactionObject",
+            "type": {
+              "kind": "UNION",
+              "name": "TransactionObject"
+            },
+            "args": [
+              {
+                "name": "transactionDigest",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String"
                 }
               }
             ],
@@ -9039,6 +9206,23 @@ const introspection = {
               "name": "MovePackage"
             },
             "args": [],
+            "isDeprecated": false
+          },
+          {
+            "name": "asTransactionObject",
+            "type": {
+              "kind": "UNION",
+              "name": "TransactionObject"
+            },
+            "args": [
+              {
+                "name": "transactionDigest",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String"
+                }
+              }
+            ],
             "isDeprecated": false
           },
           {
@@ -10775,6 +10959,41 @@ const introspection = {
                       "ofType": {
                         "kind": "INPUT_OBJECT",
                         "name": "AddressKey"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "isDeprecated": false
+          },
+          {
+            "name": "multiGetBalances",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "LIST",
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Balance"
+                  }
+                }
+              }
+            },
+            "args": [
+              {
+                "name": "keys",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "LIST",
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "BalanceKey"
                       }
                     }
                   }
@@ -13054,6 +13273,20 @@ const introspection = {
         ]
       },
       {
+        "kind": "UNION",
+        "name": "TransactionObject",
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "ConsensusObjectRead"
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ObjectChange"
+          }
+        ]
+      },
+      {
         "kind": "OBJECT",
         "name": "TransferObjectsCommand",
         "fields": [
@@ -13619,6 +13852,10 @@ const introspection = {
           },
           {
             "name": "SPONSOR",
+            "isDeprecated": false
+          },
+          {
+            "name": "SENDER_ALLOWANCE",
             "isDeprecated": false
           }
         ]

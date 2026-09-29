@@ -132,7 +132,7 @@ export class HaneulnsTransaction {
 	): TransactionObjectArgument {
 		const config = this.haneulnsClient.config;
 		return this.transaction.add(
-			paymentsModule.calculatePrice({
+			paymentsModule.calculatePricePro({
 				package: config.payments.packageId,
 				arguments: {
 					haneulns: config.haneulns,
@@ -173,7 +173,7 @@ export class HaneulnsTransaction {
 	): TransactionObjectArgument {
 		const config = this.haneulnsClient.config;
 		return this.transaction.add(
-			paymentsModule.handlePayment({
+			paymentsModule.handlePaymentPro({
 				package: config.payments.packageId,
 				arguments: {
 					haneulns: config.haneulns,

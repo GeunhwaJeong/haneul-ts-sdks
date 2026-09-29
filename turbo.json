@@ -42,6 +42,9 @@
 			]
 		},
 		// Avoid running CPU intensive tests in parallel
+		"@haneullabs/byeol#test": {
+			"env": ["PREDICT_SDK_TESTNET"]
+		},
 		"@haneullabs/walrus#test": {
 			"dependsOn": ["^build", "build", "@haneullabs/walrus-wasm#test"]
 		},

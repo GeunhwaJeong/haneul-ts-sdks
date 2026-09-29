@@ -2,14 +2,35 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export { HaneulGrpcClient, isHaneulGrpcClient } from './client.js';
-export { GrpcCoreClient } from './core.js';
-export type { HaneulGrpcClientOptions } from './client.js';
+export {
+	GrpcCoreClient,
+	parseGrpcSimulateTransactionResponse,
+	parseGrpcTransactionResponse,
+} from './core.js';
+export type {
+	GrpcExecuteTransactionOptions,
+	GrpcGetTransactionOptions,
+	GrpcSignAndExecuteTransactionOptions,
+	GrpcSimulateTransactionInclude,
+	GrpcSimulateTransactionOptions,
+	GrpcSimulateTransactionProtoJson,
+	GrpcSimulateTransactionResult,
+	GrpcTransactionInclude,
+	GrpcTransactionProtoJson,
+	GrpcTransactionResult,
+	GrpcWaitForTransactionOptions,
+	HaneulGrpcClientOptions,
+} from './client.js';
 export type { GrpcCoreClientOptions } from './core.js';
 
-// Re-export transports and types so users can configure custom transports
-// without adding @protobuf-ts/* as direct dependencies.
-export { GrpcWebFetchTransport } from '@protobuf-ts/grpcweb-transport';
+// Subclasses `@protobuf-ts/grpcweb-transport`'s transport to fix its error handling.
+export { GrpcWebFetchTransport } from './transport.js';
+
+// Re-exported so users can configure a transport, and narrow and code the errors it produces,
+// without adding @protobuf-ts/* as a dependency.
+export { GrpcStatusCode } from '@protobuf-ts/grpcweb-transport';
 export type { GrpcWebOptions } from '@protobuf-ts/grpcweb-transport';
+export { RpcError } from '@protobuf-ts/runtime-rpc';
 export type { RpcTransport } from '@protobuf-ts/runtime-rpc';
 
 // Export all gRPC proto types as a namespace

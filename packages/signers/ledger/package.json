@@ -3,7 +3,7 @@
 	"author": "Haneul Labs <build@haneul-labs.com>",
 	"description": "Haneul signer for Ledger hardware wallets",
 	"homepage": "https://sdk.haneul-labs.com",
-	"version": "0.2.5",
+	"version": "0.2.30",
 	"license": "Apache-2.0",
 	"type": "module",
 	"sideEffects": false,
@@ -52,8 +52,8 @@
 		"@haneullabs/haneul": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/node": "^25.9.3",
-		"typescript": "^6.0.3",
-		"vitest": "^4.1.8"
+		"@types/node": "^26.2.0",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
 	}
 }

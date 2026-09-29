@@ -44,7 +44,8 @@ export function isPureArg(arg: any): arg is PureArg {
 
 type Reservation = { MaxAmountU64: number | string };
 type WithdrawalTypeArg = { Balance: TypeTag };
-type WithdrawFrom = { Sender: null } | { Sponsor: null };
+type WithdrawFrom =
+	{ Sender: null } | { Sponsor: null } | { SenderAllowance: { funder: string; allowance: string } };
 type FundsWithdrawalArg = {
 	reservation: Reservation;
 	typeArg: WithdrawalTypeArg;
@@ -126,12 +127,19 @@ type ValidDuring = {
 	nonce: number;
 };
 
+type AllowedProposers = {
+	epoch: number | string;
+	proposers: number[];
+};
+
+type Validity = ValidDuring & {
+	allowedProposers: { None: null } | { Some: AllowedProposers };
+};
+
 /**
  * TransactionExpiration
  *
  * Indications the expiration time for a transaction.
  */
 export type TransactionExpiration =
-	| { None: null }
-	| { Epoch: number }
-	| { ValidDuring: ValidDuring };
+	{ None: null } | { Epoch: number } | { ValidDuring: ValidDuring } | { Validity: Validity };

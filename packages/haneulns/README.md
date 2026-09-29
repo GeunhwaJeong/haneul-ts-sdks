@@ -1,9 +1,10 @@
 # HaneulNS SDK
 
-> Note 1: You do not need to use the SDK for name resolution (name -> address, address -> name).
-> That is already covered by JSONRPC & GraphQL.
+> Name resolution is available directly from `HaneulGrpcClient` and `HaneulGraphQLClient`. Use
+> `resolveNameServiceAddress` for name-to-address resolution and `defaultNameServiceName` for
+> address-to-name resolution.
 
-HaneulNS SDK is a convenient wrapper for querying more detailed information and building transactions
-towards the Name Service.
+HaneulNS SDK is a convenient wrapper for querying detailed name records and building transactions for
+the Name Service.
 
 You can find our docs [by clicking here](https://docs.haneulns.io).

@@ -2,12 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { bcs } from '@haneullabs/haneul/bcs';
-import { PaginationArguments } from '@haneullabs/haneul/jsonRpc';
 import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
 import { normalizeStructTag, normalizeHaneulAddress, parseStructTag } from '@haneullabs/haneul/utils';
 
 import { Item, Listing, Lock, Kiosk as KioskStruct } from './contracts/0x2/kiosk.js';
-import type { Kiosk, KioskData, KioskListing, ObjectWithDisplay } from './types/index.js';
+import type {
+	Kiosk,
+	KioskData,
+	KioskListing,
+	KioskPaginationArguments,
+	ObjectWithDisplay,
+} from './types/index.js';
 
 export type DynamicFieldInfo = HaneulClientTypes.ListDynamicFieldsResponse['dynamicFields'][number];
 
@@ -176,7 +181,7 @@ export function attachLockedItems(kioskData: KioskData, lockedItemIds: string[])
 export async function getAllDynamicFields(
 	client: ClientWithCoreApi,
 	parentId: string,
-	pagination: PaginationArguments<string>,
+	pagination: KioskPaginationArguments,
 ): Promise<DynamicFieldInfo[]> {
 	let hasNextPage = true;
 	let cursor: string | null = null;

@@ -1,12 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { HaneulClientTypes } from '@haneullabs/haneul/client';
+import type { ClientWithCoreApi, HaneulClientTypes } from '@haneullabs/haneul/client';
 import type { TransactionObjectArgument } from '@haneullabs/haneul/transactions';
 
 import type { BaseRulePackageIds } from '../constants.js';
-import { HaneulJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
-import { HaneulGraphQLClient } from '@haneullabs/haneul/graphql';
 
 export * from './kiosk.js';
 export * from './transfer-policy.js';
@@ -25,4 +23,9 @@ export type KioskClientOptions = {
 	packageIds?: BaseRulePackageIds;
 };
 
-export type KioskCompatibleClient = HaneulJsonRpcClient | HaneulGraphQLClient;
+export type KioskCompatibleClient = ClientWithCoreApi;
+
+export type KioskPaginationArguments = {
+	cursor?: string | null;
+	limit?: number | null;
+};

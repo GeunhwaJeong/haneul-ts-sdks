@@ -1,7 +1,6 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import type { PaginationArguments } from '@haneullabs/haneul/jsonRpc';
 import type { HaneulClientTypes } from '@haneullabs/haneul/client';
 
 import {
@@ -24,6 +23,7 @@ import type {
 	KioskClientOptions,
 	KioskCompatibleClient,
 	KioskData,
+	KioskPaginationArguments,
 	OwnedKiosks,
 } from '../types/index.js';
 
@@ -37,11 +37,11 @@ export type KioskExtensionOptions<Name extends string = 'kiosk'> = {
  *
  * @example
  * ```ts
- * import { HaneulJsonRpcClient } from '@haneullabs/haneul/jsonRpc';
+ * import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
  * import { kiosk } from '@haneullabs/kiosk';
  *
- * const client = new HaneulJsonRpcClient({
- *   url: getJsonRpcFullnodeUrl('mainnet'),
+ * const client = new HaneulGrpcClient({
+ *   baseUrl: 'http://158.69.54.239:9000',
  *   network: 'mainnet',
  * }).$extend(kiosk());
  *
@@ -100,7 +100,7 @@ export class KioskClient {
 		pagination,
 	}: {
 		address: string;
-		pagination?: PaginationArguments<string>;
+		pagination?: KioskPaginationArguments;
 	}): Promise<OwnedKiosks> {
 		const personalPackageId =
 			this.packageIds?.personalKioskRulePackageId || PERSONAL_KIOSK_RULE_ADDRESS[this.network];

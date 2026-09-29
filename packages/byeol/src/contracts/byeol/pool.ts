@@ -216,6 +216,87 @@ export function placeLimitOrder(options: PlaceLimitOrderOptions) {
 			typeArguments: options.typeArguments,
 		});
 }
+export interface PlacePostOnlyLimitOrderArguments {
+	self: RawTransactionArgument<string>;
+	balanceManager: RawTransactionArgument<string>;
+	tradeProof: TransactionArgument;
+	clientOrderId: RawTransactionArgument<number | bigint>;
+	price: RawTransactionArgument<number | bigint>;
+	quantity: RawTransactionArgument<number | bigint>;
+	isBid: RawTransactionArgument<boolean>;
+	payWithDeep: RawTransactionArgument<boolean>;
+	expireTimestamp: RawTransactionArgument<number | bigint>;
+}
+export interface PlacePostOnlyLimitOrderOptions {
+	package?: string;
+	arguments:
+		| PlacePostOnlyLimitOrderArguments
+		| [
+				self: RawTransactionArgument<string>,
+				balanceManager: RawTransactionArgument<string>,
+				tradeProof: TransactionArgument,
+				clientOrderId: RawTransactionArgument<number | bigint>,
+				price: RawTransactionArgument<number | bigint>,
+				quantity: RawTransactionArgument<number | bigint>,
+				isBid: RawTransactionArgument<boolean>,
+				payWithDeep: RawTransactionArgument<boolean>,
+				expireTimestamp: RawTransactionArgument<number | bigint>,
+		  ];
+	typeArguments: [string, string];
+}
+/**
+ * Graceful post-only limit order. Checks the relevant side of the book first and
+ * only forwards to `place_limit_order` with `POST_ONLY` when the order is
+ * guaranteed not to cross a live order the matcher can reach. Returns `none`
+ * instead of aborting `EPOSTOrderCrossesOrderbook` when it would cross — and also
+ * `none` when the forwarded placement rests nothing (a large expired backlog at a
+ * crossing price makes `place_limit_order` hit its fill limit and inject no
+ * order), so `some` always means the order is resting on the book. An empty
+ * opposite side always allows placement.
+ *
+ * Self-matching is fixed to `SELF_MATCHING_ALLOWED` and is not a parameter: the
+ * wrapper only ever forwards a non-crossing order, and self-matching governs how a
+ * _crossing_ fill treats the taker's own maker orders, so it has no effect on the
+ * forwarded placement. Exposing it would also be a footgun — `CANCEL_TAKER` aborts
+ * (`ESelfMatchingCancelTaker`) against the caller's own expired order sitting at a
+ * crossing price, which the pre-check skips as non-live, re-introducing the very
+ * abort this wrapper exists to avoid. A caller that wants to cross and cancel its
+ * own resting orders should call `place_limit_order` directly.
+ */
+export function placePostOnlyLimitOrder(options: PlacePostOnlyLimitOrderOptions) {
+	const packageAddress = options.package ?? '@byeol/core';
+	const argumentsTypes = [
+		null,
+		null,
+		null,
+		'u64',
+		'u64',
+		'u64',
+		'bool',
+		'bool',
+		'u64',
+		'0x2::clock::Clock',
+	] satisfies (string | null)[];
+	const parameterNames = [
+		'self',
+		'balanceManager',
+		'tradeProof',
+		'clientOrderId',
+		'price',
+		'quantity',
+		'isBid',
+		'payWithDeep',
+		'expireTimestamp',
+	];
+	return (tx: Transaction) =>
+		tx.moveCall({
+			package: packageAddress,
+			module: 'pool',
+			function: 'place_post_only_limit_order',
+			arguments: normalizeMoveArguments(options.arguments, argumentsTypes, parameterNames),
+			typeArguments: options.typeArguments,
+		});
+}
 export interface PlaceMarketOrderArguments {
 	self: RawTransactionArgument<string>;
 	balanceManager: RawTransactionArgument<string>;
@@ -492,8 +573,7 @@ export interface SwapExactQuantityOptions {
 export function swapExactQuantity(options: SwapExactQuantityOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, null, null, null, 'u64', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'baseIn', 'quoteIn', 'deepIn', 'minOut'];
 	return (tx: Transaction) =>
@@ -595,8 +675,7 @@ export interface ModifyOrderOptions {
 export function modifyOrder(options: ModifyOrderOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, null, null, 'u128', 'u64', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'balanceManager', 'tradeProof', 'orderId', 'newQuantity'];
 	return (tx: Transaction) =>
@@ -635,8 +714,7 @@ export interface CancelOrderOptions {
 export function cancelOrder(options: CancelOrderOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, null, null, 'u128', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'balanceManager', 'tradeProof', 'orderId'];
 	return (tx: Transaction) =>
@@ -675,8 +753,7 @@ export interface CancelOrdersOptions {
 export function cancelOrders(options: CancelOrdersOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, null, null, 'vector<u128>', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'balanceManager', 'tradeProof', 'orderIds'];
 	return (tx: Transaction) =>
@@ -716,8 +793,7 @@ export interface CancelLiveOrderOptions {
 export function cancelLiveOrder(options: CancelLiveOrderOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, null, null, 'u128', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'balanceManager', 'tradeProof', 'orderId'];
 	return (tx: Transaction) =>
@@ -758,8 +834,7 @@ export interface CancelLiveOrdersOptions {
 export function cancelLiveOrders(options: CancelLiveOrdersOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, null, null, 'vector<u128>', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'balanceManager', 'tradeProof', 'orderIds'];
 	return (tx: Transaction) =>
@@ -1414,8 +1489,7 @@ export interface CreatePoolAdminOptions {
 export function createPoolAdmin(options: CreatePoolAdminOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, 'u64', 'u64', 'u64', 'bool', 'bool', null] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = [
 		'registry',
@@ -1582,8 +1656,7 @@ export interface AdjustMinLotSizeAdminOptions {
 export function adjustMinLotSizeAdmin(options: AdjustMinLotSizeAdminOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, 'u64', 'u64', null, '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'newLotSize', 'newMinSize', 'Cap'];
 	return (tx: Transaction) =>
@@ -1652,8 +1725,7 @@ export interface SetEwmaParamsOptions {
 export function setEwmaParams(options: SetEwmaParamsOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, null, 'u64', 'u64', 'u64', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'Cap', 'alpha', 'zScoreThreshold', 'additionalTakerFee'];
 	return (tx: Transaction) =>
@@ -2010,6 +2082,58 @@ export function midPrice(options: MidPriceOptions) {
 			typeArguments: options.typeArguments,
 		});
 }
+export interface BestAskPriceArguments {
+	self: RawTransactionArgument<string>;
+}
+export interface BestAskPriceOptions {
+	package?: string;
+	arguments: BestAskPriceArguments | [self: RawTransactionArgument<string>];
+	typeArguments: [string, string];
+}
+/**
+ * Top-of-book read for PTB construction / devInspect (SDK, UI). Returns the best
+ * (lowest) ask price, skipping expired orders. Returns `none` if the ask side has
+ * no live order.
+ */
+export function bestAskPrice(options: BestAskPriceOptions) {
+	const packageAddress = options.package ?? '@byeol/core';
+	const argumentsTypes = [null, '0x2::clock::Clock'] satisfies (string | null)[];
+	const parameterNames = ['self'];
+	return (tx: Transaction) =>
+		tx.moveCall({
+			package: packageAddress,
+			module: 'pool',
+			function: 'best_ask_price',
+			arguments: normalizeMoveArguments(options.arguments, argumentsTypes, parameterNames),
+			typeArguments: options.typeArguments,
+		});
+}
+export interface BestBidPriceArguments {
+	self: RawTransactionArgument<string>;
+}
+export interface BestBidPriceOptions {
+	package?: string;
+	arguments: BestBidPriceArguments | [self: RawTransactionArgument<string>];
+	typeArguments: [string, string];
+}
+/**
+ * Top-of-book read for PTB construction / devInspect (SDK, UI). Returns the best
+ * (highest) bid price, skipping expired orders. Returns `none` if the bid side has
+ * no live order.
+ */
+export function bestBidPrice(options: BestBidPriceOptions) {
+	const packageAddress = options.package ?? '@byeol/core';
+	const argumentsTypes = [null, '0x2::clock::Clock'] satisfies (string | null)[];
+	const parameterNames = ['self'];
+	return (tx: Transaction) =>
+		tx.moveCall({
+			package: packageAddress,
+			module: 'pool',
+			function: 'best_bid_price',
+			arguments: normalizeMoveArguments(options.arguments, argumentsTypes, parameterNames),
+			typeArguments: options.typeArguments,
+		});
+}
 export interface AccountOpenOrdersArguments {
 	self: RawTransactionArgument<string>;
 	balanceManager: RawTransactionArgument<string>;
@@ -2061,8 +2185,7 @@ export interface GetLevel2RangeOptions {
 export function getLevel2Range(options: GetLevel2RangeOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, 'u64', 'u64', 'bool', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'priceLow', 'priceHigh', 'isBid'];
 	return (tx: Transaction) =>
@@ -2399,8 +2522,7 @@ export interface CanPlaceMarketOrderOptions {
 export function canPlaceMarketOrder(options: CanPlaceMarketOrderOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, null, 'u64', 'bool', 'bool', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'balanceManager', 'quantity', 'isBid', 'payWithDeep'];
 	return (tx: Transaction) =>
@@ -2465,8 +2587,7 @@ export interface CheckLimitOrderParamsOptions {
 export function checkLimitOrderParams(options: CheckLimitOrderParamsOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, 'u64', 'u64', 'u64', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['self', 'price', 'quantity', 'expireTimestamp'];
 	return (tx: Transaction) =>

@@ -115,8 +115,7 @@ export interface RemoveLeafOptions {
 export function removeLeaf(options: RemoveLeafOptions) {
 	const packageAddress = options.package ?? '@haneulns/subdomain-proxy';
 	const argumentsTypes = [null, null, '0x2::clock::Clock', '0x1::string::String'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['haneulns', 'subdomain', 'subdomainName'];
 	return (tx: Transaction) =>
@@ -329,8 +328,7 @@ export interface UnsetUserDataOptions {
 export function unsetUserData(options: UnsetUserDataOptions) {
 	const packageAddress = options.package ?? '@haneulns/subdomain-proxy';
 	const argumentsTypes = [null, null, '0x1::string::String', '0x2::clock::Clock'] satisfies (
-		| string
-		| null
+		string | null
 	)[];
 	const parameterNames = ['haneulns', 'subdomain', 'key'];
 	return (tx: Transaction) =>

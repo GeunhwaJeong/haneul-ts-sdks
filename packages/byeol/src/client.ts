@@ -51,6 +51,7 @@ import type {
 	PoolBookParams,
 	PoolBylPrice,
 	PoolTradeParams,
+	PythConfig,
 	QuantityOut,
 	QuoteQuantityIn,
 	QuoteQuantityOut,
@@ -73,7 +74,12 @@ export interface ByeolOptions<Name = 'byeol'> {
 	marginAdminCap?: string;
 	marginMaintainerCap?: string;
 	packageIds?: ByeolPackageIds;
-	pyth?: { pythStateId: string; wormholeStateId: string };
+	pyth?: PythConfig;
+	/**
+	 * Bearer token for the Hermes serving Pyth's upgraded Core. Matches the option of the
+	 * same name in `@haneullabs/haneulns`, which takes the same credential.
+	 */
+	pythAccessToken?: string;
 	name?: Name;
 }
 
@@ -144,6 +150,7 @@ export class ByeolClient {
 		marginMaintainerCap,
 		packageIds,
 		pyth,
+		pythAccessToken,
 	}: ByeolClientOptions) {
 		const normalizedAddress = normalizeHaneulAddress(address);
 		const config = new ByeolConfig({
@@ -158,6 +165,7 @@ export class ByeolClient {
 			marginMaintainerCap,
 			packageIds,
 			pyth,
+			pythAccessToken,
 		});
 
 		this.balanceManager = new BalanceManagerContract(config);
@@ -625,6 +633,14 @@ export class ByeolClient {
 
 	getMinBorrowRiskRatio(poolKey: string): Promise<number> {
 		return this.#registryQueries.getMinBorrowRiskRatio(poolKey);
+	}
+
+	/**
+	 * Minimum risk ratio required to open a new position on the pool. Gates
+	 * position opening, unlike `getMinBorrowRiskRatio`, which gates borrowing.
+	 */
+	getMinOpenRiskRatio(poolKey: string): Promise<number> {
+		return this.#registryQueries.getMinOpenRiskRatio(poolKey);
 	}
 
 	getLiquidationRiskRatio(poolKey: string): Promise<number> {

@@ -24,6 +24,8 @@ import { PaymentsConfig } from './contracts/haneulns_payments/payments.js';
 export type HaneulnsExtensionOptions<Name extends string = 'haneulns'> = {
 	name?: Name;
 	packageInfo?: PackageInfo;
+	/** Access token for the keyed Pyth Hermes endpoint. Sent as `Authorization: Bearer <token>`. */
+	pythAccessToken?: string;
 };
 
 /**
@@ -45,6 +47,7 @@ export type HaneulnsExtensionOptions<Name extends string = 'haneulns'> = {
 export function haneulns<const Name extends string = 'haneulns'>({
 	name = 'haneulns' as Name,
 	packageInfo,
+	pythAccessToken,
 }: HaneulnsExtensionOptions<Name> = {}) {
 	return {
 		name,
@@ -53,6 +56,7 @@ export function haneulns<const Name extends string = 'haneulns'>({
 				client,
 				network: client.network,
 				packageInfo,
+				pythAccessToken,
 			});
 		},
 	};
@@ -62,10 +66,12 @@ export class HaneulnsClient {
 	client: ClientWithCoreApi;
 	network: HaneulClientTypes.Network;
 	config: PackageInfo;
+	readonly pythAccessToken?: string;
 
 	constructor(config: HaneulnsClientConfig) {
 		this.client = config.client;
 		this.network = config.network || 'mainnet';
+		this.pythAccessToken = config.pythAccessToken;
 
 		if (config.packageInfo) {
 			this.config = config.packageInfo;
@@ -168,7 +174,7 @@ export class HaneulnsClient {
 		if (!this.config.haneulns) throw new Error('Haneulns object ID is not set');
 		if (!this.config.packageId) throw new Error('Price list config not found');
 
-		const configType = `${this.config.packageIdV1}::haneulns::ConfigKey<${this.config.payments.packageId}::payments::PaymentsConfig>`;
+		const configType = `${this.config.packageIdV1}::haneulns::ConfigKey<${this.config.payments.packageIdV1}::payments::PaymentsConfig>`;
 
 		const result = await this.client.core.getDynamicField({
 			parentId: this.config.haneulns,
@@ -285,11 +291,16 @@ export class HaneulnsClient {
 	}
 
 	async getPriceInfoObject(tx: Transaction, feed: string, feeCoin?: TransactionObjectArgument) {
-		const endpoint =
-			this.network === 'testnet'
-				? 'https://hermes-beta.pyth.network'
-				: 'https://hermes.pyth.network';
-		const connection = new HaneulPriceServiceConnection(endpoint);
+		if (!this.pythAccessToken) {
+			throw new Error(
+				'A `pythAccessToken` is required to fetch Pyth price updates from the keyed Pro Hermes endpoint.',
+			);
+		}
+
+		const endpoint = 'https://pyth.dourolabs.app/hermes';
+		const connection = new HaneulPriceServiceConnection(endpoint, {
+			accessToken: this.pythAccessToken,
+		});
 		const priceIDs = [feed];
 		const priceUpdateData = await connection.getPriceFeedsUpdateData(priceIDs);
 

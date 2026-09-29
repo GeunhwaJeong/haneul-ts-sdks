@@ -18,7 +18,7 @@ import {
 	normalizeMoveArguments,
 	type RawTransactionArgument,
 } from '../utils/index.js';
-import { bcs } from '@haneullabs/haneul/bcs';
+import { bcs, type BcsType } from '@haneullabs/haneul/bcs';
 import { type Transaction, type TransactionArgument } from '@haneullabs/haneul/transactions';
 import * as bag from './deps/haneul/bag.js';
 import * as vec_set from './deps/haneul/vec_set.js';
@@ -188,25 +188,65 @@ export function newWithCustomOwnerAndCaps(options: NewWithCustomOwnerAndCapsOpti
 		});
 }
 export interface NewWithCustomOwnerCapsArguments {
-	byeolRegistry: RawTransactionArgument<string>;
-	owner: RawTransactionArgument<string>;
+	ByeolRegistry: RawTransactionArgument<string>;
+	Owner: RawTransactionArgument<string>;
 }
 export interface NewWithCustomOwnerCapsOptions {
 	package?: string;
 	arguments:
 		| NewWithCustomOwnerCapsArguments
-		| [byeolRegistry: RawTransactionArgument<string>, owner: RawTransactionArgument<string>];
+		| [ByeolRegistry: RawTransactionArgument<string>, Owner: RawTransactionArgument<string>];
 	typeArguments: [string];
 }
 export function newWithCustomOwnerCaps(options: NewWithCustomOwnerCapsOptions) {
 	const packageAddress = options.package ?? '@byeol/core';
 	const argumentsTypes = [null, 'address'] satisfies (string | null)[];
-	const parameterNames = ['byeolRegistry', 'owner'];
+	const parameterNames = ['ByeolRegistry', 'Owner'];
 	return (tx: Transaction) =>
 		tx.moveCall({
 			package: packageAddress,
 			module: 'balance_manager',
 			function: 'new_with_custom_owner_caps',
+			arguments: normalizeMoveArguments(options.arguments, argumentsTypes, parameterNames),
+			typeArguments: options.typeArguments,
+		});
+}
+export interface NewWithCustomOwnerCapsV2Arguments<App extends BcsType<any>> {
+	Witness: RawTransactionArgument<App>;
+	byeolRegistry: RawTransactionArgument<string>;
+	owner: RawTransactionArgument<string>;
+}
+export interface NewWithCustomOwnerCapsV2Options<App extends BcsType<any>> {
+	package?: string;
+	arguments:
+		| NewWithCustomOwnerCapsV2Arguments<App>
+		| [
+				Witness: RawTransactionArgument<App>,
+				byeolRegistry: RawTransactionArgument<string>,
+				owner: RawTransactionArgument<string>,
+		  ];
+	typeArguments: [string];
+}
+/**
+ * Create a `BalanceManager` with all three caps, gated on an authorized `App`
+ * witness. The witness ensures only the module defining `App` can mint caps for
+ * that app — the type tag alone is referenceable from any module, so the previous
+ * `<App>`-only signature let a rogue caller mint caps under another app's
+ * identity.
+ */
+export function newWithCustomOwnerCapsV2<App extends BcsType<any>>(
+	options: NewWithCustomOwnerCapsV2Options<App>,
+) {
+	const packageAddress = options.package ?? '@byeol/core';
+	const argumentsTypes = [`${options.typeArguments[0]}`, null, 'address'] satisfies (
+		string | null
+	)[];
+	const parameterNames = ['Witness', 'byeolRegistry', 'owner'];
+	return (tx: Transaction) =>
+		tx.moveCall({
+			package: packageAddress,
+			module: 'balance_manager',
+			function: 'new_with_custom_owner_caps_v2',
 			arguments: normalizeMoveArguments(options.arguments, argumentsTypes, parameterNames),
 			typeArguments: options.typeArguments,
 		});

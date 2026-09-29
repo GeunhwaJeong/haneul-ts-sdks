@@ -1,5 +1,21 @@
 # Change Log
 
+## 2.1.2
+
+### Patch Changes
+
+- 30289c1: Reject non-canonical encodings when decoding: `bool` values other than `0` or `1`,
+  non-minimal ULEB128 encodings (used for lengths and enum variant indices) and strings that are not
+  valid UTF-8. Strings now also keep a leading byte order mark instead of silently dropping it
+
+## 2.1.1
+
+### Patch Changes
+
+- f2f7048: Upgrade workspace dependencies, remove the legacy dapp-kit package, and migrate the
+  remaining consumers to the current gRPC-based dapp-kit. Remove the legacy API reference while
+  retaining the migration guide and deprecation notice.
+
 ## 2.1.0
 
 ### Minor Changes

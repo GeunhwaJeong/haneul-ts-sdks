@@ -32,6 +32,7 @@ export const mainPackage: Config = {
 		},
 		payments: {
 			packageId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+			packageIdV1: '0x0000000000000000000000000000000000000000000000000000000000000000',
 		},
 		bbb: {
 			packageId: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -73,27 +74,27 @@ export const mainPackage: Config = {
 			packageId: '0x63029aae8abbefae4f4ac6c5e3e0021159ea93a94ba648681fd64caf5b40677a',
 		},
 		payments: {
-			packageId: '0xc391c200188dd1a363ff12dcffe07eaac5cf28ad1cd8dc0fcc18f2f8625f0da2',
+			packageId: '0x4f33a0e1e30530f2aa500a41b9e3d502f8af3ef2c20bd0a1e42374e329da7cb0',
+			packageIdV1: '0xc391c200188dd1a363ff12dcffe07eaac5cf28ad1cd8dc0fcc18f2f8625f0da2',
 		},
 		bbb: {
-			packageId: '0xed9b18147ca81c8f3f60192c8d0630574e42387cd200a6e39b3e4e07df1ce6e6',
+			packageId: '0xab7f8da0f974ae38c205d9351787ae938da65c0a0e81d9788014f5f62a917aa1',
 			vault: '0xa0b7a4dcbb85209c9096a4e0e85e43b716377c605743193abe915e9c9f3043e5',
 		},
 		pyth: {
-			pythStateId: '0x243759059f4c3111179da5878c12f68d612c21a8d54d85edc86164bb18be1c7c',
-			wormholeStateId: '0x31358d198147da50db32eda2562951d53973a0c0ad5ed738e9b17d88b213d790',
+			pythStateId: '0x3c48fe392912de6c18087a2b3f5fdbfbfdb4598e180947feff1f12f8e9ea073e',
+			wormholeStateId: '0x750da8e6d16b6a363a39fe2eaa8295ac224a1e6fce4e47b58845e2e8746164f0',
 		},
 		/// Testnet coins will be different here for testing purposes, we can publish our own
 		coins: {
 			HANEUL: {
 				type: '0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL',
-				feed: '0x50c67b3fd225db8912a424dd4baed60ffdde625ed2feaaf283724f9608fea266',
+				feed: '0x0000000000000000000000000000000000000000000000000000000000000000',
 			},
 			/// this is a test token published as 0xb48aac3f53bab328e1eb4c5b3c34f55e760f2fb3f2305ee1a474878d80f650f0::TESTNS::TESTNS
-			/// NS token is using the HFT feed since NS feed on testnet is not available
 			NS: {
 				type: '0xb48aac3f53bab328e1eb4c5b3c34f55e760f2fb3f2305ee1a474878d80f650f0::TESTNS::TESTNS',
-				feed: '0x99137a18354efa7fb6840889d059fdb04c46a6ce21be97ab60d9ad93e91ac758',
+				feed: '0x0000000000000000000000000000000000000000000000000000000000000000',
 			},
 			/// this is a test token published as 0xb48aac3f53bab328e1eb4c5b3c34f55e760f2fb3f2305ee1a474878d80f650f0::TESTUSDC::TESTUSDC
 			USDC: {

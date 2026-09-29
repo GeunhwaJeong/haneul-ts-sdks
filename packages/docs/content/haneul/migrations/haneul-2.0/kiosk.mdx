@@ -1,21 +1,52 @@
 ---
 title: '@haneullabs/kiosk'
-description: Migrate @haneullabs/kiosk to 2.0 with client extension pattern and KioskTransaction.
+description: >-
+  Migrate @haneullabs/kiosk to 2.0 with client extension pattern and KioskTransaction
 keywords:
-  [migration, haneullabs/kiosk, Kiosk, 2.0, client extension, KioskTransaction, NFT, breaking changes]
+  - migration
+  - haneullabs/kiosk
+  - Kiosk
+  - '2.0'
+  - client extension
+  - KioskTransaction
+  - NFT
+  - breaking changes
+questions:
+  - What changed in the @haneullabs/kiosk migration?
+  - How do I migrate to @haneullabs/kiosk?
+  - 'How does Removed: transactionBlock parameter work?'
+  - 'How does Removed: low-level helper functions work?'
+answer: >-
+  Migrate @haneullabs/kiosk to 2.0 with client extension pattern and KioskTransaction
+goal:
+  description: >-
+    Reader can migrate @haneullabs/kiosk to 2.0 with client extension pattern and KioskTransaction
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 30
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 This package now exports a client extension that integrates with Haneul clients.
 
 <Callout type="info">
-	The Kiosk SDK requires `HaneulJsonRpcClient` or `HaneulGraphQLClient`. It does not work with
-	`HaneulGrpcClient` because it uses event queries that are not available in gRPC.
+	The Kiosk SDK accepts `HaneulGrpcClient`, `HaneulGraphQLClient`, and other clients that implement
+	`ClientWithCoreApi`. Use `HaneulGrpcClient` for new Kiosk code. The gRPC object API returns Display
+	v2 metadata; use GraphQL or JSON-RPC for object types that still rely on legacy Display metadata.
 </Callout>
 
 ```diff
 - import { HaneulClient, getFullnodeUrl } from '@haneullabs/haneul/client';
 - import { KioskClient, Network } from '@haneullabs/kiosk';
-+ import { HaneulJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc'; // or HaneulGraphQLClient
++ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 + import { kiosk } from '@haneullabs/kiosk';
 
 - const haneulClient = new HaneulClient({ url: getFullnodeUrl('mainnet') });
@@ -23,8 +54,8 @@ This package now exports a client extension that integrates with Haneul clients.
 -   client: haneulClient,
 -   network: Network.MAINNET,
 - });
-+ const client = new HaneulJsonRpcClient({
-+   url: getJsonRpcFullnodeUrl('mainnet'),
++ const client = new HaneulGrpcClient({
++   baseUrl: 'http://158.69.54.239:9000',
 +   network: 'mainnet',
 + }).$extend(kiosk());
 
@@ -105,14 +136,14 @@ The low-level helper functions have been removed in favor of the `KioskTransacti
 ```diff
 - import { createKiosk, shareKiosk, placeAndList } from '@haneullabs/kiosk';
 + import { kiosk, KioskTransaction } from '@haneullabs/kiosk';
-+ import { HaneulJsonRpcClient, getJsonRpcFullnodeUrl } from '@haneullabs/haneul/jsonRpc';
++ import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 
 - const [kiosk, cap] = createKiosk(tx);
 - shareKiosk(tx, kiosk);
 - placeAndList(tx, itemType, kiosk, cap, item, price);
 
-+ const client = new HaneulJsonRpcClient({
-+   url: getJsonRpcFullnodeUrl('mainnet'),
++ const client = new HaneulGrpcClient({
++   baseUrl: 'http://158.69.54.239:9000',
 +   network: 'mainnet',
 + }).$extend(kiosk());
 +

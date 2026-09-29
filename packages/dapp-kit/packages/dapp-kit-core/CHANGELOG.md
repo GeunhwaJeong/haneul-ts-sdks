@@ -1,5 +1,79 @@
 # @mysten/dapp-kit-core
 
+## 1.6.34
+
+### Patch Changes
+
+- Updated dependencies [00740a0]
+  - @mysten/slush-wallet@1.3.0
+
+## 1.6.33
+
+## 1.6.32
+
+## 1.6.31
+
+## 1.6.30
+
+## 1.6.29
+
+## 1.6.28
+
+## 1.6.27
+
+## 1.6.26
+
+## 1.6.25
+
+### Patch Changes
+
+- Updated dependencies [a1f4087]
+  - @mysten/slush-wallet@1.2.0
+
+## 1.6.24
+
+## 1.6.23
+
+## 1.6.22
+
+## 1.6.21
+
+## 1.6.20
+
+## 1.6.19
+
+## 1.6.18
+
+### Patch Changes
+
+- f2f7048: Upgrade workspace dependencies, remove the legacy dapp-kit package, and migrate the
+  remaining consumers to the current gRPC-based dapp-kit. Remove the legacy API reference while
+  retaining the migration guide and deprecation notice.
+
+## 1.6.17
+
+## 1.6.16
+
+## 1.6.15
+
+## 1.6.14
+
+## 1.6.13
+
+## 1.6.12
+
+## 1.6.11
+
+## 1.6.10
+
+## 1.6.9
+
+## 1.6.8
+
+## 1.6.7
+
+## 1.6.6
+
 ## 1.6.5
 
 ## 1.6.4

@@ -1,22 +1,41 @@
 ---
 title: Signers
-description:
+description: >-
   Signer implementations beyond keypairs — cloud KMS, Ledger, Web Crypto, passkeys, and multisig
 keywords:
-  [
-    signers,
-    Signer,
-    AWS KMS,
-    GCP KMS,
-    Ledger,
-    Web Crypto,
-    passkey,
-    multisig,
-    KMS,
-    hardware wallet,
-    Haneul,
-    TypeScript SDK,
-  ]
+  - signers
+  - Signer
+  - AWS KMS
+  - GCP KMS
+  - Ledger
+  - Web Crypto
+  - passkey
+  - multisig
+  - KMS
+  - hardware wallet
+  - Haneul
+  - TypeScript SDK
+questions:
+  - How do I sign Haneul transactions with Signers?
+  - How do I set up Signers?
+  - How does External signers work?
+  - How does Other Signer implementations work?
+answer: >-
+  Signer implementations beyond keypairs — cloud KMS, Ledger, Web Crypto, passkeys, and multisig
+goal:
+  description: Reader understands what Signers provides and how to get started
+  requires:
+    - has_frontmatter:
+        - title
+        - description
+        - keywords
+      label: Has required frontmatter fields
+    - min_words: 100
+      label: Needs content depth
+    - has_questions: true
+      label: Needs questions for AI search visibility
+    - has_answer: true
+      label: Needs answer summary for AI citation
 ---
 
 In addition to the in-process [keypairs](/haneul/cryptography/keypairs) built into `@haneullabs/haneul`, the

@@ -7,6 +7,7 @@ import { Transaction } from '../../../../src/transactions/index.js';
 import { setup, TestToolbox, createTestWithAllClients } from '../../utils/setup.js';
 import { normalizeHaneulAddress, HANEUL_TYPE_ARG } from '../../../../src/utils/index.js';
 import { bcs } from '../../../../src/bcs/index.js';
+import { ObjectError } from '../../../../src/client/index.js';
 
 const SimpleObject = bcs.struct('SimpleObject', {
 	id: bcs.Address,
@@ -106,7 +107,10 @@ describe('Core API - Objects', () => {
 
 		testWithAllClients('should throw error for non-existent object', async (client) => {
 			const fakeObjectId = normalizeHaneulAddress('0x9999');
-			await expect(client.core.getObject({ objectId: fakeObjectId })).rejects.toThrow();
+			const error = await client.core.getObject({ objectId: fakeObjectId }).catch((error) => error);
+
+			expect(error).toBeInstanceOf(ObjectError);
+			expect(error).toMatchObject({ reason: 'notFound', objectId: fakeObjectId });
 		});
 
 		testWithAllClients('should verify owner is correct', async (client) => {
@@ -158,12 +162,24 @@ describe('Core API - Objects', () => {
 			expect(objects[0]).not.toBeInstanceOf(Error);
 
 			// Second should be error
-			expect(objects[1]).toBeInstanceOf(Error);
+			expect(objects[1]).toBeInstanceOf(ObjectError);
+			expect(objects[1]).toMatchObject({ reason: 'notFound', objectId: objectIds[1] });
 		});
 
 		testWithAllClients('should handle empty array', async (client) => {
 			const { objects } = await client.core.getObjects({ objectIds: [] });
 			expect(objects).toEqual([]);
+		});
+
+		it('batches requests that exceed the GraphQL payload limit', async () => {
+			const objectIds = Array.from({ length: 46 }, () => testObjectId);
+			const { objects } = await toolbox.graphqlClient.core.getObjects({
+				objectIds,
+				include: { display: true, objectBcs: true },
+			});
+
+			expect(objects).toHaveLength(objectIds.length);
+			expect(objects.every((object) => !(object instanceof Error))).toBe(true);
 		});
 	});
 

@@ -341,6 +341,24 @@ export class MockHaneulClient extends CoreClient {
 		throw new Error('defaultNameServiceName not implemented in MockHaneulClient');
 	}
 
+	async resolveNameServiceAddress(
+		_options: HaneulClientTypes.ResolveNameServiceAddressOptions,
+	): Promise<HaneulClientTypes.ResolveNameServiceAddressResponse> {
+		throw new Error('resolveNameServiceAddress not implemented in MockHaneulClient');
+	}
+
+	async listTransactions<Include extends HaneulClientTypes.TransactionInclude = object>(
+		_options: HaneulClientTypes.ListTransactionsOptions<Include>,
+	): Promise<HaneulClientTypes.ListTransactionsResponse<Include>> {
+		throw new Error('listTransactions not implemented in MockHaneulClient');
+	}
+
+	async listEvents(
+		_options: HaneulClientTypes.ListEventsOptions,
+	): Promise<HaneulClientTypes.ListEventsResponse> {
+		throw new Error('listEvents not implemented in MockHaneulClient');
+	}
+
 	async simulateTransaction<Include extends HaneulClientTypes.SimulateTransactionInclude = object>(
 		_options: HaneulClientTypes.SimulateTransactionOptions<Include>,
 	): Promise<HaneulClientTypes.SimulateTransactionResult<Include>> {

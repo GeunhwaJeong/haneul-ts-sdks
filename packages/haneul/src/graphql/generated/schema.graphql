@@ -84,14 +84,25 @@ type Address implements Node & IAddressable {
 	"""
 	asObject: Object
 	"""
-	Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
+	How this address (interpreted as an object ID) was referenced by a specific transaction.
 	
-	Returns `None` when no checkpoint is set in scope (e.g. execution scope).
-	If the address does not own any coins of that type, a balance of zero is returned.
+	Returns `null` if the object was not referenced, or was present only as a non-object marker variant of unchanged consensus input (e.g. cancelled, stream-ended, per-epoch).
+	
+	The `transactionDigest` argument may be omitted when the query is scoped under a transaction context (e.g. a parent `Transaction`, `TransactionEffects`, or `Event`); the field then resolves against the in-scope transaction.
+	
+	Passing an explicit `transactionDigest` other than the in-scope transaction in subscription context is not supported; for arbitrary transaction lookups, use the indexed Query API.
+	"""
+	asTransactionObject(transactionDigest: String): TransactionObject
+	"""
+	Fetch the balance for `coinType` (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	
+	The result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns `null` when no checkpoint is set in scope (e.g. execution scope). If this address has no balance of that type, all three values are zero.
 	"""
 	balance(coinType: String!): Balance
 	"""
-	Total balance across coins owned by this address, grouped by coin type.
+	Balances held by this address, grouped by coin type.
+	
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator.
 	"""
 	balances(first: Int, after: String, last: Int, before: String): BalanceConnection
 	"""
@@ -121,10 +132,9 @@ type Address implements Node & IAddressable {
 	"""
 	id: ID!
 	"""
-	Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	Fetch balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
 	
-	Returns `None` when no checkpoint is set in scope (e.g. execution scope).
-	If the address does not own any coins of a given type, a balance of zero is returned for that type.
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns `null` when no checkpoint is set in scope (e.g. execution scope). If this address has no balance of a given type, all three values are zero for that type.
 	"""
 	multiGetBalances(keys: [String!]!): [Balance!]
 	"""
@@ -269,15 +279,17 @@ type AvailableRange {
 }
 
 """
-The total balance for a particular coin type.
+The balance of a particular coin type held by an address.
+
+Balances can be held in coin objects, in the address's balance accumulator, or both.
 """
 type Balance {
 	"""
-	The balance as tracked by the accumulator object for the address.
+	The balance held in the address's balance accumulator.
 	"""
 	addressBalance: BigInt
 	"""
-	Total balance across all owned coin objects of the coin type.
+	The balance held in coin objects owned by the address.
 	"""
 	coinBalance: BigInt
 	"""
@@ -285,7 +297,7 @@ type Balance {
 	"""
 	coinType: MoveType
 	"""
-	The sum total of the accumulator balance and individual coin balances owned by the address.
+	The sum of `coinBalance` and `addressBalance`.
 	"""
 	totalBalance: BigInt
 }
@@ -367,9 +379,31 @@ type BalanceEdge {
 }
 
 """
+Identifies the balance for one coin type owned by an address.
+"""
+input BalanceKey {
+	"""
+	The address that owns the balance.
+	"""
+	address: HaneulAddress!
+	"""
+	The coin type of the balance.
+	"""
+	coinType: String!
+}
+
+"""
 Input for withdrawing funds from an accumulator.
 """
 type BalanceWithdraw {
+	"""
+	The allowance authorizing the withdrawal, if `withdrawFrom` is `SENDER_ALLOWANCE`. Use `asTransactionObject` to see it as this transaction referenced it.
+	"""
+	allowance: Address
+	"""
+	The account whose funds are withdrawn, if `withdrawFrom` is `SENDER_ALLOWANCE`.
+	"""
+	funder: Address
 	"""
 	How much to withdraw from the accumulator.
 	"""
@@ -617,13 +651,25 @@ type CoinMetadata implements IAddressable & IMoveObject & IObject {
 	"""
 	allowGlobalPause: Boolean
 	"""
-	Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
+	How this object was referenced by a specific transaction.
 	
-	If the address does not own any coins of that type, a balance of zero is returned.
+	Returns `null` if the object was not referenced, or was present only as a non-object marker variant of unchanged consensus input (e.g. cancelled, stream-ended, per-epoch).
+	
+	The `transactionDigest` argument may be omitted when the query is scoped under a transaction context (e.g. a parent `Transaction`, `TransactionEffects`, or `Event`); the field then resolves against the in-scope transaction.
+	
+	Passing an explicit `transactionDigest` other than the in-scope transaction in subscription context is not supported; for arbitrary transaction lookups, use the indexed Query API.
+	"""
+	asTransactionObject(transactionDigest: String): TransactionObject
+	"""
+	Fetch the balance for `coinType` (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	
+	The result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. If this address has no balance of that type, all three values are zero.
 	"""
 	balance(coinType: String!): Balance
 	"""
-	Total balance across coins owned by this address, grouped by coin type.
+	Balances held by this address, grouped by coin type.
+	
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator.
 	"""
 	balances(first: Int, after: String, last: Int, before: String): BalanceConnection
 	"""
@@ -683,9 +729,9 @@ type CoinMetadata implements IAddressable & IMoveObject & IObject {
 	"""
 	moveObjectBcs: Base64
 	"""
-	Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	Fetch balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
 	
-	If the address does not own any coins of a given type, a balance of zero is returned for that type.
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns `null` when no checkpoint is set in scope (e.g. execution scope). If this address has no balance of a given type, all three values are zero for that type.
 	"""
 	multiGetBalances(keys: [String!]!): [Balance!]
 	"""
@@ -986,13 +1032,25 @@ type DynamicField implements Node & IAddressable & IMoveObject & IObject {
 	"""
 	addressAt(rootVersion: UInt53, checkpoint: UInt53): Address
 	"""
-	Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
+	How this object was referenced by a specific transaction.
 	
-	If the address does not own any coins of that type, a balance of zero is returned.
+	Returns `null` if the object was not referenced, or was present only as a non-object marker variant of unchanged consensus input (e.g. cancelled, stream-ended, per-epoch).
+	
+	The `transactionDigest` argument may be omitted when the query is scoped under a transaction context (e.g. a parent `Transaction`, `TransactionEffects`, or `Event`); the field then resolves against the in-scope transaction.
+	
+	Passing an explicit `transactionDigest` other than the in-scope transaction in subscription context is not supported; for arbitrary transaction lookups, use the indexed Query API.
+	"""
+	asTransactionObject(transactionDigest: String): TransactionObject
+	"""
+	Fetch the balance for `coinType` (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	
+	The result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. If this address has no balance of that type, all three values are zero.
 	"""
 	balance(coinType: String!): Balance
 	"""
-	Total balance across coins owned by this address, grouped by coin type.
+	Balances held by this address, grouped by coin type.
+	
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator.
 	"""
 	balances(first: Int, after: String, last: Int, before: String): BalanceConnection
 	"""
@@ -1040,9 +1098,9 @@ type DynamicField implements Node & IAddressable & IMoveObject & IObject {
 	"""
 	moveObjectBcs: Base64
 	"""
-	Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	Fetch balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
 	
-	If the address does not own any coins of a given type, a balance of zero is returned for that type.
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns `null` when no checkpoint is set in scope (e.g. execution scope). If this address has no balance of a given type, all three values are zero for that type.
 	"""
 	multiGetBalances(keys: [String!]!): [Balance!]
 	"""
@@ -1195,7 +1253,7 @@ type EndOfEpochTransaction {
 	transactions(first: Int, after: String, last: Int, before: String): EndOfEpochTransactionKindConnection
 }
 
-union EndOfEpochTransactionKind = ChangeEpochTransaction | AuthenticatorStateCreateTransaction | AuthenticatorStateExpireTransaction | RandomnessStateCreateTransaction | CoinDenyListStateCreateTransaction | StoreExecutionTimeObservationsTransaction | BridgeStateCreateTransaction | BridgeCommitteeInitTransaction | AccumulatorRootCreateTransaction | CoinRegistryCreateTransaction | DisplayRegistryCreateTransaction | AddressAliasStateCreateTransaction | WriteAccumulatorStorageCostTransaction
+union EndOfEpochTransactionKind = ChangeEpochTransaction | AuthenticatorStateCreateTransaction | AuthenticatorStateExpireTransaction | RandomnessStateCreateTransaction | CoinDenyListStateCreateTransaction | StoreExecutionTimeObservationsTransaction | BridgeStateCreateTransaction | BridgeCommitteeInitTransaction | AccumulatorRootCreateTransaction | CoinRegistryCreateTransaction | DisplayRegistryCreateTransaction | AddressAliasStateCreateTransaction | WriteAccumulatorStorageCostTransaction | ForwardingAddressRegistryCreateTransaction
 
 type EndOfEpochTransactionKindConnection {
 	"""
@@ -1549,6 +1607,16 @@ type FeatureFlag {
 
 
 """
+System transaction for creating the forwarding address registry.
+"""
+type ForwardingAddressRegistryCreateTransaction {
+	"""
+	A workaround to define an empty variant of a GraphQL union.
+	"""
+	_: Boolean
+}
+
+"""
 Access to the gas inputs, after they have been smashed into one coin. The gas coin can only be used by reference, except for with `TransferObjectsTransaction` that can accept it by value.
 """
 type GasCoin {
@@ -1641,13 +1709,25 @@ interface IAddressable {
 	"""
 	addressAt(rootVersion: UInt53, checkpoint: UInt53): Address
 	"""
-	Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
+	How this addressable entity was referenced by a specific transaction.
 	
-	If the address does not own any coins of that type, a balance of zero is returned.
+	Returns `null` if the object was not referenced, or was present only as a non-object marker variant of unchanged consensus input (e.g. cancelled, stream-ended, per-epoch).
+	
+	The `transactionDigest` argument may be omitted when the query is scoped under a transaction context (e.g. a parent `Transaction`, `TransactionEffects`, or `Event`); the field then resolves against the in-scope transaction.
+	
+	Passing an explicit `transactionDigest` other than the in-scope transaction in subscription context is not supported; for arbitrary transaction lookups, use the indexed Query API.
+	"""
+	asTransactionObject(transactionDigest: String): TransactionObject
+	"""
+	Fetch the balance for `coinType` (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	
+	The result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns `null` when no checkpoint is set in scope (e.g. execution scope). If this address has no balance of that type, all three values are zero.
 	"""
 	balance(coinType: String!): Balance
 	"""
-	Total balance across coins owned by this address, grouped by coin type.
+	Balances held by this address, grouped by coin type.
+	
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator.
 	"""
 	balances(first: Int, after: String, last: Int, before: String): BalanceConnection
 	"""
@@ -1655,9 +1735,9 @@ interface IAddressable {
 	"""
 	defaultNameRecord: NameRecord
 	"""
-	Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	Fetch balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
 	
-	Returns `null` when no checkpoint is set in scope (e.g. execution scope). If the address does not own any coins of a given type, a balance of zero is returned for that type.
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns `null` when no checkpoint is set in scope (e.g. execution scope). If this address has no balance of a given type, all three values are zero for that type.
 	"""
 	multiGetBalances(keys: [String!]!): [Balance!]
 	"""
@@ -2275,13 +2355,25 @@ type MoveObject implements Node & IAddressable & IMoveObject & IObject {
 	"""
 	asDynamicField: DynamicField
 	"""
-	Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
+	How this object was referenced by a specific transaction.
 	
-	If the address does not own any coins of that type, a balance of zero is returned.
+	Returns `null` if the object was not referenced, or was present only as a non-object marker variant of unchanged consensus input (e.g. cancelled, stream-ended, per-epoch).
+	
+	The `transactionDigest` argument may be omitted when the query is scoped under a transaction context (e.g. a parent `Transaction`, `TransactionEffects`, or `Event`); the field then resolves against the in-scope transaction.
+	
+	Passing an explicit `transactionDigest` other than the in-scope transaction in subscription context is not supported; for arbitrary transaction lookups, use the indexed Query API.
+	"""
+	asTransactionObject(transactionDigest: String): TransactionObject
+	"""
+	Fetch the balance for `coinType` (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	
+	The result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. If this address has no balance of that type, all three values are zero.
 	"""
 	balance(coinType: String!): Balance
 	"""
-	Total balance across coins owned by this address, grouped by coin type.
+	Balances held by this address, grouped by coin type.
+	
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator.
 	"""
 	balances(first: Int, after: String, last: Int, before: String): BalanceConnection
 	"""
@@ -2329,9 +2421,9 @@ type MoveObject implements Node & IAddressable & IMoveObject & IObject {
 	"""
 	moveObjectBcs: Base64
 	"""
-	Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	Fetch balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
 	
-	If the address does not own any coins of a given type, a balance of zero is returned for that type.
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns `null` when no checkpoint is set in scope (e.g. execution scope). If this address has no balance of a given type, all three values are zero for that type.
 	"""
 	multiGetBalances(keys: [String!]!): [Balance!]
 	"""
@@ -2434,13 +2526,25 @@ type MovePackage implements Node & IAddressable & IObject {
 	"""
 	addressAt(rootVersion: UInt53, checkpoint: UInt53): Address
 	"""
-	Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
+	How this object was referenced by a specific transaction.
 	
-	If the address does not own any coins of that type, a balance of zero is returned.
+	Returns `null` if the object was not referenced, or was present only as a non-object marker variant of unchanged consensus input (e.g. cancelled, stream-ended, per-epoch).
+	
+	The `transactionDigest` argument may be omitted when the query is scoped under a transaction context (e.g. a parent `Transaction`, `TransactionEffects`, or `Event`); the field then resolves against the in-scope transaction.
+	
+	Passing an explicit `transactionDigest` other than the in-scope transaction in subscription context is not supported; for arbitrary transaction lookups, use the indexed Query API.
+	"""
+	asTransactionObject(transactionDigest: String): TransactionObject
+	"""
+	Fetch the balance for `coinType` (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	
+	The result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. If this address has no balance of that type, all three values are zero.
 	"""
 	balance(coinType: String!): Balance
 	"""
-	Total balance across coins owned by this address, grouped by coin type.
+	Balances held by this address, grouped by coin type.
+	
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator.
 	"""
 	balances(first: Int, after: String, last: Int, before: String): BalanceConnection
 	"""
@@ -2472,9 +2576,9 @@ type MovePackage implements Node & IAddressable & IObject {
 	"""
 	modules(first: Int, after: String, last: Int, before: String): MoveModuleConnection
 	"""
-	Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	Fetch balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
 	
-	If the address does not own any coins of a given type, a balance of zero is returned for that type.
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns `null` when no checkpoint is set in scope (e.g. execution scope). If this address has no balance of a given type, all three values are zero for that type.
 	"""
 	multiGetBalances(keys: [String!]!): [Balance!]
 	"""
@@ -2955,13 +3059,25 @@ type Object implements Node & IAddressable & IObject {
 	"""
 	asMovePackage: MovePackage
 	"""
-	Fetch the total balance for coins with marker type `coinType` (e.g. `0x2::haneul::HANEUL`), owned by this address.
+	How this object was referenced by a specific transaction.
 	
-	If the address does not own any coins of that type, a balance of zero is returned.
+	Returns `null` if the object was not referenced, or was present only as a non-object marker variant of unchanged consensus input (e.g. cancelled, stream-ended, per-epoch).
+	
+	The `transactionDigest` argument may be omitted when the query is scoped under a transaction context (e.g. a parent `Transaction`, `TransactionEffects`, or `Event`); the field then resolves against the in-scope transaction.
+	
+	Passing an explicit `transactionDigest` other than the in-scope transaction in subscription context is not supported; for arbitrary transaction lookups, use the indexed Query API.
+	"""
+	asTransactionObject(transactionDigest: String): TransactionObject
+	"""
+	Fetch the balance for `coinType` (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	
+	The result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. If this address has no balance of that type, all three values are zero.
 	"""
 	balance(coinType: String!): Balance
 	"""
-	Total balance across coins owned by this address, grouped by coin type.
+	Balances held by this address, grouped by coin type.
+	
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator.
 	"""
 	balances(first: Int, after: String, last: Int, before: String): BalanceConnection
 	"""
@@ -2993,10 +3109,9 @@ type Object implements Node & IAddressable & IObject {
 	"""
 	id: ID!
 	"""
-	Fetch the total balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
+	Fetch balances keyed by coin types (e.g. `0x2::haneul::HANEUL`) owned by this address.
 	
-	Returns `None` when no checkpoint is set in scope (e.g. execution scope).
-	If the address does not own any coins of a given type, a balance of zero is returned for that type.
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns `null` when no checkpoint is set in scope (e.g. execution scope). If this address has no balance of a given type, all three values are zero for that type.
 	"""
 	multiGetBalances(keys: [String!]!): [Balance!]
 	"""
@@ -3537,6 +3652,12 @@ type Query {
 	Returns a list of addresses that is guaranteed to be the same length as `keys`. If an address in `keys` is fetched by name and the name does not resolve to an address, its corresponding entry in the result will be `null`.
 	"""
 	multiGetAddresses(keys: [AddressKey!]!): [Address]!
+	"""
+	Fetch balances by their addresses and coin types.
+	
+	Each result includes the total balance, the balance held in coin objects, and the balance held in the address's balance accumulator. Returns a list that is guaranteed to be the same length as `keys`. If an address has no balance of a given type, all three values are zero for that key.
+	"""
+	multiGetBalances(keys: [BalanceKey!]!): [Balance!]!
 	"""
 	Fetch checkpoints by their sequence numbers.
 	
@@ -4335,6 +4456,11 @@ enum TransactionKindInput {
 }
 
 """
+An object as it appears in a specific transaction. The variant discriminates whether the object was changed by the transaction or read as an unchanged consensus (shared) input.
+"""
+union TransactionObject = ObjectChange | ConsensusObjectRead
+
+"""
 Transfers `inputs` to `address`. All inputs must have the `store` ability (allows public transfer) and must not be previously immutable or shared.
 """
 type TransferObjectsCommand {
@@ -4553,6 +4679,10 @@ enum WithdrawFrom {
 	The funds are withdrawn from the sponsor's account.
 	"""
 	SPONSOR
+	"""
+	The funds are withdrawn from the account of an allowance's funder, under an allowance granted to the transaction sender. See `BalanceWithdraw.funder` and `BalanceWithdraw.allowance`.
+	"""
+	SENDER_ALLOWANCE
 }
 
 type WithdrawMaxAmountU64 {

@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/payment-kit",
-	"version": "0.2.5",
+	"version": "0.2.30",
 	"private": false,
 	"description": "Haneul Payment Kit",
 	"license": "Apache-2.0",
@@ -43,8 +43,8 @@
 	},
 	"devDependencies": {
 		"@haneullabs/codegen": "workspace:^",
-		"typescript": "^6.0.3",
-		"vitest": "^4.1.8"
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
 	},
 	"dependencies": {
 		"@haneullabs/bcs": "workspace:^"

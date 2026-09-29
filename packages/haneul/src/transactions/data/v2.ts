@@ -29,6 +29,7 @@ import {
 	ObjectRefSchema,
 	HaneulAddress,
 	ValidDuringSchema,
+	ValiditySchema,
 } from './internal.js';
 import type { Simplify } from '@haneullabs/utils';
 
@@ -143,6 +144,7 @@ const TransactionExpiration = enumUnion({
 	None: literal(true),
 	Epoch: JsonU64,
 	ValidDuring: ValidDuringSchema,
+	Validity: ValiditySchema,
 });
 
 export const SerializedTransactionDataV2Schema = object({

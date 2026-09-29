@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/move-bytecode-template",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"description": "Move Binary Format implementation in WASM",
 	"main": "index.js",
 	"types": "./index.d.mts",
@@ -44,7 +44,7 @@
 	"license": "Apache-2.0",
 	"devDependencies": {
 		"@haneullabs/bcs": "workspace:^",
-		"typescript": "^6.0.3",
-		"vitest": "^4.1.8"
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
 	}
 }

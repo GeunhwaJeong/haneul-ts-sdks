@@ -1,5 +1,144 @@
 # @mysten/create-dapp
 
+## 0.7.36
+
+## 0.7.35
+
+## 0.7.34
+
+### Patch Changes
+
+- Updated dependencies [2e9856f]
+  - @mysten/sui@2.33.0
+
+## 0.7.33
+
+### Patch Changes
+
+- Updated dependencies [4394023]
+  - @mysten/sui@2.32.0
+
+## 0.7.32
+
+## 0.7.31
+
+## 0.7.30
+
+## 0.7.29
+
+### Patch Changes
+
+- Updated dependencies [15eb25e]
+- Updated dependencies [15eb25e]
+  - @mysten/sui@2.31.0
+
+## 0.7.28
+
+## 0.7.27
+
+## 0.7.26
+
+### Patch Changes
+
+- Updated dependencies [cc2aec1]
+  - @mysten/sui@2.30.0
+
+## 0.7.25
+
+### Patch Changes
+
+- Updated dependencies [ee96ca4]
+  - @mysten/sui@2.29.0
+
+## 0.7.24
+
+## 0.7.23
+
+### Patch Changes
+
+- Updated dependencies [5c16cf4]
+  - @mysten/sui@2.28.0
+
+## 0.7.22
+
+## 0.7.21
+
+### Patch Changes
+
+- Updated dependencies [7c696dc]
+  - @mysten/sui@2.27.0
+
+## 0.7.20
+
+### Patch Changes
+
+- f2f7048: Upgrade workspace dependencies, remove the legacy dapp-kit package, and migrate the
+  remaining consumers to the current gRPC-based dapp-kit. Remove the legacy API reference while
+  retaining the migration guide and deprecation notice.
+
+## 0.7.19
+
+## 0.7.18
+
+### Patch Changes
+
+- Updated dependencies [87989d5]
+  - @mysten/sui@2.26.0
+
+## 0.7.17
+
+### Patch Changes
+
+- Updated dependencies [19e85a3]
+- Updated dependencies [19e85a3]
+- Updated dependencies [f76883d]
+- Updated dependencies [f76883d]
+- Updated dependencies [f76883d]
+- Updated dependencies [a217536]
+- Updated dependencies [f76883d]
+- Updated dependencies [f76883d]
+  - @mysten/codegen@0.12.0
+  - @mysten/sui@2.25.0
+
+## 0.7.16
+
+### Patch Changes
+
+- Updated dependencies [c5f452f]
+  - @mysten/sui@2.24.0
+
+## 0.7.15
+
+## 0.7.14
+
+## 0.7.13
+
+### Patch Changes
+
+- Updated dependencies [f9bfbbf]
+- Updated dependencies [f9bfbbf]
+  - @mysten/sui@2.23.0
+
+## 0.7.12
+
+## 0.7.11
+
+## 0.7.10
+
+### Patch Changes
+
+- Updated dependencies [899d9e3]
+  - @mysten/sui@2.22.0
+
+## 0.7.9
+
+### Patch Changes
+
+- Updated dependencies [da78e18]
+  - @mysten/sui@2.21.0
+
+## 0.7.8
+
 ## 0.7.7
 
 ## 0.7.6

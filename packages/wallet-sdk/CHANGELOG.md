@@ -1,5 +1,74 @@
 # @mysten/wallet-sdk
 
+## 0.9.6
+
+## 0.9.5
+
+## 0.9.4
+
+## 0.9.3
+
+## 0.9.2
+
+## 0.9.1
+
+## 0.9.0
+
+### Minor Changes
+
+- 15eb25e: Recognize `SenderAllowance` funds withdrawals in the transaction analyzer. Withdrawal
+  inputs report `withdrawFrom: 'SenderAllowance'` with the `funder` and `allowance`, and balance
+  flows attribute the withdrawn amount to the funder instead of the sender or gas owner.
+
+  Recognize `allowance::balance_spend` and `allowance::app_balance_spend`, tracking both funder
+  debits and recipient credits. Require funder and allowance details when narrowing allowance
+  inputs.
+
+  Reject balance-flow analysis when a withdrawal's redemption cannot be tracked, including allowance
+  withdrawals passed to custom Move functions. This prevents opaque self-funded allowance spends
+  from bypassing auto-approval token budgets.
+
+## 0.8.19
+
+## 0.8.18
+
+## 0.8.17
+
+## 0.8.16
+
+## 0.8.15
+
+## 0.8.14
+
+## 0.8.13
+
+## 0.8.12
+
+## 0.8.11
+
+## 0.8.10
+
+## 0.8.9
+
+## 0.8.8
+
+### Patch Changes
+
+- 8c4b149: Update dependencies to versions that resolve security advisories: hono,
+  @hono/node-server, next, postcss, and valibot
+
+## 0.8.7
+
+## 0.8.6
+
+## 0.8.5
+
+## 0.8.4
+
+## 0.8.3
+
+## 0.8.2
+
 ## 0.8.1
 
 ## 0.8.0
