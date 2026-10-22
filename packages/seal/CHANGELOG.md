@@ -1,5 +1,20 @@
 # @mysten/seal
 
+## 1.5.1
+
+## 1.5.0
+
+### Minor Changes
+
+- 0cd291e: Support address alias for seal, instead of rejecting session-key signatures if the signer
+  mismatches the canonical account address.
+
+## 1.4.19
+
+## 1.4.18
+
+## 1.4.17
+
 ## 1.4.16
 
 ## 1.4.15

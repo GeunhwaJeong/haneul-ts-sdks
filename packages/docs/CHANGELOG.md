@@ -1,5 +1,142 @@
 # @mysten/docs
 
+## 0.1.78
+
+### Patch Changes
+
+- Updated dependencies [3aa65e2]
+- Updated dependencies [785655d]
+- Updated dependencies [84b81a4]
+  - @mysten/bcs@2.1.3
+  - @mysten/utils@0.4.2
+  - @mysten/sui@2.37.0
+  - @mysten/deepbook-v3@2.8.0
+  - @mysten/kiosk@1.4.21
+  - @mysten/payment-kit@0.2.35
+  - @mysten/seal@1.5.1
+  - @mysten/walrus@1.2.36
+  - @mysten/dapp-kit-core@1.6.39
+  - @mysten/enoki@1.3.1
+  - @mysten/enoki-connect@1.1.37
+  - @mysten/slush-wallet@1.3.5
+  - @mysten/zksend@1.2.38
+  - @mysten/signers@1.1.35
+  - @mysten/aws-kms-signer@0.3.32
+  - @mysten/gcp-kms-signer@0.2.35
+  - @mysten/ledger-signer@0.2.35
+  - @mysten/webcrypto-signer@0.2.35
+  - @mysten/suins@2.0.17
+  - @mysten/wallet-standard@0.21.35
+  - @mysten/dapp-kit-react@2.1.41
+
+## 0.1.77
+
+### Patch Changes
+
+- Updated dependencies [7a9b3e5]
+- Updated dependencies [0cd291e]
+- Updated dependencies [ad42dd8]
+- Updated dependencies [352a0cc]
+- Updated dependencies [b7a6110]
+- Updated dependencies [7a9b3e5]
+  - @mysten/enoki@1.3.0
+  - @mysten/seal@1.5.0
+  - @mysten/sui@2.36.0
+  - @mysten/deepbook-v3@2.7.0
+  - @mysten/walrus@1.2.35
+  - @mysten/dapp-kit-core@1.6.38
+  - @mysten/enoki-connect@1.1.36
+  - @mysten/kiosk@1.4.20
+  - @mysten/payment-kit@0.2.34
+  - @mysten/signers@1.1.34
+  - @mysten/aws-kms-signer@0.3.31
+  - @mysten/gcp-kms-signer@0.2.34
+  - @mysten/ledger-signer@0.2.34
+  - @mysten/webcrypto-signer@0.2.34
+  - @mysten/slush-wallet@1.3.4
+  - @mysten/suins@2.0.16
+  - @mysten/wallet-standard@0.21.34
+  - @mysten/zksend@1.2.37
+  - @mysten/dapp-kit-react@2.1.40
+
+## 0.1.76
+
+### Patch Changes
+
+- Updated dependencies [55b1d3f]
+  - @mysten/sui@2.35.0
+  - @mysten/dapp-kit-core@1.6.37
+  - @mysten/deepbook-v3@2.6.8
+  - @mysten/enoki@1.2.31
+  - @mysten/enoki-connect@1.1.35
+  - @mysten/kiosk@1.4.19
+  - @mysten/payment-kit@0.2.33
+  - @mysten/seal@1.4.19
+  - @mysten/signers@1.1.33
+  - @mysten/aws-kms-signer@0.3.30
+  - @mysten/gcp-kms-signer@0.2.33
+  - @mysten/ledger-signer@0.2.33
+  - @mysten/webcrypto-signer@0.2.33
+  - @mysten/slush-wallet@1.3.3
+  - @mysten/suins@2.0.15
+  - @mysten/wallet-standard@0.21.33
+  - @mysten/walrus@1.2.34
+  - @mysten/zksend@1.2.36
+  - @mysten/dapp-kit-react@2.1.39
+
+## 0.1.75
+
+### Patch Changes
+
+- Updated dependencies [2ba222a]
+- Updated dependencies [953e584]
+- Updated dependencies [10772ce]
+- Updated dependencies [10772ce]
+  - @mysten/deepbook-v3@2.6.7
+  - @mysten/suins@2.0.14
+  - @mysten/sui@2.34.0
+  - @mysten/walrus@1.2.33
+  - @mysten/dapp-kit-core@1.6.36
+  - @mysten/enoki@1.2.30
+  - @mysten/enoki-connect@1.1.34
+  - @mysten/kiosk@1.4.18
+  - @mysten/payment-kit@0.2.32
+  - @mysten/seal@1.4.18
+  - @mysten/signers@1.1.32
+  - @mysten/aws-kms-signer@0.3.29
+  - @mysten/gcp-kms-signer@0.2.32
+  - @mysten/ledger-signer@0.2.32
+  - @mysten/webcrypto-signer@0.2.32
+  - @mysten/slush-wallet@1.3.2
+  - @mysten/wallet-standard@0.21.32
+  - @mysten/zksend@1.2.35
+  - @mysten/dapp-kit-react@2.1.38
+
+## 0.1.74
+
+### Patch Changes
+
+- Updated dependencies [d6ba632]
+  - @mysten/sui@2.33.2
+  - @mysten/dapp-kit-core@1.6.35
+  - @mysten/deepbook-v3@2.6.6
+  - @mysten/enoki@1.2.29
+  - @mysten/enoki-connect@1.1.33
+  - @mysten/kiosk@1.4.17
+  - @mysten/payment-kit@0.2.31
+  - @mysten/seal@1.4.17
+  - @mysten/signers@1.1.31
+  - @mysten/aws-kms-signer@0.3.28
+  - @mysten/gcp-kms-signer@0.2.31
+  - @mysten/ledger-signer@0.2.31
+  - @mysten/webcrypto-signer@0.2.31
+  - @mysten/slush-wallet@1.3.1
+  - @mysten/suins@2.0.13
+  - @mysten/wallet-standard@0.21.31
+  - @mysten/walrus@1.2.32
+  - @mysten/zksend@1.2.34
+  - @mysten/dapp-kit-react@2.1.37
+
 ## 0.1.73
 
 ### Patch Changes

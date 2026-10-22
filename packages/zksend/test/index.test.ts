@@ -3,7 +3,7 @@
 
 import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
 import type { Keypair } from '@haneullabs/haneul/cryptography';
-import { getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { getFaucetHost, requestHaneulFromFaucetV3 } from '@haneullabs/haneul/faucet';
 import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { Transaction } from '@haneullabs/haneul/transactions';
 import { GEUNHWA_PER_HANEUL } from '@haneullabs/haneul/utils';
@@ -26,8 +26,6 @@ const keypair = Ed25519Keypair.fromSecretKey(
 	'haneulprivkey1qz3v0pjxalg3z3p9p6lp4x84y74g0qt2y2q36amvkgfh9zzmm4q66y6ccdz',
 );
 
-// Automatically get gas from testnet is not working reliably, manually request gas via discord,
-// or uncomment the beforeAll and gas function below
 beforeAll(async () => {
 	const balance = await client.getBalance({
 		owner: keypair.toHaneulAddress(),
@@ -36,14 +34,15 @@ beforeAll(async () => {
 	if (Number(balance.balance.balance) < Number(GEUNHWA_PER_HANEUL) * 0.02) {
 		await getHaneulFromFaucet(keypair);
 	}
-}, 30_000);
+}, 300_000);
 
 async function getHaneulFromFaucet(keypair: Keypair) {
 	const faucetHost = getFaucetHost('testnet');
-	await requestHaneulFromFaucetV2({
+	const { digest } = await requestHaneulFromFaucetV3({
 		host: faucetHost,
 		recipient: keypair.toHaneulAddress(),
 	});
+	await client.waitForTransaction({ digest });
 }
 
 describe('Contract links', () => {

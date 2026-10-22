@@ -25,14 +25,16 @@ type CompressedSignature =
 	| { Secp256k1: Uint8Array }
 	| { Secp256r1: Uint8Array }
 	| { ZkLogin: Uint8Array }
-	| { Passkey: Uint8Array };
+	| { Passkey: Uint8Array }
+	| { MLDSA65: Uint8Array };
 
 type PublicKeyEnum =
 	| { ED25519: Uint8Array }
 	| { Secp256k1: Uint8Array }
 	| { Secp256r1: Uint8Array }
 	| { ZkLogin: Uint8Array }
-	| { Passkey: Uint8Array };
+	| { Passkey: Uint8Array }
+	| { MLDSA65: Uint8Array };
 
 type PubkeyEnumWeightPair = {
 	pubKey: PublicKeyEnum;
@@ -69,6 +71,7 @@ export class MultiSigPublicKey extends PublicKey {
 		weight: number;
 		publicKey: PublicKey;
 	}[];
+	#options: { client?: ClientWithCoreApi };
 	/**
 	 * Create a new MultiSigPublicKey object
 	 */
@@ -80,6 +83,8 @@ export class MultiSigPublicKey extends PublicKey {
 		options: { client?: ClientWithCoreApi } = {},
 	) {
 		super();
+
+		this.#options = options;
 
 		if (typeof value === 'string') {
 			this.rawBytes = fromBase64(value);
@@ -141,21 +146,27 @@ export class MultiSigPublicKey extends PublicKey {
 	static fromPublicKeys({
 		threshold,
 		publicKeys,
+		client,
 	}: {
 		threshold: number;
 		publicKeys: { publicKey: PublicKey; weight: number }[];
+		/** Client used to verify zkLogin member signatures */
+		client?: ClientWithCoreApi;
 	}) {
-		return new MultiSigPublicKey({
-			pk_map: publicKeys.map(({ publicKey, weight }) => {
-				const scheme = SIGNATURE_FLAG_TO_SCHEME[publicKey.flag() as SignatureFlag];
+		return new MultiSigPublicKey(
+			{
+				pk_map: publicKeys.map(({ publicKey, weight }) => {
+					const scheme = SIGNATURE_FLAG_TO_SCHEME[publicKey.flag() as SignatureFlag];
 
-				return {
-					pubKey: { [scheme]: publicKey.toRawBytes() } as PublicKeyEnum,
-					weight,
-				};
-			}),
-			threshold,
-		});
+					return {
+						pubKey: { [scheme]: publicKey.toRawBytes() } as PublicKeyEnum,
+						weight,
+					};
+				}),
+				threshold,
+			},
+			{ client },
+		);
 	}
 
 	/**
@@ -188,21 +199,22 @@ export class MultiSigPublicKey extends PublicKey {
 	 * Return the Haneul address associated with this MultiSig public key
 	 */
 	override toHaneulAddress(): string {
-		// max length = 1 flag byte + (max pk size + max weight size (u8)) * max signer size + 2 threshold bytes (u16)
-		const maxLength = 1 + (64 + 1) * MAX_SIGNER_IN_MULTISIG + 2;
-		const tmp = new Uint8Array(maxLength);
+		const haneulBytes = this.publicKeys.map(({ publicKey }) => publicKey.toHaneulBytes());
+		// 1 flag byte + 2 threshold bytes (u16) + per member: flagged public key + 1 weight byte (u8)
+		const length = 3 + haneulBytes.reduce((sum, bytes) => sum + bytes.length + 1, 0);
+		const tmp = new Uint8Array(length);
 		tmp.set([SIGNATURE_SCHEME_TO_FLAG['MultiSig']]);
 
 		tmp.set(bcs.u16().serialize(this.multisigPublicKey.threshold).toBytes(), 1);
 		// The initial value 3 ensures that following data will be after the flag byte and threshold bytes
 		let i = 3;
-		for (const { publicKey, weight } of this.publicKeys) {
-			const bytes = publicKey.toHaneulBytes();
+		for (const [j, { weight }] of this.publicKeys.entries()) {
+			const bytes = haneulBytes[j];
 			tmp.set(bytes, i);
 			i += bytes.length;
 			tmp.set([weight], i++);
 		}
-		return normalizeHaneulAddress(bytesToHex(blake2b(tmp.slice(0, i), { dkLen: 32 })));
+		return normalizeHaneulAddress(bytesToHex(blake2b(tmp, { dkLen: 32 })));
 	}
 
 	/**
@@ -213,9 +225,38 @@ export class MultiSigPublicKey extends PublicKey {
 	}
 
 	/**
-	 * Verifies that the signature is valid for for the provided message
+	 * Verifies that the signature is valid for the provided message
 	 */
 	async verify(message: Uint8Array, multisigSignature: string): Promise<boolean> {
+		return this.#verifyMembers(multisigSignature, (publicKey, signature) =>
+			publicKey.verify(message, signature),
+		);
+	}
+
+	/**
+	 * Verifies that the signature is valid for the provided PersonalMessage
+	 */
+	override verifyPersonalMessage(message: Uint8Array, multisigSignature: string): Promise<boolean> {
+		// Each member verifies with its own intent-aware method, so members that cannot verify a
+		// raw digest (zkLogin, which is verified through the client) still work.
+		return this.#verifyMembers(multisigSignature, (publicKey, signature) =>
+			publicKey.verifyPersonalMessage(message, signature),
+		);
+	}
+
+	/**
+	 * Verifies that the signature is valid for the provided Transaction
+	 */
+	override verifyTransaction(transaction: Uint8Array, multisigSignature: string): Promise<boolean> {
+		return this.#verifyMembers(multisigSignature, (publicKey, signature) =>
+			publicKey.verifyTransaction(transaction, signature),
+		);
+	}
+
+	async #verifyMembers(
+		multisigSignature: string,
+		verifyMember: (publicKey: PublicKey, signature: Uint8Array) => Promise<boolean>,
+	): Promise<boolean> {
 		// Multisig verification only supports serialized signature
 		const parsed = parseSerializedSignature(multisigSignature);
 
@@ -236,8 +277,11 @@ export class MultiSigPublicKey extends PublicKey {
 			return false;
 		}
 
-		for (const { publicKey, weight, signature } of parsePartialSignatures(multisig)) {
-			if (!(await publicKey.verify(message, signature))) {
+		for (const { publicKey, weight, signature } of parsePartialSignatures(
+			multisig,
+			this.#options,
+		)) {
+			if (!(await verifyMember(publicKey, signature))) {
 				return false;
 			}
 
@@ -302,7 +346,8 @@ export class MultiSigPublicKey extends PublicKey {
 			bitmap,
 			multisig_pk: this.multisigPublicKey,
 		};
-		const bytes = bcs.MultiSig.serialize(multisig, { maxSize: 8192 }).toBytes();
+		// Ten ML-DSA-65 members are ~53 KB of signatures and public keys.
+		const bytes = bcs.MultiSig.serialize(multisig, { maxSize: 65536 }).toBytes();
 		const tmp = new Uint8Array(bytes.length + 1);
 		tmp.set([SIGNATURE_SCHEME_TO_FLAG['MultiSig']]);
 		tmp.set(bytes, 1);

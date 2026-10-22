@@ -1,0 +1,77 @@
+{
+	"$comment": "Conformance vectors for docs/pow-spec.md. Generated, not hand-written. Each case gives the exact preimage it hashes, so an implementation can compare its own join, its encodings, and its hash independently.",
+	"domain": "haneul-faucet-pow/1",
+	"salt": "haneul-faucet-pow-1",
+	"params": {
+		"algorithm": "argon2d",
+		"argon2Version": 19,
+		"phc": "$argon2d$v=19$m=8192,t=1,p=1",
+		"memoryKiB": 8192,
+		"iterations": 1,
+		"parallelism": 1,
+		"outputBytes": 32
+	},
+	"inputSource": "Inputs of the upstream specification vectors (devnet checkpoint 1713342). The hashes use Haneul's domain and salt and were computed with the Argon2 reference implementation, which reproduces the upstream vectors for theirs.",
+	"inputs": {
+		"chainId": "8wWZfv1HjQxjB5ncmC9CQqqRqUMBiEZXnc5FhS9zRe1v",
+		"checkpointSeq": "1713342",
+		"checkpointDigest": "GzBdc9tbUe3s2PK1iVJcyQBj5TvdX7bJiAHWbhBDYiYb",
+		"randomBytes": "mJ4ZqDXQasy17GTiGfp0/OYAGCR+7reLM5+Gb39YtoAIaPuh1wj+z5J7po+eSze3",
+		"faucetAddress": "0x949cd75a2485cc18b8258634ffd9b849a687e2e2a0b4c2444a21f007fc79adc4",
+		"recipient": "0x1111111111111111111111111111111111111111111111111111111111111111"
+	},
+	"cases": [
+		{
+			"note": "randomness present",
+			"randomBytes": "mJ4ZqDXQasy17GTiGfp0/OYAGCR+7reLM5+Gb39YtoAIaPuh1wj+z5J7po+eSze3",
+			"nonce": "0",
+			"preimage": "haneul-faucet-pow/1\n8wWZfv1HjQxjB5ncmC9CQqqRqUMBiEZXnc5FhS9zRe1v\n1713342\nGzBdc9tbUe3s2PK1iVJcyQBj5TvdX7bJiAHWbhBDYiYb\nmJ4ZqDXQasy17GTiGfp0/OYAGCR+7reLM5+Gb39YtoAIaPuh1wj+z5J7po+eSze3\n0x949cd75a2485cc18b8258634ffd9b849a687e2e2a0b4c2444a21f007fc79adc4\n0x1111111111111111111111111111111111111111111111111111111111111111\n0",
+			"hash": "11a5e8a363b64b63ee5dcc6a0fcdb29512a3b562b4f44e46082d1b2acb9093c0",
+			"v": "1271678258252237667"
+		},
+		{
+			"note": "randomness present",
+			"randomBytes": "mJ4ZqDXQasy17GTiGfp0/OYAGCR+7reLM5+Gb39YtoAIaPuh1wj+z5J7po+eSze3",
+			"nonce": "42",
+			"preimage": "haneul-faucet-pow/1\n8wWZfv1HjQxjB5ncmC9CQqqRqUMBiEZXnc5FhS9zRe1v\n1713342\nGzBdc9tbUe3s2PK1iVJcyQBj5TvdX7bJiAHWbhBDYiYb\nmJ4ZqDXQasy17GTiGfp0/OYAGCR+7reLM5+Gb39YtoAIaPuh1wj+z5J7po+eSze3\n0x949cd75a2485cc18b8258634ffd9b849a687e2e2a0b4c2444a21f007fc79adc4\n0x1111111111111111111111111111111111111111111111111111111111111111\n42",
+			"hash": "911d4d259e2cc9d65160671f2821e1c6136c57c2e82c76f9a2c5cace382777b0",
+			"v": "10456598733787023830"
+		},
+		{
+			"note": "randomness present, valid at difficulty 256 and the first solution found grinding up from zero",
+			"randomBytes": "mJ4ZqDXQasy17GTiGfp0/OYAGCR+7reLM5+Gb39YtoAIaPuh1wj+z5J7po+eSze3",
+			"nonce": "287",
+			"preimage": "haneul-faucet-pow/1\n8wWZfv1HjQxjB5ncmC9CQqqRqUMBiEZXnc5FhS9zRe1v\n1713342\nGzBdc9tbUe3s2PK1iVJcyQBj5TvdX7bJiAHWbhBDYiYb\nmJ4ZqDXQasy17GTiGfp0/OYAGCR+7reLM5+Gb39YtoAIaPuh1wj+z5J7po+eSze3\n0x949cd75a2485cc18b8258634ffd9b849a687e2e2a0b4c2444a21f007fc79adc4\n0x1111111111111111111111111111111111111111111111111111111111111111\n287",
+			"hash": "005572246ba4d6f4643f53d3addfa2a797b091e1f23ad845c80c7202139b3034",
+			"v": "24050873770759924"
+		},
+		{
+			"note": "randomness present, maximum u64 nonce",
+			"randomBytes": "mJ4ZqDXQasy17GTiGfp0/OYAGCR+7reLM5+Gb39YtoAIaPuh1wj+z5J7po+eSze3",
+			"nonce": "18446744073709551615",
+			"preimage": "haneul-faucet-pow/1\n8wWZfv1HjQxjB5ncmC9CQqqRqUMBiEZXnc5FhS9zRe1v\n1713342\nGzBdc9tbUe3s2PK1iVJcyQBj5TvdX7bJiAHWbhBDYiYb\nmJ4ZqDXQasy17GTiGfp0/OYAGCR+7reLM5+Gb39YtoAIaPuh1wj+z5J7po+eSze3\n0x949cd75a2485cc18b8258634ffd9b849a687e2e2a0b4c2444a21f007fc79adc4\n0x1111111111111111111111111111111111111111111111111111111111111111\n18446744073709551615",
+			"hash": "a23c6a0c01d7bed9dcf7acea34b236c95d2af1dad8a90aecec52ef171584cd23",
+			"v": "11690335332550033113"
+		},
+		{
+			"note": "randomness absent, so the field is empty and the digest carries the unpredictability",
+			"randomBytes": "",
+			"nonce": "0",
+			"preimage": "haneul-faucet-pow/1\n8wWZfv1HjQxjB5ncmC9CQqqRqUMBiEZXnc5FhS9zRe1v\n1713342\nGzBdc9tbUe3s2PK1iVJcyQBj5TvdX7bJiAHWbhBDYiYb\n\n0x949cd75a2485cc18b8258634ffd9b849a687e2e2a0b4c2444a21f007fc79adc4\n0x1111111111111111111111111111111111111111111111111111111111111111\n0",
+			"hash": "839858f2de661a75751f62bef77888a8061808f1f9df8b1b898b51c8de0aa3f8",
+			"v": "9482426815565142645"
+		}
+	],
+	"thresholds": {
+		"2": "9223372036854775808",
+		"3": "6148914691236517205",
+		"7": "2635249153387078802",
+		"256": "72057594037927936",
+		"724": "25478928278604353",
+		"725": "25443784929254553",
+		"1000": "18446744073709551",
+		"11586": "1592158128233173",
+		"$comment": "threshold = floor(2^64 / difficulty), integer division per spec section 4. Difficulty 1 is absent on purpose: it sits outside the domain, since threshold(1) is 2^64 and does not fit in a u64. 3, 7, 724 and 11586 divide 2^64 inexactly, so they pin the floor: a float implementation drifts on them.",
+		"281474976710656": "65536"
+	}
+}

@@ -602,7 +602,7 @@ describe('Integration test', () => {
 
 		const encryptedObject = EncryptedObject.parse(encryptedBytes);
 
-		// Session key with mismatched haneul address and personal msg signature fails.
+		// Address is checked against the signature on server side.
 		const wrongHaneulAddress = Ed25519Keypair.generate().getPublicKey().toHaneulAddress();
 		const sessionKey = await SessionKey.create({
 			address: wrongHaneulAddress,
@@ -611,9 +611,7 @@ describe('Integration test', () => {
 			haneulClient,
 		});
 		const sig = await keypair.signPersonalMessage(sessionKey.getPersonalMessage());
-		await expect(sessionKey.setPersonalMessageSignature(sig.signature)).rejects.toThrow(
-			InvalidPersonalMessageSignatureError,
-		);
+		await sessionKey.setPersonalMessageSignature(sig.signature);
 
 		// Wrong txBytes fails to verify.
 		const sessionKey2 = await SessionKey.create({

@@ -2,7 +2,7 @@
 	"name": "@haneullabs/kiosk",
 	"author": "Haneul Labs <build@haneul-labs.com>",
 	"description": "Haneul Kiosk library",
-	"version": "1.4.16",
+	"version": "1.4.21",
 	"license": "Apache-2.0",
 	"type": "module",
 	"main": "./dist/index.mjs",

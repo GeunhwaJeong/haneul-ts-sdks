@@ -12,7 +12,7 @@
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
 import { bcs } from '@haneullabs/haneul/bcs';
-import { type Transaction } from '@haneullabs/haneul/transactions';
+import { type Transaction, type TransactionArgument } from '@haneullabs/haneul/transactions';
 const $moduleName = '@local-pkg/hashi::utxo';
 export const UtxoId = new MoveStruct({
 	name: `${$moduleName}::UtxoId`,
@@ -51,7 +51,7 @@ export function utxoId(options: UtxoIdOptions) {
 		});
 }
 export interface UtxoArguments {
-	utxoId: RawTransactionArgument<string>;
+	utxoId: TransactionArgument;
 	amount: RawTransactionArgument<number | bigint>;
 	derivationPath: RawTransactionArgument<string | null>;
 }
@@ -60,7 +60,7 @@ export interface UtxoOptions {
 	arguments:
 		| UtxoArguments
 		| [
-				utxoId: RawTransactionArgument<string>,
+				utxoId: TransactionArgument,
 				amount: RawTransactionArgument<number | bigint>,
 				derivationPath: RawTransactionArgument<string | null>,
 		  ];

@@ -52,10 +52,7 @@ export const DUST_RELAY_MIN_VALUE = 546n;
  */
 export const WORST_CASE_NETWORK_FEE_CEILING_SATS = 100_000n;
 
-/**
- * Length of the Guardian's Ed25519 attestation public key, in bytes. Matches
- * `GUARDIAN_PUBLIC_KEY_LEN` in `hashi::config`.
- */
+/** Length of the Guardian's Ed25519 attestation public key, in bytes. */
 export const GUARDIAN_PUBLIC_KEY_LEN = 32;
 
 /**
@@ -71,8 +68,8 @@ export const NETWORK_CONFIG: Partial<Record<HaneulNetwork, NetworkConfig>> = {
 		bitcoinNetwork: 'signet',
 	},
 	testnet: {
-		hashiObjectId: '0x22c0ce66ce09df2dc88a31bd320d4177b766518b9b88010368cfbdcd724528f8',
-		packageId: '0xfcea10cadbb553c4874201584abf68771592678952efd957b2e82c010c7f4360',
+		hashiObjectId: '0x342e908043db6090558ed7766df95bfc3609881b2eac7edb5343dd5bb3ddd1bb',
+		packageId: '0x5e0b99c31f691742acea5de4ca1bf53c398d5639fed6503a51ffe8035dc68485',
 		bitcoinNetwork: 'signet',
 	},
 };

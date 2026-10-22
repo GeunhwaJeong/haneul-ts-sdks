@@ -29,8 +29,9 @@ jobs:
       # `packages/hashi/src/contracts` were generated from. Unlike the
       # standalone hashi-ts-sdk repo, ts-sdks does NOT vendor hashi as a
       # submodule, so we clone it explicitly below. Keep this in sync with
-      # the codegen revision when the bindings are regenerated.
-      HASHI_PIN: cd2b81f9a208f5077032110652f1e8bba297278c
+      # the codegen revision when the bindings are regenerated. This is hashi's
+      # `testnet-1.0` tag, the source of the deployed testnet package.
+      HASHI_PIN: b1d1a77df73582cb1f8925254b6ec66fd1c07457
       LOCALNET_DATA_DIR: ${{ github.workspace }}/.hashi/localnet
       LOCALNET_LOG: ${{ github.workspace }}/localnet.log
     steps:
@@ -64,12 +65,12 @@ jobs:
           node-version: '24'
           cache: 'pnpm'
 
-      # `hashi/rust-toolchain.toml` pins 1.91 — match it so cargo doesn't
+      # `hashi/rust-toolchain.toml` pins 1.96 — match it so cargo doesn't
       # auto-install a second toolchain inside the build step (slower and
       # uncached).
       - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # pin@stable
         with:
-          toolchain: '1.91'
+          toolchain: '1.96'
 
       - uses: Swatinem/rust-cache@23869a5bd66c73db3c0ac40331f3206eb23791dc # pin@v2.9.1
         with:
@@ -155,13 +156,29 @@ jobs:
           fi
 
           OBJ=$(jq -r .hashi_object_id "$LOCALNET_DATA_DIR/state.json")
+          # Throwaway client config + empty keystore, pointed at the localnet.
+          HANEUL_CLIENT_DIR="$RUNNER_TEMP/haneul-client"
+          mkdir -p "$HANEUL_CLIENT_DIR"
+          echo '[]' > "$HANEUL_CLIENT_DIR/haneul.keystore"
+          cat > "$HANEUL_CLIENT_DIR/client.yaml" <<EOF
+          ---
+          keystore:
+            File: $HANEUL_CLIENT_DIR/haneul.keystore
+          envs:
+            - alias: localnet
+              rpc: 'http://127.0.0.1:9000'
+              ws: ~
+          active_env: localnet
+          active_address: '0x0000000000000000000000000000000000000000000000000000000000000000'
+          EOF
           echo "Phase 2/3: polling Hashi object $OBJ for non-empty MPC key (cap 3 min)…"
           MPC_OK=0
           for i in $(seq 1 36); do
-            LEN=$(curl -s -X POST http://127.0.0.1:9000 \
-              -H content-type:application/json \
-              -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"haneul_getObject\",\"params\":[\"$OBJ\",{\"showContent\":true}]}" \
-              | jq -r '.result.data.content.fields.committee_set.fields.mpc_public_key | length' 2>/dev/null || echo 0)
+            # CLI JSON flattens Move structs (no `.fields` wrappers) and
+            # renders vector<u8> as a base64 string, so `length` is 0 while
+            # the key is empty.
+            LEN=$(haneul client --client.config "$HANEUL_CLIENT_DIR/client.yaml" object "$OBJ" --json 2>/dev/null \
+              | jq -r '.content.committee_set.mpc_public_key | length' 2>/dev/null || echo 0)
             if [[ "$LEN" -gt 0 ]]; then
               echo "MPC key on chain (length=$LEN) after ~$((i * 5)) s — DKG settled."
               MPC_OK=1

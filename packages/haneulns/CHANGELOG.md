@@ -1,5 +1,20 @@
 # @mysten/suins
 
+## 2.0.17
+
+## 2.0.16
+
+## 2.0.15
+
+## 2.0.14
+
+### Patch Changes
+
+- 2ba222a: Upgrade axios to require version 1.20.0 or later, fixing reported security
+  vulnerabilities.
+
+## 2.0.13
+
 ## 2.0.12
 
 ## 2.0.11

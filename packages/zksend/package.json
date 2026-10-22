@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/zksend",
-	"version": "1.2.33",
+	"version": "1.2.38",
 	"description": "Create claimable links for transferring coins and NFTs",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",

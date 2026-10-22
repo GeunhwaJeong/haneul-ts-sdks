@@ -50,7 +50,7 @@ import {
 	grpcTransactionToTransactionData,
 } from '../client/transaction-resolver.js';
 import { setAddressBalanceTransactionExpirationFromSimulatedEpoch } from '../client/address-balance-transaction-expiration.js';
-import { transactionBytesHaveEmptyGasPayment } from '../client/utils.js';
+import { isMockedGasObjectId, transactionBytesHaveEmptyGasPayment } from '../client/utils.js';
 import { Value } from './proto/google/protobuf/struct.js';
 import { ExecutedTransaction } from './proto/haneul/rpc/v2/executed_transaction.js';
 import {
@@ -457,14 +457,18 @@ export class GrpcCoreClient extends CoreClient {
 		if (options.include?.commandResults) {
 			paths.push('command_outputs');
 		}
+		if (!options.include?.effects) {
+			// The gas object ID is always needed to report whether a mocked gas coin was used
+			paths.push('transaction.effects.gas_object.object_id');
+		}
 
 		if (!(options.transaction instanceof Uint8Array)) {
 			await options.transaction.prepareForSerialization({ client: this });
 		}
 
-		// A gas payment explicitly set to an empty list means gas is paid from the sender's
-		// address balance, so the server needs to perform gas selection rather than simulating
-		// with a mocked gas coin.
+		// A gas payment explicitly set to an empty list means the server should select real gas
+		// (from the sender's address balance or coin objects) rather than simulating with a
+		// mocked gas coin.
 		const doGasSelection =
 			options.doGasSelection ??
 			(options.transaction instanceof Uint8Array
@@ -833,20 +837,22 @@ export class GrpcCoreClient extends CoreClient {
 	async defaultNameServiceName(
 		options: HaneulClientTypes.DefaultNameServiceNameOptions,
 	): Promise<HaneulClientTypes.DefaultNameServiceNameResponse> {
-		const name =
-			(
-				await this.#client.nameService.reverseLookupName(
-					{
-						address: options.address,
-					},
-					{ abort: options.signal },
-				)
-			).response.record?.name ?? null;
-		return {
-			data: {
-				name,
-			},
-		};
+		try {
+			const { response } = await this.#client.nameService.reverseLookupName(
+				{ address: options.address },
+				{ abort: options.signal },
+			);
+
+			return { data: { name: response.record?.name ?? null } };
+		} catch (error) {
+			// The reverse lookup reports an address without a default name (or whose default name
+			// has expired) the same way a forward lookup reports a missing name.
+			if (isNameServiceResolutionMiss(error)) {
+				return { data: { name: null } };
+			}
+
+			throw error;
+		}
 	}
 
 	async resolveNameServiceAddress(
@@ -1619,6 +1625,7 @@ export function parseGrpcSimulateTransactionResponse<
 ): HaneulClientTypes.SimulateTransactionResult<Include> {
 	const include = options?.include;
 	const transactionResult = parseGrpcTransactionResponse(response.transaction!, { include });
+	const gasPaymentMocked = isMockedGasObjectId(response.transaction?.effects?.gasObject?.objectId);
 
 	const commandResults =
 		include?.commandResults && response.commandOutputs
@@ -1638,6 +1645,7 @@ export function parseGrpcSimulateTransactionResponse<
 			Transaction: transactionResult.Transaction,
 			commandResults:
 				commandResults as HaneulClientTypes.SimulateTransactionResult<Include>['commandResults'],
+			gasPaymentMocked,
 		};
 	}
 
@@ -1646,6 +1654,7 @@ export function parseGrpcSimulateTransactionResponse<
 		FailedTransaction: transactionResult.FailedTransaction,
 		commandResults:
 			commandResults as HaneulClientTypes.SimulateTransactionResult<Include>['commandResults'],
+		gasPaymentMocked,
 	};
 }
 

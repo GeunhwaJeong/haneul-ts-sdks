@@ -6,6 +6,8 @@ import { toBase64 } from '@haneullabs/utils';
 import { bcs } from '../bcs/index.js';
 import { ExecutionStatus } from '../bcs/effects.js';
 import { TransactionDataBuilder } from '../transactions/TransactionData.js';
+import { MOCKED_GAS_OBJECT_ID } from '../utils/constants.js';
+import { normalizeHaneulAddress } from '../utils/haneul-types.js';
 import type { HaneulClientTypes } from './types.js';
 
 const ordinalRules = new Intl.PluralRules('en-US', { type: 'ordinal' });
@@ -412,6 +414,14 @@ export function transactionBytesHaveEmptyGasPayment(bytes: Uint8Array): boolean 
 	} catch {
 		return false;
 	}
+}
+
+/**
+ * Checks whether a gas object ID is the mocked gas coin the node substitutes when a transaction
+ * is simulated without a gas payment.
+ */
+export function isMockedGasObjectId(objectId: string | null | undefined): boolean {
+	return objectId != null && normalizeHaneulAddress(objectId) === MOCKED_GAS_OBJECT_ID;
 }
 
 /**

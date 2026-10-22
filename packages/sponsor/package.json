@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/sponsor",
-	"version": "0.3.6",
+	"version": "0.3.11",
 	"private": false,
 	"description": "Build Haneul gas sponsorship flows from a signer, with pluggable transaction validation",
 	"license": "Apache-2.0",

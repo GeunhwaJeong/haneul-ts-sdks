@@ -43,6 +43,7 @@ import { chunk, fromBase64, toBase64 } from '@haneullabs/utils';
 import { normalizeStructTag, normalizeHaneulAddress } from '../utils/haneul-types.js';
 import {
 	formatMoveAbortMessage,
+	isMockedGasObjectId,
 	parseTransactionEffectsBcs,
 	transactionBytesHaveEmptyGasPayment,
 } from '../client/utils.js';
@@ -422,9 +423,9 @@ export class GraphQLCoreClient extends CoreClient {
 			await options.transaction.prepareForSerialization({ client: this });
 		}
 
-		// A gas payment explicitly set to an empty list means gas is paid from the sender's
-		// address balance, so the server needs to perform gas selection rather than simulating
-		// with a mocked gas coin.
+		// A gas payment explicitly set to an empty list means the server should select real gas
+		// (from the sender's address balance or coin objects) rather than simulating with a
+		// mocked gas coin.
 		const doGasSelection =
 			options.doGasSelection ??
 			(options.transaction instanceof Uint8Array
@@ -459,6 +460,9 @@ export class GraphQLCoreClient extends CoreClient {
 		);
 
 		const transactionResult = parseTransaction(result.effects?.transaction!, options.include);
+		const gasPaymentMocked = isMockedGasObjectId(
+			result.effects?.transaction?.effects?.gasEffects?.gasObject?.address,
+		);
 
 		const commandResults =
 			options.include?.commandResults && result.outputs
@@ -478,6 +482,7 @@ export class GraphQLCoreClient extends CoreClient {
 				Transaction: transactionResult.Transaction,
 				commandResults:
 					commandResults as HaneulClientTypes.SimulateTransactionResult<Include>['commandResults'],
+				gasPaymentMocked,
 			};
 		} else {
 			return {
@@ -485,6 +490,7 @@ export class GraphQLCoreClient extends CoreClient {
 				FailedTransaction: transactionResult.FailedTransaction,
 				commandResults:
 					commandResults as HaneulClientTypes.SimulateTransactionResult<Include>['commandResults'],
+				gasPaymentMocked,
 			};
 		}
 	}
@@ -789,19 +795,16 @@ export class GraphQLCoreClient extends CoreClient {
 	async defaultNameServiceName(
 		options: HaneulClientTypes.DefaultNameServiceNameOptions,
 	): Promise<HaneulClientTypes.DefaultNameServiceNameResponse> {
-		const name = await this.#graphqlQuery(
-			{
-				query: DefaultHaneulnsNameDocument,
-				signal: options.signal,
-				variables: {
-					address: options.address,
-				},
-			},
-			(result) => result.address?.defaultNameRecord?.domain ?? null,
-		);
+		const { data, errors } = await this.#graphqlClient.query({
+			query: DefaultHaneulnsNameDocument,
+			signal: options.signal,
+			variables: { address: options.address },
+		});
+
+		handleGraphQLErrors(errors);
 
 		return {
-			data: { name: name },
+			data: { name: data?.address?.defaultNameRecord?.domain ?? null },
 		};
 	}
 

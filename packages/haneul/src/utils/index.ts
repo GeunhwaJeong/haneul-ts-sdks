@@ -30,6 +30,7 @@ export {
 	HANEUL_RANDOM_OBJECT_ID,
 	HANEUL_COIN_REGISTRY_OBJECT_ID,
 	HANEUL_DENY_LIST_OBJECT_ID,
+	MOCKED_GAS_OBJECT_ID,
 } from './constants.js';
 
 export { isValidNamedPackage, isValidNamedType } from './move-registry.js';

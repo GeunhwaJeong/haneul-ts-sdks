@@ -6,6 +6,7 @@ import { fromBase64 } from '@haneullabs/bcs';
 import type { PublicKey, SignatureFlag, SignatureScheme } from '../cryptography/index.js';
 import { parseSerializedSignature, SIGNATURE_FLAG_TO_SCHEME } from '../cryptography/index.js';
 import { Ed25519PublicKey } from '../keypairs/ed25519/publickey.js';
+import { MLDSA65PublicKey } from '../keypairs/mldsa65/publickey.js';
 import { PasskeyPublicKey } from '../keypairs/passkey/publickey.js';
 import { Secp256k1PublicKey } from '../keypairs/secp256k1/publickey.js';
 import { Secp256r1PublicKey } from '../keypairs/secp256r1/publickey.js';
@@ -110,7 +111,9 @@ function parseSignature(signature: string, options: { client?: ClientWithCoreApi
 	if (parsedSignature.signatureScheme === 'MultiSig') {
 		return {
 			...parsedSignature,
-			publicKey: new MultiSigPublicKey(parsedSignature.multisig.multisig_pk),
+			publicKey: new MultiSigPublicKey(parsedSignature.multisig.multisig_pk, {
+				client: options.client,
+			}),
 		};
 	}
 
@@ -151,13 +154,16 @@ export function publicKeyFromRawBytes(
 			publicKey = new Secp256r1PublicKey(bytes);
 			break;
 		case 'MultiSig':
-			publicKey = new MultiSigPublicKey(bytes);
+			publicKey = new MultiSigPublicKey(bytes, { client: options.client });
 			break;
 		case 'ZkLogin':
 			publicKey = ZkLoginPublicIdentifier.fromBytes(bytes, options);
 			break;
 		case 'Passkey':
 			publicKey = new PasskeyPublicKey(bytes);
+			break;
+		case 'MLDSA65':
+			publicKey = new MLDSA65PublicKey(bytes);
 			break;
 		default:
 			throw new Error(`Unsupported signature scheme ${signatureScheme}`);

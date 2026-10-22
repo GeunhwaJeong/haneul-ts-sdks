@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { BcsType, BcsTypeOptions } from '@haneullabs/bcs';
-import { bcs, fromBase58, fromBase64, fromHex, toBase58, toBase64, toHex } from '@haneullabs/bcs';
+import { bcs, fromBase58, fromBase64, toBase58, toBase64, toHex } from '@haneullabs/bcs';
 
 import { isValidHaneulAddress, normalizeHaneulAddress, HANEUL_ADDRESS_LENGTH } from '../utils/haneul-types.js';
 import { TypeTagSerializer } from './type-tag-serializer.js';
@@ -27,27 +27,82 @@ function optionEnum<T extends BcsType<any, any>>(type: T) {
 	});
 }
 
+const HEX_NIBBLES = new Int8Array(128).fill(-1);
+for (let i = 0; i < 16; i++) {
+	HEX_NIBBLES['0123456789abcdef'.charCodeAt(i)] = i;
+	HEX_NIBBLES['0123456789ABCDEF'.charCodeAt(i)] = i;
+}
+function hexNibble(code: number): number {
+	return code < 128 ? HEX_NIBBLES[code] : -1;
+}
+
+// Same bytes as fromHex(normalizeHaneulAddress(value)) for valid addresses, or null for invalid ones
+function decodeAddress(value: string): Uint8Array<ArrayBuffer> | null {
+	if (!value) {
+		return null;
+	}
+	const start =
+		value.length >= 2 && value[0] === '0' && (value[1] === 'x' || value[1] === 'X') ? 2 : 0;
+	const digits = value.length - start;
+	if (digits > HANEUL_ADDRESS_LENGTH * 2) {
+		return null;
+	}
+
+	const bytes = new Uint8Array(HANEUL_ADDRESS_LENGTH);
+	// Right-align the digits, as normalizeHaneulAddress left-pads with zeros
+	let byteIndex = HANEUL_ADDRESS_LENGTH - 1;
+	let i = value.length - 1;
+	for (; i >= start + 1; i -= 2) {
+		const low = hexNibble(value.charCodeAt(i));
+		const high = hexNibble(value.charCodeAt(i - 1));
+		if (low < 0 || high < 0) {
+			return null;
+		}
+		bytes[byteIndex--] = (high << 4) | low;
+	}
+	if (i === start) {
+		const low = hexNibble(value.charCodeAt(i));
+		if (low < 0) {
+			return null;
+		}
+		bytes[byteIndex] = low;
+	}
+
+	return bytes;
+}
+
 export const Address = bcs.bytes(HANEUL_ADDRESS_LENGTH).transform({
-	validate: (val) => {
-		const address = typeof val === 'string' ? val : toHex(val);
+	// Validation lives in input so string addresses are only decoded once per write; transform's
+	// validate runs input, so validate() still rejects invalid addresses.
+	input: (val: string | Uint8Array) => {
+		if (typeof val === 'string') {
+			const bytes = decodeAddress(val);
+			if (!bytes) {
+				throw new Error(`Invalid Haneul address ${val}`);
+			}
+			return bytes;
+		}
+		const address = toHex(val);
 		if (!address || !isValidHaneulAddress(normalizeHaneulAddress(address))) {
 			throw new Error(`Invalid Haneul address ${address}`);
 		}
+		return val;
 	},
-	input: (val: string | Uint8Array) =>
-		typeof val === 'string' ? fromHex(normalizeHaneulAddress(val)) : val,
-	output: (val) => normalizeHaneulAddress(toHex(val)),
+	output: (val) => `0x${toHex(val)}`,
 });
 
 export const ObjectDigest = bcs.byteVector().transform({
 	name: 'ObjectDigest',
-	input: (value: string) => fromBase58(value),
-	output: (value) => toBase58(new Uint8Array(value)),
-	validate: (value) => {
-		if (fromBase58(value).length !== 32) {
+	// The length check lives in input so the digest is only base58-decoded once per write;
+	// transform's validate runs input, so validate() still rejects digests of the wrong length.
+	input: (value: string) => {
+		const bytes = fromBase58(value);
+		if (bytes.length !== 32) {
 			throw new Error('ObjectDigest must be 32 bytes');
 		}
+		return bytes;
 	},
+	output: (value) => toBase58(value),
 });
 
 export const HaneulObjectRef = bcs.struct('HaneulObjectRef', {
@@ -113,7 +168,7 @@ export const CallArg = bcs.enum('CallArg', {
 	Pure: bcs.struct('Pure', {
 		bytes: bcs.byteVector().transform({
 			input: (val: string | Uint8Array) => (typeof val === 'string' ? fromBase64(val) : val),
-			output: (val) => toBase64(new Uint8Array(val)),
+			output: (val) => toBase64(val),
 		}),
 	}),
 	Object: ObjectArg,
@@ -190,7 +245,7 @@ export const Command = bcs.enum('Command', {
 		modules: bcs.vector(
 			bcs.byteVector().transform({
 				input: (val: string | Uint8Array) => (typeof val === 'string' ? fromBase64(val) : val),
-				output: (val) => toBase64(new Uint8Array(val)),
+				output: (val) => toBase64(val),
 			}),
 		),
 		dependencies: bcs.vector(Address),
@@ -218,7 +273,7 @@ export const Command = bcs.enum('Command', {
 		modules: bcs.vector(
 			bcs.byteVector().transform({
 				input: (val: string | Uint8Array) => (typeof val === 'string' ? fromBase64(val) : val),
-				output: (val) => toBase64(new Uint8Array(val)),
+				output: (val) => toBase64(val),
 			}),
 		),
 		dependencies: bcs.vector(Address),
@@ -341,14 +396,18 @@ export const CompressedSignature = bcs.enum('CompressedSignature', {
 	Secp256r1: bcs.bytes(64),
 	ZkLogin: bcs.byteVector(),
 	Passkey: bcs.byteVector(),
+	MLDSA65: bcs.bytes(3309),
 });
 
+// Variant order must match Haneul's `PublicKey` enum, which validators hash to
+// derive a multisig address.
 export const PublicKey = bcs.enum('PublicKey', {
 	ED25519: bcs.bytes(32),
 	Secp256k1: bcs.bytes(33),
 	Secp256r1: bcs.bytes(33),
 	ZkLogin: bcs.byteVector(),
 	Passkey: bcs.bytes(33),
+	MLDSA65: bcs.bytes(1952),
 });
 
 export const MultiSigPkMap = bcs.struct('MultiSigPkMap', {
@@ -369,7 +428,7 @@ export const MultiSig = bcs.struct('MultiSig', {
 
 export const base64String = bcs.byteVector().transform({
 	input: (val: string | Uint8Array) => (typeof val === 'string' ? fromBase64(val) : val),
-	output: (val) => toBase64(new Uint8Array(val)),
+	output: (val) => toBase64(val),
 });
 
 export const PasskeyAuthenticator = bcs.struct('PasskeyAuthenticator', {

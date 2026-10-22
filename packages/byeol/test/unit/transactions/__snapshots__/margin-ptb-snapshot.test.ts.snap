@@ -3668,6 +3668,40 @@ exports[`marginManager PTB snapshots > borrowedShares 1`] = `
 }
 `;
 
+exports[`marginManager PTB snapshots > byeolPool 1`] = `
+{
+  "commands": [
+    {
+      "$kind": "MoveCall",
+      "MoveCall": {
+        "arguments": [
+          {
+            "$kind": "Input",
+            "Input": 0,
+            "type": "object",
+          },
+        ],
+        "function": "byeol_pool",
+        "module": "margin_manager",
+        "package": "0xce6ab6290458f597fc078793335f4b1d98479f29ebc02198ae960e9401d0c72f",
+        "typeArguments": [
+          "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
+          "0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7::DBUSDC::DBUSDC",
+        ],
+      },
+    },
+  ],
+  "inputs": [
+    {
+      "$kind": "UnresolvedObject",
+      "UnresolvedObject": {
+        "objectId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      },
+    },
+  ],
+}
+`;
+
 exports[`marginManager PTB snapshots > calculateAssets 1`] = `
 {
   "commands": [
@@ -3999,40 +4033,6 @@ exports[`marginManager PTB snapshots > deepBalance 1`] = `
           },
         ],
         "function": "byl_balance",
-        "module": "margin_manager",
-        "package": "0xce6ab6290458f597fc078793335f4b1d98479f29ebc02198ae960e9401d0c72f",
-        "typeArguments": [
-          "0x0000000000000000000000000000000000000000000000000000000000000002::haneul::HANEUL",
-          "0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7::DBUSDC::DBUSDC",
-        ],
-      },
-    },
-  ],
-  "inputs": [
-    {
-      "$kind": "UnresolvedObject",
-      "UnresolvedObject": {
-        "objectId": "0x2222222222222222222222222222222222222222222222222222222222222222",
-      },
-    },
-  ],
-}
-`;
-
-exports[`marginManager PTB snapshots > byeolPool 1`] = `
-{
-  "commands": [
-    {
-      "$kind": "MoveCall",
-      "MoveCall": {
-        "arguments": [
-          {
-            "$kind": "Input",
-            "Input": 0,
-            "type": "object",
-          },
-        ],
-        "function": "byeol_pool",
         "module": "margin_manager",
         "package": "0xce6ab6290458f597fc078793335f4b1d98479f29ebc02198ae960e9401d0c72f",
         "typeArguments": [

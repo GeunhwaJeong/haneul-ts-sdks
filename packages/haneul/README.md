@@ -133,17 +133,21 @@ await client.listCoins({
 
 ## Getting coins from the faucet
 
-You can request haneul from the faucet when running against devnet or localnet. For testnet, visit
-faucet.haneul.io.
+Use `requestHaneulFromFaucetV3` on devnet and testnet. It fetches a challenge, computes proof-of-work,
+and submits the proof to `/v3/gas`. The payout credits the recipient's address balance.
 
 ```typescript
-import { getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { getFaucetHost, requestHaneulFromFaucetV3 } from '@haneullabs/haneul/faucet';
 
-await requestHaneulFromFaucetV2({
+const result = await requestHaneulFromFaucetV3({
 	host: getFaucetHost('devnet'),
 	recipient: '0xcc2bd176a478baea9a0de7a24cd927661cc6e860d5bacecb9a138ef20dbab231',
 });
+console.log(result.digest, result.amountGeunhwa);
 ```
+
+For localnet, use `requestHaneulFromFaucetV2` with `getFaucetHost('localnet')` for a no-PoW faucet
+(`/v2/gas`). Use `requestHaneulFromFaucetV3` with the local PoW faucet's host for `/v3/gas`.
 
 ## Writing APIs
 

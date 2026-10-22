@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/codegen",
-	"version": "0.12.15",
+	"version": "0.12.20",
 	"description": "typescript codegen for haneul move",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",

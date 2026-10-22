@@ -1,5 +1,77 @@
 # @mysten/sui.js
 
+## 2.37.0
+
+### Minor Changes
+
+- 785655d: Fix verifying multisig signatures with zkLogin members: the client passed to
+  `verifyTransactionSignature`, `verifyPersonalMessageSignature`, `publicKeyFromSuiBytes`, or
+  `MultiSigPublicKey.fromPublicKeys` (new optional `client` option) is now used to verify each
+  zkLogin member. zkLogin signatures are now verified against the identifier's own address rather
+  than one derived from the signature, so a member's signature must come from that member's zkLogin
+  identity.
+
+### Patch Changes
+
+- 3aa65e2: Speed up BCS parsing and serialization: faster ULEB, integer and byte reads and writes,
+  enum and option encoding, string decoding, and a single input conversion per write for transformed
+  types. Base58, base64 and hex helpers in `@mysten/utils` are faster and no longer depend on
+  `@scure/base`. Sui address and object digest encoding is faster.
+
+  Behaviour changes:
+
+  - `BcsReader.readBytes` and `readULEB` throw instead of reading past the end of a view into the
+    rest of its buffer.
+  - `bcs.option(T)` returns `null`/`undefined` when `T` reads as `null`/`undefined` (for example a
+    nested option's inner `None`), instead of `true`.
+  - `bcs.Address.serializedSize` and `bcs.ObjectDigest.serializedSize` throw on invalid input
+    instead of returning a size.
+
+## 2.36.0
+
+### Minor Changes
+
+- ad42dd8: Add ML-DSA-65 (FIPS 204) support: `MLDSA65Keypair` and `MLDSA65PublicKey` under
+  `@mysten/sui/keypairs/mldsa65`, signature scheme flag `0x07`, and ML-DSA-65 members in multisig
+  and the verify helpers.
+
+### Patch Changes
+
+- 7a9b3e5: Avoid initializing Poseidon when importing keypairs or parsing signatures by separating
+  zkLogin public-key encoding helpers from address-seed hashing.
+
+## 2.35.0
+
+### Minor Changes
+
+- 55b1d3f: Add `gasPaymentMocked` to `simulateTransaction` results, which is `true` when the node
+  simulated with a mocked gas coin because the transaction had no gas payment, and export
+  `MOCKED_GAS_OBJECT_ID` from `@mysten/sui/utils`
+
+## 2.34.0
+
+### Minor Changes
+
+- 953e584: Add `requestSuiFromFaucetV3` for proof-of-work faucets on devnet, testnet, and localnet.
+  The helper fetches and validates a challenge, computes Argon2d proof-of-work, and submits it to
+  `/v3/gas`, with cancellation and a configurable timeout. Export `FaucetResponseV3` and
+  `FaucetError`, including server error codes and transaction digests.
+
+  Use Node's asynchronous native Argon2d when available, with Noble as the fallback for Node 22 and
+  browsers.
+
+  Use V3 for devnet/testnet and local PoW faucets. Keep using `requestSuiFromFaucetV2` for local
+  no-PoW faucets. V3 pays into address balances and returns `digest` and `amountMist` instead of
+  `coins_sent`. Payout submissions are not automatically retried.
+
+## 2.33.2
+
+### Patch Changes
+
+- d6ba632: `client.core.defaultNameServiceName` now returns `{ data: { name: null } }` for an
+  address without a default SuiNS name on the gRPC and GraphQL clients, matching JSON-RPC.
+  Previously gRPC threw a `NOT_FOUND` `RpcError` and GraphQL threw `Missing response data`.
+
 ## 2.33.1
 
 ## 2.33.0

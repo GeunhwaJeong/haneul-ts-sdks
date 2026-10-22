@@ -12,7 +12,7 @@
 
 import { MoveStruct, normalizeMoveArguments, type RawTransactionArgument } from '../utils/index.js';
 import { bcs } from '@haneullabs/haneul/bcs';
-import { type Transaction } from '@haneullabs/haneul/transactions';
+import { type Transaction, type TransactionArgument } from '@haneullabs/haneul/transactions';
 const $moduleName = '@local-pkg/hashi::enable_version';
 export const EnableVersion = new MoveStruct({
 	name: `${$moduleName}::EnableVersion`,
@@ -24,7 +24,7 @@ export interface ProposeArguments {
 	hashi: RawTransactionArgument<string>;
 	validatorAddress: RawTransactionArgument<string>;
 	version: RawTransactionArgument<number | bigint>;
-	metadata: RawTransactionArgument<string>;
+	metadata: TransactionArgument;
 }
 export interface ProposeOptions {
 	package?: string;
@@ -34,9 +34,10 @@ export interface ProposeOptions {
 				hashi: RawTransactionArgument<string>,
 				validatorAddress: RawTransactionArgument<string>,
 				version: RawTransactionArgument<number | bigint>,
-				metadata: RawTransactionArgument<string>,
+				metadata: TransactionArgument,
 		  ];
 }
+/** Private `entry`: see the visibility note in `hashi::proposal`. */
 export function propose(options: ProposeOptions) {
 	const packageAddress = options.package ?? '@local-pkg/hashi';
 	const argumentsTypes = [null, 'address', 'u64', null, '0x2::clock::Clock'] satisfies (
@@ -61,6 +62,7 @@ export interface ExecuteOptions {
 		| ExecuteArguments
 		| [hashi: RawTransactionArgument<string>, proposalId: RawTransactionArgument<string>];
 }
+/** Private `entry`: see the visibility note in `hashi::proposal`. */
 export function execute(options: ExecuteOptions) {
 	const packageAddress = options.package ?? '@local-pkg/hashi';
 	const argumentsTypes = [null, '0x2::object::ID', '0x2::clock::Clock'] satisfies (string | null)[];

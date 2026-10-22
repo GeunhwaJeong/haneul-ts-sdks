@@ -1,5 +1,42 @@
 # @mysten/hashi
 
+## 0.6.27
+
+### Patch Changes
+
+- 4bae068: Fix `view.withdrawalStatus` returning an empty `bitcoinAddress` on gRPC and GraphQL
+  clients. Those transports render the `WithdrawalRequested` event's `bitcoin_address` as a base64
+  string, which was read as a number array; both encodings are now decoded.
+
+## 0.6.26
+
+### Patch Changes
+
+- 69f1ed1: Regenerate the Hashi Move bindings from hashi's `testnet-1.0` tag and point the testnet
+  defaults at the package published from it. The earlier bindings could not decode that package's
+  `Hashi` object, so every read failed with `HashiFetchError`. Withdrawal status is now derived from
+  the request and its `WithdrawalTransaction`, because the chain no longer stores a status field;
+  the values `view.withdrawalStatus` and `view.transactionHistory` report are unchanged.
+  `call.deposit`'s `utxo` and `call.requestWithdrawal`'s `btc` are now typed as
+  `TransactionArgument`: both are Move values that must come from an earlier command in the same
+  transaction, so an object ID string was never valid.
+
+## 0.6.25
+
+### Patch Changes
+
+- e7708a4: Correct the guardian docs: the README's limiter example reads the on-chain `guardian_url`
+  instead of a retired devnet hostname, `GovernanceConfig.guardianPublicKey` is deprecated because
+  hashi no longer has that config, and `RawGuardianInfo.gitRevision` is documented as `''` until the
+  operator initializes the guardian.
+- 15d48d8: Read the guardian `/info` timestamp from `timestampMs`, its name in current guardian
+  proxies, and fall back to `signedAtMs` for older ones. Against a current proxy,
+  `RawGuardianInfo.signedAtMs` was always `null`.
+
+## 0.6.24
+
+## 0.6.23
+
 ## 0.6.22
 
 ## 0.6.21

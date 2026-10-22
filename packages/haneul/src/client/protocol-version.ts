@@ -8,4 +8,4 @@ export const CLIENT_PROTOCOL_VERSION_HEADER = 'x-haneul-client-protocol-version'
  * Highest Haneul protocol version whose on-chain types this SDK can decode. Bump this when the SDK
  * gains support for types introduced in a newer protocol version.
  */
-export const MAX_PROTOCOL_VERSION = 138;
+export const MAX_PROTOCOL_VERSION = 128;

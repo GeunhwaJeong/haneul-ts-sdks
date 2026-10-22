@@ -23,7 +23,7 @@ export interface HashiClientOptions<Name = string> {
 	btcRpcUrl?: string;
 	/** Override the Haneul GraphQL endpoint URL (defaults to `https://fullnode.{network}.haneul.io:443/graphql`). */
 	graphqlUrl?: string;
-	/** Guardian origin URL (e.g. `https://hashi-guardian-devnet.haneul-labs.com`); the SDK appends `/info`. Takes precedence over the on-chain `guardian_url` config. */
+	/** Guardian origin URL (e.g. `https://guardian.testnet.hashi.haneul.io`); the SDK appends `/info`. Takes precedence over the on-chain `guardian_url` config. */
 	guardianUrl?: string;
 	/** Custom guardian-info source. When set, the SDK calls this instead of fetching `/info` — useful for caching, tests, or bespoke transports. */
 	guardianInfoProvider?: GuardianInfoProvider;
@@ -57,11 +57,11 @@ export interface GovernanceConfig {
 	readonly bitcoinDepositTimeDelayMs: bigint;
 	readonly depositMinimum: bigint;
 	readonly worstCaseNetworkFee: bigint;
-	/** Guardian gRPC/HTTP endpoint from on-chain config. `null` if unset. */
+	/** The guardian's public endpoint (`guardian_url`), which serves `/info`. `null` if unset. */
 	readonly guardianUrl: string | null;
 	/**
-	 * Guardian's Ed25519 attestation key (32 bytes), used to verify signed
-	 * `GetGuardianInfo` responses. `null` if unset.
+	 * @deprecated Always `null` on current deployments: hashi removed the
+	 * `guardian_public_key` config in hashi#690.
 	 */
 	readonly guardianPublicKey: Uint8Array | null;
 	/**
@@ -328,7 +328,7 @@ export interface GuardianLimiterRaw {
  */
 export interface RawGuardianInfo {
 	readonly limiter: GuardianLimiterRaw | null;
-	/** Guardian build git revision (untrusted, enclave-self-reported). */
+	/** Guardian build git revision (untrusted, enclave-self-reported); `''` until the operator initializes the guardian. */
 	readonly gitRevision: string;
 	/** Current committee epoch; `null` before the guardian is initialized. */
 	readonly committeeEpoch: bigint | null;
@@ -336,7 +336,7 @@ export interface RawGuardianInfo {
 	readonly btcPubkey: string | null;
 	/** Guardian ed25519 32-byte signing pubkey (hex). */
 	readonly signingPubKey: string;
-	/** `GuardianInfo` signing timestamp (ms since epoch); `null` if absent. */
+	/** When the guardian produced this info (ms since epoch); `null` if absent. */
 	readonly signedAtMs: bigint | null;
 }
 

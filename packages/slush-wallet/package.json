@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/slush-wallet",
-	"version": "1.3.0",
+	"version": "1.3.5",
 	"description": "Wallet adapter for Slush web wallet",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",

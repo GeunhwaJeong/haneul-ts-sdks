@@ -5,6 +5,7 @@ import type { InferBcsType } from '@haneullabs/bcs';
 import { bcs } from '@haneullabs/bcs';
 import type { Signer } from '@haneullabs/haneul/cryptography';
 import type { ClientCache, ClientWithCoreApi } from '@haneullabs/haneul/client';
+import { ObjectError } from '@haneullabs/haneul/client';
 import type { TransactionObjectArgument, TransactionResult } from '@haneullabs/haneul/transactions';
 import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
 import { normalizeStructTag, parseStructTag } from '@haneullabs/haneul/utils';
@@ -1438,13 +1439,25 @@ export class WalrusClient {
 	}: {
 		blobObjectId: string;
 	}): Promise<Record<string, string> | null> {
-		const response = await this.#haneulClient.core.getDynamicField({
-			parentId: blobObjectId,
-			name: {
-				type: 'vector<u8>',
-				bcs: bcs.string().serialize('metadata').toBytes(),
-			},
-		});
+		let response;
+		try {
+			response = await this.#haneulClient.core.getDynamicField({
+				parentId: blobObjectId,
+				name: {
+					type: 'vector<u8>',
+					bcs: bcs.string().serialize('metadata').toBytes(),
+				},
+			});
+		} catch (error) {
+			// The metadata field may never have been created or may have been removed.
+			if (
+				error instanceof ObjectError &&
+				(error.reason === 'notFound' || error.reason === 'deleted')
+			) {
+				return null;
+			}
+			throw error;
+		}
 
 		const parsedMetadata = metadata.Metadata.parse(response.dynamicField.value.bcs);
 

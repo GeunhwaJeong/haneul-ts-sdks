@@ -120,7 +120,7 @@ const INFO_BODY = {
 	committeeEpoch: '3',
 	btcPubkey: 'deadbeef',
 	signingPubKey: 'feedface',
-	signedAtMs: '1720000000123',
+	timestampMs: '1720000000123',
 };
 
 function mockFetch(body: unknown, init?: { ok?: boolean; status?: number }) {
@@ -156,6 +156,13 @@ describe('fetchGuardianInfo', () => {
 		});
 	});
 
+	it('reads the timestamp from signedAtMs on proxies built before hashi#1311', async () => {
+		const { timestampMs, ...body } = INFO_BODY;
+		mockFetch({ ...body, signedAtMs: timestampMs });
+		const info = await fetchGuardianInfo('https://g.example');
+		expect(info.signedAtMs).toBe(1_720_000_000_123n);
+	});
+
 	it('appends /info, strips trailing slashes, and sends a preflight-free GET', async () => {
 		const spy = mockFetch(INFO_BODY);
 		await fetchGuardianInfo('https://g.example///');
@@ -171,6 +178,18 @@ describe('fetchGuardianInfo', () => {
 		expect(info.btcPubkey).toBeNull();
 		expect(info.committeeEpoch).toBeNull();
 		expect(info.gitRevision).toBe('abc123');
+	});
+
+	it('returns an empty gitRevision before the operator initializes the guardian', async () => {
+		mockFetch({
+			...INFO_BODY,
+			limiter: null,
+			gitRevision: null,
+			committeeEpoch: null,
+			btcPubkey: null,
+		});
+		const info = await fetchGuardianInfo('https://g.example');
+		expect(info.gitRevision).toBe('');
 	});
 
 	it('throws http-error on a non-2xx status', async () => {

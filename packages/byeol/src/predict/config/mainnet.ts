@@ -18,10 +18,24 @@ export const MAINNET_CONFIG: PredictConfig = Object.freeze({
 	// The record widens `network` to `string` so the published types don't pin a literal;
 	// this file is the mainnet config by construction.
 	network: 'mainnet',
-	packages: MAINNET_PREDICT.packages,
-	objects: MAINNET_PREDICT.objects,
+	// Delayed execution (DBU-885) is recorded on Mainnet. The generated record carries the package
+	// IDs that move with upgrades (Predict, `byeol_predict_orders`, `byeol_predict_math`) and
+	// the Lazer `State`. The three IDs pinned below are in no publication record and never move:
+	// the Predict version that introduced delayed execution (Mainnet v4), which defines its new
+	// types and events, and the `OrderDesk` and `QueueRegistry` that `byeol_predict_orders`'s
+	// `init` shared at publish.
+	packages: Object.freeze({
+		...MAINNET_PREDICT.packages,
+		predictDelayedExecution: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	}),
+	objects: Object.freeze({
+		...MAINNET_PREDICT.objects,
+		orderDesk: '0x0000000000000000000000000000000000000000000000000000000000000000',
+		queueRegistry: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	}),
 	quoteCoinType: MAINNET_PREDICT.quoteCoinType,
 	coinTypes: MAINNET_PREDICT.coinTypes,
 	units: MAINNET_PREDICT.units,
 	underlyings: MAINNET_PREDICT.underlyings,
+	oracle: MAINNET_PREDICT.oracle,
 });

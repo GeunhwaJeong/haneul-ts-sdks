@@ -18,10 +18,24 @@ export const TESTNET_CONFIG: PredictConfig = Object.freeze({
 	// The record widens `network` to `string` so the published types don't pin a literal;
 	// this file is the testnet config by construction.
 	network: 'testnet',
-	packages: TESTNET_PREDICT.packages,
-	objects: TESTNET_PREDICT.objects,
+	// Delayed execution (DBU-885) is recorded on Testnet. The generated record carries the package
+	// IDs that move with upgrades (Predict, `byeol_predict_orders`, `byeol_predict_math`) and
+	// the Lazer `State`. The three IDs pinned below are in no publication record and never move:
+	// the Predict version that introduced delayed execution (Testnet v5), which defines its new
+	// types and events, and the `OrderDesk` and `QueueRegistry` that `byeol_predict_orders`'s
+	// `init` shared at publish.
+	packages: Object.freeze({
+		...TESTNET_PREDICT.packages,
+		predictDelayedExecution: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	}),
+	objects: Object.freeze({
+		...TESTNET_PREDICT.objects,
+		orderDesk: '0x0000000000000000000000000000000000000000000000000000000000000000',
+		queueRegistry: '0x0000000000000000000000000000000000000000000000000000000000000000',
+	}),
 	quoteCoinType: TESTNET_PREDICT.quoteCoinType,
 	coinTypes: TESTNET_PREDICT.coinTypes,
 	units: TESTNET_PREDICT.units,
 	underlyings: TESTNET_PREDICT.underlyings,
+	oracle: TESTNET_PREDICT.oracle,
 });

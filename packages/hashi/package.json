@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/hashi",
-	"version": "0.6.22",
+	"version": "0.6.27",
 	"private": false,
 	"description": "TypeScript SDK for the Hashi Haneul Move smart contracts",
 	"license": "Apache-2.0",

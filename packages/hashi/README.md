@@ -291,11 +291,6 @@ namespace reads the guardian's public, read-only `/info` endpoint to surface tha
 headroom.
 
 ```ts
-const client = new HaneulGrpcClient({
-	network: 'devnet',
-	baseUrl: 'https://fullnode.devnet.haneul.io:443',
-}).$extend(hashi({ guardianUrl: 'https://hashi-guardian-devnet.haneul-labs.com' }));
-
 // Guardian identity + limiter. `limiter` is null before the guardian is provisioned.
 const info = await client.hashi.guardian.info();
 

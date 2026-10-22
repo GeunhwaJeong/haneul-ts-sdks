@@ -68,7 +68,18 @@ export interface UnderlyingIds {
 /** Ids for Byeol Predict. */
 export interface PredictIds {
 	network: string;
-	packages: { predict: string; predictV1: string; account: string; propbook: string };
+	packages: {
+		predict: string;
+		predictV1: string;
+		account: string;
+		propbook: string;
+		/** Latest `byeol_predict_orders`, once the network records delayed execution. */
+		predictOrders?: string;
+		/** Its original ID, only once it differs from `predictOrders`. */
+		predictOrdersV1?: string;
+		/** `byeol_predict_math`, once the network records delayed execution. */
+		predictMath?: string;
+	};
 	objects: {
 		registry: string;
 		protocolConfig: string;
@@ -80,4 +91,6 @@ export interface PredictIds {
 	coinTypes: { plp: string; byl: string };
 	units: DeploymentUnits;
 	underlyings: Record<string, UnderlyingIds>;
+	/** Pyth Lazer's shared `State`, recorded with delayed execution. */
+	oracle?: { pythLazerState: string };
 }

@@ -22,3 +22,9 @@ export const HANEUL_COIN_REGISTRY_OBJECT_ID =
 	'0x000000000000000000000000000000000000000000000000000000000000000c';
 export const HANEUL_DENY_LIST_OBJECT_ID =
 	'0x0000000000000000000000000000000000000000000000000000000000000403';
+/**
+ * Object ID of the gas coin the node substitutes when a transaction is simulated without a gas
+ * payment. See `gasPaymentMocked` on `SimulateTransactionResult`.
+ */
+export const MOCKED_GAS_OBJECT_ID =
+	'0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';

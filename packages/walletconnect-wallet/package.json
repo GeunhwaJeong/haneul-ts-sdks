@@ -1,6 +1,6 @@
 {
 	"name": "@haneullabs/walletconnect-wallet",
-	"version": "1.1.30",
+	"version": "1.1.35",
 	"description": "Wallet adapter for WalletConnect on Haneul",
 	"license": "Apache-2.0",
 	"author": "Haneul Labs <build@haneul-labs.com>",
@@ -20,6 +20,7 @@
 		"dist"
 	],
 	"scripts": {
+		"test": "vitest run",
 		"clean": "rm -rf tsconfig.tsbuildinfo ./dist",
 		"build": "rm -rf dist && tsc --noEmit && tsdown",
 		"prettier:check": "prettier -c --ignore-unknown .",

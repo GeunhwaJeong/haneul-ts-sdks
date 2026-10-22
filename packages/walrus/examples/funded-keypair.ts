@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { HaneulGrpcClient } from '@haneullabs/haneul/grpc';
-import { getFaucetHost, requestHaneulFromFaucetV2 } from '@haneullabs/haneul/faucet';
+import { getFaucetHost, requestHaneulFromFaucetV3 } from '@haneullabs/haneul/faucet';
 import { Ed25519Keypair } from '@haneullabs/haneul/keypairs/ed25519';
 import { coinWithBalance, Transaction } from '@haneullabs/haneul/transactions';
 import { GEUNHWA_PER_HANEUL, parseStructTag } from '@haneullabs/haneul/utils';
@@ -25,10 +25,11 @@ export async function getFundedKeypair() {
 	});
 
 	if (BigInt(balance.balance) < GEUNHWA_PER_HANEUL) {
-		await requestHaneulFromFaucetV2({
+		const { digest } = await requestHaneulFromFaucetV3({
 			host: getFaucetHost('testnet'),
 			recipient: keypair.toHaneulAddress(),
 		});
+		await haneulClient.waitForTransaction({ digest });
 	}
 
 	const walBalance = await haneulClient.getBalance({
